@@ -1,0 +1,84 @@
+html {
+    background: #72c4c4;
+    margin: 0px;
+}
+
+body {
+    overflow-x: hidden !important;
+    font-family: 'Verdana', Geneva, sans-serif;
+    margin-top: 3px;
+    margin-left: 0px;
+    margin-right: 0px;
+    -webkit-font-smoothing: antialiased;
+    font-weight: 600;
+    color: #2770a8;
+    background: #72c4c4;
+}
+
+#waveImg{
+    margin-left: 4px;
+    margin-top: 1px;
+    vertical-align: top;
+}
+
+a {
+    vertical-align: top;
+}
+
+.logoutButton {
+    background-color:#c28e8e;
+    -moz-border-radius:6px;
+    -webkit-border-radius:6px;
+    border-radius:6px;
+    display:inline-block;
+    cursor:pointer;
+    color: #703c2b;
+    font-family: 'Verdana', Geneva, sans-serif;
+    font-weight: 600;
+    font-size:14px;
+    padding:4px 31px;
+    text-decoration:none;
+}
+.logoutButton:hover {
+    color: #5f4026;
+    background-color:#de9656;
+}
+.logoutButton:active {
+    position:relative;
+    top:1px;
+}
+
+.loginButton {
+    background-color:#3680a3;
+    -moz-border-radius:6px;
+    -webkit-border-radius:6px;
+    border-radius:6px;
+    display:inline-block;
+    cursor:pointer;
+    color:#bad6d6;
+    font-family: 'Verdana', Geneva, sans-serif;
+    font-weight: 600;
+    font-size:14px;
+    padding:4px 31px;
+    text-decoration:none;
+}
+.loginButton:hover {
+    background-color:#36a385;
+}
+.loginButton:active {
+    position:relative;
+    top:1px;
+}
+
+.datawakeText {
+    top: 3px;
+    display: inline-block;
+    position: relative;
+    font-size:19px;
+}
+
+#loginButton {
+    float: right;
+    margin-top: 1px;
+    margin-right: 4px;
+}

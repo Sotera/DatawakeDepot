@@ -1,0 +1,13 @@
+{
+  "title": "DatawakeFFPlugin",
+  "name": "DatawakeFFPlugin",
+  "version": "0.0.2",
+  "description": "Datawake Firefox Browser Plugin",
+  "main": "index.js",
+  "author": "John Reeme",
+  "engines": {
+    "firefox": ">=38.0a1",
+    "fennec": ">=38.0a1"
+  },
+  "license": "MIT"
+}

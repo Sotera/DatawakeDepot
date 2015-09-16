@@ -1,0 +1,43 @@
+//
+   Created by jreeme-dw-depot on 8/13/15.
+
+.box
+  .box-body.no-padding(style='min-height: 120px;')
+    table.table.table-striped(st-table='displayedUsers', st-safe-src='safeDisplayedUsers')
+      thead
+        tr
+          th
+          th(st-sort='username') Username
+          th Member Of
+          th(st-sort='email') E-Mail
+          th(st-sort='firstName') First Name
+          th(st-sort='lastName') Last Name
+        tr
+          th
+            a.btn.btn-block.btn-success(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
+              span.glyphicon.glyphicon-plus(style="margin-right: 10px")
+              span Add User
+          th
+            input.input-sm.form-control(st-search='username' type='search' placeholder='search')
+      tbody
+        tr(ng-repeat='user in displayedUsers')
+          td(style='width: 120px')
+            .btn-group
+              button.btn.btn-sm.btn-default(ui-sref='app.users.password({id:user.id})',ng-disabled='!currentUser.isAdmin')
+                i.fa.fa-key
+              button.btn.btn-sm.btn-default(ui-sref='app.users.edit({id:user.id})',ng-disabled='!currentUser.isAdmin')
+                i.fa.fa-pencil
+              button.btn.btn-sm.btn-danger(ng-click='delete({id:user.id})',ng-disabled='!currentUser.isAdmin')
+                i.fa.fa-trash-o
+          td(style='width: 120px')
+            a(href='', ui-sref='app.users.view({id: user.id})') {{user.username}}
+          td
+            span.label.label-default(ng-repeat="role in user.roles") {{role.name}}
+          td
+            span.text-muted {{user.email}}
+          td
+            span.text-muted {{user.firstName}}
+          td
+            span.text-muted {{user.lastName}}
+  .overlay(ng-if='loading')
+  .loading-img(ng-if='loading')

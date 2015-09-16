@@ -1,0 +1,32 @@
+{
+  "name": "DwDomainItem",
+  "plural": "dwDomainItems",
+  "base": "PersistedModel",
+  "properties": {
+    "id": {
+      "type": "number",
+      "id": true
+    },
+    "itemType": {
+      "type": "string",
+      "required": true
+    },
+    "itemValue": {
+      "type": "string"
+    },
+    "domainId":{
+      "type": "number"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "domain": {
+      "type": "belongsTo",
+      "model": "DwDomain",
+      "foreignKey": "domainId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}
+

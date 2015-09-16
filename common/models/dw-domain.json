@@ -1,0 +1,34 @@
+{
+  "name": "DwDomain",
+  "plural": "dwDomains",
+  "base": "PersistedModel",
+  "properties": {
+    "id": {
+      "type": "number",
+      "id": true
+    },
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "trails": {
+      "type": "hasMany",
+      "model": "DwTrail",
+      "foreignKey": "trailId"
+    },
+    "domainItems": {
+      "type": "hasMany",
+      "model": "DwDomainItem",
+      "foreignKey": "domainItemId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}
+

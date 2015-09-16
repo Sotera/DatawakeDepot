@@ -1,0 +1,35 @@
+{
+  "name": "DwTransmission",
+  "plural": "dwTransmissions",
+  "base": "PersistedModel",
+  "properties": {
+    "id": {
+      "type": "number",
+      "id": true
+    },
+    "transmission": {
+      "type": "string",
+      "required": true
+    },
+    "status": {
+      "type": "string"
+    },
+    "timestamp": {
+      "type": "string"
+    },
+    "recipientId": {
+      "type": "number"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "recipient": {
+      "type": "hasOne",
+      "model": "DwRecipient",
+      "foreignKey": "recipientId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}
+

@@ -1,0 +1,7 @@
+{
+  "name": "DatawakeDepot",
+  "description": "Loopback Web Application implementing Datawake Launching Pad",
+  "repository": "https://github.com/sotera/DatawakeDepot",
+  "logo": "https://node-js-sample.herokuapp.com/node.svg",
+  "keywords": ["node", "angular", "loopback", "admin", "datawake"]
+}

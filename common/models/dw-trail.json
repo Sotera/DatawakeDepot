@@ -1,0 +1,32 @@
+{
+  "name": "DwTrail",
+  "plural": "dwTrails",
+  "base": "PersistedModel",
+  "properties": {
+    "id": {
+      "type": "number",
+      "id": true
+    },
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "string"
+    },
+    "createdDate": {
+      "type": "date"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "domain": {
+      "type": "belongsTo",
+      "model": "DwDomain",
+      "foreignKey": "domainId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}
+

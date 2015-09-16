@@ -1,0 +1,9 @@
+.row
+  .col-md-6
+    .ag-fresh(ag-grid='gridOptions' style='height: 480px;' ng-style='percentHeightStyle' percent-height percent='75')
+  .col-md-6
+    |Page Size:
+    select(ng-model='pageSize' ng-change='onPageSizeChanged()')
+      option(value='10') 10
+      option(value='100') 100
+      option(value='500') 500

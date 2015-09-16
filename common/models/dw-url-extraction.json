@@ -1,0 +1,23 @@
+{
+  "name": "DwUrlExtraction",
+  "plural": "dwUrlExtractions",
+  "base": "PersistedModel",
+  "properties": {
+    "id": {
+      "type": "number",
+      "id": true
+    },
+    "extractedType": {
+      "type": "string",
+      "required": true
+    },
+    "extractedValue": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}
+

@@ -1,0 +1,56 @@
+{
+  "name": "DwRecipient",
+  "plural": "dwRecipients",
+  "base": "PersistedModel",
+  "properties": {
+    "id": {
+      "type": "number",
+      "id": true
+    },
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "index": {
+      "type": "string"
+    },
+    "recipientUrl": {
+      "type": "string"
+    },
+    "credentials": {
+      "type": "string"
+    },
+    "protocol": {
+      "type": "string"
+    },
+    "serviceType": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "domains": {
+      "type": "hasMany",
+      "model": "DwDomain",
+      "foreignKey": "domainId"
+    },
+    "trails": {
+      "type": "hasMany",
+      "model": "DwTrail",
+      "foreignKey": "trailId"
+    },
+    "users": {
+      "type": "hasMany",
+      "model": "DwUser",
+      "foreignKey": "userId"
+    },
+    "transmission": {
+      "type": "hasMany",
+      "model": "DwTransmission",
+      "foreignKey": "transmissionId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}
+

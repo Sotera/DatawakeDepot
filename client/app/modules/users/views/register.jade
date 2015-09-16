@@ -1,0 +1,27 @@
+.lockscreen(style='height: 100%;')
+  #login-box.form-box
+    span.pull-right.image(style='margin: 15px 20px; float: left;')
+      img.img-circle(gravatar-src='credentials.email',
+      gravatar-size='50',
+      alt='User Image')
+    span.image(style='margin: 15px 15px; float: left;')
+      img.img-circle(src='/images/waveicon38.png' height='46' width='46')
+    .header(translate, style='text-align: center;')
+      |Register
+    form.form-signin(name='joinForm',
+    role='form',
+    ng-submit='register()')
+      .body.bg-gray
+        .callout.callout-danger(ng-if='registerError')
+          p {{loginError.message | translate}}
+        auto-fields(fields='schema',
+        data='registration',
+        options='options')
+      .footer
+        button.btn.bg-olive.btn-block(translate,
+        type='submit',
+        ng-class="{'btn-primary':joinForm.$valid}")
+          |Register
+        a.btn.bg-yellow.btn-block(translate, href='#/login')
+          |Or Sign In
+

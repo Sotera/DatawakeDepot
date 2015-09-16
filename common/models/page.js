@@ -4,7 +4,7 @@ var Showdown = require('showdown');
 
 module.exports = function(Page) {
 
-  var converter = new Showdown.converter();
+  var converter = new Showdown.Converter();
 
   Page.html = function(id, cb) {
     Page.findById(id, function(err, page) {

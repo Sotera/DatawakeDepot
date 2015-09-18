@@ -1,5 +1,13 @@
 //This is the injected content script. It only gets injected into http://datawake-depot.org
 //pages
+self.port.on('logout-target-content-script', function(message) {
+  //This message is from the content script to the listening page script
+  //setup in: browserPlugin.service.js in the datawake-depot app
+  var msg = {
+    type: 'logout'
+  }
+  window.postMessage(msg, '*');
+});
 self.port.on('page-attached-target-content-script', function(message) {
   //This listener will hear back from the page script
   window.addEventListener('message', function(event){
@@ -7,6 +15,9 @@ self.port.on('page-attached-target-content-script', function(message) {
      var msg = event.data;
       if(msg.type == 'handshake-ack'){
         //document.body.style.border = '5px solid green';
+      }
+      else if(msg.type == 'logout-success-target-content-script'){
+        self.port.emit('logout-success-target-plugin');
       }
       else if(msg.type == 'login-success-target-content-script'){
         //document.body.style.border = '5px solid yellow';

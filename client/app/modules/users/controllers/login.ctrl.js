@@ -103,7 +103,7 @@ angular.module('com.module.users')
               },
               include: ['roles', 'identities', 'credentials', 'accessTokens']
             }
-          }, function (result, responseHeaders) {
+          }, function (result) {
             AppAuth.currentUser.roles = result.roles;
             var admins = AppAuth.currentUser.roles.filter(function (u) {
               return u.name === 'admins';
@@ -116,7 +116,11 @@ angular.module('com.module.users')
               next = '/';
             }
             $location.path(next);
-            BrowserPluginService.notifyPluginOfLoginSuccess(user);
+            var msg = {
+              action: 'login',
+              user: user
+            }
+            UserLoginOrLogoutMsg.broadcast(msg);
           }, function (res) {
             $scope.loginError = res.data.error;
           });

@@ -84,17 +84,15 @@ angular.module('com.module.users')
       $scope.showDownloadPluginButton = false;
     };
     $scope.login = function () {
-      var credentials = $scope.credentials;
-      $scope.loginResult = AminoUser.login({
-          include: 'user',
-          rememberMe: credentials.rememberMe
-        }, credentials,
-        function (user) {
-          console.log(user);
-          console.log(user.user);
+      AminoUser.login({
+        include: 'user',
+        rememberMe: $scope.credentials.rememberMe
+      }, $scope.credentials).$promise
+        .then(function (userInfo) {
           var next = $location.nextAfterLogin || '/';
           $location.nextAfterLogin = null;
-          AppAuth.currentUser = $scope.loginResult.user;
+          AppAuth.currentUser = userInfo.user;
+          AppAuth.currentUser.accessToken = userInfo.id;
           //Find a little more out about our current user
           AminoUser.findOne({
             filter: {
@@ -103,29 +101,31 @@ angular.module('com.module.users')
               },
               include: ['roles', 'identities', 'credentials', 'accessTokens']
             }
-          }, function (result) {
-            AppAuth.currentUser.roles = result.roles;
-            var admins = AppAuth.currentUser.roles.filter(function (u) {
-              return u.name === 'admins';
+          }).$promise
+            .then(function (user) {
+              AppAuth.currentUser.roles = user.roles;
+              var admins = AppAuth.currentUser.roles.filter(function (u) {
+                return u.name === 'admins';
+              });
+              AppAuth.currentUser.isAdmin = (admins.length > 0);
+              //And now toast our login success!
+              CoreService.toastSuccess(gettextCatalog.getString('Logged in'),
+                gettextCatalog.getString('You are logged in!'));
+              if (next === '/login') {
+                next = '/';
+              }
+              $location.path(next);
+              var msg = {
+                action: 'login',
+                user: AppAuth.currentUser
+              }
+              UserLoginOrLogoutMsg.broadcast(msg);
+            })
+            .catch(function (err) {
+              $scope.loginError = res.data.error;
             });
-            AppAuth.currentUser.isAdmin = (admins.length > 0);
-            //And now toast our login success!
-            CoreService.toastSuccess(gettextCatalog.getString('Logged in'),
-              gettextCatalog.getString('You are logged in!'));
-            if (next === '/login') {
-              next = '/';
-            }
-            $location.path(next);
-            var msg = {
-              action: 'login',
-              user: user
-            }
-            UserLoginOrLogoutMsg.broadcast(msg);
-          }, function (res) {
-            $scope.loginError = res.data.error;
-          });
-        },
-        function (res) {
+        })
+        .catch(function (err) {
           $scope.loginError = res.data.error;
         });
     };

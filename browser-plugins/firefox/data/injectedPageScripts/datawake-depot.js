@@ -23,7 +23,7 @@ self.port.on('page-attached-target-content-script', function(message) {
         //document.body.style.border = '5px solid yellow';
         //Login was successful so tell mainline plugin about our logged in
         //user (Remember this code is running in a content script).
-        self.port.emit('login-success-target-plugin', msg.user.user);
+        self.port.emit('login-success-target-plugin', msg.user);
       }else{
         //document.body.style.border = '5px solid blue';
       }

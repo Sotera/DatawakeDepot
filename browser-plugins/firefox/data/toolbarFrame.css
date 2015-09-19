@@ -1,84 +1,130 @@
 html {
-    background: #72c4c4;
-    margin: 0px;
+    /*    background: #72c4c4;*/
+    margin: 0px 0px 0px 0px;
 }
 
 body {
     overflow-x: hidden !important;
     font-family: 'Verdana', Geneva, sans-serif;
-    margin-top: 3px;
+    margin-top: 0px;
     margin-left: 0px;
     margin-right: 0px;
     -webkit-font-smoothing: antialiased;
     font-weight: 600;
-    color: #2770a8;
-    background: #72c4c4;
+    /*color: #2770a8;*/
+    background: #8cf4ff;
 }
 
-#waveImg{
-    margin-left: 4px;
+#waveImg {
+    margin-left: 0px;
+    margin-top: 4px;
+    vertical-align: top;
+}
+
+a,
+select {
     margin-top: 1px;
-    vertical-align: top;
 }
 
-a {
-    vertical-align: top;
-}
-
-.logoutButton {
-    background-color:#c28e8e;
-    -moz-border-radius:6px;
-    -webkit-border-radius:6px;
-    border-radius:6px;
-    display:inline-block;
-    cursor:pointer;
+.startTrailButton {
+    background-color: #c28e8e;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    display: inline-block;
+    cursor: pointer;
     color: #703c2b;
     font-family: 'Verdana', Geneva, sans-serif;
     font-weight: 600;
-    font-size:14px;
-    padding:4px 31px;
-    text-decoration:none;
+    font-size: 14px;
+    padding: 4px 31px;
+    text-decoration: none;
 }
+
+.startTrailButton:hover {
+    color: #5f4026;
+    background-color: #de9656;
+}
+
+.startTrailButton:active {
+    position: relative;
+    top: 1px;
+}
+
+.logoutButton {
+    background-color: #c28e8e;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    display: inline-block;
+    cursor: pointer;
+    color: #703c2b;
+    font-family: 'Verdana', Geneva, sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 4px 31px;
+    text-decoration: none;
+}
+
 .logoutButton:hover {
     color: #5f4026;
-    background-color:#de9656;
+    background-color: #de9656;
 }
+
 .logoutButton:active {
-    position:relative;
-    top:1px;
+    position: relative;
+    top: 1px;
 }
 
 .loginButton {
-    background-color:#3680a3;
-    -moz-border-radius:6px;
-    -webkit-border-radius:6px;
-    border-radius:6px;
-    display:inline-block;
-    cursor:pointer;
-    color:#bad6d6;
+    background-color: #3680a3;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    display: inline-block;
+    cursor: pointer;
+    color: #bad6d6;
     font-family: 'Verdana', Geneva, sans-serif;
     font-weight: 600;
-    font-size:14px;
-    padding:4px 31px;
-    text-decoration:none;
+    font-size: 14px;
+    padding: 4px 31px;
+    text-decoration: none;
 }
+
 .loginButton:hover {
-    background-color:#36a385;
+    background-color: #36a385;
 }
+
 .loginButton:active {
-    position:relative;
-    top:1px;
+    position: relative;
+    top: 1px;
 }
 
 .datawakeText {
     top: 3px;
     display: inline-block;
     position: relative;
-    font-size:19px;
+    font-size: 19px;
 }
 
-#loginButton {
+.rightFloatElement {
     float: right;
     margin-top: 1px;
     margin-right: 4px;
 }
+
+/*.row.no-gutter div[class*="col-"] {
+    background-color:#dd3333;
+}*/
+
+.row.no-gutter [class*='col-']:not(:first-child), .row.no-gutter [class*='col-']:not(:last-child) {
+    padding-right: 6px;
+    padding-left: 0px;
+}
+
+/* only for column content visible */
+/*.col-lg-1 > div {
+    background-color: #ddd;
+}*/
+
+

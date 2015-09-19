@@ -1,26 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link href="vendor/bootstrap/bootstrap.min.css"
+        rel="stylesheet"/>
+  <link href="vendor/bootstrap/bootstrap-theme.min.css"
+        rel="stylesheet"/>
   <link href="toolbarFrame.css"
         rel="stylesheet"/>
   <script type="text/javascript"
-          src="superagent.js"></script>
+          src="vendor/superagent/superagent.js"></script>
+  <script type="text/javascript"
+          src="vendor/jquery/jquery-2.1.4.min.js"></script>
   <script type="text/javascript"
           src="toolbarFrame.js"></script>
 </head>
 <body onload="onLoad()">
-<div style="vertical-align: middle">
-  <img src="./images/waveicon24.png"
-       id="waveImg"
-       height="24"
-       width="24">
+<div style="vertical-align: middle"
+     class="container-fluid">
+  <div class="row no-gutter">
+    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+      <img src="./images/waveicon24.png"
+           id="waveImg"
+           style="margin-left: 6px;"
+           height="24"
+           width="24">
 
-  <div class="datawakeText">
-    Datawake
+      <div class="datawakeText">
+        Datawake
+      </div>
+    </div>
+    <div class="col-lg-6 col-md-5 col-sm-4 col-xs-3">
+      <select id="trailList"
+              class="form-control btn-info input-sm">
+        <option>Apple</option>
+        <option>Bannana</option>
+        <option>Chilis</option>
+      </select>
+    </div>
+    <div class="col-lg-1 col-md-2 col-sm-3 col-xs-3">
+      <a id="startTrailButton"
+         role="button"
+         class="btn btn-sm btn-success btn-block disabled"
+         onclick="toggleTrailing()">Start Trailing</a>
+    </div>
+    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-2">
+      <a id="loginButton"
+         role="button"
+         class="btn btn-sm btn-success btn-block"
+         onclick="login()">Login</a>
+    </div>
   </div>
-  <a id="loginButton"
-     class="loginButton"
-     onclick="login()">Login</a>
 </div>
 </body>
 </html>

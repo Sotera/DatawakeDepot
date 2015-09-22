@@ -12,7 +12,7 @@
       "required": true
     },
     "timestamp": {
-      "type": "string"
+      "type": "date"
     },
     "comments": {
       "type": "string"
@@ -29,12 +29,12 @@
     "trail": {
       "type": "belongsTo",
       "model": "DwTrail",
-      "foreignKey": "trailId"
+      "foreignKey": "id"
     },
     "extractions": {
       "type": "hasMany",
       "model": "DwUrlExtractions",
-      "foreignKey": "urlExtractionId"
+      "foreignKey": "id"
     }
   },
   "acls": [],

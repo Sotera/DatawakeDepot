@@ -32,22 +32,22 @@
     "domains": {
       "type": "hasMany",
       "model": "DwDomain",
-      "foreignKey": "domainId"
+      "foreignKey": "id"
     },
     "trails": {
       "type": "hasMany",
       "model": "DwTrail",
-      "foreignKey": "trailId"
+      "foreignKey": "id"
     },
     "users": {
       "type": "hasMany",
       "model": "DwUser",
-      "foreignKey": "userId"
+      "foreignKey": "id"
     },
     "transmission": {
       "type": "hasMany",
       "model": "DwTransmission",
-      "foreignKey": "transmissionId"
+      "foreignKey": "id"
     }
   },
   "acls": [],

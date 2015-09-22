@@ -15,7 +15,7 @@
       "type": "string"
     },
     "timestamp": {
-      "type": "string"
+      "type": "date"
     },
     "recipientId": {
       "type": "number"
@@ -26,7 +26,7 @@
     "recipient": {
       "type": "hasOne",
       "model": "DwRecipient",
-      "foreignKey": "recipientId"
+      "foreignKey": "id"
     }
   },
   "acls": [],

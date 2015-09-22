@@ -20,12 +20,12 @@
     "trails": {
       "type": "hasMany",
       "model": "DwTrail",
-      "foreignKey": "trailId"
+      "foreignKey": "id"
     },
     "domainItems": {
       "type": "hasMany",
       "model": "DwDomainItem",
-      "foreignKey": "domainItemId"
+      "foreignKey": "id"
     }
   },
   "acls": [],

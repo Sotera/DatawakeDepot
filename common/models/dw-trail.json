@@ -14,7 +14,7 @@
     "description": {
       "type": "string"
     },
-    "createdDate": {
+    "timestamp": {
       "type": "date"
     }
   },
@@ -23,7 +23,7 @@
     "domain": {
       "type": "belongsTo",
       "model": "DwDomain",
-      "foreignKey": "domainId"
+      "foreignKey": "id"
     }
   },
   "acls": [],

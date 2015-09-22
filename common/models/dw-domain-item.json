@@ -23,7 +23,7 @@
     "domain": {
       "type": "belongsTo",
       "model": "DwDomain",
-      "foreignKey": "domainId"
+      "foreignKey": "id"
     }
   },
   "acls": [],

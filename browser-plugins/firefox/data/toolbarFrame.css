@@ -26,6 +26,12 @@ select {
     margin-top: 1px;
 }
 
+.vcenter{
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+}
+
 .startTrailButton {
     background-color: #c28e8e;
     -moz-border-radius: 6px;

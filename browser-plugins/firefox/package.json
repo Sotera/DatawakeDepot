@@ -1,6 +1,6 @@
 {
   "title": "DatawakeFFPlugin",
-  "name": "DatawakeFFPlugin",
+  "name": "datawakeffplugin",
   "version": "0.0.2",
   "description": "Datawake Firefox Browser Plugin",
   "main": "index.js",

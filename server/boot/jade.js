@@ -27,6 +27,9 @@ module.exports = function (app) {
   app.get('/modules/dwSettings/views/list', function (req, res) {
     res.render('dwSettings/views/list', {title: 'Datwake Settings'});
   });
+  app.get('/modules/dwSettings/views/form', function (req, res) {
+    res.render('dwSettings/views/form', {title: 'Datwake Settings'});
+  });
   app.get('/modules/dwTrails/views/main', function (req, res) {
     res.render('dwTrails/views/main', {title: 'Datawake Trails'});
   });

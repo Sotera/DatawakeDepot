@@ -1,12 +1,9 @@
-//
-   Created by jreeme-dw-depot on 8/13/15.
-
 .box
   .box-header
     span.box-title
       .input-group
         a.btn.btn-default(translate, href='', ui-sref='^.list', style='float: left;')
-          i.fa.fa-arrow-left Users
+          i.fa.fa-arrow-left Settings
     .box-tools.pull-right
       span.pull-right.btn-group
         button.btn.btn-primary.btn-success.btn-sm(translate, ng-click='onSubmit()')
@@ -14,60 +11,10 @@
         a.btn.btn-sm.btn-default(href='', ng-click='delete({id: page.id})')
           i.fa.fa-trash-o
   .box-body
-    .alert.alert-danger(translate, ng-if='addError') Could not add user!
+    .alert.alert-danger(translate, ng-if='addError') Could not add Setting!
     form(ng-submit='onSubmit()' novalidate)
-      formly-form(model='user', fields='formFields')
-    //div(ng-repeat='role in listA')
-      input(type='checkbox',
-      checkbox-group,
-      checklist-model='getRoles()',
-      checklist-value='role',
-      ng-change='roleChecked(role, checked)')
-      label {{role}}
-      //input(type='checkbox', checklist-model='listA', checklist-value='role') {{role}}
-    //.container
-        .row
-          .col-md-12.text-center
-            h3 Pick List Example
-          .col-sm-4
-            #list1.list-group.col-sm-offset-1
-              label.list-group-item.active Member
-                input.pull-right(type='checkbox',
-                value='{{toggle}}',
-                ng-model='toggle',
-                ng-click='toggleA()',
-                title='Toggle All')
-              span(ng-repeat='user1 in listA')
-                label.list-group-item {{user1.firstName}}
-                  input.pull-right(type='checkbox',
-                  name='selectedA[]',
-                  value='{{user1.id}}',
-                  ng-checked='selectedA.indexOf(user1.id) > -1',
-                  ng-click='selectA(user1.id)')
-          .col-md-2.v-center.text-center
-            .btn-group
-              button.btn.btn-default(title='Send to list 1', ng-click='bToA()')
-                i.glyphicon.glyphicon-chevron-left
-              button.btn.btn-default(title='Send to list 2', ng-click='aToB()')
-                i.glyphicon.glyphicon-chevron-right
-          .col-sm-4
-            #list2.list-group
-              label.list-group-item.active Team
-                input.pull-right(type='checkbox',
-                value='{{toggle}}',
-                ng-model='toggle',
-                ng-click='toggleB()',
-                title='Toggle All')
-              span(ng-repeat='user1 in listB')
-                label.list-group-item {{user1.firstName}}
-                  input.pull-right(type='checkbox',
-                  name='selectedB[]',
-                  value='{{user1.id}}',
-                  ng-checked='selectedB.indexOf(user1.id) > -1',
-                  ng-click='selectB(user1.id)')
-    //.form-group(ng-if='!user.id')
-      label(translate) Password
-      input.form-control(required, type='text', ng-model='user.password')
+      formly-form(model='dwSetting', fields='formFields')
+
   .overlay(ng-if='loading')
   .overlay(ng-if='loading-img')
 

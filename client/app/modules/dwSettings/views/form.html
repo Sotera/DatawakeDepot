@@ -7,7 +7,7 @@
                  class=" btn btn-default "
                  style="float: left;"
                  translate><i
-                class="fa fa-arrow-left"></i> Users</a>
+                class="fa fa-arrow-left"></i> Trails</a>
             </div>
         </span>
 
@@ -28,20 +28,20 @@
   <div class="box-body">
     <div class="alert alert-danger"
          ng-if="addError"
-         translate>Could not add user!
+         translate>Could not add Setting!
     </div>
 
-    <formly-form result="user"
+    <formly-form result="setting"
                  fields="formFields"
                  options="formOptions"
                  ng-submit="onSubmit()"></formly-form>
 
-    <div ng-if="!user.id"
+    <div ng-if="!dwSetting.id"
          class="form-group">
-      <label translate>Password!!</label>
+      <label translate>xyz!!</label>
       <input type="text"
              class="form-control"
-             ng-model="user.password"
+             ng-model="trail.xyz"
              required/>
     </div>
 

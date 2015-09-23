@@ -21,6 +21,16 @@ body {
     vertical-align: top;
 }
 
+.red-throb{
+    color: #cccccc;
+    -moz-animation: color_change 1s infinite alternate;
+}
+
+@-moz-keyframes color_change {
+    from { background-color: #ac1b00; }
+    to { background-color: #cd3400; }
+}
+
 a,
 select {
     margin-top: 1px;

@@ -1,4 +1,7 @@
+window.trailingActive = false;
+
 function trailSelectionChanged() {
+  $('#toggleTrailButton').removeClass('disabled');
 }
 function onLoad() {
   /*
@@ -20,22 +23,20 @@ function onLoad() {
     //e.source.postMessage('pong', event.origin);
     try {
       var msg = event.data;
-      var loginButton = window.document.getElementById('loginButton');
-      var trailList = window.document.getElementById('trailList');
-      var startTrailButton = window.document.getElementById('startTrailButton');
       if (msg.type == 'login-success-target-toolbar-frame') {
         window.aminoUser = msg.user;
-        loginButton.innerHTML = 'Logout: ' + window.aminoUser.username;
-        loginButton.classList.remove('btn-success');
-        loginButton.classList.add('btn-danger');
-        trailList.removeAttribute('disabled');
+        $('#loginButton').html('Logout: ' + window.aminoUser.username);
+        $('#loginButton').removeClass('btn-success');
+        $('#loginButton').addClass('btn-danger');
+        $('#trailList').removeAttr('disabled');
+        $('#toggleTrailButton').addClass('disabled');
         loadTrails();
       } else if (msg.type == 'logout-success-target-toolbar-frame') {
         window.aminoUser = null;
-        loginButton.innerHTML = 'Login';
-        loginButton.classList.remove('btn-danger');
-        loginButton.classList.add('btn-success');
-        trailList.setAttribute('disabled', 'disabled');
+        $('#loginButton').html('Login');
+        $('#loginButton').addClass('btn-success');
+        $('#loginButton').removeClass('btn-danger');
+        $('#trailList').attr('disabled', 'disabled');
         clearTrails();
       }
     } catch (ex) {
@@ -55,12 +56,16 @@ function loadTrails() {
     try {
       if (res.status === 200) {
         var rawTrails = JSON.parse(res.text);
+        if(!rawTrails.length){
+          return;
+        }
         $.each(rawTrails, function (i, trail) {
           $('#trailList').append($('<option>', {
-            value: name,
-            text: name
+            value: trail.name,
+            text: trail.name
           }));
         });
+        $('#trailList')[0].onchange();
       } else {
         console.log(errorMsg);
       }
@@ -69,7 +74,21 @@ function loadTrails() {
     }
   });
 }
-function startTrailing() {
+function toggleTrailing() {
+  if(window.trailingActive){
+    $('#loginButton').removeClass('disabled');
+    $('#trailList').removeAttr('disabled');
+    $('#toggleTrailButton').addClass('btn-success');
+    $('#toggleTrailButton').removeClass('red-throb');
+    $('#toggleTrailButton').html('Start Trailing');
+  }else{
+    $('#loginButton').addClass('disabled');
+    $('#trailList').attr('disabled', 'disabled');
+    $('#toggleTrailButton').removeClass('btn-success');
+    $('#toggleTrailButton').addClass('red-throb');
+    $('#toggleTrailButton').html('Stop Trailing');
+  }
+  window.trailingActive = !window.trailingActive;
 }
 function login() {
   //window.document.body.style.border = '5px solid red';

@@ -21,4 +21,20 @@ module.exports = function (app) {
   app.get('/modules/users/views/register', function (req, res) {
     res.render('users/views/register', {title: 'Login'});
   });
+  app.get('/modules/dwSettings/views/main', function (req, res) {
+    res.render('dwSettings/views/main', {title: 'Datwake Settings'});
+  });
+  app.get('/modules/dwSettings/views/list', function (req, res) {
+    res.render('dwSettings/views/list', {title: 'Datwake Settings'});
+  });
+  app.get('/modules/dwTrails/views/main', function (req, res) {
+    res.render('dwTrails/views/main', {title: 'Datawake Trails'});
+  });
+  app.get('/modules/dwTrails/views/list', function (req, res) {
+    res.render('dwTrails/views/list', {title: 'Datawake Trails'});
+  });
+  app.get('/modules/dwTrails/views/form', function (req, res) {
+    res.render('dwTrails/views/form', {title: 'Datawake Trails'});
+  });
+
 };

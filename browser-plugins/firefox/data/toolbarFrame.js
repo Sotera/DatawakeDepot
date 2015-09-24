@@ -52,6 +52,7 @@ function loadTrails() {
   clearTrails();
   var req = window.superagent;
   req.get('http://localhost:3000/api/dwTrails', function (res) {
+//  req.get('http://datawake-depot.org/api/dwTrails', function (res) {
     var errorMsg = 'GET /api/dwTrails call FAILED';
     try {
       if (res.status === 200) {

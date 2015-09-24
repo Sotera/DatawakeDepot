@@ -78,8 +78,7 @@ module.exports = function (grunt) {
       jsTest: {
         files: ['<%= yeoman.test %>/spec/{,*/}*.js'],
         tasks: [
-          'newer:jshint:test',
-          'karma'
+          'newer:jshint:test'
         ]
       },
       styles: {
@@ -512,12 +511,6 @@ module.exports = function (grunt) {
     },
 
     // Test settings
-    karma: {
-      unit: {
-        configFile: '<%= yeoman.test %>/karma.conf.js',
-        singleRun: true
-      }
-    },
     loopback_sdk_angular: {
       services: {
         options: {

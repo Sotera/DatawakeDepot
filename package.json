@@ -81,7 +81,6 @@
     "passport-local": "1.0.0",
     "passport-oauth2": "1.1.2",
     "passport-twitter": "1.0.3",
-    "phantomjs": "^1.9.18",
     "serve-favicon": "2.3.0",
     "showdown": "1.2.3",
     "time-grunt": "1.2.1"
@@ -93,11 +92,6 @@
     "browserify": "11.1.0",
     "connect-livereload": "0.5.3",
     "jasmine-core": "2.3.4",
-    "karma": "^0.13.9",
-    "karma-cli": "^0.1.0",
-    "karma-coverage": "^0.5.2",
-    "karma-jasmine": "^0.3.6",
-    "karma-phantomjs-launcher": "^0.2.1",
     "run-sequence": "1.1.2",
     "tiny-lr": "0.1.6"
   }

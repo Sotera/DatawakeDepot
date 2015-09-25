@@ -5,7 +5,11 @@ function getPluginState() {
 }
 var PluginState = function(){
   this.loggedInUser = null;
+  this.loginUrl = null;
   this.toolbarFrameSource = null;
+  this.toolbarFrameOrigin = null;
+  this.contentScriptHandle = null;
+  this.pageModDatawakeDepotIncludeFilter = null;
 }
 
 //PluginState.prototype.sayHello = function(){}

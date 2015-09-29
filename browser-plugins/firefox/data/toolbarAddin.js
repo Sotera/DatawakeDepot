@@ -38,12 +38,17 @@ function init() {
   tabs.on('ready', function (tab) {
     if (pluginState.trailingActive) {
       var {Request} = require('sdk/request');
+      var url = pluginState.loginUrl + '/api/dwTrailUrls';
       Request({
-        url: 'http://www.yahoo.com',
-        onComplete: function(res){
+        url: url,
+        content: {
+          trailId: 1,
+          url: tab.url
+        },
+        onComplete: function (res) {
           console.log(res.text);
         }
-      }).get();
+      }).post();
     }
   });
 }

@@ -1,24 +1,8 @@
 window.trailingActive = false;
-
 function trailSelectionChanged() {
   $('#toggleTrailButton').removeClass('disabled');
 }
 function onLoad() {
-  /*
-   var trails = ['Select Trail', 'Woo Hoo Trail', 'Woo Lai Trail'];
-   var select = window.document.getElementById('trailList');
-   for (var i = 0; i < trails.length; ++i) {
-   var option = window.document.createElement('option');
-   option.innerHTML = trails[i];
-   option.value = trails[i];
-   if (i == 0) {
-   option.value = '';
-   option.setAttribute('disabled', 'disabled');
-   option.setAttribute('selected', 'selected');
-   }
-   select.appendChild(option);
-   }*/
-  //window.document.body.style.border = '5px solid red';
   window.addEventListener('message', function (event) {
     //e.source.postMessage('pong', event.origin);
     try {
@@ -57,7 +41,7 @@ function loadTrails() {
     try {
       if (res.status === 200) {
         var rawTrails = JSON.parse(res.text);
-        if(!rawTrails.length){
+        if (!rawTrails.length) {
           return;
         }
         $.each(rawTrails, function (i, trail) {
@@ -76,13 +60,13 @@ function loadTrails() {
   });
 }
 function toggleTrailing() {
-  if(window.trailingActive){
+  if (window.trailingActive) {
     $('#loginButton').removeClass('disabled');
     $('#trailList').removeAttr('disabled');
     $('#toggleTrailButton').addClass('btn-success');
     $('#toggleTrailButton').removeClass('red-throb');
     $('#toggleTrailButton').html('Start Trailing');
-  }else{
+  } else {
     $('#loginButton').addClass('disabled');
     $('#trailList').attr('disabled', 'disabled');
     $('#toggleTrailButton').removeClass('btn-success');
@@ -90,12 +74,14 @@ function toggleTrailing() {
     $('#toggleTrailButton').html('Stop Trailing');
   }
   window.trailingActive = !window.trailingActive;
+  window.parent.postMessage({action: 'set-trailing-active',
+    data: window.trailingActive}, '*');
 }
 function login() {
   //window.document.body.style.border = '5px solid red';
   if (window.aminoUser) {
-    window.parent.postMessage('logout', '*');
+    window.parent.postMessage({action: 'logout'}, '*');
   } else {
-    window.parent.postMessage('login', '*');
+    window.parent.postMessage({action: 'login'}, '*');
   }
 }

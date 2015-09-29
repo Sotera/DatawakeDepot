@@ -7,15 +7,26 @@ function init() {
   var frame = new Frame({
     url: './toolbarFrame.html',
     onMessage: (e)=> {
-      if (e.data == 'logout') {
-        pluginState.contentScriptHandle.port.emit('logout-target-content-script', '');
-      } else if (e.data == 'login') {
-        tabs.open({
-          url: pluginState.loginUrl
-        });
-      } else if (e.data == 'page-loaded') {
+      var msg = e.data;
+      //This msg comes from the system
+      if (msg == 'page-loaded') {
         pluginState.toolbarFrameSource = e.source;
         pluginState.toolbarFrameOrigin = e.origin;
+        return;
+      }
+      //These come from us
+      switch (msg.action) {
+        case 'login':
+          tabs.open({
+            url: pluginState.loginUrl
+          });
+          break;
+        case 'logout':
+          pluginState.contentScriptHandle.port.emit('logout-target-content-script', '');
+          break;
+        case 'set-trailing-active':
+          pluginState.trailingActive = msg.data;
+          break;
       }
       //e.source.postMessage('pong', e.origin);
     }
@@ -24,7 +35,15 @@ function init() {
     title: 'Datawake',
     items: [frame]
   });
-  /*tabs.on('ready', function(tab){
-   var t = tab;
-   });*/
+  tabs.on('ready', function (tab) {
+    if (pluginState.trailingActive) {
+      var {Request} = require('sdk/request');
+      Request({
+        url: 'http://www.yahoo.com',
+        onComplete: function(res){
+          console.log(res.text);
+        }
+      }).get();
+    }
+  });
 }

@@ -1,5 +1,6 @@
 exports.init = init;
 var pluginState = require('./pluginState').getPluginState();
+var {on, emit} = require('sdk/event/core');
 function init() {
   var pageMod = require('sdk/page-mod');
   try {
@@ -11,6 +12,9 @@ function init() {
         pluginState.contentScriptHandle = worker;
         //This listener is waiting to hear from the injected content script
         pluginState.contentScriptHandle.port.on('logout-success-target-plugin', function (user) {
+          //Notify the contextMenu
+          emit(exports, 'logged-out-target-context-menu');
+          //Notify the toolbarFrame
           pluginState.loggedInUser = null;
           var msg = {
             type: 'logout-success-target-toolbar-frame'
@@ -18,6 +22,9 @@ function init() {
           pluginState.toolbarFrameSource.postMessage(msg, pluginState.toolbarFrameOrigin);
         });
         pluginState.contentScriptHandle.port.on('login-success-target-plugin', function (user) {
+          //Notify the contextMenu
+          emit(exports, 'logged-in-target-context-menu');
+          //Notify the toolbarFrame
           pluginState.loggedInUser = user;
           var msg = {
             type: 'login-success-target-toolbar-frame',
@@ -35,3 +42,4 @@ function init() {
     console.log(err);
   }
 };
+exports.on = on.bind(null, exports);

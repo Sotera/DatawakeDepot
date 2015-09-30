@@ -1,5 +1,5 @@
 var {pluginState} = require('./pluginState');
-exports.init = function() {
+exports.init = function () {
   var tabs = require('sdk/tabs');
   var { Toolbar } = require('sdk/ui/toolbar');
   var { Frame } = require('sdk/ui/frame');
@@ -13,11 +13,15 @@ exports.init = function() {
           pluginState.toolbarFrameOrigin = e.origin;
           break;
         case 'login':
+          //Aim a browser tab at our login screen
           tabs.open({
             url: pluginState.loginUrl
           });
           break;
         case 'logout':
+          logoutSuccessfulHandler(false);
+          //In case the login tab is open. Someday we may support multiple open
+          //login tabs. Not today.
           pluginState.postEventToContentScript('logout-target-content-script');
           break;
         case 'set-trailing-active':
@@ -46,5 +50,34 @@ exports.init = function() {
       }).post();
     }
   });
+  //Here we listen for when the DD content script is fired up and ready.
+  pluginState.onAddInModuleEvent('page-content-script-attached', function (data) {
+    pluginState.addContentScriptEventHandler('logout-success-target-plugin', function (user) {
+      logoutSuccessfulHandler(true);
+    });
+    pluginState.addContentScriptEventHandler('login-success-target-plugin', function (user) {
+      loginSuccessfulHandler(user);
+    });
+  });
+};
+function logoutSuccessfulHandler(tellToolBar) {
+  pluginState.postEventToAddInModule('logged-out-target-context-menu');
+  pluginState.loggedInUser = null;
+  if(!tellToolBar){
+    return;
+  }
+  var msg = {
+    type: 'logout-success-target-toolbar-frame'
+  }
+  pluginState.postMessageToToolBar(msg);
+}
+function loginSuccessfulHandler(user) {
+  pluginState.postEventToAddInModule('logged-in-target-context-menu');
+  pluginState.loggedInUser = user;
+  var msg = {
+    type: 'login-success-target-toolbar-frame',
+    user: user
+  };
+  pluginState.postMessageToToolBar(msg);
 }
 

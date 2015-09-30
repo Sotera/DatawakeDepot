@@ -28,30 +28,7 @@ var PluginState = function () {
   };
   me.onContentScriptAttach = function(worker){
     me.contentScriptHandle = worker;
-    //This listener is waiting to hear from the injected content script
-    me.addContentScriptEventHandler('logout-success-target-plugin', function (user) {
-      //Notify the contextMenu
-      me.postEventToAddInModule('logged-out-target-context-menu');
-      //Notify the toolbarFrame
-      me.loggedInUser = null;
-      var msg = {
-        type: 'logout-success-target-toolbar-frame'
-      }
-      me.postMessageToToolBar(msg);
-    });
-    me.addContentScriptEventHandler('login-success-target-plugin', function (user) {
-      //Notify the contextMenu
-      me.postEventToAddInModule('logged-in-target-context-menu');
-      //Notify the toolbarFrame
-      me.loggedInUser = user;
-      var msg = {
-        type: 'login-success-target-toolbar-frame',
-        user: user
-      }
-      me.postMessageToToolBar(msg);
-    });
-    //This message gets emitted from the mainline plugin code to the injected
-    //content script
+    me.postEventToAddInModule('page-content-script-attached');
     me.postEventToContentScript('page-attached-target-content-script');
   }
 };

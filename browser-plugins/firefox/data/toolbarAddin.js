@@ -1,6 +1,5 @@
-exports.init = init;
-var pluginState = require('./pluginState').getPluginState();
-function init() {
+var {pluginState} = require('./pluginState');
+exports.init = function() {
   var tabs = require('sdk/tabs');
   var { Toolbar } = require('sdk/ui/toolbar');
   var { Frame } = require('sdk/ui/frame');
@@ -8,27 +7,23 @@ function init() {
     url: './toolbarFrame.html',
     onMessage: (e)=> {
       var msg = e.data;
-      //This msg comes from the system
-      if (msg == 'page-loaded') {
-        pluginState.toolbarFrameSource = e.source;
-        pluginState.toolbarFrameOrigin = e.origin;
-        return;
-      }
-      //These come from us
       switch (msg.action) {
+        case 'page-loaded':
+          pluginState.toolbarFrameSource = e.source;
+          pluginState.toolbarFrameOrigin = e.origin;
+          break;
         case 'login':
           tabs.open({
             url: pluginState.loginUrl
           });
           break;
         case 'logout':
-          pluginState.contentScriptHandle.port.emit('logout-target-content-script', '');
+          pluginState.postEventToContentScript('logout-target-content-script');
           break;
         case 'set-trailing-active':
           pluginState.trailingActive = msg.data;
           break;
       }
-      //e.source.postMessage('pong', e.origin);
     }
   });
   var toolbar = Toolbar({
@@ -52,3 +47,4 @@ function init() {
     }
   });
 }
+

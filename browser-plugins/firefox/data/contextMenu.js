@@ -1,16 +1,15 @@
-exports.init = init;
+var {pluginState} = require('./pluginState');
 var contextMenu = require("sdk/context-menu");
 var self = require('sdk/self');
-var pageMods = require('./pageMods');
 var menu = null;
-function init() {
-  pageMods.on('logged-out-target-context-menu', function () {
+exports.init = function () {
+  pluginState.onAddInModuleEvent('logged-out-target-context-menu', function () {
     if (menu) {
       menu.destroy();
       menu = null;
     }
   });
-  pageMods.on('logged-in-target-context-menu', function () {
+  pluginState.onAddInModuleEvent('logged-in-target-context-menu', function () {
     addContextMenu();
   });
 }

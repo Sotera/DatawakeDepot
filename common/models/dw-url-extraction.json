@@ -7,11 +7,10 @@
       "type": "number",
       "id": true
     },
-    "extractedType": {
-      "type": "string",
-      "required": true
+    "domainEntityTypeId": {
+      "type": "number"
     },
-    "extractedValue": {
+    "Value": {
       "type": "string"
     }
   },

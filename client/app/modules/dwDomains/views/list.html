@@ -1,0 +1,22 @@
+<div class="box">
+  <div class="box-body no-padding" style="min-height: 120px;">
+    <table class="table table-bordered table-striped">
+      <tr ng-repeat="domain in domains">
+        <td>
+          <a href="" ui-sref="app.dwDomains.view({id: domain.id})">{{domain.domain}}</a>
+          <span class="text-muted">{{domain.value}}</span>
+          <span class="pull-right">
+            <div class="btn-group">
+              <button class="btn btn-xs btn-default" ui-sref="app.domain.domain({ id: domain.id })"><i class="fa fa-key"></i></button>
+              <button class="btn btn-xs btn-default" ui-sref="app.domain.edit({ id: domain.id })"><i class="fa fa-pencil"></i></button>
+              <button class="btn btn-xs btn-danger" ng-click="delete({ id: domain.id })"><i class="fa fa-trash-o"></i></button>
+            </div>
+          </span>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div ng-if="loading" class="overlay"></div>
+  <div ng-if="loading" class="loading-img"></div>
+</div>
+

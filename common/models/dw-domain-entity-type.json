@@ -1,16 +1,17 @@
 {
-  "name": "DwDomainItem",
-  "plural": "dwDomainItems",
+  "name": "DwDomainEntityType",
+  "plural": "dwDomainEntityTypes",
   "base": "PersistedModel",
   "properties": {
     "id": {
       "type": "number",
       "id": true
     },
-    "domainEntityTypeId": {
-      "type": "number"
+    "name": {
+      "type": "string",
+      "required": true
     },
-    "itemValue": {
+    "description": {
       "type": "string"
     },
     "domainId":{
@@ -22,11 +23,6 @@
     "domain": {
       "type": "belongsTo",
       "model": "DwDomain",
-      "foreignKey": "id"
-    },
-    "domainEntityType": {
-      "type": "hasOne",
-      "model": "DwDomainEntityType",
       "foreignKey": "id"
     }
   },

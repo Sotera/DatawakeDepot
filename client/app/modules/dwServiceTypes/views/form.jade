@@ -1,0 +1,21 @@
+.box
+  .box-header
+    span.box-title
+      .input-group
+        a.btn.btn-default(translate, href='', ui-sref='^.list', style='float: left;')
+          i.fa.fa-arrow-left Service Types
+    .box-tools.pull-right
+      span.pull-right.btn-group
+        button.btn.btn-primary.btn-success.btn-sm(translate, ng-click='onSubmit()')
+          i.fa.fa-save Save
+        a.btn.btn-sm.btn-default(href='', ng-click='delete({id: page.id})')
+          i.fa.fa-trash-o
+  .box-body
+    .alert.alert-danger(translate, ng-if='addError') Could not add Service Type!
+    form(ng-submit='onSubmit()' novalidate)
+      formly-form(model='dwServiceType', fields='formFields')
+
+  .overlay(ng-if='loading')
+  .overlay(ng-if='loading-img')
+
+

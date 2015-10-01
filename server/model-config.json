@@ -109,5 +109,9 @@
   "DwDomain": {
     "dataSource": "db",
     "public": true
+  },
+  "DwDomainEntityType": {
+    "dataSource": "db",
+    "public": true
   }
 }

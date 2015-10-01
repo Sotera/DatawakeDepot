@@ -1,0 +1,31 @@
+.box
+    .box-body.no-padding(style='min-height: 120px;')
+        table.table.table-striped(st-table='displayedServiceTypes', st-safe-src='safeDisplayedServiceTypes')
+            thead
+                tr
+                    th
+                    th(st-sort='name') Service Type Name
+                    th(st-sort='description') Description
+                tr
+                    th
+                        a.btn.btn-block.btn-success(ui-sref='^.add')
+                            span.glyphicon.glyphicon-plus(style="margin-right: 10px")
+                            span Add Service Type
+                    th
+                        input.input-sm.form-control(st-search='name' type='search' placeholder='search')
+                    th
+                        input.input-sm.form-control(st-search='description' type='search' placeholder='search')
+            tbody
+                tr(ng-repeat='serviceType in displayedServiceTypes')
+                    td(style='width: 120px')
+                        .btn-group
+                            button.btn.btn-sm.btn-default(ui-sref='app.dwServiceTypes.edit({id:serviceType.id})')
+                                i.fa.fa-pencil
+                            button.btn.btn-sm.btn-danger(ng-click='delete({id:serviceType.id})')
+                                i.fa.fa-trash-o
+                    td
+                        span.text-muted {{serviceType.name}}
+                    td
+                        span.text-muted {{serviceType.description}}
+    .overlay(ng-if='loading')
+    .loading-img(ng-if='loading')

@@ -1,0 +1,22 @@
+<div class="box">
+  <div class="box-body no-padding" style="min-height: 120px;">
+    <table class="table table-bordered table-striped">
+      <tr ng-repeat="crawlType in crawlTypes">
+        <td>
+          <a href="" ui-sref="app.dwCrawlTypes.view({id: crawlType.id})">{{crawlType.name}}</a>
+          <span class="text-muted">{{crawlType.description}}</span>
+          <span class="pull-right">
+            <div class="btn-group">
+              <button class="btn btn-xs btn-default" ui-sref="app.crawlType.name({ id: crawlType.id })"><i class="fa fa-key"></i></button>
+              <button class="btn btn-xs btn-default" ui-sref="app.crawlType.edit({ id: crawlType.id })"><i class="fa fa-pencil"></i></button>
+              <button class="btn btn-xs btn-danger" ng-click="delete({ id: crawlType.id })"><i class="fa fa-trash-o"></i></button>
+            </div>
+          </span>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div ng-if="loading" class="overlay"></div>
+  <div ng-if="loading" class="loading-img"></div>
+</div>
+

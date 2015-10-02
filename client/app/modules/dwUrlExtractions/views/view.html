@@ -1,0 +1,17 @@
+<div class="box">
+    <div class="box-header">
+        <h3 class="box-title">
+            <a href="" ui-sref="^.list" class="btn btn-default" translate><i class="fa fa-arrow-left"></i> Url Extractions</a>
+            {{urlExtraction.name}}
+        </h3>
+    </div>
+    <div class="box-body">
+        <div>
+            <h2>{{urlExtraction.name}}
+                <small>{{urlExtraction.description}}</small>
+            </h2>
+                       <h3 translate>Raw</h3>
+            <pre>{{urlExtraction|json}}</pre>
+        </div>
+    </div>
+</div>

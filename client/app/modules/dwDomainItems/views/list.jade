@@ -1,0 +1,31 @@
+.box
+    .box-body.no-padding(style='min-height: 120px;')
+        table.table.table-striped(st-table='displayedDomainItems', st-safe-src='safedisplayedDomainItems')
+            thead
+                tr
+                    th
+                    th(st-sort='name') Domain Item Type
+                    th(st-sort='description') Domain Item Value
+                tr
+                    th
+                        a.btn.btn-block.btn-success(ui-sref='^.add')
+                            span.glyphicon.glyphicon-plus(style="margin-right: 10px")
+                            span Add Domain Item
+                    th
+                        input.input-sm.form-control(st-search='name' type='search' placeholder='search')
+                    th
+                        input.input-sm.form-control(st-search='description' type='search' placeholder='search')
+            tbody
+                tr(ng-repeat='domainItem in displayedDomainItems')
+                    td(style='width: 120px')
+                        .btn-group
+                            button.btn.btn-sm.btn-default(ui-sref='app.dwDomainItems.edit({id:domainItem.id})')
+                                i.fa.fa-pencil
+                            button.btn.btn-sm.btn-danger(ng-click='delete({id:domainItem.id})')
+                                i.fa.fa-trash-o
+                    td
+                        span.text-muted {{domainItem.domainEntityTypeId}}
+                    td
+                        span.text-muted {{domainItem.itemValue}}
+    .overlay(ng-if='loading')
+    .loading-img(ng-if='loading')

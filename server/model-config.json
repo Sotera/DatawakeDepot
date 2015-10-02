@@ -113,5 +113,9 @@
   "DwDomainEntityType": {
     "dataSource": "db",
     "public": true
+  },
+  "DwUrlExtraction": {
+    "dataSource": "db",
+    "public": true
   }
 }

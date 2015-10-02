@@ -1,0 +1,27 @@
+.box
+    .box-body.no-padding(style='min-height: 120px;')
+        table.table.table-striped(st-table='displayedTrailUrls', st-safe-src='safeDisplayedTrailUrls')
+            thead
+                tr
+                    th
+                    th(st-sort='name') Trail Url
+                tr
+                    th
+                        a.btn.btn-block.btn-success(ui-sref='^.add')
+                            span.glyphicon.glyphicon-plus(style="margin-right: 10px")
+                            span Add Trail Url
+                    th
+                        input.input-sm.form-control(st-search='url' type='search' placeholder='search')
+            tbody
+                tr(ng-repeat='trailUrl in displayedTrailUrls')
+                    td(style='width: 120px')
+                        .btn-group
+                            button.btn.btn-sm.btn-default(ui-sref='app.dwTrailUrls.edit({id:trailUrl.id})')
+                                i.fa.fa-pencil
+                            button.btn.btn-sm.btn-danger(ng-click='delete({id:trailUrl.id})')
+                                i.fa.fa-trash-o
+                    td
+                        span.text-muted {{trailUrl.url}}
+
+    .overlay(ng-if='loading')
+    .loading-img(ng-if='loading')

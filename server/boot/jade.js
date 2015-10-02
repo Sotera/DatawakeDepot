@@ -48,27 +48,27 @@ module.exports = function (app) {
     res.render('dwDomains/views/form', {title: 'Datawake Domains'});
   });
 
-  ///* dwDomainEntityTypes */
-  //app.get('/modules/dwDomainEntityTypes/views/main', function (req, res) {
-  //    res.render('dwDomainEntityTypes/views/main', {title: 'Datawake Domain Entity Types'});
-  //});
-  //app.get('/modules/dwDomainEntityTypes/views/list', function (req, res) {
-  //    res.render('dwDomainEntityTypes/views/list', {title: 'Datawake Domain Entity Types'});
-  //});
-  //app.get('/modules/dwDomainEntityTypes/views/form', function (req, res) {
-  //    res.render('dwDomainEntityTypes/views/form', {title: 'Datawake Domain Entity Types'});
-  //});
+  /* dwDomainEntityTypes */
+  app.get('/modules/dwDomainEntityTypes/views/main', function (req, res) {
+      res.render('dwDomainEntityTypes/views/main', {title: 'Datawake Domain Entity Types'});
+  });
+  app.get('/modules/dwDomainEntityTypes/views/list', function (req, res) {
+      res.render('dwDomainEntityTypes/views/list', {title: 'Datawake Domain Entity Types'});
+  });
+  app.get('/modules/dwDomainEntityTypes/views/form', function (req, res) {
+      res.render('dwDomainEntityTypes/views/form', {title: 'Datawake Domain Entity Types'});
+  });
 
-  ///* dwDomainItems */
-  //app.get('/modules/dwDomainItems/views/main', function (req, res) {
-  //    res.render('dwDomainItems/views/main', {title: 'Datawake Domain Items'});
-  //});
-  //app.get('/modules/dwDomainItems/views/list', function (req, res) {
-  //    res.render('dwDomainItems/views/list', {title: 'Datawake Domain Items'});
-  //});
-  //app.get('/modules/dwDomainItems/views/form', function (req, res) {
-  //    res.render('dwDomainItems/views/form', {title: 'Datawake Domain Items'});
-  //});
+  /* dwDomainItems */
+  app.get('/modules/dwDomainItems/views/main', function (req, res) {
+      res.render('dwDomainItems/views/main', {title: 'Datawake Domain Items'});
+  });
+  app.get('/modules/dwDomainItems/views/list', function (req, res) {
+      res.render('dwDomainItems/views/list', {title: 'Datawake Domain Items'});
+  });
+  app.get('/modules/dwDomainItems/views/form', function (req, res) {
+      res.render('dwDomainItems/views/form', {title: 'Datawake Domain Items'});
+  });
 
   /* dwServiceTypes */
   app.get('/modules/dwServiceTypes/views/main', function (req, res) {
@@ -103,26 +103,26 @@ module.exports = function (app) {
     res.render('dwTrails/views/form', {title: 'Datawake Trails'});
   });
 
-  ///* dwTrailUrls */
-  //app.get('/modules/dwTrailUrls/views/main', function (req, res) {
-  //    res.render('dwTrailUrls/views/main', {title: 'Datawake Trail Urls'});
-  //});
-  //app.get('/modules/dwTrailUrls/views/list', function (req, res) {
-  //    res.render('dwTrailUrls/views/list', {title: 'Datawake Trail Urls'});
-  //});
-  //app.get('/modules/dwTrailUrls/views/form', function (req, res) {
-  //    res.render('dwTrailUrls/views/form', {title: 'Datawake Trail Urls'});
-  //});
+  /* dwTrailUrls */
+  app.get('/modules/dwTrailUrls/views/main', function (req, res) {
+      res.render('dwTrailUrls/views/main', {title: 'Datawake Trail Urls'});
+  });
+  app.get('/modules/dwTrailUrls/views/list', function (req, res) {
+      res.render('dwTrailUrls/views/list', {title: 'Datawake Trail Urls'});
+  });
+  app.get('/modules/dwTrailUrls/views/form', function (req, res) {
+      res.render('dwTrailUrls/views/form', {title: 'Datawake Trail Urls'});
+  });
 
-  ///* dwTrailUrlExtractions */
-  //app.get('/modules/dwTrailUrlExtractions/views/main', function (req, res) {
-  //    res.render('dwTrailUrlExtractions/views/main', {title: 'Datawake Trail Extractions'});
-  //});
-  //app.get('/modules/dwTrailUrlExtractions/views/list', function (req, res) {
-  //    res.render('dwTrailUrlExtractions/views/list', {title: 'Datawake Trail Extractions'});
-  //});
-  //app.get('/modules/dwTrailUrlExtractions/views/form', function (req, res) {
-  //    res.render('dwTrailUrlExtractions/views/form', {title: 'Datawake Trail Extractions'});
-  //});
+  /* dwUrlExtractions */
+  app.get('/modules/dwUrlExtractions/views/main', function (req, res) {
+      res.render('dwUrlExtractions/views/main', {title: 'Datawake Trail Extractions'});
+  });
+  app.get('/modules/dwUrlExtractions/views/list', function (req, res) {
+      res.render('dwUrlExtractions/views/list', {title: 'Datawake Trail Extractions'});
+  });
+  app.get('/modules/dwUrlExtractions/views/form', function (req, res) {
+      res.render('dwUrlExtractions/views/form', {title: 'Datawake Trail Extractions'});
+  });
 
 };

@@ -51,16 +51,14 @@ angular.module('loopbackApp', [
 
   'com.module.dwCrawlTypes',
   'com.module.dwDomains',
+  'com.module.dwDomainEntityTypes',
+  'com.module.dwDomainItems',
   'com.module.dwServiceTypes',
   'com.module.dwSettings',
-  'com.module.dwTrails'
+  'com.module.dwTrails',
+  'com.module.dwTrailUrls',
+  'com.module.dwUrlExtractions'
 
-  /*
-   ,'com.module.dwDomainEntityTypes'
-   ,'com.module.dwDomainItems'
-   ,'com.module.dwTrailUrls'
-   ,'com.module.dwTrailUrlExtractions'
-   */
 ])
   .run(function ($rootScope, $cookies, gettextCatalog) {
     $rootScope.locales = {

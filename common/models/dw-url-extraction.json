@@ -10,12 +10,21 @@
     "domainEntityTypeId": {
       "type": "number"
     },
-    "Value": {
+    "value": {
       "type": "string"
+    },
+    "trailId": {
+      "type": "number"
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "domain": {
+      "type": "belongsTo",
+      "model": "DwTrailUrl",
+      "foreignKey": "trailId"
+    }
+  },
   "acls": [],
   "methods": {}
 }

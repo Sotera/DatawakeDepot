@@ -1,285 +1,56 @@
 'use strict';
-// to enable these logs set `DEBUG=boot:04-load-content` or `DEBUG=boot:*`
+// to enable these logs set `DEBUG=boot:04-load-dwsettings` or `DEBUG=boot:*`
 var log = require('debug')('boot:04-load-dwsettings');
+function dwSettingFindOrCreate(app, name, value) {
+  app.models.DwSetting.findOrCreate(
+    {where: {setting: name}}, // find
+    {
+      setting: name,
+      value: value
+    }, // create
+    function (err, data, created) {
+      if (err) {
+        console.error('err', err);
+      }
+      (created) ? log('created Setting', data.setting)
+        : log('found Setting', data.setting);
+    });
+}
+var nameValuePairs = [
+  {name: 'CDR_ES_CRED', value: null},
+  {name: 'CDR_ES_HOST', value: 'els.istresearch.com'},
+  {name: 'CDR_ES_INDEX', value: 'memex-domains'},
+  {name: 'CDR_ES_PORT', value: '9200'},
+  {name: 'DEEPDIVE_REPO', value: 'atf'},
+  {name: 'DEEPDIVE_URL', value: 'https://api.clearcutcorp.com/docs'},
+  {name: 'DEEPDIVE_USER', value: 'justin'},
+  {name: 'DIG_URL', value: 'http://none.com'},
+  {name: 'DW_CONN_TYPE', value: 'mysql'},
+  {name: 'DW_CRAWL', value: 'False'},
+  {name: 'DW_EXTERNAL_LINK_NAMES', value: 'Tellfinder, Google'},
+  {
+    name: 'DW_EXTERNAL_LINK_VALUES',
+    value: 'https://tellfinder.istresearch.com:8443/tellfinder/entitylist.jsp?tip=$VALUE&attribute=false,https://google.com#q=$VALUE'
+  },
+  {name: 'DW_MOCK_AUTH', value: '1'},
+  {name: 'DW_MOCK_FORENSIC_AUTH', value: '1'},
+  {name: 'ES_CRED', value: null},
+  {name: 'ES_HOST', value: 'els.istresearch.com'},
+  {name: 'ES_INDEX', value: 'memex_ht'},
+  {name: 'ES_MRPN', value: '10'},
+  {name: 'ES_PORT', value: '9200'},
+  {name: 'EXTRACTION_BLACKLIST', value: 'www.google.com,search.yahoo.com,www.bing.com,www.yahoo.com'},
+  {name: 'MITIE_HOME', value: '/usr/lib/mitie/MITIE'},
+  {name: 'PROXY_PORT', value: '8484'}
+];
 module.exports = function (app) {
   if (app.dataSources.db.name !== 'Memory' && !process.env.INITDB) {
     return;
   }
   log('Creating dwSettings');
-  var DwSetting = app.models.DwSetting;
   //JReeme sez: setMaxListeners so we don't have to see that ridiculous memory leak warning
-  DwSetting.getDataSource().setMaxListeners(32);
-  DwSetting.findOrCreate(
-    {where: {setting: 'CDR_ES_CRED'}}, // find
-    {
-      setting: 'CDR_ES_CRED',
-      value: null
-    }, // create
-    function (err, data, created) {
-      if (err) {
-        console.error('err', err);
-      }
-      (created) ? log('created Setting', data.setting)
-        : log('found Setting', data.setting);
-    });
-  DwSetting.findOrCreate(
-    {where: {setting: 'CDR_ES_HOST'}}, // find
-    {
-      setting: 'CDR_ES_HOST',
-      value: 'els.istresearch.com'
-    }, // create
-    function (err, data, created) {
-      if (err) {
-        console.error('err', err);
-      }
-      (created) ? log('created Setting', data.setting)
-        : log('found Setting', data.setting);
-    });
-  DwSetting.findOrCreate(
-    {where: {setting: 'CDR_ES_INDEX'}}, // find
-    {
-      setting: 'CDR_ES_INDEX',
-      value: 'memex-domains'
-    }, // create
-    function (err, data, created) {
-      if (err) {
-        console.error('err', err);
-      }
-      (created) ? log('created Setting', data.setting)
-        : log('found Setting', data.setting);
-    });
-  DwSetting.findOrCreate(
-    {where: {setting: 'CDR_ES_PORT'}}, // find
-    {
-      setting: 'CDR_ES_PORT',
-      value: '9200'
-    }, // create
-    function (err, data, created) {
-      if (err) {
-        console.error('err', err);
-      }
-      (created) ? log('created Setting', data.setting)
-        : log('found Setting', data.setting);
-    });
-  DwSetting.findOrCreate(
-    {where: {setting: 'DEEPDIVE_REPO'}}, // find
-    {
-      setting: 'DEEPDIVE_REPO',
-      value: 'atf'
-    }, // create
-    function (err, data, created) {
-      if (err) {
-        console.error('err', err);
-      }
-      (created) ? log('created Setting', data.setting)
-        : log('found Setting', data.setting);
-    });
-  DwSetting.findOrCreate(
-    {where: {setting: 'DEEPDIVE_URL'}}, // find
-    {
-      setting: 'DEEPDIVE_URL',
-      value: 'https://api.clearcutcorp.com/docs'
-    }, // create
-    function (err, data, created) {
-      if (err) {
-        console.error('err', err);
-      }
-      (created) ? log('created Setting', data.setting)
-        : log('found Setting', data.setting);
-    });
-  DwSetting.findOrCreate(
-    {where: {setting: 'DEEPDIVE_USER'}}, // find
-    {
-      setting: 'DEEPDIVE_USER',
-      value: 'justin'
-    }, // create
-    function (err, data, created) {
-      if (err) {
-        console.error('err', err);
-      }
-      (created) ? log('created Setting', data.setting)
-        : log('found Setting', data.setting);
-    });
-  DwSetting.findOrCreate(
-    {where: {setting: 'DIG_URL'}}, // find
-    {
-      setting: 'DIG_URL',
-      value: 'http://none.com'
-    }, // create
-    function (err, data, created) {
-      if (err) {
-        console.error('err', err);
-      }
-      (created) ? log('created Setting', data.setting)
-        : log('found Setting', data.setting);
-    });
-  DwSetting.findOrCreate(
-    {where: {setting: 'DW_CONN_TYPE'}}, // find
-    {
-      setting: 'DW_CONN_TYPE',
-      value: 'mysql'
-    }, // create
-    function (err, data, created) {
-      if (err) {
-        console.error('err', err);
-      }
-      (created) ? log('created Setting', data.setting)
-        : log('found Setting', data.setting);
-    });
-  DwSetting.findOrCreate(
-    {where: {setting: 'DW_CRAWL'}}, // find
-    {
-      setting: 'DW_CRAWL',
-      value: 'False'
-    }, // create
-    function (err, data, created) {
-      if (err) {
-        console.error('err', err);
-      }
-      (created) ? log('created Setting', data.setting)
-        : log('found Setting', data.setting);
-    });
-  DwSetting.findOrCreate(
-    {where: {setting: 'DW_EXTERNAL_LINK_NAMES'}}, // find
-    {
-      setting: 'DW_EXTERNAL_LINK_NAMES',
-      value: 'Tellfinder, Google'
-    }, // create
-    function (err, data, created) {
-      if (err) {
-        console.error('err', err);
-      }
-      (created) ? log('created Setting', data.setting)
-        : log('found Setting', data.setting);
-    });
-  DwSetting.findOrCreate(
-    {where: {setting: 'DW_EXTERNAL_LINK_VALUES'}}, // find
-    {
-      setting: 'DW_EXTERNAL_LINK_VALUES',
-      value: 'https://tellfinder.istresearch.com:8443/tellfinder/entitylist.jsp?tip=$VALUE&attribute=false,https://google.com#q=$VALUE'
-    }, // create
-    function (err, data, created) {
-      if (err) {
-        console.error('err', err);
-      }
-      (created) ? log('created Setting', data.setting)
-        : log('found Setting', data.setting);
-    });
-  DwSetting.findOrCreate(
-    {where: {setting: 'DW_MOCK_AUTH'}}, // find
-    {
-      setting: 'DW_MOCK_AUTH',
-      value: '1'
-    }, // create
-    function (err, data, created) {
-      if (err) {
-        console.error('err', err);
-      }
-      (created) ? log('created Setting', data.setting)
-        : log('found Setting', data.setting);
-    });
-  DwSetting.findOrCreate(
-    {where: {setting: 'DW_MOCK_FORENSIC_AUTH'}}, // find
-    {
-      setting: 'DW_MOCK_FORENSIC_AUTH',
-      value: '1'
-    }, // create
-    function (err, data, created) {
-      if (err) {
-        console.error('err', err);
-      }
-      (created) ? log('created Setting', data.setting)
-        : log('found Setting', data.setting);
-    });
-  DwSetting.findOrCreate(
-    {where: {setting: 'ES_CRED'}}, // find
-    {
-      setting: 'ES_CRED',
-      value: null
-    }, // create
-    function (err, data, created) {
-      if (err) {
-        console.error('err', err);
-      }
-      (created) ? log('created Setting', data.setting)
-        : log('found Setting', data.setting);
-    });
-  DwSetting.findOrCreate(
-    {where: {setting: 'ES_HOST'}}, // find
-    {
-      setting: 'ES_HOST',
-      value: 'els.istresearch.com'
-    }, // create
-    function (err, data, created) {
-      if (err) {
-        console.error('err', err);
-      }
-      (created) ? log('created Setting', data.setting)
-        : log('found Setting', data.setting);
-    });
-  DwSetting.findOrCreate(
-    {where: {setting: 'ES_INDEX'}}, // find
-    {
-      setting: 'ES_INDEX',
-      value: 'memex_ht'
-    }, // create
-    function (err, data, created) {
-      if (err) {
-        console.error('err', err);
-      }
-      (created) ? log('created Setting', data.setting)
-        : log('found Setting', data.setting);
-    });
-  DwSetting.findOrCreate(
-    {where: {setting: 'ES_MRPN'}}, // find
-    {
-      setting: 'ES_MRPN',
-      value: '10'
-    }, // create
-    function (err, data, created) {
-      if (err) {
-        console.error('err', err);
-      }
-      (created) ? log('created Setting', data.setting)
-        : log('found Setting', data.setting);
-    });
-  DwSetting.findOrCreate(
-    {where: {setting: 'ES_PORT'}}, // find
-    {
-      setting: 'ES_PORT',
-      value: '9200'
-    }, // create
-    function (err, data, created) {
-      if (err) {
-        console.error('err', err);
-      }
-      (created) ? log('created Setting', data.setting)
-        : log('found Setting', data.setting);
-    });
-  DwSetting.findOrCreate(
-    {where: {setting: 'EXTRACTION_BLACKLIST'}}, // find
-    {
-      setting: 'EXTRACTION_BLACKLIST',
-      value: 'www.google.com,search.yahoo.com,www.bing.com,www.yahoo.com'
-    }, // create
-    function (err, data, created) {
-      if (err) {
-        console.error('err', err);
-      }
-      (created) ? log('created Setting', data.setting)
-        : log('found Setting', data.setting);
-    });
-  DwSetting.findOrCreate(
-    {where: {setting: 'MITIE_HOME'}}, // find
-    {
-      setting: 'MITIE_HOME',
-      value: '/usr/lib/mitie/MITIE'
-    }, // create
-    function (err, data, created) {
-      if (err) {
-        console.error('err', err);
-      }
-      (created) ? log('created Setting', data.setting)
-        : log('found Setting', data.setting);
-    });
+  app.models.DwSetting.getDataSource().setMaxListeners(32);
+  nameValuePairs.forEach(function (item) {
+    dwSettingFindOrCreate(app, item.name, item.value);
+  });
 };

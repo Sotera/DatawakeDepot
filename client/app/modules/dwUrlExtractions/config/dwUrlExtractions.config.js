@@ -4,6 +4,6 @@ angular.module('com.module.dwUrlExtractions')
         $rootScope.addMenu(gettextCatalog.getString('Url Extractions'), 'app.dwUrlExtractions.list','fa-cog');
 
         DwUrlExtraction.find(function(data) {
-            $rootScope.addDashboardBox(gettextCatalog.getString('Datawake Trail Url Extractions'), 'bg-gray', 'ion-clipboard', data.length, 'app.dwUrlExtractions.list');
+            $rootScope.addDashboardBox(gettextCatalog.getString('Datawake Trail Url Extractions'), 'bg-green', 'fa-cog', data.length, 'app.dwUrlExtractions.list');
         });
     });

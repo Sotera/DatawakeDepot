@@ -13,7 +13,7 @@
   .box-body
     .alert.alert-danger(translate, ng-if='addError') Could not add Domain!
     form(ng-submit='onSubmit()' novalidate)
-      formly-form(model='dwDomain', fields='formFields')
+      formly-form(model='DwDomain', fields='formFields')
 
   .overlay(ng-if='loading')
   .overlay(ng-if='loading-img')

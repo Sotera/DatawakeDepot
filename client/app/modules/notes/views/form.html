@@ -10,7 +10,7 @@
 <div class="row">
   <div class="col-md-4">
     <div class="alert alert-danger" ng-if="addError" translate>Could not add note!</div>
-    <formly-form result="note" fields="formFields" options="formOptions" ng-submit="onSubmit()"></formly-form>
+    <formly-form model="note" fields="formFields" options="formOptions" ng-submit="onSubmit()"></formly-form>
   </div>
 </div>
 <div class="controls">

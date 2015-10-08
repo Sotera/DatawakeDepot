@@ -1,9 +1,11 @@
 'use strict';
-angular.module('com.module.dwDomains')
-    .run(function ($rootScope, gettextCatalog, DwDomain) {
-      $rootScope.addMenu(gettextCatalog.getString('Domains'), 'app.dwDomains.list','fa-cog');
+var app = angular.module('com.module.dwDomains');
 
-      DwDomain.find(function(data) {
-        $rootScope.addDashboardBox(gettextCatalog.getString('Datawake Domains'), 'bg-blue', 'ion-clipboard', data.length, 'app.dwDomains.list');
-      });
+app.run(function($rootScope, DwDomain, gettextCatalog) {
+    $rootScope.addMenu(gettextCatalog.getString('Datawake Domains'), 'app.domains.list', 'fa-file-o');
+
+    DwDomain.find(function(data) {
+        $rootScope.addDashboardBox(gettextCatalog.getString('Datawake Domains'),'bg-green', 'ion-clipboard', data.length, 'app.domains.list');
     });
+
+});

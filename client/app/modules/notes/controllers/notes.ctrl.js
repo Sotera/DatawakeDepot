@@ -1,26 +1,30 @@
 'use strict';
 var app = angular.module('com.module.notes');
 
-app.controller('NotesCtrl', function($scope, $state, $stateParams, NotesService,
-  gettextCatalog) {
+app.controller('NotesCtrl', function($scope, $state, $stateParams, NotesService, gettextCatalog) {
 
+  $scope.note = {};
   $scope.formFields = [{
     key: 'title',
-    type: 'text',
-    label: gettextCatalog.getString('Title'),
-    required: true
+    type: 'input',
+    templateOptions: {
+      label: gettextCatalog.getString('Title'),
+      required: true
+    }
   }, {
     key: 'body',
     type: 'textarea',
-    label: gettextCatalog.getString('Body'),
-    required: true
+    templateOptions: {
+      label: gettextCatalog.getString('Body'),
+      required: true
+    }
   }];
 
-/*  $scope.formOptions = {
-    uniqueFormId: true,
-    hideSubmit: false,
-    submitCopy: 'Save'
-  };*/
+  //$scope.formOptions = {
+  //  uniqueFormId: true,
+  //  hideSubmit: false,
+  //  submitCopy: 'Save'
+  //};
 
   $scope.delete = function(id) {
     NotesService.deleteNote(id, function() {
@@ -38,9 +42,11 @@ app.controller('NotesCtrl', function($scope, $state, $stateParams, NotesService,
   $scope.notes = NotesService.getNotes();
 
   if ($stateParams.id) {
-    $scope.note = NotesService.getNote($stateParams.id);
+    NotesService.getNote($stateParams.id).$promise.then(function(result){
+      $scope.note = result;})
   } else {
     $scope.note = {};
   }
 
 });
+

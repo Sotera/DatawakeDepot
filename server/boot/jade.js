@@ -44,9 +44,9 @@ module.exports = function (app) {
   app.get('/modules/dwDomains/views/list', function (req, res) {
     res.render('dwDomains/views/list', {title: 'Datawake Domains'});
   });
-  app.get('/modules/dwDomains/views/form', function (req, res) {
-    res.render('dwDomains/views/form', {title: 'Datawake Domains'});
-  });
+  //app.get('/modules/dwDomains/views/form', function (req, res) {
+  //  res.render('dwDomains/views/form', {title: 'Datawake Domains'});
+  //});
 
   /* dwDomainEntityTypes */
   app.get('/modules/dwDomainEntityTypes/views/main', function (req, res) {

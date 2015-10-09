@@ -22,7 +22,7 @@ exports.init = function () {
           logoutSuccessfulHandler(false);
           //In case the login tab is open. Someday we may support multiple open
           //login tabs. Not today.
-          pluginState.postEventToContentScript('logout-target-content-script');
+          pluginState.postEventToDatawakeDepotContentScript('logout-target-content-script');
           break;
         case 'set-trailing-active':
           pluginState.trailingActive = msg.data;
@@ -50,12 +50,22 @@ exports.init = function () {
       }).post();
     }
   });
+  //Here we listen for when the Scraper content script is fired up and ready.
+  pluginState.onAddInModuleEvent('page-scraper-content-script-attached-target-addin', function (data) {
+    pluginState.addScraperContentScriptEventHandler('contents', function (pageContents) {
+      var JSZip = require('./vendor/jszip/jszip.min.js');
+      var zip = new JSZip();
+      zip.load(pageContents.html);
+      var html = zip.file('zipped-content.zip').asText();
+      html = zip.file('zipped-content.zip').asText();
+    });
+  });
   //Here we listen for when the DD content script is fired up and ready.
-  pluginState.onAddInModuleEvent('page-content-script-attached', function (data) {
-    pluginState.addContentScriptEventHandler('logout-success-target-plugin', function (user) {
+  pluginState.onAddInModuleEvent('page-datawake-depot-content-script-attached-target-addin', function (data) {
+    pluginState.addDatawakeDepotContentScriptEventHandler('logout-success-target-plugin', function (user) {
       logoutSuccessfulHandler(true);
     });
-    pluginState.addContentScriptEventHandler('login-success-target-plugin', function (user) {
+    pluginState.addDatawakeDepotContentScriptEventHandler('login-success-target-plugin', function (user) {
       loginSuccessfulHandler(user);
     });
   });

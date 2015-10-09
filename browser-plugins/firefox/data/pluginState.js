@@ -6,19 +6,29 @@ var PluginState = function () {
   me.trailingActive = false;
   me.toolbarFrameSource = null;
   me.toolbarFrameOrigin = null;
-  me.contentScriptHandle = null;
+  me.datawakeDepotContentScriptHandle = null;
+  me.scraperContentScriptHandle = null;
   me.pageModDatawakeDepotIncludeFilter = null;
   me.postMessageToToolBar = function (msg) {
     me.toolbarFrameSource.postMessage(msg, me.toolbarFrameOrigin);
   };
-  me.postEventToContentScript = function (eventName, data) {
-    if (!me.contentScriptHandle) {
+  me.postEventToScraperContentScript = function (eventName, data) {
+    if (!me.scraperContentScriptHandle) {
       return;
     }
-    me.contentScriptHandle.port.emit(eventName, data);
+    me.scraperContentScriptHandle.port.emit(eventName, data);
   };
-  me.addContentScriptEventHandler = function (eventName, cb) {
-    me.contentScriptHandle.port.on(eventName, cb);
+  me.postEventToDatawakeDepotContentScript = function (eventName, data) {
+    if (!me.datawakeDepotContentScriptHandle) {
+      return;
+    }
+    me.datawakeDepotContentScriptHandle.port.emit(eventName, data);
+  };
+  me.addScraperContentScriptEventHandler = function (eventName, cb) {
+    me.scraperContentScriptHandle.port.on(eventName, cb);
+  };
+  me.addDatawakeDepotContentScriptEventHandler = function (eventName, cb) {
+    me.datawakeDepotContentScriptHandle.port.on(eventName, cb);
   };
   me.postEventToAddInModule = function (eventName, data) {
     emit(exports, eventName, data);
@@ -26,10 +36,15 @@ var PluginState = function () {
   me.onAddInModuleEvent = function (eventName, cb) {
     on(exports, eventName, cb);
   };
-  me.onContentScriptAttach = function(worker){
-    me.contentScriptHandle = worker;
-    me.postEventToAddInModule('page-content-script-attached');
-    me.postEventToContentScript('page-attached-target-content-script');
+  me.onScraperContentScriptAttach = function(worker){
+    me.scraperContentScriptHandle = worker;
+    me.postEventToAddInModule('page-scraper-content-script-attached-target-addin');
+    me.postEventToScraperContentScript('page-attached-target-content-script');
+  }
+  me.onDatawakeDepotContentScriptAttach = function(worker){
+    me.datawakeDepotContentScriptHandle = worker;
+    me.postEventToAddInModule('page-datawake-depot-content-script-attached-target-addin');
+    me.postEventToDatawakeDepotContentScript('page-attached-target-content-script');
   }
 };
 exports.pluginState = exports.pluginState || new PluginState();

@@ -1,103 +1,249 @@
 'use strict';
+//********************--> Factor this memstream code out (BEGIN)
+var stream = require('stream');
+var util = require('util');
+var fs = require('fs');
+// use Node.js Writable, otherwise load polyfill
+var Writable = stream.Writable || require('readable-stream').Writable;
+var memStore = {};
+/* Writable memory stream */
+function WritableMemoryStream(key, options) {
+  // allow use without new operator
+  if (!(this instanceof WritableMemoryStream)) {
+    return new WritableMemoryStream(key, options);
+  }
+  Writable.call(this, options); // init super
+  this.key = key; // save key
+  memStore[key] = new Buffer(''); // empty
+}
+util.inherits(WritableMemoryStream, Writable);
+WritableMemoryStream.prototype._write = function (chunk, enc, cb) {
+  // our memory store stores things in buffers
+  var buffer = (Buffer.isBuffer(chunk)) ?
+    chunk :  // already is Buffer use it
+    new Buffer(chunk, enc);  // string, convert
+  // concat to the buffer already there
+  memStore[this.key] = Buffer.concat([memStore[this.key], buffer]);
+  cb();
+};
+/*var memStreamProxySocket = new WritableMemoryStream('memStreamProxySocket');
+ var memStreamSocketRequest = new WritableMemoryStream('memStreamSocketRequest');*/
+var memStreamProxySocket = fs.createWriteStream('/tmp/proxySocket.bin');
+var memStreamSocketRequest = fs.createWriteStream('/tmp/socketRequest.bin');
+/*var memoryStream = new WritableMemoryStream('foo');
+ memoryStream.on('finish',function(){
+ var md = memStore;
+ });
+ memoryStream.write('hello');
+ memoryStream.write('world');
+ memoryStream.end();*/
+//********************--> Factor this memstream code out (END)
+//JReeme: Lifted from http://www.catonmat.net/http-proxy-in-nodejs/
 var http = require('http');
+var net = require('net');
+var appSettings = require('../appSettings');
+var debugging = 0;
+var regex_hostport = /^([^:]+)(:([0-9]+))?$/;
 // to enable these logs set `DEBUG=boot:proxy` or `DEBUG=boot:*`
 var log = require('debug')('boot:proxy');
+//Disable proxy server
 module.exports = function (app) {
-  var appSettings = require('../appSettings');
+};
+//Enable proxy server
+var module_exports = function (app) {
   appSettings.getSetting('PROXY_PORT')
     .then(function (proxyPortModel) {
       var proxyPort = proxyPortModel.value;
       log('Starting proxy server @ ' + proxyPort);
-      http.createServer(serverCallback).listen(proxyPort);
+      var server = http.createServer(httpUserRequest).listen(proxyPort);
+      // add handler for HTTPS (which issues a CONNECT to the proxy)
+      server.addListener(
+        'connect',
+        function (request, socketRequest, bodyhead) {
+          var url = request['url'];
+          var httpVersion = request['httpVersion'];
+          var hostport = getHostPortFromString(url, 443);
+          if (debugging) {
+            log('  = will connect to %s:%s', hostport[0], hostport[1]);
+          }
+          // set up TCP connection
+          var proxySocket = new net.Socket();
+          proxySocket.connect(
+            parseInt(hostport[1]), hostport[0],
+            function () {
+              if (debugging) {
+                log('  < connected to %s/%s', hostport[0], hostport[1]);
+                log('  > writing head of length %d', bodyhead.length);
+              }
+              proxySocket.write(bodyhead);
+              // tell the caller the connection was successfully established
+              socketRequest.write("HTTP/" + httpVersion + " 200 Connection established\r\n\r\n");
+            }
+          );
+          proxySocket.on(
+            'data',
+            function (chunk) {
+              if (debugging) {
+                log('  < data length = %d', chunk.length);
+              }
+              memStreamSocketRequest.write(chunk);
+              socketRequest.write(chunk);
+            }
+          );
+          proxySocket.on(
+            'end',
+            function () {
+              if (debugging) {
+                log('  < end');
+              }
+              socketRequest.end();
+            }
+          );
+          socketRequest.on(
+            'data',
+            function (chunk) {
+              if (debugging) {
+                log('  > data length = %d', chunk.length);
+              }
+              memStreamProxySocket.write(chunk);
+              proxySocket.write(chunk);
+            }
+          );
+          socketRequest.on(
+            'end',
+            function () {
+              if (debugging) {
+                log('  > end');
+              }
+              proxySocket.end();
+            }
+          );
+          proxySocket.on(
+            'error',
+            function (err) {
+              socketRequest.write("HTTP/" + httpVersion + " 500 Connection error\r\n\r\n");
+              if (debugging) {
+                log('  < ERR: %s', err);
+              }
+              socketRequest.end();
+            }
+          );
+          socketRequest.on(
+            'error',
+            function (err) {
+              if (debugging) {
+                log('  > ERR: %s', err);
+              }
+              proxySocket.end();
+            }
+          );
+        }
+      ); // HTTPS connect listener
     })
     .catch(function (err) {
       log(err);
     });
 };
-function serverCallback(req, res) {
-  if (!security_filter(req, res)) {
-    return;
-  }
-  req = prevent_loop(req, res);
-  if (!req) {
-    return;
-  }
-  var ip = req.connection.remoteAddress;
-  log(ip + ": " + req.method + " " + req.headers.host + "=>" + req.url);
-  //get authorization token
-  var authorization = authenticate(req);
-  //calc new host info
-  var action = handle_proxy_route(req.headers.host, authorization);
-  var host = encode_host(action);
-  //handle action
-  if (action.action == "redirect") {
-    action_redirect(res, host);
-  } else if (action.action == "proxyto") {
-    action_proxy(res, req, host);
-  } else if (action.action == "authenticate") {
-    action_authenticate(res, action.msg);
-  }
-}
-function security_filter(req, res) {
-  //HTTP 1.1 protocol violation: no host, no method, no url
-  if (req.headers.host === undefined ||
-    req.method === undefined ||
-    req.url === undefined) {
-    security_log(req, res, "Either host, method or url is poorly defined");
-    return false;
-  }
-  return true;
-}
-function security_log(req, res, errMsg) {
-  var ip = req.connection.remoteAddress;
-  msg = "**SECURITY VIOLATION**, " + ip + "," + (req.method || "!NO METHOD!");
-  msg += " " + (req.headers.host || "!NO HOST!");
-  msg += "=>" + (req.url || "!NO URL!") + "," + errMsg;
-  log(msg);
-}
-function prevent_loop(req, res) {
-  if (req.headers.proxy == "node.datawake") {//if request is already tatooed => loop
-    log("Loop detected");
-    res.writeHead(500);
-    res.write("Proxy loop!");
-    res.end();
-    return null;
-  } else {//append a tattoo to it
-    req.headers.proxy = "node.datawake";
-    return req;
-  }
-}
-function authenticate(req) {
-  var token = {
-    "login": "anonymous",
-    "pass": ""
-  };
-  if (req.headers.authorization && req.headers.authorization.search('Basic ') === 0) {
-    // fetch login and password
-    var basic = (new Buffer(req.headers.authorization.split(' ')[1], 'base64').toString());
-    log("Authentication token received: " + basic);
-    basic = basic.split(':');
-    token.login = basic[0];
-    token.pass = "";
-    for (i = 1; i < basic.length; i++) {
-      token.pass += basic[i];
+function getHostPortFromString(hostString, defaultPort) {
+  var host = hostString;
+  var port = defaultPort;
+  var result = regex_hostport.exec(hostString);
+  if (result != null) {
+    host = result[1];
+    if (result[2] != null) {
+      port = result[3];
     }
   }
-  return token;
+  return ( [host, port] );
 }
-function handle_proxy_route(host, token) {
-  //extract target host and port
-  var action = decode_host(host);
-  action.action = "proxyto";//default action
-  return action;
-}
-function decode_host(host) {
-  var retVal = {};
-  host = host.split(':');
-  retVal.host = host[0];
-  retVal.port = host[1] || 80;
-  return retVal;
-}
-function encode_host(host) {
-  return host.host + ((host.port == 80) ? "" : ":" + host.port);
+// handle a HTTP proxy request
+function httpUserRequest(userRequest, userResponse) {
+  //log('  > httpUserRequest--> request: %s', userRequest.url);
+  if (debugging) {
+    log('  > request: %s', userRequest.url);
+  }
+  var httpVersion = userRequest['httpVersion'];
+  var hostport = getHostPortFromString(userRequest.headers['host'], 80);
+  // have to extract the path from the requested URL
+  var path = userRequest.url;
+  var result = /^[a-zA-Z]+:\/\/[^\/]+(\/.*)?$/.exec(userRequest.url);
+  if (result) {
+    if (result[1].length > 0) {
+      path = result[1];
+    } else {
+      path = "/";
+    }
+  }
+  var options = {
+    'host': hostport[0],
+    'port': hostport[1],
+    'method': userRequest.method,
+    'path': path,
+    'agent': userRequest.agent,
+    'auth': userRequest.auth,
+    'headers': userRequest.headers
+  };
+  if (debugging) {
+    log('  > options: %s', JSON.stringify(options, null, 2));
+  }
+  var proxyRequest = http.request(
+    options,
+    function (proxyResponse) {
+      if (debugging) {
+        log('  > request headers: %s', JSON.stringify(options['headers'], null, 2));
+      }
+      if (debugging) {
+        log('  < response %d headers: %s', proxyResponse.statusCode, JSON.stringify(proxyResponse.headers, null, 2));
+      }
+      userResponse.writeHead(
+        proxyResponse.statusCode,
+        proxyResponse.headers
+      );
+      proxyResponse.on(
+        'data',
+        function (chunk) {
+          if (debugging) {
+            log('  < chunk = %d bytes', chunk.length);
+          }
+          userResponse.write(chunk);
+        }
+      );
+      proxyResponse.on(
+        'end',
+        function () {
+          if (debugging) {
+            log('  < END');
+          }
+          userResponse.end();
+        }
+      );
+    }
+  );
+  proxyRequest.on(
+    'error',
+    function (error) {
+      userResponse.writeHead(500);
+      userResponse.write(
+        "<h1>500 Error</h1>\r\n" +
+        "<p>Error was <pre>" + error + "</pre></p>\r\n" +
+        "</body></html>\r\n"
+      );
+      userResponse.end();
+    }
+  );
+  userRequest.addListener(
+    'data',
+    function (chunk) {
+      if (debugging) {
+        log('  > chunk = %d bytes', chunk.length);
+      }
+      proxyRequest.write(chunk);
+    }
+  );
+  userRequest.addListener(
+    'end',
+    function () {
+      proxyRequest.end();
+    }
+  );
 }

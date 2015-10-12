@@ -1,3 +1,4 @@
+var {Request} = require('sdk/request');
 var {pluginState} = require('./pluginState');
 exports.init = function () {
   var tabs = require('sdk/tabs');
@@ -27,6 +28,19 @@ exports.init = function () {
         case 'set-trailing-active':
           pluginState.trailingActive = msg.data;
           break;
+        case 'request-trails-target-addin':
+          var url = pluginState.loginUrl + '/api/dwTrails';
+          Request({
+            url: url,
+            onComplete: function (res) {
+              var msg = {
+                type: 'updated-trails-target-toolbar-frame',
+                trails: res.json
+              }
+              pluginState.postMessageToToolBar(msg);
+            }
+          }).get();
+          break;
       }
     }
   });
@@ -35,29 +49,35 @@ exports.init = function () {
     items: [frame]
   });
   tabs.on('ready', function (tab) {
-    if (pluginState.trailingActive) {
-      var {Request} = require('sdk/request');
-      var url = pluginState.loginUrl + '/api/dwTrailUrls';
-      Request({
-        url: url,
-        content: {
-          trailId: 1,
-          url: tab.url
-        },
-        onComplete: function (res) {
-          console.log(res.text);
-        }
-      }).post();
+    if (!pluginState.trailingActive) {
+      return;
     }
+    var url = pluginState.loginUrl + '/api/dwTrailUrls';
+    Request({
+      url: url,
+      content: {
+        trailId: 1,
+        url: tab.url
+      },
+      onComplete: function (res) {
+        console.log(res.text);
+      }
+    }).post();
   });
   //Here we listen for when the Scraper content script is fired up and ready.
   pluginState.onAddInModuleEvent('page-scraper-content-script-attached-target-addin', function (data) {
-    pluginState.addScraperContentScriptEventHandler('contents', function (pageContents) {
-      var JSZip = require('./vendor/jszip/jszip.min.js');
+    pluginState.addScraperContentScriptEventHandler('zipped-html-body', function (pageContents) {
+      //TODO: Work out some scraper eventing so we don't do the DOM operation if we're not trailing.
+      //This will work for now though.
+      if (!pluginState.trailingActive) {
+        return;
+      }
+
+      //HowTo: decode (unzip) in addin
+/*      var JSZip = require('./vendor/jszip/jszip.min.js');
       var zip = new JSZip();
-      zip.load(pageContents.html);
-      var html = zip.file('zipped-content.zip').asText();
-      html = zip.file('zipped-content.zip').asText();
+      zip.load(pageContents.zippedHtmlBody);
+      var html = zip.file('zipped-html-body.zip').asText();*/
     });
   });
   //Here we listen for when the DD content script is fired up and ready.
@@ -73,7 +93,7 @@ exports.init = function () {
 function logoutSuccessfulHandler(tellToolBar) {
   pluginState.postEventToAddInModule('logged-out-target-context-menu');
   pluginState.loggedInUser = null;
-  if(!tellToolBar){
+  if (!tellToolBar) {
     return;
   }
   var msg = {

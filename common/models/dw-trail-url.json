@@ -19,7 +19,7 @@
     },
     "trailId": {
       "type": "number"
-    }    ,
+    },
     "crawlType": {
       "type": "string"
     }
@@ -40,4 +40,3 @@
   "acls": [],
   "methods": {}
 }
-

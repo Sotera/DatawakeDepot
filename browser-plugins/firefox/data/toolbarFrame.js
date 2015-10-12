@@ -1,4 +1,6 @@
 window.trailingActive = false;
+function domainSelectionChanged() {
+}
 function trailSelectionChanged() {
   $('#toggleTrailButton').removeClass('disabled');
 }
@@ -12,6 +14,8 @@ function onLoad() {
         //We do this in case user logs out from WebApp. We'll get a signal from the
         //content script and we need to reset the toolbar UI
         setUIStateToLoggedOut();
+      } else if (msg.type == 'updated-trails-target-toolbar-frame') {
+        updateTrails(msg.trails);
       }
     } catch (ex) {
       console.log('Error decoding message to toolbar frame: ' + ex);
@@ -22,36 +26,19 @@ function onLoad() {
 function clearTrails() {
   $('#trailList').children().remove().end();
 }
-function loadTrails() {
+function updateTrails(updatedTrails) {
   clearTrails();
-  var req = window.superagent;
-  req.get('http://localhost:3000/api/dwTrails', function (res) {
-//  req.get('http://datawake-depot.org/api/dwTrails', function (res) {
-    var errorMsg = 'GET /api/dwTrails call FAILED';
-    try {
-      if (res.status === 200) {
-        var rawTrails = JSON.parse(res.text);
-        if (!rawTrails.length) {
-          return;
-        }
-        $.each(rawTrails, function (i, trail) {
-          $('#trailList').append($('<option>', {
-            value: trail.name,
-            text: trail.name
-          }));
-        });
-        $('#trailList')[0].onchange();
-      } else {
-        console.log(errorMsg);
-      }
-    } catch (ex) {
-      console.log(errorMsg + ': ' + ex);
-    }
+  $.each(updatedTrails, function (i, trail) {
+    $('#trailList').append($('<option>', {
+      value: trail.name,
+      text: trail.name
+    }));
   });
 }
 function toggleTrailing() {
   if (window.trailingActive) {
     $('#loginButton').removeClass('disabled');
+    $('#domainList').removeAttr('disabled');
     $('#trailList').removeAttr('disabled');
     $('#toggleTrailButton')
       .addClass('btn-success')
@@ -59,6 +46,7 @@ function toggleTrailing() {
       .html('Start Trailing');
   } else {
     $('#loginButton').addClass('disabled');
+    $('#domainList').attr('disabled', 'disabled');
     $('#trailList').attr('disabled', 'disabled');
     $('#toggleTrailButton')
       .removeClass('btn-success')
@@ -79,7 +67,7 @@ function setUIStateToLoggedIn(user) {
     .addClass('btn-danger');
   $('#trailList').removeAttr('disabled');
   $('#toggleTrailButton').addClass('disabled');
-  loadTrails();
+  postMessageToAddin({action: 'request-trails-target-addin'});
 }
 function setUIStateToLoggedOut() {
   //Do this check in case we're logged out via toolbar *and* a browser tab is

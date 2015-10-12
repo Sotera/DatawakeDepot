@@ -24,11 +24,6 @@
     },
     "domainItems": {
       "type": "hasMany",
-      "model": "DwDomainItem",
-      "foreignKey": "id"
-    },
-    "domainItems": {
-      "type": "hasMany",
       "model": "DwDomainEntityTypes",
       "foreignKey": "id"
     }
@@ -36,4 +31,3 @@
   "acls": [],
   "methods": {}
 }
-

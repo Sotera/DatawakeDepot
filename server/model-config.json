@@ -117,5 +117,9 @@
   "DwUrlExtraction": {
     "dataSource": "db",
     "public": true
+  },
+  "dw-page-content": {
+    "dataSource": "db",
+    "public": true
   }
 }

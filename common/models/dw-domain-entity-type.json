@@ -14,7 +14,7 @@
     "description": {
       "type": "string"
     },
-    "domainId":{
+    "domainId": {
       "type": "number"
     }
   },
@@ -29,4 +29,3 @@
   "acls": [],
   "methods": {}
 }
-

@@ -1,7 +1,14 @@
 {
-  "db": {
-    "name": "db",
+  "db-mem": {
+    "name": "db-mem",
     "connector": "memory",
     "file": "db.json"
+  },
+  "db": {
+    "host": "localhost",
+    "port": 27017,
+    "database": "datawake",
+    "name": "db",
+    "connector": "mongodb"
   }
 }

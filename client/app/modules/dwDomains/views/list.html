@@ -3,8 +3,8 @@
     <table class="table table-bordered table-striped">
       <tr ng-repeat="domain in domains">
         <td>
-          <a href="" ui-sref="app.dwDomains.view({id: domain.id})">{{domain.domain}}</a>
-          <span class="text-muted">{{domain.value}}</span>
+          <a href="" ui-sref="app.dwDomains.view({id: domain.id})">{{domain.name}}</a>
+          <span class="text-muted">{{domain.description}}</span>
           <span class="pull-right">
             <div class="btn-group">
               <button class="btn btn-xs btn-default" ui-sref="app.domain.domain({ id: domain.id })"><i class="fa fa-key"></i></button>

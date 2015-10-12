@@ -19,8 +19,9 @@ angular.module('com.module.dwDomains')
               url: '/edit/:id',
               //templateUrl: 'modules/dwDomains/views/form.html',
               templateUrl: 'modules/dwDomains/views/form',
-              controller: 'DwDomainsCtrl',
-              authenticate: true
+              controller: 'DwDomainsCtrl'
+              //,
+              //authenticate: true
           })
           .state('app.dwDomains.delete', {
               url: '/delete/:id',
@@ -38,7 +39,8 @@ angular.module('com.module.dwDomains')
               url: '/add',
               //templateUrl: 'modules/dwDomains/views/form.html',
               templateUrl: 'modules/dwDomains/views/form',
-              controller: 'DwDomainsCtrl',
-              authenticate: true
+              controller: 'DwDomainsCtrl'
+              //,
+              //authenticate: true
           });
     });

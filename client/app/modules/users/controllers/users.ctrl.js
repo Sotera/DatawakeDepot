@@ -1,7 +1,7 @@
 'use strict';
 var app = angular.module('com.module.users');
-app.controller('UsersCtrl', function ($scope, $stateParams, $state, CoreService,
-                                      AminoUser, Role, AppAuth, gettextCatalog) {
+app.controller('UsersCtrl', function ($scope, $stateParams, $state, CoreService, AminoUser, Role, AppAuth, gettextCatalog) {
+
   //Define a couple of scope methods
   $scope.delete = function (id) {
     CoreService.confirm(gettextCatalog.getString('Are you sure?'),
@@ -23,6 +23,7 @@ app.controller('UsersCtrl', function ($scope, $stateParams, $state, CoreService,
         return false;
       });
   };
+
   $scope.onSubmit = function () {
     var newUser = {
       email: $scope.user.email,
@@ -110,6 +111,7 @@ app.controller('UsersCtrl', function ($scope, $stateParams, $state, CoreService,
       disabled: !$scope.currentUser.isAdmin
     }
   }];
+
   Role.find().$promise
     .then(function (allRoles) {
       for (var i = 0; i < allRoles.length; ++i) {

@@ -1,9 +1,11 @@
 'use strict';
-angular.module('com.module.dwCrawlTypes')
-    .run(function ($rootScope, gettextCatalog, DwCrawlType) {
-      $rootScope.addMenu(gettextCatalog.getString('Crawl Types'), 'app.dwCrawlTypes.list','fa-cog');
+var app = angular.module('com.module.dwCrawlTypes');
 
-      DwCrawlType.find(function(data) {
-        $rootScope.addDashboardBox(gettextCatalog.getString('Datawake Crawl Types'), 'bg-green', 'ion-clipboard', data.length, 'app.dwCrawlTypes.list');
-      });
+app.run(function($rootScope, DwCrawlType, gettextCatalog) {
+    $rootScope.addMenu(gettextCatalog.getString('CrawlTypes'), 'app.dwCrawlTypes.list', 'fa-cog');
+
+    DwCrawlType.find(function(data) {
+        $rootScope.addDashboardBox(gettextCatalog.getString('CrawlTypes'), 'bg-purple', 'ion-clipboard', data.length, 'app.dwCrawlTypes.list');
     });
+
+});

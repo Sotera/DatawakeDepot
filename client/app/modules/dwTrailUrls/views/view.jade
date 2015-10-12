@@ -1,0 +1,14 @@
+div.box
+    div.box-header
+        h3.box-title
+            a(href="" ui-sref="^.list" class="btn btn-default")
+                i.fa.fa-arrow-left &nbsp;Back to TrailUrls
+    div.box-body
+        div
+            h2 {{trailUrl.name}}
+
+            h3 Domains
+                ul
+                    li( ng-repeat="comment in trailUrl.comments") {{comment.value}}
+            h3 Raw
+                pre {{trailUrl|json}}

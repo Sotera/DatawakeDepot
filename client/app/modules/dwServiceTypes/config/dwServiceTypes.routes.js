@@ -1,44 +1,26 @@
 'use strict';
-angular.module('com.module.dwServiceTypes')
-    .config(function($stateProvider) {
-        $stateProvider
+var app = angular.module('com.module.dwServiceTypes');
 
-            .state('app.dwServiceTypes', {
-                abstract: true,
-                url: '/DwServiceTypes',
-                //templateUrl: 'modules/dwServiceTypes/views/main.html'
-                templateUrl: 'modules/dwServiceTypes/views/main'
-            })
-            .state('app.dwServiceTypes.view', {
-                url: '/views/:id',
-                templateUrl: 'modules/dwServiceTypes/views/views',
-                controller: 'DwServiceTypesCtrl',
-                authenticate: false
-            })
-            .state('app.dwServiceTypes.edit', {
-                url: '/edit/:id',
-                //templateUrl: 'modules/dwServiceTypes/views/form.html',
-                templateUrl: 'modules/dwServiceTypes/views/form',
-                controller: 'DwServiceTypesCtrl',
-                authenticate: true
-            })
-            .state('app.dwServiceTypes.delete', {
-                url: '/delete/:id',
-                controller: 'DwServiceTypesCtrl',
-                authenticate: true
-            })
-            .state('app.dwServiceTypes.list', {
-                url: '',
-                //templateUrl: 'modules/dwServiceTypes/views/list.html',
-                templateUrl: 'modules/dwServiceTypes/views/list',
-                controller: 'DwServiceTypesCtrl',
-                authenticate: true
-            })
-            .state('app.dwServiceTypes.add', {
-                url: '/add',
-                //templateUrl: 'modules/dwServiceTypes/views/form.html',
-                templateUrl: 'modules/dwServiceTypes/views/form',
-                controller: 'DwServiceTypesCtrl',
-                authenticate: true
-            });
+app.config(function($stateProvider) {
+    $stateProvider.state('app.dwServiceTypes', {
+        abstract: true,
+        url: '/dwServiceTypes',
+        templateUrl: 'modules/dwServiceTypes/views/main'
+    }).state('app.dwServiceTypes.list', {
+        url: '',
+        templateUrl: 'modules/dwServiceTypes/views/list',
+        controller: 'ServiceTypesCtrl'
+    }).state('app.dwServiceTypes.add', {
+        url: '/add',
+        templateUrl: 'modules/dwServiceTypes/views/form',
+        controller: 'ServiceTypesCtrl'
+    }).state('app.dwServiceTypes.edit', {
+        url: '/:id/edit',
+        templateUrl: 'modules/dwServiceTypes/views/form',
+        controller: 'ServiceTypesCtrl'
+    }).state('app.dwServiceTypes.view', {
+        url: '/:id',
+        templateUrl: 'modules/dwServiceTypes/views/view',
+        controller: 'ServiceTypesCtrl'
     });
+});

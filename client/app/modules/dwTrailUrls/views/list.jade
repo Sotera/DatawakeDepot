@@ -1,27 +1,38 @@
-.box
-    .box-body.no-padding(style='min-height: 120px;')
-        table.table.table-striped(st-table='displayedTrailUrls', st-safe-src='safeDisplayedTrailUrls')
-            thead
-                tr
-                    th
-                    th(st-sort='name') Trail Url
-                tr
-                    th
-                        a.btn.btn-block.btn-success(ui-sref='^.add')
-                            span.glyphicon.glyphicon-plus(style="margin-right: 10px")
-                            span Add Trail Url
-                    th
-                        input.input-sm.form-control(st-search='url' type='search' placeholder='search')
-            tbody
-                tr(ng-repeat='trailUrl in displayedTrailUrls')
-                    td(style='width: 120px')
-                        .btn-group
-                            button.btn.btn-sm.btn-default(ui-sref='app.dwTrailUrls.edit({id:trailUrl.id})')
-                                i.fa.fa-pencil
-                            button.btn.btn-sm.btn-danger(ng-click='delete({id:trailUrl.id})')
-                                i.fa.fa-trash-o
-                    td
-                        span.text-muted {{trailUrl.url}}
 
-    .overlay(ng-if='loading')
-    .loading-img(ng-if='loading')
+.box
+  .box-body.no-padding(style='min-height: 120px;')
+    table.table.table-striped(st-table='trailUrls')
+      thead
+        //tr
+        //  th
+        //      input.input-sm.form-control(st-search='name' type='search' placeholder='Search across fields')
+        tr
+          th(st-sort='url') Url
+          th(st-sort='timestamp') timestamp
+          th(st-sort='crawlType') crawlType
+          th(st-sort='comments') comments
+          th(st-sort='trailId') trail
+          th
+              a.btn.btn-block.btn-success(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
+                  span.glyphicon.glyphicon-plus(style="margin-right: 10px")
+                  span Add TrailUrl
+      tbody
+        tr(ng-repeat='trailUrl in trailUrls')
+          td(style='width: 120px')
+            a(href='', ui-sref='app.dwTrailUrls.view({id: trailUrl.id})') {{trailUrl.url}}
+          td
+            span.text-muted {{trailUrl.timestamp}}
+          td
+            span.text-muted {{trailUrl.crawlType}}
+          td
+            span.text-muted {{trailUrl.comments}}
+          td
+            span.text-muted {{trailUrl.trailId}}
+          td(style='width: 120px')
+            .btn-toolbar
+                button.btn.btn-sm.btn-default(ui-sref='app.dwTrailUrls.edit({id:trailUrl.id})',ng-disabled='!currentUser.isAdmin')
+                    i.fa.fa-pencil
+                button.btn.btn-sm.btn-danger(ng-click='delete({id:trailUrl.id})',ng-disabled='!currentUser.isAdmin')
+                    i.fa.fa-trash-o
+  .overlay(ng-if='loading')
+  .loading-img(ng-if='loading')

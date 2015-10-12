@@ -1,31 +1,32 @@
+
 .box
-    .box-body.no-padding(style='min-height: 120px;')
-        table.table.table-striped(st-table='displayedDomainItems', st-safe-src='safedisplayedDomainItems')
-            thead
-                tr
-                    th
-                    th(st-sort='name') Domain Item Type
-                    th(st-sort='description') Domain Item Value
-                tr
-                    th
-                        a.btn.btn-block.btn-success(ui-sref='^.add')
-                            span.glyphicon.glyphicon-plus(style="margin-right: 10px")
-                            span Add Domain Item
-                    th
-                        input.input-sm.form-control(st-search='name' type='search' placeholder='search')
-                    th
-                        input.input-sm.form-control(st-search='description' type='search' placeholder='search')
-            tbody
-                tr(ng-repeat='domainItem in displayedDomainItems')
-                    td(style='width: 120px')
-                        .btn-group
-                            button.btn.btn-sm.btn-default(ui-sref='app.dwDomainItems.edit({id:domainItem.id})')
-                                i.fa.fa-pencil
-                            button.btn.btn-sm.btn-danger(ng-click='delete({id:domainItem.id})')
-                                i.fa.fa-trash-o
-                    td
-                        span.text-muted {{domainItem.domainEntityTypeId}}
-                    td
-                        span.text-muted {{domainItem.itemValue}}
-    .overlay(ng-if='loading')
-    .loading-img(ng-if='loading')
+  .box-body.no-padding(style='min-height: 120px;')
+    table.table.table-striped(st-table='domainItems')
+      thead
+        //tr
+        //  th
+        //      input.input-sm.form-control(st-search='name' type='search' placeholder='Search across fields')
+        tr
+          th(st-sort='domainEntityTypeId') EntityType
+          th(st-sort='itemValue') Value
+          th(st-sort='domainId') Domain
+          th
+              a.btn.btn-block.btn-success(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
+                  span.glyphicon.glyphicon-plus(style="margin-right: 10px")
+                  span Add DomainItem
+      tbody
+        tr(ng-repeat='domainItem in domainItems')
+          td(style='width: 120px')
+            a(href='', ui-sref='app.dwDomainItems.view({id: domainItem.id})') {{domainItem.id}}
+          td
+            span.text-muted {{domainItem.itemValue}}
+          td
+            span.text-muted {{domainItem.domainId}}
+          td(style='width: 120px')
+            .btn-toolbar
+                button.btn.btn-sm.btn-default(ui-sref='app.dwDomainItems.edit({id:domainItem.id})',ng-disabled='!currentUser.isAdmin')
+                    i.fa.fa-pencil
+                button.btn.btn-sm.btn-danger(ng-click='delete({id:domainItem.id})',ng-disabled='!currentUser.isAdmin')
+                    i.fa.fa-trash-o
+  .overlay(ng-if='loading')
+  .loading-img(ng-if='loading')

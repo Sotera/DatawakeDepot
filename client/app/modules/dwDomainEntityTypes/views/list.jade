@@ -1,31 +1,34 @@
+
 .box
-    .box-body.no-padding(style='min-height: 120px;')
-        table.table.table-striped(st-table='displayedDomainEntityTypes', st-safe-src='safeDisplayedDomainEntityTypes')
-            thead
-                tr
-                    th
-                    th(st-sort='name') Domain Entity Type Name
-                    th(st-sort='description') Description
-                tr
-                    th
-                        a.btn.btn-block.btn-success(ui-sref='^.add')
-                            span.glyphicon.glyphicon-plus(style="margin-right: 10px")
-                            span Add Domain Entity Type
-                    th
-                        input.input-sm.form-control(st-search='name' type='search' placeholder='search')
-                    th
-                        input.input-sm.form-control(st-search='description' type='search' placeholder='search')
-            tbody
-                tr(ng-repeat='domainEntityType in displayedDomainEntityTypes')
-                    td(style='width: 120px')
-                        .btn-group
-                            button.btn.btn-sm.btn-default(ui-sref='app.dwDomainEntityTypes.edit({id:domainEntityType.id})')
-                                i.fa.fa-pencil
-                            button.btn.btn-sm.btn-danger(ng-click='delete({id:domainEntityType.id})')
-                                i.fa.fa-trash-o
-                    td
-                        span.text-muted {{domainEntityType.name}}
-                    td
-                        span.text-muted {{domainEntityType.description}}
-    .overlay(ng-if='loading')
-    .loading-img(ng-if='loading')
+  .box-body.no-padding(style='min-height: 120px;')
+    table.table.table-striped(st-table='entityTypes')
+      thead
+        //tr
+        //  th
+        //      input.input-sm.form-control(st-search='name' type='search' placeholder='Search across fields')
+        tr
+          th(st-sort='name') Name
+          th(st-sort='description') Description
+          th Member Of Domains
+          th
+              a.btn.btn-block.btn-success(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
+                  span.glyphicon.glyphicon-plus(style="margin-right: 10px")
+                  span Add EntityType
+      tbody
+        tr(ng-repeat='entityType in entityTypes')
+          td(style='width: 120px')
+            a(href='', ui-sref='app.dwDomainEntityTypes.view({id: entityType.id})') {{entityType.name}}
+          td
+            span.text-muted {{entityType.description}}
+          td
+            //span.label.label-default(ng-repeat="domain in entityType.domains") {{domain.name}}
+          td
+            span.text-muted {{entityType.domainId}}
+          td(style='width: 120px')
+            .btn-toolbar
+                button.btn.btn-sm.btn-default(ui-sref='app.dwDomainEntityTypes.edit({id:entityType.id})',ng-disabled='!currentUser.isAdmin')
+                    i.fa.fa-pencil
+                button.btn.btn-sm.btn-danger(ng-click='delete({id:entityType.id})',ng-disabled='!currentUser.isAdmin')
+                    i.fa.fa-trash-o
+  .overlay(ng-if='loading')
+  .loading-img(ng-if='loading')

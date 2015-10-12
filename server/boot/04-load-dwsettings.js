@@ -44,9 +44,9 @@ var nameValuePairs = [
   {name: 'PROXY_PORT', value: '8484'}
 ];
 module.exports = function (app) {
-  if (app.dataSources.db.name !== 'Memory' && !process.env.INITDB) {
+/*  if (app.datasources.db.name !== 'memory' && !process.env.initdb) {
     return;
-  }
+  }*/
   log('Creating dwSettings');
   //JReeme sez: setMaxListeners so we don't have to see that ridiculous memory leak warning
   app.models.DwSetting.getDataSource().setMaxListeners(32);

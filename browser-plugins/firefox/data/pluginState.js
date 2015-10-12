@@ -1,14 +1,34 @@
 var {on, emit} = require('sdk/event/core');
+var {Request} = require('sdk/request');
 var PluginState = function () {
   var me = this;
   me.loggedInUser = null;
+  me.currentTrail = {};
+  me.currentTrailList = [];
+  me.tenSecondTimer = 0;
   me.loginUrl = null;
+  me.trailsUrl = '/api/dwTrails';
+  me.trailsUrlsUrl = '/api/dwTrailUrls';
   me.trailingActive = false;
   me.toolbarFrameSource = null;
   me.toolbarFrameOrigin = null;
   me.datawakeDepotContentScriptHandle = null;
   me.scraperContentScriptHandle = null;
   me.pageModDatawakeDepotIncludeFilter = null;
+  me.restPost = function(url, content, callback){
+    url = me.loginUrl + url;
+    Request({
+      url: url,
+      onComplete: callback
+    }).post();
+  };
+  me.restGet = function(url, callback){
+    url = me.loginUrl + url;
+    Request({
+      url: url,
+      onComplete: callback
+    }).get();
+  };
   me.postMessageToToolBar = function (msg) {
     me.toolbarFrameSource.postMessage(msg, me.toolbarFrameOrigin);
   };
@@ -45,6 +65,12 @@ var PluginState = function () {
     me.datawakeDepotContentScriptHandle = worker;
     me.postEventToAddInModule('page-datawake-depot-content-script-attached-target-addin');
     me.postEventToDatawakeDepotContentScript('page-attached-target-content-script');
+  }
+  me.reset = function(){
+    me.loggedInUser = null;
+    me.currentTrail = {};
+    me.currentTrailList = [];
+    me.tenSecondTimer = 0;
   }
 };
 exports.pluginState = exports.pluginState || new PluginState();

@@ -1,4 +1,4 @@
-var {Request} = require('sdk/request');
+var {setInterval, clearInterval} = require('sdk/timers');
 var {pluginState} = require('./pluginState');
 exports.init = function () {
   var tabs = require('sdk/tabs');
@@ -29,17 +29,15 @@ exports.init = function () {
           pluginState.trailingActive = msg.data;
           break;
         case 'request-trails-target-addin':
-          var url = pluginState.loginUrl + '/api/dwTrails';
-          Request({
-            url: url,
-            onComplete: function (res) {
-              var msg = {
-                type: 'updated-trails-target-toolbar-frame',
-                trails: res.json
-              }
-              pluginState.postMessageToToolBar(msg);
+          refreshTrails();
+          break;
+        case 'set-current-trail-target-addin':
+          for (var i = 0; i < pluginState.currentTrailList.length; ++i) {
+            if (pluginState.currentTrailList[i].name == msg.trailValue) {
+              pluginState.currentTrail = pluginState.currentTrailList[i];
+              break;
             }
-          }).get();
+          }
           break;
       }
     }
@@ -52,17 +50,14 @@ exports.init = function () {
     if (!pluginState.trailingActive) {
       return;
     }
-    var url = pluginState.loginUrl + '/api/dwTrailUrls';
-    Request({
-      url: url,
-      content: {
-        trailId: 1,
+    pluginState.restPost(pluginState.trailsUrlsUrl,
+      {
+        trailId: pluginState.currentTrail.trailId,
         url: tab.url
-      },
-      onComplete: function (res) {
+      }, function (res) {
         console.log(res.text);
       }
-    }).post();
+    );
   });
   //Here we listen for when the Scraper content script is fired up and ready.
   pluginState.onAddInModuleEvent('page-scraper-content-script-attached-target-addin', function (data) {
@@ -72,12 +67,11 @@ exports.init = function () {
       if (!pluginState.trailingActive) {
         return;
       }
-
       //HowTo: decode (unzip) in addin
-/*      var JSZip = require('./vendor/jszip/jszip.min.js');
-      var zip = new JSZip();
-      zip.load(pageContents.zippedHtmlBody);
-      var html = zip.file('zipped-html-body.zip').asText();*/
+      /*      var JSZip = require('./vendor/jszip/jszip.min.js');
+       var zip = new JSZip();
+       zip.load(pageContents.zippedHtmlBody);
+       var html = zip.file('zipped-html-body.zip').asText();*/
     });
   });
   //Here we listen for when the DD content script is fired up and ready.
@@ -91,6 +85,8 @@ exports.init = function () {
   });
 };
 function logoutSuccessfulHandler(tellToolBar) {
+  stopTenSecondTimer();
+  pluginState.reset();
   pluginState.postEventToAddInModule('logged-out-target-context-menu');
   pluginState.loggedInUser = null;
   if (!tellToolBar) {
@@ -102,6 +98,7 @@ function logoutSuccessfulHandler(tellToolBar) {
   pluginState.postMessageToToolBar(msg);
 }
 function loginSuccessfulHandler(user) {
+  startTenSecondTimer();
   pluginState.postEventToAddInModule('logged-in-target-context-menu');
   pluginState.loggedInUser = user;
   var msg = {
@@ -110,4 +107,41 @@ function loginSuccessfulHandler(user) {
   };
   pluginState.postMessageToToolBar(msg);
 }
-
+function refreshTrails() {
+  if (pluginState.trailingActive) {
+    return;
+  }
+  pluginState.restGet(pluginState.trailsUrl,
+    function (res) {
+      if (compareTrailLists(res.json, pluginState.currentTrailList)) {
+        return;
+      }
+      pluginState.currentTrailList = res.json;
+      var msg = {
+        type: 'updated-trails-target-toolbar-frame',
+        trails: pluginState.currentTrailList,
+        currentTrail: pluginState.currentTrail
+      }
+      pluginState.postMessageToToolBar(msg);
+    }
+  );
+}
+function compareTrailLists(trailList0, trailList1) {
+  try {
+    if (trailList0.length != trailList1.length) {
+      return false;
+    }
+    return true;
+  }
+  catch (err) {
+    return false;
+  }
+}
+function stopTenSecondTimer() {
+  clearInterval(pluginState.tenSecondTimer);
+}
+function startTenSecondTimer() {
+  pluginState.tenSecondTimer = setInterval(function () {
+    refreshTrails();
+  }, 10000);
+}

@@ -3,6 +3,10 @@ function domainSelectionChanged() {
 }
 function trailSelectionChanged() {
   $('#toggleTrailButton').removeClass('disabled');
+  postMessageToAddin({
+    action: 'set-current-trail-target-addin',
+    trailValue: $('#trailList').val()
+  });
 }
 function onLoad() {
   window.addEventListener('message', function (event) {
@@ -15,7 +19,7 @@ function onLoad() {
         //content script and we need to reset the toolbar UI
         setUIStateToLoggedOut();
       } else if (msg.type == 'updated-trails-target-toolbar-frame') {
-        updateTrails(msg.trails);
+        updateTrails(msg.trails, msg.currentTrail);
       }
     } catch (ex) {
       console.log('Error decoding message to toolbar frame: ' + ex);
@@ -26,14 +30,19 @@ function onLoad() {
 function clearTrails() {
   $('#trailList').children().remove().end();
 }
-function updateTrails(updatedTrails) {
+function updateTrails(trails, currentTrail) {
   clearTrails();
-  $.each(updatedTrails, function (i, trail) {
+  $.each(trails, function (i, trail) {
     $('#trailList').append($('<option>', {
       value: trail.name,
       text: trail.name
     }));
   });
+  if (currentTrail) {
+    $('#trailList').val(currentTrail.name);
+  } else {
+    $('#trailList')[0].onchange();
+  }
 }
 function toggleTrailing() {
   if (window.trailingActive) {

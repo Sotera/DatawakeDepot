@@ -16,6 +16,11 @@
   },
   "validations": [],
   "relations": {
+    "teams": {
+      "type": "hasMany",
+      "model": "DwTeam",
+      "foreignKey": "id"
+    },
     "trails": {
       "type": "hasMany",
       "model": "DwTrail",
@@ -26,9 +31,9 @@
       "model": "DwDomainItem",
       "foreignKey": "id"
     },
-    "domainItems": {
+    "domainEntTypes": {
       "type": "hasMany",
-      "model": "DwDomainEntityTypes",
+      "model": "DwDomainEntityType",
       "foreignKey": "id"
     }
   },

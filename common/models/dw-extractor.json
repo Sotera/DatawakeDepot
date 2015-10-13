@@ -1,6 +1,6 @@
 {
-  "name": "DwDomainEntityType",
-  "plural": "dwDomainEntityTypes",
+  "name": "DwExtractor",
+  "plural": "dwExtractors",
   "base": "PersistedModel",
   "properties": {
     "id": {
@@ -11,23 +11,34 @@
       "type": "string",
       "required": true
     },
-    "description": {
+    "index": {
       "type": "string"
     },
-    "domainId":{
+    "extractorUrl": {
+      "type": "string",
+      "required": true
+    },
+    "credentials": {
+      "type": "string"
+    },
+    "protocol": {
+      "type": "string",
+      "required": true
+    },
+    "serviceTypeId": {
       "type": "number"
     }
   },
   "validations": [],
   "relations": {
-    "domain": {
+    "domains": {
       "type": "hasMany",
       "model": "DwDomain",
       "foreignKey": "id"
     },
-    "domainItems": {
-      "type": "hasMany",
-      "model": "DwDomainItem",
+    "services": {
+      "type": "hasOne",
+      "model": "DwServiceType",
       "foreignKey": "id"
     }
   },

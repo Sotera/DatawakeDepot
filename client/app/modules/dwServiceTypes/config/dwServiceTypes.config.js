@@ -5,7 +5,7 @@ app.run(function($rootScope, DwServiceType, gettextCatalog) {
     $rootScope.addMenu(gettextCatalog.getString('ServiceTypes'), 'app.dwServiceTypes.list', 'fa-cog');
 
     DwServiceType.find(function(data) {
-        $rootScope.addDashboardBox(gettextCatalog.getString('ServiceTypes'), 'bg-black', 'ion-clipboard', data.length, 'app.dwServiceTypes.list');
+        $rootScope.addDashboardBox(gettextCatalog.getString('ServiceTypes'), 'bg-green', 'ion-clipboard', data.length, 'app.dwServiceTypes.list');
     });
 
 });

@@ -25,6 +25,16 @@
       "model": "Role",
       "foreignKey": "principalId",
       "through": "RoleMapping"
+    },
+    "teams": {
+      "type": "hasMany",
+      "model": "DwTeam",
+      "foreignKey": "id"
+    },
+    "trails": {
+      "type": "hasMany",
+      "model": "DwTrail",
+      "foreignKey": "id"
     }
   },
   "acls": [

@@ -9,7 +9,6 @@ var PluginState = function () {
   me.currentDomainList = [];
   me.currentTrail = null;
   me.currentTrailList = [];
-  me.tenSecondTimer = 0;
   me.loginUrl = '';
   me.domainsUrl = '/api/dwDomains';
   me.trailsUrl = '/api/dwTrails';
@@ -79,7 +78,6 @@ var PluginState = function () {
     me.currentDomainList = [];
     me.currentTrail = null;
     me.currentTrailList = [];
-    me.tenSecondTimer = 0;
   }
 };
 if(exports.pluginState == null){

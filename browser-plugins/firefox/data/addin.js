@@ -93,7 +93,6 @@ exports.init = function () {
   });
 };
 function logoutSuccessfulHandler(tellToolBar) {
-  stopTenSecondTimer();
   pluginState.reset();
   pluginState.postEventToAddInModule('logged-out-target-context-menu');
   pluginState.loggedInUser = null;
@@ -106,7 +105,6 @@ function logoutSuccessfulHandler(tellToolBar) {
   pluginState.postMessageToToolBar(msg);
 }
 function loginSuccessfulHandler(user) {
-  startTenSecondTimer();
   pluginState.postEventToAddInModule('logged-in-target-context-menu');
   pluginState.loggedInUser = user;
   var msg = {
@@ -169,12 +167,4 @@ function compareTrailLists(trailList0, trailList1) {
   catch (err) {
     return false;
   }
-}
-function stopTenSecondTimer() {
-  clearInterval(pluginState.tenSecondTimer);
-}
-function startTenSecondTimer() {
-  pluginState.tenSecondTimer = setInterval(function () {
-    refreshTeamsDomainsTrails();
-  }, 10000);
 }

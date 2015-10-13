@@ -5,7 +5,7 @@ app.run(function($rootScope, DwTrailUrl, gettextCatalog) {
     $rootScope.addMenu(gettextCatalog.getString('TrailUrls'), 'app.dwTrailUrls.list', 'fa-cog');
 
     DwTrailUrl.find(function(data) {
-        $rootScope.addDashboardBox(gettextCatalog.getString('TrailUrls'), 'bg-green', 'ion-clipboard', data.length, 'app.dwTrailUrls.list');
+        $rootScope.addDashboardBox(gettextCatalog.getString('TrailUrls'), 'bg-olive', 'ion-clipboard', data.length, 'app.dwTrailUrls.list');
     });
 
 });

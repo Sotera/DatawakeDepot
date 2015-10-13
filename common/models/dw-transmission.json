@@ -17,16 +17,16 @@
     "timestamp": {
       "type": "date"
     },
-    "recipientId": {
+    "feedId": {
       "type": "number"
     }
   },
   "validations": [],
   "relations": {
-    "recipient": {
+    "feed": {
       "type": "hasOne",
-      "model": "DwRecipient",
-      "foreignKey": "id"
+      "model": "DwFeed",
+      "foreignKey": "feedId"
     }
   },
   "acls": [],

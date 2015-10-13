@@ -18,18 +18,30 @@
 <div style="vertical-align: middle"
      class="container-fluid">
   <div class="row no-gutter">
-    <div class="col-lg-4 col-md-2 col-sm-1 col-xs-1">
+    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
       <img src="./images/waveicon24.png"
            id="waveImg"
            style="margin-left: 6px;"
            height="24"
            width="24">
 
-      <div class="datawakeText">
+<!--      <div class="datawakeText">
         Datawake
+      </div>-->
+    </div>
+    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+      <div class="datawakeText pull-right">
+        Team:
       </div>
     </div>
-    <div class="col-lg-1 col-md-1 col-sm-3 col-xs-1">
+    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+      <select id="teamList"
+              disabled="disabled"
+              onchange="teamSelectionChanged()"
+              class="form-control btn-info input-sm">
+      </select>
+    </div>
+    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
       <div class="datawakeText pull-right">
         Domain:
       </div>
@@ -41,7 +53,7 @@
               class="form-control btn-info input-sm">
       </select>
     </div>
-    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-2">
+    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
       <div class="datawakeText pull-right">
         Trail:
       </div>
@@ -53,13 +65,13 @@
               class="form-control btn-info input-sm">
       </select>
     </div>
-    <div class="col-lg-1 col-md-2 col-sm-2 col-xs-2">
+    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
       <a id="toggleTrailButton"
          role="button"
          class="btn btn-sm btn-success btn-block disabled"
          onclick="toggleTrailing()">Start Trailing</a>
     </div>
-    <div class="col-lg-1 col-md-2 col-sm-1 col-xs-2">
+    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
       <a id="loginButton"
          role="button"
          class="btn btn-sm btn-success btn-block"

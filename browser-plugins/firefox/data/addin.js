@@ -29,7 +29,15 @@ exports.init = function () {
           pluginState.trailingActive = msg.data;
           break;
         case 'request-trails-target-addin':
-          refreshTrails();
+          refreshTeamsDomainsTrails();
+          break;
+        case 'set-current-domain-target-addin':
+          for (var i = 0; i < pluginState.currentDomainList.length; ++i) {
+            if (pluginState.currentDomainList[i].name == msg.domainValue) {
+              pluginState.currentDomain = pluginState.currentDomainList[i];
+              break;
+            }
+          }
           break;
         case 'set-current-trail-target-addin':
           for (var i = 0; i < pluginState.currentTrailList.length; ++i) {
@@ -103,14 +111,28 @@ function loginSuccessfulHandler(user) {
   pluginState.loggedInUser = user;
   var msg = {
     type: 'login-success-target-toolbar-frame',
-    user: user
+    pluginState: pluginState
   };
   pluginState.postMessageToToolBar(msg);
 }
-function refreshTrails() {
+function refreshTeamsDomainsTrails() {
   if (pluginState.trailingActive) {
     return;
   }
+  pluginState.restGet(pluginState.domainsUrl,
+    function (res) {
+      if (compareDomainLists(res.json, pluginState.currentDomainList)) {
+        return;
+      }
+      pluginState.currentDomainList = res.json;
+      var msg = {
+        type: 'updated-domains-target-toolbar-frame',
+        domains: pluginState.currentDomainList,
+        currentDomain: pluginState.currentDomain
+      }
+      pluginState.postMessageToToolBar(msg);
+    }
+  );
   pluginState.restGet(pluginState.trailsUrl,
     function (res) {
       if (compareTrailLists(res.json, pluginState.currentTrailList)) {
@@ -125,6 +147,17 @@ function refreshTrails() {
       pluginState.postMessageToToolBar(msg);
     }
   );
+}
+function compareDomainLists(domainList0, domainList1) {
+  try {
+    if (domainList0.length != domainList1.length) {
+      return false;
+    }
+    return true;
+  }
+  catch (err) {
+    return false;
+  }
 }
 function compareTrailLists(trailList0, trailList1) {
   try {
@@ -142,6 +175,6 @@ function stopTenSecondTimer() {
 }
 function startTenSecondTimer() {
   pluginState.tenSecondTimer = setInterval(function () {
-    refreshTrails();
+    refreshTeamsDomainsTrails();
   }, 10000);
 }

@@ -29,7 +29,7 @@ angular.module('loopbackApp', [
   'ui.codemirror',
   'ui.gravatar',
   'ui.grid',
-  'angularGrid',
+/*  'angularGrid',*/
   'smart-table',
   'ui.router',
   'ui.layout',

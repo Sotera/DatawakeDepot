@@ -3,10 +3,15 @@ var {Request} = require('sdk/request');
 var PluginState = function () {
   var me = this;
   me.loggedInUser = null;
-  me.currentTrail = {};
+  me.currentTeam = null;
+  me.currentTeamList = [];
+  me.currentDomain = null;
+  me.currentDomainList = [];
+  me.currentTrail = null;
   me.currentTrailList = [];
   me.tenSecondTimer = 0;
-  me.loginUrl = null;
+  me.loginUrl = '';
+  me.domainsUrl = '/api/dwDomains';
   me.trailsUrl = '/api/dwTrails';
   me.trailsUrlsUrl = '/api/dwTrailUrls';
   me.trailingActive = false;
@@ -68,9 +73,15 @@ var PluginState = function () {
   }
   me.reset = function(){
     me.loggedInUser = null;
-    me.currentTrail = {};
+    me.currentTeam = null;
+    me.currentTeamList = [];
+    me.currentDomain = null;
+    me.currentDomainList = [];
+    me.currentTrail = null;
     me.currentTrailList = [];
     me.tenSecondTimer = 0;
   }
 };
-exports.pluginState = exports.pluginState || new PluginState();
+if(exports.pluginState == null){
+  exports.pluginState = new PluginState();
+}

@@ -23,8 +23,8 @@
     "protocol": {
       "type": "string"
     },
-    "serviceType": {
-      "type": "string"
+    "serviceTypeId": {
+      "type": "number"
     }
   },
   "validations": [],
@@ -47,6 +47,11 @@
     "transmission": {
       "type": "hasMany",
       "model": "DwTransmission",
+      "foreignKey": "id"
+    },
+    "serviceType": {
+      "type": "hasOne",
+      "model": "DwServiceType",
       "foreignKey": "id"
     }
   },

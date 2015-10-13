@@ -1,0 +1,21 @@
+.box
+  .box-header
+    span.box-title
+      .input-group
+        a.btn.btn-default(translate, href='', ui-sref='^.list', style='float: left;')
+          i.fa.fa-arrow-left &nbsp;Back to Feeds
+    .box-tools.pull-right
+      span.pull-right.btn-toolbar
+        button.btn.btn-primary.btn-success.btn-sm(translate, ng-click='onSubmit()')
+          i.fa.fa-save &nbsp;Save
+        button.btn.btn-primary.btn-danger.btn-sm(translate, ng-click='delete({id: feed.id})')
+          i.fa.fa-trash-o &nbsp;Delete
+  .box-body
+    .alert.alert-danger(translate, ng-if='addError') Could not add Feed!
+    form(ng-submit='onSubmit()' novalidate)
+      formly-form(model='feed', fields='formFields')
+
+  .overlay(ng-if='loading')
+  .overlay(ng-if='loading-img')
+
+

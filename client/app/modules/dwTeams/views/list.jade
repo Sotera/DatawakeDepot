@@ -1,0 +1,32 @@
+
+.box
+  .box-body.no-padding(style='min-height: 120px;')
+    table.table.table-striped(st-table='teams')
+      thead
+        //tr
+        //  th
+        //      input.input-sm.form-control(st-search='name' type='search' placeholder='Search across fields')
+        tr
+          th(st-sort='name') Name
+          th(st-sort='description') Description
+          th Members
+          th
+              a.btn.btn-block.btn-success(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
+                  span.glyphicon.glyphicon-plus(style="margin-right: 10px")
+                  span Add Team
+      tbody
+        tr(ng-repeat='team in teams')
+          td(style='width: 120px')
+            a(href='', ui-sref='app.dwTeams.view({id: team.id})') {{team.name}}
+          td
+            span.text-muted {{team.description}}
+          td
+            //span.label.label-default(ng-repeat="domain in team.domains") {{domain.name}}
+          td(style='width: 120px')
+            .btn-toolbar
+                button.btn.btn-sm.btn-default(ui-sref='app.dwTeams.edit({id:team.id})',ng-disabled='!currentUser.isAdmin')
+                    i.fa.fa-pencil
+                button.btn.btn-sm.btn-danger(ng-click='delete({id:team.id})',ng-disabled='!currentUser.isAdmin')
+                    i.fa.fa-trash-o
+  .overlay(ng-if='loading')
+  .loading-img(ng-if='loading')

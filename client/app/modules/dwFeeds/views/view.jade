@@ -2,10 +2,10 @@ div.box
     div.box-header
         h3.box-title
             a(href="" ui-sref="^.list" class="btn btn-default")
-                i.fa.fa-arrow-left &nbsp;Back to ServiceTypes
+                i.fa.fa-arrow-left &nbsp;Back to Feeds
     div.box-body
         div
-            h2 {{serviceType.name}}
+            h2 {{feed.name}}
 
             h3 Raw
-                pre {{serviceType|json}}
+                pre {{feed|json}}

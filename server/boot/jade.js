@@ -82,6 +82,34 @@ module.exports = function (app) {
       res.render('dwDomainItems/views/view', {title: 'Datawake Domain Items'});
   });
 
+  /* dwExtractors */
+  app.get('/modules/dwExtractors/views/main', function (req, res) {
+    res.render('dwExtractors/views/main', {title: 'Datawake Domain Entity Types'});
+  });
+  app.get('/modules/dwExtractors/views/list', function (req, res) {
+    res.render('dwExtractors/views/list', {title: 'Datawake Domain Entity Types'});
+  });
+  app.get('/modules/dwExtractors/views/form', function (req, res) {
+    res.render('dwExtractors/views/form', {title: 'Datawake Domain Entity Types'});
+  });
+  app.get('/modules/dwExtractors/views/view', function (req, res) {
+    res.render('dwExtractors/views/view', {title: 'Datawake  Domain Entity Types'});
+  });
+
+  /* dwFeeds */
+  app.get('/modules/dwFeeds/views/main', function (req, res) {
+    res.render('dwFeeds/views/main', {title: 'Datawake Domain Entity Types'});
+  });
+  app.get('/modules/dwFeeds/views/list', function (req, res) {
+    res.render('dwFeeds/views/list', {title: 'Datawake Domain Entity Types'});
+  });
+  app.get('/modules/dwFeeds/views/form', function (req, res) {
+    res.render('dwFeeds/views/form', {title: 'Datawake Domain Entity Types'});
+  });
+  app.get('/modules/dwFeeds/views/view', function (req, res) {
+    res.render('dwFeeds/views/view', {title: 'Datawake  Domain Entity Types'});
+  });
+
   /* dwServiceTypes */
   app.get('/modules/dwServiceTypes/views/main', function (req, res) {
     res.render('dwServiceTypes/views/main', {title: 'Datawake Service Types'});
@@ -108,6 +136,20 @@ module.exports = function (app) {
   });
   app.get('/modules/dwSettings/views/view', function (req, res) {
     res.render('dwSettings/views/view', {title: 'Datawake Settings'});
+  });
+
+  /* dwTeams */
+  app.get('/modules/dwTeams/views/main', function (req, res) {
+    res.render('dwTeams/views/main', {title: 'Datawake Domain Entity Types'});
+  });
+  app.get('/modules/dwTeams/views/list', function (req, res) {
+    res.render('dwTeams/views/list', {title: 'Datawake Domain Entity Types'});
+  });
+  app.get('/modules/dwTeams/views/form', function (req, res) {
+    res.render('dwTeams/views/form', {title: 'Datawake Domain Entity Types'});
+  });
+  app.get('/modules/dwTeams/views/view', function (req, res) {
+    res.render('dwTeams/views/view', {title: 'Datawake  Domain Entity Types'});
   });
 
   /* dwTrails */

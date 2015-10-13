@@ -1,0 +1,41 @@
+
+.box
+  .box-body.no-padding(style='min-height: 120px;')
+    table.table.table-striped(st-table='feeds')
+      thead
+        //tr
+        //  th
+        //      input.input-sm.form-control(st-search='name' type='search' placeholder='Search across fields')
+        tr
+          th(st-sort='name') Name
+          th(st-sort='feedUrl') Url
+          th(st-sort='serviceTypeId') ServiceType
+          th(st-sort='index') Index
+          th(st-sort='credentials') Credentials
+          th(st-sort='protocol') Protocol
+          th
+              a.btn.btn-block.btn-success(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
+                  span.glyphicon.glyphicon-plus(style="margin-right: 10px")
+                  span Add Feed
+      tbody
+        tr(ng-repeat='feed in feeds')
+          td(style='width: 120px')
+            a(href='', ui-sref='app.dwFeeds.view({id: feed.id})') {{feed.name}}
+          td
+            span.text-muted {{feed.feedUrl}}
+          td
+            span.text-muted {{feed.serviceTypeId}}
+          td
+            span.text-muted {{feed.index}}
+          td
+            span.text-muted {{feed.credentials}}
+          td
+            span.text-muted {{feed.protocol}}
+          td(style='width: 120px')
+            .btn-toolbar
+                button.btn.btn-sm.btn-default(ui-sref='app.dwFeeds.edit({id:feed.id})',ng-disabled='!currentUser.isAdmin')
+                    i.fa.fa-pencil
+                button.btn.btn-sm.btn-danger(ng-click='delete({id:feed.id})',ng-disabled='!currentUser.isAdmin')
+                    i.fa.fa-trash-o
+  .overlay(ng-if='loading')
+  .loading-img(ng-if='loading')

@@ -1,0 +1,42 @@
+
+.box
+  .box-body.no-padding(style='min-height: 120px;')
+    table.table.table-striped(st-table='extractors')
+      thead
+        //tr
+        //  th
+        //      input.input-sm.form-control(st-search='name' type='search' placeholder='Search across fields')
+        tr
+          th(st-sort='name') Name
+          th(st-sort='extractorUrl') Url
+          th(st-sort='serviceTypeId') ServiceType
+          th(st-sort='index') Index
+          th(st-sort='credentials') Credentials
+          th(st-sort='protocol') protocol
+
+          th
+              a.btn.btn-block.btn-success(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
+                  span.glyphicon.glyphicon-plus(style="margin-right: 10px")
+                  span Add Extractor
+      tbody
+        tr(ng-repeat='extractor in extractors')
+          td(style='width: 120px')
+            a(href='', ui-sref='app.dwExtractors.view({id: extractor.id})') {{extractor.name}}
+          td
+            span.text-muted {{extractor.extractorUrl}}
+          td
+            span.text-muted {{extractor.serviceTypeId}}
+          td
+            span.text-muted {{extractor.index}}
+          td
+            span.text-muted {{extractor.credentials}}
+          td
+            span.text-muted {{extractor.protocol}}
+          td(style='width: 120px')
+            .btn-toolbar
+                button.btn.btn-sm.btn-default(ui-sref='app.dwExtractors.edit({id:extractor.id})',ng-disabled='!currentUser.isAdmin')
+                    i.fa.fa-pencil
+                button.btn.btn-sm.btn-danger(ng-click='delete({id:extractor.id})',ng-disabled='!currentUser.isAdmin')
+                    i.fa.fa-trash-o
+  .overlay(ng-if='loading')
+  .loading-img(ng-if='loading')

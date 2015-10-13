@@ -1,0 +1,11 @@
+div.box
+    div.box-header
+        h3.box-title
+            a(href="" ui-sref="^.list" class="btn btn-default")
+                i.fa.fa-arrow-left &nbsp;Back to EntityTypes
+    div.box-body
+        div
+            h2 {{entityType.name}}
+
+            h3 Raw
+                pre {{entityType|json}}

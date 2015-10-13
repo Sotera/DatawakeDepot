@@ -1,31 +1,29 @@
+
 .box
-    .box-body.no-padding(style='min-height: 120px;')
-        table.table.table-striped(st-table='displayedCrawlTypes', st-safe-src='safeDisplayedCrawlTypes')
-            thead
-                tr
-                    th
-                    th(st-sort='name') Crawl Type Name
-                    th(st-sort='description') Description
-                tr
-                    th
-                        a.btn.btn-block.btn-success(ui-sref='^.add')
-                            span.glyphicon.glyphicon-plus(style="margin-right: 10px")
-                            span Add Crawl Type
-                    th
-                        input.input-sm.form-control(st-search='name' type='search' placeholder='search')
-                    th
-                        input.input-sm.form-control(st-search='description' type='search' placeholder='search')
-            tbody
-                tr(ng-repeat='crawlType in displayedCrawlTypes')
-                    td(style='width: 120px')
-                        .btn-group
-                            button.btn.btn-sm.btn-default(ui-sref='app.dwCrawlTypes.edit({id:crawlType.id})')
-                                i.fa.fa-pencil
-                            button.btn.btn-sm.btn-danger(ng-click='delete({id:crawlType.id})')
-                                i.fa.fa-trash-o
-                    td
-                        span.text-muted {{crawlType.name}}
-                    td
-                        span.text-muted {{crawlType.description}}
-    .overlay(ng-if='loading')
-    .loading-img(ng-if='loading')
+  .box-body.no-padding(style='min-height: 120px;')
+    table.table.table-striped(st-table='crawlTypes')
+      thead
+        //tr
+        //  th
+        //      input.input-sm.form-control(st-search='name' type='search' placeholder='Search across fields')
+        tr
+          th(st-sort='name') Name
+          th(st-sort='description') Description
+          th
+              a.btn.btn-block.btn-success(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
+                  span.glyphicon.glyphicon-plus(style="margin-right: 10px")
+                  span Add CrawlType
+      tbody
+        tr(ng-repeat='crawlType in crawlTypes')
+          td(style='width: 120px')
+            a(href='', ui-sref='app.dwCrawlTypes.view({id: crawlType.id})') {{crawlType.name}}
+          td
+            span.text-muted {{crawlType.description}}
+          td(style='width: 120px')
+            .btn-toolbar
+                button.btn.btn-sm.btn-default(ui-sref='app.dwCrawlTypes.edit({id:crawlType.id})',ng-disabled='!currentUser.isAdmin')
+                    i.fa.fa-pencil
+                button.btn.btn-sm.btn-danger(ng-click='delete({id:crawlType.id})',ng-disabled='!currentUser.isAdmin')
+                    i.fa.fa-trash-o
+  .overlay(ng-if='loading')
+  .loading-img(ng-if='loading')

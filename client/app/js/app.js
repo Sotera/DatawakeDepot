@@ -29,7 +29,7 @@ angular.module('loopbackApp', [
   'ui.codemirror',
   'ui.gravatar',
   'ui.grid',
-/*  'angularGrid',*/
+  'angularGrid',
   'smart-table',
   'ui.router',
   'ui.layout',
@@ -40,10 +40,12 @@ angular.module('loopbackApp', [
   'com.module.about',
   /*  'com.module.files',
    'com.module.events',
+  'com.module.notes',
   'com.module.pages',
-   'com.module.notes',
   'com.module.posts',
-  'com.module.products',*/
+  'com.module.products',
+
+*/
   'com.module.sandbox',
   'com.module.settings',
   'com.module.users',
@@ -57,6 +59,8 @@ angular.module('loopbackApp', [
   'com.module.dwTrails',
   'com.module.dwTrailUrls',
   'com.module.dwUrlExtractions'
+
+
 
 ])
   .run(function ($rootScope, $cookies, gettextCatalog) {

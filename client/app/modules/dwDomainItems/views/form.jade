@@ -3,17 +3,17 @@
     span.box-title
       .input-group
         a.btn.btn-default(translate, href='', ui-sref='^.list', style='float: left;')
-          i.fa.fa-arrow-left Domain Items
+          i.fa.fa-arrow-left &nbsp;Back to DomainItems
     .box-tools.pull-right
-      span.pull-right.btn-group
+      span.pull-right.btn-toolbar
         button.btn.btn-primary.btn-success.btn-sm(translate, ng-click='onSubmit()')
-          i.fa.fa-save Save
-        a.btn.btn-sm.btn-default(href='', ng-click='delete({id: page.id})')
-          i.fa.fa-trash-o
+          i.fa.fa-save &nbsp;Save
+        button.btn.btn-primary.btn-danger.btn-sm(translate, ng-click='delete({id: domainItem.id})')
+          i.fa.fa-trash-o &nbsp;Delete
   .box-body
-    .alert.alert-danger(translate, ng-if='addError') Could not add Domain Item!
+    .alert.alert-danger(translate, ng-if='addError') Could not add DomainItem!
     form(ng-submit='onSubmit()' novalidate)
-      formly-form(model='dwDomainItem', fields='formFields')
+      formly-form(model='domainItem', fields='formFields')
 
   .overlay(ng-if='loading')
   .overlay(ng-if='loading-img')

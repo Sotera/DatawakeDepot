@@ -94,7 +94,7 @@
     "dataSource": "db",
     "public": true
   },
-  "DwRecipient": {
+  "DwFeed": {
     "dataSource": "db",
     "public": true
   },
@@ -115,6 +115,14 @@
     "public": true
   },
   "DwUrlExtraction": {
+    "dataSource": "db",
+    "public": true
+  },
+  "DwTeam": {
+    "dataSource": "db",
+    "public": true
+  },
+  "DwExtractor": {
     "dataSource": "db",
     "public": true
   }

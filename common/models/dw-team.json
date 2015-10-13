@@ -1,11 +1,10 @@
 {
-  "name": "DwDomainEntityType",
-  "plural": "dwDomainEntityTypes",
+  "name": "DwTeam",
+  "plural": "dwTeams",
   "base": "PersistedModel",
   "properties": {
     "id": {
-      "type": "number",
-      "id": true
+      "type": "id"
     },
     "name": {
       "type": "string",
@@ -13,21 +12,23 @@
     },
     "description": {
       "type": "string"
-    },
-    "domainId":{
-      "type": "number"
     }
   },
   "validations": [],
   "relations": {
-    "domain": {
+    "trails": {
       "type": "hasMany",
-      "model": "DwDomain",
+      "model": "DwTrail",
       "foreignKey": "id"
     },
-    "domainItems": {
+    "users": {
       "type": "hasMany",
-      "model": "DwDomainItem",
+      "model": "AminoUser",
+      "foreignKey": "id"
+    },
+    "domains": {
+      "type": "hasMany",
+      "model": "DwDomain",
       "foreignKey": "id"
     }
   },

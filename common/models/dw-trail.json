@@ -16,6 +16,10 @@
     },
     "timestamp": {
       "type": "date"
+    },
+    "domainId": {
+      "type": "number",
+      "id": true
     }
   },
   "validations": [],
@@ -23,6 +27,16 @@
     "domain": {
       "type": "belongsTo",
       "model": "DwDomain",
+      "foreignKey": "id"
+    },
+    "teams": {
+      "type": "belongsTo",
+      "model": "DwTeam",
+      "foreignKey": "id"
+    },
+    "user": {
+      "type": "hasMany",
+      "model": "AminoUser",
       "foreignKey": "id"
     }
   },

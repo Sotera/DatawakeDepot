@@ -1,6 +1,6 @@
 {
-  "name": "DwRecipient",
-  "plural": "dwRecipients",
+  "name": "DwFeed",
+  "plural": "dwFeeds",
   "base": "PersistedModel",
   "properties": {
     "id": {
@@ -14,7 +14,7 @@
     "index": {
       "type": "string"
     },
-    "recipientUrl": {
+    "feedUrl": {
       "type": "string"
     },
     "credentials": {
@@ -41,7 +41,7 @@
     },
     "users": {
       "type": "hasMany",
-      "model": "DwUser",
+      "model": "AminoUser",
       "foreignKey": "id"
     },
     "transmission": {

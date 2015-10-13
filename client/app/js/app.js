@@ -6,6 +6,8 @@
  * # loopbackApp
  *
  * Main module of the application.
+ *
+ *** The order of the modules here controls the order that they appear in the toolbar on the left of the application ***
  */
 angular.module('loopbackApp', [
   'angular-loading-bar',
@@ -49,16 +51,20 @@ angular.module('loopbackApp', [
   'com.module.sandbox',
   'com.module.settings',
   'com.module.users',
+  'com.module.dwTeams',
 
   'com.module.dwCrawlTypes',
   'com.module.dwDomains',
-  'com.module.dwDomainEntityTypes',
   'com.module.dwDomainItems',
+  'com.module.dwDomainEntityTypes',
+  'com.module.dwExtractors',
+  'com.module.dwFeeds',
   'com.module.dwServiceTypes',
   'com.module.dwSettings',
   'com.module.dwTrails',
   'com.module.dwTrailUrls',
   'com.module.dwUrlExtractions'
+
 
 
 

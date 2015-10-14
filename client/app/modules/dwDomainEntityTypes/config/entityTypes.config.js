@@ -5,7 +5,7 @@ app.run(function($rootScope, DwDomainEntityType, gettextCatalog) {
   $rootScope.addMenu(gettextCatalog.getString('EntityTypes'), 'app.dwDomainEntityTypes.list', 'fa-cog');
 
   DwDomainEntityType.find(function(data) {
-    $rootScope.addDashboardBox(gettextCatalog.getString('EntityTypes'), 'bg-yellow', 'ion-clipboard', data.length, 'app.dwDomainEntityTypes.list');
+    $rootScope.addDashboardBox(gettextCatalog.getString('EntityTypes'), 'bg-blue', 'ion-ios-people', data.length, 'app.dwDomainEntityTypes.list');
   });
 
 });

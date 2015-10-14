@@ -5,7 +5,7 @@
       thead
         tr
           th
-            input.input-sm.form-control(st-search='name' type='search' placeholder='Search across all terms')
+            input.input-sm.form-control(st-search='' type='search' placeholder='Search across all terms')
         tr
           th(st-sort='name') Name
           th(st-sort='description') Description
@@ -18,7 +18,7 @@
       tbody
         tr(ng-repeat='domain in displayedDomains')
           td(style='width: 120px')
-            a(href='', ui-sref='app.dwDomains.view({id: domain.id})') {{domain.name}}
+            a(ui-sref='app.dwDomains.view({id:domain.id})') {{domain.name}}
           td
             span.text-muted {{domain.description}}
           td(style='width: 120px')

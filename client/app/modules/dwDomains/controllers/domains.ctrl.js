@@ -2,7 +2,6 @@
 var app = angular.module('com.module.dwDomains');
 
 app.controller('DomainsCtrl', function($scope, $state, $stateParams, DwDomain, DomainsService, gettextCatalog, AppAuth) {
-
     //Put the currentUser in $scope for convenience
     $scope.currentUser = AppAuth.currentUser;
 
@@ -31,7 +30,7 @@ app.controller('DomainsCtrl', function($scope, $state, $stateParams, DwDomain, D
     };
 
     $scope.onSubmit = function() {
-        DomainsService.upsertDomain($scope.safeDisplayedDomains, function() {
+        DomainsService.upsertDomain($scope.domain, function() {
             $scope.safeDisplayedDomains = DomainsService.getDomains();
             $state.go('^.list');
         });
@@ -41,7 +40,7 @@ app.controller('DomainsCtrl', function($scope, $state, $stateParams, DwDomain, D
     DwDomain.find({filter: {include: []}}).$promise
         .then(function (allDomains) {
             $scope.safeDisplayedDomains = allDomains;
-            $scope.displayedDomains = [].concat($scope.safeDisplayedUsers);
+            $scope.displayedDomains = [].concat($scope.safeDisplayedDomains);
         })
         .catch(function (err) {
             console.log(err);
@@ -49,13 +48,12 @@ app.controller('DomainsCtrl', function($scope, $state, $stateParams, DwDomain, D
         .then(function () {
             $scope.loading = false;
         });
-    return;
 
     if ($stateParams.id) {
         DomainsService.getDomain($stateParams.id).$promise.then(function(result){
-            $scope.safeDisplayedDomains = result;})
+            $scope.domain = result;})
     } else {
-        $scope.safeDisplayedDomains = {};
+        $scope.domain = {};
     }
 
     //Search Functionality

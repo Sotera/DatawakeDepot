@@ -27,14 +27,14 @@
       "through": "RoleMapping"
     },
     "teams": {
-      "type": "hasMany",
+      "type": "hasAndBelongsToMany",
       "model": "DwTeam",
-      "foreignKey": "id"
+      "foreignKey": ""
     },
     "trails": {
-      "type": "hasMany",
+      "type": "hasAndBelongsToMany",
       "model": "DwTrail",
-      "foreignKey": "id"
+      "foreignKey": ""
     }
   },
   "acls": [

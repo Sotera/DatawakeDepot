@@ -4,7 +4,8 @@
   "base": "PersistedModel",
   "properties": {
     "id": {
-      "type": "id"
+      "type": "string",
+      "id": true
     },
     "name": {
       "type": "string",
@@ -19,17 +20,17 @@
     "trails": {
       "type": "hasMany",
       "model": "DwTrail",
-      "foreignKey": "id"
+      "foreignKey": ""
     },
     "users": {
-      "type": "hasMany",
+      "type": "hasAndBelongsToMany",
       "model": "AminoUser",
-      "foreignKey": "id"
+      "foreignKey": ""
     },
     "domains": {
-      "type": "hasMany",
+      "type": "hasAndBelongsToMany",
       "model": "DwDomain",
-      "foreignKey": "id"
+      "foreignKey": ""
     }
   },
   "acls": [],

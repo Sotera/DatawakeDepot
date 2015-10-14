@@ -2,9 +2,10 @@
   "name": "DwCrawlType",
   "plural": "dwCrawlTypes",
   "base": "PersistedModel",
+  "idInjection": true,
   "properties": {
     "id": {
-      "type": "number",
+      "type": "string",
       "id": true
     },
     "name": {

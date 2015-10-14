@@ -4,7 +4,7 @@
   "base": "PersistedModel",
   "properties": {
     "id": {
-      "type": "number",
+      "type": "string",
       "id": true
     },
     "name": {
@@ -22,37 +22,24 @@
     },
     "protocol": {
       "type": "string"
-    },
-    "serviceTypeId": {
-      "type": "number"
     }
   },
   "validations": [],
   "relations": {
     "domains": {
-      "type": "hasMany",
+      "type": "hasAndBelongsToMany",
       "model": "DwDomain",
-      "foreignKey": "id"
-    },
-    "trails": {
-      "type": "hasMany",
-      "model": "DwTrail",
-      "foreignKey": "id"
-    },
-    "users": {
-      "type": "hasMany",
-      "model": "AminoUser",
-      "foreignKey": "id"
+      "foreignKey": ""
     },
     "transmission": {
       "type": "hasMany",
       "model": "DwTransmission",
-      "foreignKey": "id"
+      "foreignKey": ""
     },
     "serviceType": {
       "type": "hasOne",
       "model": "DwServiceType",
-      "foreignKey": "id"
+      "foreignKey": ""
     }
   },
   "acls": [],

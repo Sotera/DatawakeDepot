@@ -4,7 +4,7 @@
   "base": "PersistedModel",
   "properties": {
     "id": {
-      "type": "number",
+      "type": "string",
       "id": true
     },
     "transmission": {
@@ -18,7 +18,7 @@
       "type": "date"
     },
     "feedId": {
-      "type": "number"
+      "type": "string"
     }
   },
   "validations": [],
@@ -26,7 +26,7 @@
     "feed": {
       "type": "hasOne",
       "model": "DwFeed",
-      "foreignKey": "id"
+      "foreignKey": ""
     }
   },
   "acls": [],

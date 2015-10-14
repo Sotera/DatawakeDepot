@@ -1,8 +1,11 @@
 
 .box
   .box-body.no-padding(style='min-height: 120px;')
-    table.table.table-striped(st-table='domains')
+    table.table.table-striped(st-table='displayedDomains', st-safe-src='safeDisplayedDomains')
       thead
+        tr
+          th
+            input.input-sm.form-control(st-search='name' type='search' placeholder='Search across all terms')
         tr
           th(st-sort='name') Name
           th(st-sort='description') Description
@@ -11,10 +14,9 @@
               a.btn.btn-block.btn-success(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
                   span.glyphicon.glyphicon-plus(style="margin-right: 10px")
                   span Add Domain
-          th
-              input.input-sm.form-control(st-search='name' type='search' placeholder='search')
+
       tbody
-        tr(ng-repeat='domain in domains')
+        tr(ng-repeat='domain in displayedDomains')
           td(style='width: 120px')
             a(href='', ui-sref='app.dwDomains.view({id: domain.id})') {{domain.name}}
           td

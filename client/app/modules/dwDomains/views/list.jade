@@ -3,16 +3,16 @@
   .box-body.no-padding(style='min-height: 120px;')
     table.table.table-striped(st-table='domains')
       thead
-        //tr
-        //  th
-        //      input.input-sm.form-control(st-search='name' type='search' placeholder='Search across fields')
         tr
           th(st-sort='name') Name
           th(st-sort='description') Description
+        tr
           th
               a.btn.btn-block.btn-success(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
                   span.glyphicon.glyphicon-plus(style="margin-right: 10px")
                   span Add Domain
+          th
+              input.input-sm.form-control(st-search='name' type='search' placeholder='search')
       tbody
         tr(ng-repeat='domain in domains')
           td(style='width: 120px')

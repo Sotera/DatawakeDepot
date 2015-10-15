@@ -24,7 +24,7 @@
   },
   "main": "server/server.js",
   "dependencies": {
-    "async": "1.4.2",
+    "async": "^1.4.2",
     "body-parser": "1.14.0",
     "bower": "1.5.2",
     "compression": "1.5.2",

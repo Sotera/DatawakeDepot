@@ -125,5 +125,9 @@
   "DwExtractor": {
     "dataSource": "db",
     "public": true
+  },
+  "UserTeamMapping": {
+    "dataSource": "db",
+    "public": true
   }
 }

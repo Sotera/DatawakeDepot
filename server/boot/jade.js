@@ -190,8 +190,8 @@ module.exports = function (app) {
   app.get('/modules/dwUrlExtractions/views/form', function (req, res) {
       res.render('dwUrlExtractions/views/form', {title: 'Datawake Trail Extractions'});
   });
-  app.get('/modules/dwUrlExtractions/views/form', function (req, res) {
-      res.render('dwUrlExtractions/views/form', {title: 'Datawake Trail Extractions'});
+  app.get('/modules/dwUrlExtractions/views/view', function (req, res) {
+      res.render('dwUrlExtractions/views/view', {title: 'Datawake Trail Extractions'});
   });
 
 };

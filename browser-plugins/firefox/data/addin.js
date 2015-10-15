@@ -28,9 +28,6 @@ exports.init = function () {
         case 'set-trailing-active':
           pluginState.trailingActive = msg.data;
           break;
-        case 'request-trails-target-addin':
-          refreshTeamsDomainsTrails();
-          break;
         case 'set-current-domain-target-addin':
           for (var i = 0; i < pluginState.currentDomainList.length; ++i) {
             if (pluginState.currentDomainList[i].name == msg.domainValue) {
@@ -107,21 +104,44 @@ function logoutSuccessfulHandler(tellToolBar) {
 function loginSuccessfulHandler(user) {
   pluginState.postEventToAddInModule('logged-in-target-context-menu');
   pluginState.loggedInUser = user;
+  //Pack up all the stuff the toolbar needs to do its thing into pluginState and
+  //send it over
+  pluginState.getTeamsForLoggedInUser(function (teams) {
+    pluginState.currentTeamList = teams;
+    if (!pluginState.currentTeamList.length) {
+      postLoginMessageToToolBar();
+      return;
+    }
+    pluginState.currentTeam = pluginState.currentTeamList[0];
+    pluginState.getDomainsForCurrentTeam(function (domains) {
+      pluginState.currentDomainList = domains;
+      if(!pluginState.currentDomainList.length){
+        postLoginMessageToToolBar();
+        return;
+      }
+      pluginState.currentDomain = pluginState.currentDomainList[0];
+    });
+  });
+}
+function postLoginMessageToToolBar() {
   var msg = {
     type: 'login-success-target-toolbar-frame',
-    pluginState: pluginState
+    pluginState: {
+      loggedInUser: pluginState.loggedInUser,
+      currentTeam: pluginState.currentTeam,
+      currentTeamList: pluginState.currentTeamList,
+      currentDomain: pluginState.currentDomain,
+      currentDomainList: pluginState.currentDomainList,
+      currentTrail: pluginState.currentTrail,
+      currentTrailList: pluginState.currentTrailList
+    }
   };
   pluginState.postMessageToToolBar(msg);
 }
 function refreshTeamsDomainsTrails() {
-  if (pluginState.trailingActive) {
-    return;
-  }
+  //Get trails for particular user
   pluginState.restGet(pluginState.domainsUrl,
     function (res) {
-      if (compareDomainLists(res.json, pluginState.currentDomainList)) {
-        return;
-      }
       pluginState.currentDomainList = res.json;
       var msg = {
         type: 'updated-domains-target-toolbar-frame',
@@ -133,9 +153,6 @@ function refreshTeamsDomainsTrails() {
   );
   pluginState.restGet(pluginState.trailsUrl,
     function (res) {
-      if (compareTrailLists(res.json, pluginState.currentTrailList)) {
-        return;
-      }
       pluginState.currentTrailList = res.json;
       var msg = {
         type: 'updated-trails-target-toolbar-frame',
@@ -145,26 +162,4 @@ function refreshTeamsDomainsTrails() {
       pluginState.postMessageToToolBar(msg);
     }
   );
-}
-function compareDomainLists(domainList0, domainList1) {
-  try {
-    if (domainList0.length != domainList1.length) {
-      return false;
-    }
-    return true;
-  }
-  catch (err) {
-    return false;
-  }
-}
-function compareTrailLists(trailList0, trailList1) {
-  try {
-    if (trailList0.length != trailList1.length) {
-      return false;
-    }
-    return true;
-  }
-  catch (err) {
-    return false;
-  }
 }

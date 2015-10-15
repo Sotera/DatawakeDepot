@@ -68,7 +68,7 @@ function toggleTrailing() {
     $('#toggleTrailButton')
       .addClass('btn-success')
       .removeClass('red-throb')
-      .html('Start Trailing');
+      .html('Start');
   } else {
     $('#loginButton').addClass('disabled');
     $('#domainList').attr('disabled', 'disabled');
@@ -76,7 +76,7 @@ function toggleTrailing() {
     $('#toggleTrailButton')
       .removeClass('btn-success')
       .addClass('red-throb')
-      .html('Stop Trailing');
+      .html('Stop');
   }
   window.trailingActive = !window.trailingActive;
   postMessageToAddin({
@@ -94,7 +94,6 @@ function setUIStateToLoggedIn(pluginState) {
   $('#domainList').removeAttr('disabled');
   $('#trailList').removeAttr('disabled');
   $('#toggleTrailButton').addClass('disabled');
-  postMessageToAddin({action: 'request-trails-target-addin'});
 }
 function setUIStateToLoggedOut() {
   //Do this check in case we're logged out via toolbar *and* a browser tab is

@@ -10,7 +10,9 @@ var PluginState = function () {
   me.currentTrail = null;
   me.currentTrailList = [];
   me.loginUrl = '';
+  me.usersUrl = '/api/AminoUsers';
   me.domainsUrl = '/api/dwDomains';
+  me.teamsUrl = '/api/dwTeams';
   me.trailsUrl = '/api/dwTrails';
   me.trailsUrlsUrl = '/api/dwTrailUrls';
   me.trailingActive = false;
@@ -28,10 +30,27 @@ var PluginState = function () {
   };
   me.restGet = function(url, callback){
     url = me.loginUrl + url;
+    url += '?access_token=' + me.loggedInUser.accessToken;
     Request({
       url: url,
       onComplete: callback
     }).get();
+  };
+  me.getDomainsForCurrentTeam = function (cb) {
+    var url = me.teamsUrl;
+    url += '/' + me.currentTeam.id;
+    url += '/domains';
+    me.restGet(url,function(res){
+      cb(res.JSON);
+    });
+  };
+  me.getTeamsForLoggedInUser = function (cb) {
+    var url = me.usersUrl;
+    url += '/' + me.loggedInUser.id;
+    url += '/teams';
+    me.restGet(url,function(res){
+      cb(res.JSON);
+    });
   };
   me.postMessageToToolBar = function (msg) {
     me.toolbarFrameSource.postMessage(msg, me.toolbarFrameOrigin);

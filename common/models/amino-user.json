@@ -2,7 +2,12 @@
   "name": "AminoUser",
   "plural": "AminoUsers",
   "base": "User",
-  "properties": {},
+  "properties": {
+    "id": {
+      "type": "string",
+      "id": true
+    }
+  },
   "validations": [],
   "relations": {
     "accessTokens": {

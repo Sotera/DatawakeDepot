@@ -1,20 +1,19 @@
 
 .box
   .box-body.no-padding(style='min-height: 120px;')
-    table.table.table-striped(st-table='serviceTypes')
+    table.table.table-striped(st-table='displayedserviceTypes', st-safe-src='safeDisplayedserviceTypes')
       thead
-        //tr
-        //  th
-        //      input.input-sm.form-control(st-search='name' type='search' placeholder='Search across fields')
+        tr
+          th
+            input.input-sm.form-control(st-search='' type='search' placeholder='Search')
         tr
           th(st-sort='name') Name
           th(st-sort='description') Description
           th
-              a.btn.btn-block.btn-success(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
-                  span.glyphicon.glyphicon-plus(style="margin-right: 10px")
-                  span Add ServiceType
+              a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
+                &nbsp;Add Service Type
       tbody
-        tr(ng-repeat='serviceType in serviceTypes')
+        tr(ng-repeat='serviceType in displayedserviceTypes')
           td(style='width: 120px')
             a(href='', ui-sref='app.dwServiceTypes.view({id: serviceType.id})') {{serviceType.name}}
           td

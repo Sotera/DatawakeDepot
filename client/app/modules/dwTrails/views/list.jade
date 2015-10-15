@@ -1,28 +1,27 @@
 
 .box
   .box-body.no-padding(style='min-height: 120px;')
-    table.table.table-striped(st-table='trails')
+    table.table.table-striped(st-table='displayedTrails', st-safe-src='safeDisplayedtrails')
       thead
-        //tr
-        //  th
-        //      input.input-sm.form-control(st-search='name' type='search' placeholder='Search across fields')
+        tr
+          th
+            input.input-sm.form-control(st-search='' type='search' placeholder='Search')
         tr
           th(st-sort='name') Name
           th(st-sort='description') Description
-          th Member Of Domains
+          th Based on Domain
           th(st-sort='timestamp') Timestamp
           th
-              a.btn.btn-block.btn-success(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
-                  span.glyphicon.glyphicon-plus(style="margin-right: 10px")
-                  span Add Trail
+              a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
+                &nbsp;Add Trail
       tbody
-        tr(ng-repeat='trail in trails')
+        tr(ng-repeat='trail in displayedTrails')
           td(style='width: 120px')
             a(href='', ui-sref='app.dwTrails.view({id: trail.id})') {{trail.name}}
           td
             span.text-muted {{trail.description}}
           td
-            //span.label.label-default(ng-repeat="domain in trail.domains") {{domain.name}}
+            span.label.label-default(ng-repeat="domain in trail.domains") {{domain.name}}
           td
             span.text-muted {{trail.timestamp}}
           td(style='width: 120px')

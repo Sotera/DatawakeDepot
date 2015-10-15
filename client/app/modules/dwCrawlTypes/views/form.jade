@@ -3,7 +3,7 @@
     span.box-title
       .input-group
         a.btn.btn-default(translate, href='', ui-sref='^.list', style='float: left;')
-          i.fa.fa-arrow-left &nbsp;Back to CrawlTypes
+          i.fa.fa-arrow-left &nbsp;Back to Crawl Types
     .box-tools.pull-right
       span.pull-right.btn-toolbar
         button.btn.btn-primary.btn-success.btn-sm(translate, ng-click='onSubmit()')
@@ -11,7 +11,7 @@
         button.btn.btn-primary.btn-danger.btn-sm(translate, ng-click='delete({id: crawlType.id})')
           i.fa.fa-trash-o &nbsp;Delete
   .box-body
-    .alert.alert-danger(translate, ng-if='addError') Could not add CrawlType!
+    .alert.alert-danger(translate, ng-if='addError') Could not add Crawl Type!
     form(ng-submit='onSubmit()' novalidate)
       formly-form(model='crawlType', fields='formFields')
 

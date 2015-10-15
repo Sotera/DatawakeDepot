@@ -1,12 +1,12 @@
 'use strict';
-var app = angular.module('com.module.dwExtractors');
+var app = angular.module('com.module.dwCrawlTypes');
 
-app.controller('ExtractorsCtrl', function($scope, $state, $stateParams, DwExtractor, ExtractorsService, gettextCatalog, AppAuth) {
+app.controller('CrawlTypesCtrl', function($scope, $state, $stateParams, DwCrawlType, CrawlTypesService, gettextCatalog, AppAuth) {
 
     //Put the currentUser in $scope for convenience
     $scope.currentUser = AppAuth.currentUser;
 
-    $scope.extractor = {};
+    $scope.crawlType = {};
     $scope.formFields = [{
         key: 'id',
         type: 'input',
@@ -22,64 +22,36 @@ app.controller('ExtractorsCtrl', function($scope, $state, $stateParams, DwExtrac
             required: true
         }
     }, {
-        key: 'index',
+        key: 'description',
         type: 'input',
         templateOptions: {
-            label: gettextCatalog.getString('Index'),
-            required: false
-        }
-    }, {
-        key: 'extractorUrl',
-        type: 'input',
-        templateOptions: {
-            label: gettextCatalog.getString('Url'),
-            required: true
-        }
-    }, {
-        key: 'credentials',
-        type: 'input',
-        templateOptions: {
-            label: gettextCatalog.getString('Credentials'),
-            required: false
-        }
-    }, {
-        key: 'protocol',
-        type: 'input',
-        templateOptions: {
-            label: gettextCatalog.getString('Protocol'),
-            required: false
-        }
-    }, {
-        key: 'serviceTypeId',
-        type: 'input',
-        templateOptions: {
-            label: gettextCatalog.getString('ServiceType'),
+            label: gettextCatalog.getString('Description'),
             required: false
         }
     }];
 
 
     $scope.delete = function(id) {
-        ExtractorsService.deleteExtractor(id, function() {
-            $scope.safeDisplayedextractors = ExtractorsService.getExtractors();
+        CrawlTypesService.deleteCrawlType(id, function() {
+            $scope.safeDisplayedcrawlTypes = CrawlTypesService.getCrawlTypes();
             $state.go('^.list');
         });
     };
 
     $scope.onSubmit = function() {
-        ExtractorsService.upsertExtractor($scope.extractor, function() {
-            $scope.safeDisplayedextractors = ExtractorsService.getExtractors();
+        CrawlTypesService.upsertCrawlType($scope.crawlType, function() {
+            $scope.safeDisplayedcrawlTypes = CrawlTypesService.getCrawlTypes();
             $state.go('^.list');
         });
     };
 
-    $scope.extractors = ExtractorsService.getExtractors();
+    $scope.crawlTypes = CrawlTypesService.getCrawlTypes();
 
     $scope.loading = true;
-    DwExtractor.find({filter: {include: []}}).$promise
-        .then(function (allExtractors) {
-            $scope.safeDisplayedextractors = allExtractors;
-            $scope.displayedextractors = [].concat($scope.safeDisplayedextractors);
+    DwCrawlType.find({filter: {include: []}}).$promise
+        .then(function (allCrawlTypes) {
+            $scope.safeDisplayedcrawlTypes = allCrawlTypes;
+            $scope.displayedcrawlTypes = [].concat($scope.safeDisplayedcrawlTypes);
         })
         .catch(function (err) {
             console.log(err);
@@ -89,10 +61,10 @@ app.controller('ExtractorsCtrl', function($scope, $state, $stateParams, DwExtrac
         });
 
     if ($stateParams.id) {
-        ExtractorsService.getExtractor($stateParams.id).$promise.then(function(result){
-            $scope.extractor = result;})
+        CrawlTypesService.getCrawlType($stateParams.id).$promise.then(function(result){
+            $scope.crawlType = result;})
     } else {
-        $scope.extractor = {};
+        $scope.crawlType = {};
     }
 
     $scope.getDomains = function () {

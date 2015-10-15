@@ -1,23 +1,22 @@
 
 .box
   .box-body.no-padding(style='min-height: 120px;')
-    table.table.table-striped(st-table='trailUrls')
+    table.table.table-striped(st-table='displayedTrailUrls', st-safe-src='safeDisplayedtrailUrls')
       thead
-        //tr
-        //  th
-        //      input.input-sm.form-control(st-search='name' type='search' placeholder='Search across fields')
         tr
-          th(st-sort='url') Url
-          th(st-sort='timestamp') timestamp
-          th(st-sort='crawlType') crawlType
-          th(st-sort='comments') comments
-          th(st-sort='trailId') trail
           th
-              a.btn.btn-block.btn-success(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
-                  span.glyphicon.glyphicon-plus(style="margin-right: 10px")
-                  span Add TrailUrl
+            input.input-sm.form-control(st-search='' type='search' placeholder='Search')
+        tr
+          th(st-sort='url') URL
+          th(st-sort='timestamp') Timestamp
+          th(st-sort='crawlType') Crawl Type
+          th(st-sort='comments') Comments
+          th(st-sort='trailId') Trail
+          th
+              a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
+                &nbsp;Add Trail URL
       tbody
-        tr(ng-repeat='trailUrl in trailUrls')
+        tr(ng-repeat='trailUrl in displayedTrailUrls')
           td(style='width: 120px')
             a(href='', ui-sref='app.dwTrailUrls.view({id: trailUrl.id})') {{trailUrl.url}}
           td
@@ -27,7 +26,7 @@
           td
             span.text-muted {{trailUrl.comments}}
           td
-            span.text-muted {{trailUrl.trailId}}
+            span.label.label-default {{trailUrl.trailId}}
           td(style='width: 120px')
             .btn-toolbar
                 button.btn.btn-sm.btn-default(ui-sref='app.dwTrailUrls.edit({id:trailUrl.id})',ng-disabled='!currentUser.isAdmin')

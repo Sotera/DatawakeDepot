@@ -2,13 +2,13 @@ div.box
     div.box-header
         h3.box-title
             a(href="" ui-sref="^.list" class="btn btn-default")
-                i.fa.fa-arrow-left &nbsp;Back to TrailUrls
+                i.fa.fa-arrow-left &nbsp;Back to Trail URLs
     div.box-body
         div
             h2 {{trailUrl.name}}
 
-            h3 Domains
+            h3 Associated Trail
                 ul
-                    li( ng-repeat="comment in trailUrl.comments") {{comment.value}}
+                    li.label.label-default( ng-repeat="comment in trailUrl.trailId") {{trailId.id}}
             h3 Raw
                 pre {{trailUrl|json}}

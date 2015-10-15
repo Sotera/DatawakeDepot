@@ -1,11 +1,11 @@
 
 .box
   .box-body.no-padding(style='min-height: 120px;')
-    table.table.table-striped(st-table='feeds')
+    table.table.table-striped(st-table='displayedfeeds', st-safe-src='safeDisplayedfeeds')
       thead
-        //tr
-        //  th
-        //      input.input-sm.form-control(st-search='name' type='search' placeholder='Search across fields')
+        tr
+          th
+            input.input-sm.form-control(st-search='' type='search' placeholder='Search')
         tr
           th(st-sort='name') Name
           th(st-sort='feedUrl') Url
@@ -13,12 +13,12 @@
           th(st-sort='index') Index
           th(st-sort='credentials') Credentials
           th(st-sort='protocol') Protocol
+          th(st-sort='feed') Feed
           th
-              a.btn.btn-block.btn-success(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
-                  span.glyphicon.glyphicon-plus(style="margin-right: 10px")
-                  span Add Feed
+            a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
+              &nbsp;Add Feed
       tbody
-        tr(ng-repeat='feed in feeds')
+        tr(ng-repeat='feed in displayedfeeds')
           td(style='width: 120px')
             a(href='', ui-sref='app.dwFeeds.view({id: feed.id})') {{feed.name}}
           td
@@ -31,6 +31,8 @@
             span.text-muted {{feed.credentials}}
           td
             span.text-muted {{feed.protocol}}
+          td
+            span.text-muted {{feed.feedId}}
           td(style='width: 120px')
             .btn-toolbar
                 button.btn.btn-sm.btn-default(ui-sref='app.dwFeeds.edit({id:feed.id})',ng-disabled='!currentUser.isAdmin')

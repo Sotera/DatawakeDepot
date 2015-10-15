@@ -1,20 +1,19 @@
 
 .box
   .box-body.no-padding(style='min-height: 120px;')
-    table.table.table-striped(st-table='settings')
+    table.table.table-striped(st-table='displayedSettings', st-safe-src='safeDisplayedsettings')
       thead
-        //tr
-        //  th
-        //      input.input-sm.form-control(st-search='name' type='search' placeholder='Search across fields')
+        tr
+          th
+            input.input-sm.form-control(st-search='' type='search' placeholder='Search')
         tr
           th(st-sort='name') Setting
           th(st-sort='description') Value
           th
-              a.btn.btn-block.btn-success(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
-                  span.glyphicon.glyphicon-plus(style="margin-right: 10px")
-                  span Add Setting
+              a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
+                &nbsp;Add Setting
       tbody
-        tr(ng-repeat='setting in settings')
+        tr(ng-repeat='setting in displayedSettings')
           td(style='width: 120px')
             a(href='', ui-sref='app.dwSettings.view({id: setting.id})') {{setting.setting}}
           td

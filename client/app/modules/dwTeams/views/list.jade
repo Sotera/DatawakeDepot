@@ -1,21 +1,20 @@
 
 .box
   .box-body.no-padding(style='min-height: 120px;')
-    table.table.table-striped(st-table='teams')
+    table.table.table-striped(st-table='displayedteams', st-safe-src='safeDisplayedteams')
       thead
-        //tr
-        //  th
-        //      input.input-sm.form-control(st-search='name' type='search' placeholder='Search across fields')
+        tr
+          th
+            input.input-sm.form-control(st-search='' type='search' placeholder='Search')
         tr
           th(st-sort='name') Name
           th(st-sort='description') Description
           th Members
           th
-              a.btn.btn-block.btn-success(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
-                  span.glyphicon.glyphicon-plus(style="margin-right: 10px")
-                  span Add Team
+              a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
+                &nbsp;Add Team
       tbody
-        tr(ng-repeat='team in teams')
+        tr(ng-repeat='team in displayedteams')
           td(style='width: 120px')
             a(href='', ui-sref='app.dwTeams.view({id: team.id})') {{team.name}}
           td

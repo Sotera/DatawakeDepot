@@ -1,20 +1,19 @@
 
 .box
   .box-body.no-padding(style='min-height: 120px;')
-    table.table.table-striped(st-table='crawlTypes')
+    table.table.table-striped(st-table='displayedcrawlTypes', st-safe-src='safeDisplayedcrawlTypes')
       thead
-        //tr
-        //  th
-        //      input.input-sm.form-control(st-search='name' type='search' placeholder='Search across fields')
+        tr
+          th
+            input.input-sm.form-control(st-search='' type='search' placeholder='Search')
         tr
           th(st-sort='name') Name
           th(st-sort='description') Description
           th
-              a.btn.btn-block.btn-success(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
-                  span.glyphicon.glyphicon-plus(style="margin-right: 10px")
-                  span Add CrawlType
+              a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
+                &nbsp;Add Crawl Type
       tbody
-        tr(ng-repeat='crawlType in crawlTypes')
+        tr(ng-repeat='crawlType in displayedcrawlTypes')
           td(style='width: 120px')
             a(href='', ui-sref='app.dwCrawlTypes.view({id: crawlType.id})') {{crawlType.name}}
           td

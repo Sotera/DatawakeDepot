@@ -5,15 +5,14 @@
       thead
         tr
           th
-            input.input-sm.form-control(st-search='' type='search' placeholder='Search across all terms')
+            input.input-sm.form-control(st-search='' type='search' placeholder='Search')
         tr
           th(st-sort='name') Name
           th(st-sort='description') Description
           th() Domain Items
           th
-            a.btn.btn-block.btn-success(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
-              span.glyphicon.glyphicon-plus(style="margin-right: 10px")
-                span &nbsp;Add Domain
+            a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
+                &nbsp;Add Domain
 
       tbody
         tr(ng-repeat='domain in displayedDomains')

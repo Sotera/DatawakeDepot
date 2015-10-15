@@ -10,3 +10,9 @@ header.header .logo {
   height: 50px;
   display: block;
 }
+
+.custom {
+  width: 155px !important;
+  word-spacing: -6px;
+  white-space: normal;
+}

@@ -2,9 +2,10 @@
   "name": "DwDomainEntityType",
   "plural": "dwDomainEntityTypes",
   "base": "PersistedModel",
+  "idInjection": true,
   "properties": {
     "id": {
-      "type": "number",
+      "type": "string",
       "id": true
     },
     "name": {
@@ -13,24 +14,27 @@
     },
     "description": {
       "type": "string"
-    },
-    "domainId": {
-      "type": "number"
     }
   },
   "validations": [],
   "relations": {
     "domain": {
-      "type": "hasMany",
+      "type": "belongsTo",
       "model": "DwDomain",
-      "foreignKey": "id"
+      "foreignKey": ""
     },
-    "domainItems": {
+    "domainItem": {
       "type": "hasMany",
       "model": "DwDomainItem",
-      "foreignKey": "id"
+      "foreignKey": ""
+    },
+    "urlExtraction": {
+      "type": "hasMany",
+      "model": "DwUrlExtraction",
+      "foreignKey": ""
     }
   },
   "acls": [],
   "methods": {}
 }
+

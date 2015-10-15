@@ -4,7 +4,7 @@
   "base": "PersistedModel",
   "properties": {
     "id": {
-      "type": "number",
+      "type": "string",
       "id": true
     },
     "name": {
@@ -24,22 +24,19 @@
     "protocol": {
       "type": "string",
       "required": true
-    },
-    "serviceTypeId": {
-      "type": "number"
     }
   },
   "validations": [],
   "relations": {
     "domains": {
-      "type": "hasMany",
+      "type": "hasAndBelongsToMany",
       "model": "DwDomain",
-      "foreignKey": "id"
+      "foreignKey": ""
     },
     "services": {
       "type": "hasOne",
       "model": "DwServiceType",
-      "foreignKey": "id"
+      "foreignKey": ""
     }
   },
   "acls": [],

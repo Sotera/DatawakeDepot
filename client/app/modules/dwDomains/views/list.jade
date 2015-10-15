@@ -1,29 +1,33 @@
 
 .box
   .box-body.no-padding(style='min-height: 120px;')
-    table.table.table-striped(st-table='domains')
+    table.table.table-striped(st-table='displayedDomains', st-safe-src='safeDisplayedDomains')
       thead
-        //tr
-        //  th
-        //      input.input-sm.form-control(st-search='name' type='search' placeholder='Search across fields')
+        tr
+          th
+            input.input-sm.form-control(st-search='' type='search' placeholder='Search across all terms')
         tr
           th(st-sort='name') Name
           th(st-sort='description') Description
+          th() Domain Items
           th
-              a.btn.btn-block.btn-success(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
-                  span.glyphicon.glyphicon-plus(style="margin-right: 10px")
-                  span Add Domain
+            a.btn.btn-block.btn-success(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
+              span.glyphicon.glyphicon-plus(style="margin-right: 10px")
+                span &nbsp;Add Domain
+
       tbody
-        tr(ng-repeat='domain in domains')
+        tr(ng-repeat='domain in displayedDomains')
           td(style='width: 120px')
-            a(href='', ui-sref='app.dwDomains.view({id: domain.id})') {{domain.name}}
+            a(ui-sref='app.dwDomains.view({id:domain.id})') {{domain.name}}
           td
             span.text-muted {{domain.description}}
+          td
+            span {{domain.domainItems}}
           td(style='width: 120px')
             .btn-toolbar
-                button.btn.btn-sm.btn-default(ui-sref='app.dwDomains.edit({id:domain.id})',ng-disabled='!currentUser.isAdmin')
-                    i.fa.fa-pencil
-                button.btn.btn-sm.btn-danger(ng-click='delete({id:domain.id})',ng-disabled='!currentUser.isAdmin')
-                    i.fa.fa-trash-o
+              button.btn.btn-sm.btn-default(ui-sref='app.dwDomains.edit({id:domain.id})',ng-disabled='!currentUser.isAdmin')
+                i.fa.fa-pencil
+              button.btn.btn-sm.btn-danger(ng-click='delete({id:domain.id})',ng-disabled='!currentUser.isAdmin')
+                i.fa.fa-trash-o
   .overlay(ng-if='loading')
   .loading-img(ng-if='loading')

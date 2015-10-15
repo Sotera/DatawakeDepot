@@ -4,7 +4,7 @@
   "base": "PersistedModel",
   "properties": {
     "id": {
-      "type": "number",
+      "type": "string",
       "id": true
     },
     "name": {
@@ -18,7 +18,7 @@
       "type": "date"
     },
     "domainId": {
-      "type": "number",
+      "type": "string",
       "id": true
     }
   },
@@ -27,17 +27,22 @@
     "domain": {
       "type": "belongsTo",
       "model": "DwDomain",
-      "foreignKey": "id"
+      "foreignKey": ""
     },
     "teams": {
       "type": "belongsTo",
       "model": "DwTeam",
-      "foreignKey": "id"
+      "foreignKey": ""
     },
     "user": {
-      "type": "hasMany",
+      "type": "hasAndBelongsToMany",
       "model": "AminoUser",
-      "foreignKey": "id"
+      "foreignKey": ""
+    },
+    "url": {
+      "type": "hasMany",
+      "model": "DwTrailUrl",
+      "foreignKey": ""
     }
   },
   "acls": [],

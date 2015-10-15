@@ -4,7 +4,7 @@
   "base": "PersistedModel",
   "properties": {
     "id": {
-      "type": "number",
+      "type": "string",
       "id": true
     },
     "url": {
@@ -16,12 +16,6 @@
     },
     "comments": {
       "type": "string"
-    },
-    "trailId": {
-      "type": "number"
-    },
-    "crawlType": {
-      "type": "string"
     }
   },
   "validations": [],
@@ -29,14 +23,20 @@
     "trail": {
       "type": "belongsTo",
       "model": "DwTrail",
-      "foreignKey": "id"
+      "foreignKey": ""
+    },
+    "urlCrawl": {
+      "type": "hasOne",
+      "model": "DwCrawlType",
+      "foreignKey": ""
     },
     "extractions": {
       "type": "hasMany",
       "model": "DwUrlExtractions",
-      "foreignKey": "id"
+      "foreignKey": ""
     }
   },
   "acls": [],
   "methods": {}
 }
+

@@ -2,9 +2,11 @@
   "name": "DwDomain",
   "plural": "dwDomains",
   "base": "PersistedModel",
+  "idInjection": true,
   "properties": {
     "id": {
-      "type": "id"
+      "type": "string",
+      "id": true
     },
     "name": {
       "type": "string",
@@ -17,24 +19,39 @@
   "validations": [],
   "relations": {
     "teams": {
-      "type": "hasMany",
+      "type": "hasAndBelongsToMany",
       "model": "DwTeam",
-      "foreignKey": "id"
+      "foreignKey": ""
+    },
+    "extractors": {
+      "type": "hasAndBelongsToMany",
+      "model": "DwExtractor",
+      "foreignKey": ""
+    },
+    "feeds": {
+      "type": "hasAndBelongsToMany",
+      "model": "DwFeed",
+      "foreignKey": ""
     },
     "trails": {
       "type": "hasMany",
       "model": "DwTrail",
-      "foreignKey": "id"
+      "foreignKey": ""
     },
     "domainItems": {
-      "type": "hasMany",
+      "type": "embedsMany",
       "model": "DwDomainItem",
-      "foreignKey": "id"
+      "property": "domainItemList",
+      "options":{
+        "validate": true,
+        "forceId": false,
+        "persistent": true
+      }
     },
     "domainEntTypes": {
       "type": "hasMany",
       "model": "DwDomainEntityType",
-      "foreignKey": "id"
+      "foreignKey": ""
     }
   },
   "acls": [],

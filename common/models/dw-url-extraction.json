@@ -4,25 +4,24 @@
   "base": "PersistedModel",
   "properties": {
     "id": {
-      "type": "number",
+      "type": "string",
       "id": true
-    },
-    "domainEntityTypeId": {
-      "type": "number"
     },
     "value": {
       "type": "string"
-    },
-    "trailId": {
-      "type": "number"
     }
   },
   "validations": [],
   "relations": {
-    "domain": {
+    "trailUrl": {
       "type": "belongsTo",
       "model": "DwTrailUrl",
-      "foreignKey": "trailId"
+      "foreignKey": ""
+    },
+    "extractEntityType": {
+      "type": "hasOne",
+      "model": "DwDomainEntityType",
+      "foreignKey": ""
     }
   },
   "acls": [],

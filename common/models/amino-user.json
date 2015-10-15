@@ -2,16 +2,7 @@
   "name": "AminoUser",
   "plural": "AminoUsers",
   "base": "User",
-  "idInjection":true,
-  "properties": {
-    "amino_id": {
-      "type": "string",
-      "id": true,
-      "mongodb":{
-        "field":"_id"
-      }
-    }
-  },
+  "properties": {},
   "validations": [],
   "relations": {
     "accessTokens": {
@@ -38,6 +29,11 @@
     "teams": {
       "type": "hasAndBelongsToMany",
       "model": "DwTeam",
+      "foreignKey": ""
+    },
+    "trails": {
+      "type": "hasAndBelongsToMany",
+      "model": "DwTrail",
       "foreignKey": ""
     }
   },

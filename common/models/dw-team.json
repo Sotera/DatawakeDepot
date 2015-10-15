@@ -1,15 +1,11 @@
 {
   "name": "DwTeam",
-  "plural": "DwTeams",
+  "plural": "dwTeams",
   "base": "PersistedModel",
-  "idInjection":true,
   "properties": {
-    "amino_id": {
+    "id": {
       "type": "string",
-      "id": true,
-      "mongodb":{
-        "field":"_id"
-      }
+      "id": true
     },
     "name": {
       "type": "string",
@@ -21,12 +17,23 @@
   },
   "validations": [],
   "relations": {
+    "trails": {
+      "type": "hasMany",
+      "model": "DwTrail",
+      "foreignKey": ""
+    },
     "users": {
       "type": "hasAndBelongsToMany",
       "model": "AminoUser",
+      "foreignKey": ""
+    },
+    "domains": {
+      "type": "hasAndBelongsToMany",
+      "model": "DwDomain",
       "foreignKey": ""
     }
   },
   "acls": [],
   "methods": {}
 }
+

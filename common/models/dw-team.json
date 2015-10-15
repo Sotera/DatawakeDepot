@@ -13,27 +13,25 @@
     },
     "description": {
       "type": "string"
+    },
+    "users": {
+      "type": [
+        "string"
+      ]
+    },
+    "domains": {
+      "type": [
+        "string"
+      ]
+    },
+    "trails": {
+      "type": [
+        "string"
+      ]
     }
   },
   "validations": [],
-  "relations": {
-    "trails": {
-      "type": "hasMany",
-      "model": "DwTrail",
-      "foreignKey": ""
-    },
-    "users": {
-      "type": "hasAndBelongsToMany",
-      "model": "AminoUser",
-      "foreignKey": ""
-    },
-    "domains": {
-      "type": "hasAndBelongsToMany",
-      "model": "DwDomain",
-      "foreignKey": ""
-    }
-  },
+  "relations": {},
   "acls": [],
   "methods": {}
 }
-

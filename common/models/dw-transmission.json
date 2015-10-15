@@ -22,14 +22,7 @@
     }
   },
   "validations": [],
-  "relations": {
-    "feed": {
-      "type": "hasOne",
-      "model": "DwFeed",
-      "foreignKey": ""
-    }
-  },
+  "relations": {},
   "acls": [],
   "methods": {}
 }
-

@@ -22,27 +22,33 @@
     },
     "protocol": {
       "type": "string"
+    },
+    "serviceTypeId": {
+      "type": "string"
+    },
+    "domains": {
+      "type": [
+        "string"
+      ]
+    },
+    "teams": {
+      "type": [
+        "string"
+      ]
+    },
+    "trails": {
+      "type": [
+        "string"
+      ]
+    },
+    "transmissions": {
+      "type": [
+        "string"
+      ]
     }
   },
   "validations": [],
-  "relations": {
-    "domains": {
-      "type": "hasAndBelongsToMany",
-      "model": "DwDomain",
-      "foreignKey": ""
-    },
-    "transmission": {
-      "type": "hasMany",
-      "model": "DwTransmission",
-      "foreignKey": ""
-    },
-    "serviceType": {
-      "type": "hasOne",
-      "model": "DwServiceType",
-      "foreignKey": ""
-    }
-  },
+  "relations": {},
   "acls": [],
   "methods": {}
 }
-

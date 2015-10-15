@@ -14,27 +14,13 @@
     },
     "description": {
       "type": "string"
+    },
+    "domainId": {
+      "type": "string"
     }
   },
   "validations": [],
-  "relations": {
-    "domain": {
-      "type": "belongsTo",
-      "model": "DwDomain",
-      "foreignKey": ""
-    },
-    "domainItem": {
-      "type": "hasMany",
-      "model": "DwDomainItem",
-      "foreignKey": ""
-    },
-    "urlExtraction": {
-      "type": "hasMany",
-      "model": "DwUrlExtraction",
-      "foreignKey": ""
-    }
-  },
+  "relations": {},
   "acls": [],
   "methods": {}
 }
-

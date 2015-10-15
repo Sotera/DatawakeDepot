@@ -2,7 +2,9 @@
   "name": "AminoUser",
   "plural": "AminoUsers",
   "base": "User",
-  "properties": {},
+  "properties": {
+    "domains": {}
+  },
   "validations": [],
   "relations": {
     "accessTokens": {
@@ -25,16 +27,6 @@
       "model": "Role",
       "foreignKey": "principalId",
       "through": "RoleMapping"
-    },
-    "teams": {
-      "type": "hasAndBelongsToMany",
-      "model": "DwTeam",
-      "foreignKey": ""
-    },
-    "trails": {
-      "type": "hasAndBelongsToMany",
-      "model": "DwTrail",
-      "foreignKey": ""
     }
   },
   "acls": [

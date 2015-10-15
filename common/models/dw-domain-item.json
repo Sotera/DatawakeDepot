@@ -8,27 +8,18 @@
       "type": "string",
       "id": true
     },
-    "domainEntityTypeId": {
+    "itemValue": {
       "type": "string"
     },
-    "itemValue": {
+    "domainId": {
+      "type": "string"
+    },
+    "domainEntityTypeId": {
       "type": "string"
     }
   },
   "validations": [],
-  "relations": {
-    "domain": {
-      "type": "belongsTo",
-      "model": "DwDomain",
-      "foreignKey": ""
-    },
-    "domainEntityType": {
-      "type": "hasOne",
-      "model": "DwDomainEntityType",
-      "foreignKey": ""
-    }
-  },
+  "relations": {},
   "acls": [],
   "methods": {}
 }
-

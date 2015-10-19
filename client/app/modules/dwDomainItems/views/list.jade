@@ -7,9 +7,9 @@
           th
             input.input-sm.form-control(st-search='' type='search' placeholder='Search')
         tr
-          th(st-sort='itemType') Item Type
-          th(st-sort='itemValue') Value
-          th(st-sort='domainId') Domain
+          th.sortable(st-sort='itemType' st-sort-default="true") Item Type
+          th.sortable(st-sort='itemValue') Value
+          th.sortable(st-sort='domainId') Domain
           th
               a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
                   &nbsp;Add Domain Item

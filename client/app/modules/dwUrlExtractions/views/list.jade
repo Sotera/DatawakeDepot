@@ -7,9 +7,9 @@
           th
             input.input-sm.form-control(st-search='' type='search' placeholder='Search')
         tr
-          th(st-sort='domainEntityTypeId') Entity Type
-          th(st-sort='value') Value
-          th(st-sort='trailId') Trail
+          th.sortable(st-sort='domainEntityTypeId' st-sort-default="true") Entity Type
+          th.sortable(st-sort='value') Value
+          th.sortable(st-sort='trailId') Trail
           th
               a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
                 &nbsp;Add UrlExtraction

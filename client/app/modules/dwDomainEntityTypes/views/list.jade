@@ -7,9 +7,9 @@
           th
               input.input-sm.form-control(st-search='' type='search' placeholder='Search')
         tr
-          th(st-sort='name') Entity Type
-          th(st-sort='description') Description
-          th Member Of Domains
+          th.sortable(st-sort='name' st-sort-default="true") Entity Type
+          th.sortable(st-sort='description') Description
+          th.sortable Member Of Domains
           th
               a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
                   &nbsp;Add Entity Type

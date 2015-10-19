@@ -9,11 +9,11 @@
           th
             input.input-sm.form-control(st-search='' type='search' placeholder='search')
         tr
-          th(st-sort='username') Username
-          th(st-sort='firstName') First Name
-          th(st-sort='lastName') Last Name
-          th(st-sort='email') E-Mail
-          th Member Of
+          th.sortable(st-sort='username' st-sort-default="true") Username
+          th.sortable(st-sort='firstName') First Name
+          th.sortable(st-sort='lastName') Last Name
+          th.sortable(st-sort='email') E-Mail
+          th.sortable(st-sort='') Member Of
           th
             a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
               &nbsp;Add User

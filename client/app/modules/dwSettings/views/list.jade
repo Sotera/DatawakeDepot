@@ -7,8 +7,8 @@
           th
             input.input-sm.form-control(st-search='' type='search' placeholder='Search')
         tr
-          th(st-sort='name') Setting
-          th(st-sort='description') Value
+          th.sortable(st-sort='name' st-sort-default="true") Setting
+          th.sortable(st-sort='description') Value
           th
               a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
                 &nbsp;Add Setting

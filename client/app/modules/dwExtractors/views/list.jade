@@ -7,12 +7,12 @@
           th
             input.input-sm.form-control(st-search='' type='search' placeholder='Search')
         tr
-          th(st-sort='name') Name
-          th(st-sort='extractorUrl') Url
-          th(st-sort='serviceTypeId') ServiceType
-          th(st-sort='index') Index
-          th(st-sort='credentials') Credentials
-          th(st-sort='protocol') Protocol
+          th.sortable(st-sort='name' st-sort-default="true") Name
+          th.sortable(st-sort='extractorUrl') Url
+          th.sortable(st-sort='serviceTypeId') ServiceType
+          th.sortable(st-sort='index') Index
+          th.sortable(st-sort='credentials') Credentials
+          th.sortable(st-sort='protocol') Protocol
           th
             a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
               &nbsp;Add Extractor

@@ -7,11 +7,11 @@
           th
             input.input-sm.form-control(st-search='' type='search' placeholder='Search')
         tr
-          th(st-sort='url') URL
-          th(st-sort='timestamp') Timestamp
-          th(st-sort='crawlType') Crawl Type
-          th(st-sort='comments') Comments
-          th(st-sort='trailId') Trail
+          th.sortable(st-sort='url' st-sort-default="true") URL
+          th.sortable(st-sort='timestamp') Timestamp
+          th.sortable(st-sort='crawlType') Crawl Type
+          th.sortable(st-sort='comments') Comments
+          th.sortable(st-sort='trailId') Trail
           th
               a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
                 &nbsp;Add Trail URL

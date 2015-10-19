@@ -7,10 +7,10 @@
           th
             input.input-sm.form-control(st-search='' type='search' placeholder='Search')
         tr
-          th(st-sort='name') Name
-          th(st-sort='description') Description
-          th Based on Domain
-          th(st-sort='timestamp') Timestamp
+          th.sortable(st-sort='name' st-sort-default="true") Name
+          th.sortable(st-sort='description') Description
+          th.sortable Based on Domain
+          th.sortable(st-sort='timestamp') Timestamp
           th
               a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
                 &nbsp;Add Trail

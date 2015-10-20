@@ -1,12 +1,18 @@
 'use strict';
 var app = angular.module('com.module.dwExtractors');
 
-app.controller('ExtractorsCtrl', function($scope, $state, $stateParams, DwExtractor, ExtractorsService, gettextCatalog, AppAuth) {
+app.controller('ExtractorsCtrl', function($scope, $state, $stateParams, DwDomain, DwExtractor, DwServiceType, ExtractorsService, gettextCatalog, AppAuth) {
 
     //Put the currentUser in $scope for convenience
     $scope.currentUser = AppAuth.currentUser;
+    $scope.protocols = [
+        {"name": "ES","description": "Elastic Search"},
+        {"name": "ReST","description": "ReSTful Url" },
+        {"name": "Kafka","description": "Kafka Queue"}
+    ];
+    $scope.serviceTypes = [];
+    $scope.domains = [];
 
-    $scope.extractor = {};
     $scope.formFields = [{
         key: 'id',
         type: 'input',
@@ -44,17 +50,25 @@ app.controller('ExtractorsCtrl', function($scope, $state, $stateParams, DwExtrac
         }
     }, {
         key: 'protocol',
-        type: 'input',
+        type: 'select',
         templateOptions: {
             label: gettextCatalog.getString('Protocol'),
-            required: false
+            options: $scope.protocols,
+            valueProp: 'name',
+            labelProp: 'name',
+            required: true,
+            disabled: false
         }
     }, {
         key: 'serviceTypeId',
-        type: 'input',
+        type: 'select',
         templateOptions: {
             label: gettextCatalog.getString('ServiceType'),
-            required: false
+            options: $scope.serviceTypes,
+            valueProp: 'id',
+            labelProp: 'name',
+            required: true,
+            disabled: false
         }
     }];
 
@@ -73,10 +87,8 @@ app.controller('ExtractorsCtrl', function($scope, $state, $stateParams, DwExtrac
         });
     };
 
-    $scope.extractors = ExtractorsService.getExtractors();
-
     $scope.loading = true;
-    DwExtractor.find({filter: {include: []}}).$promise
+    DwExtractor.find({filter: {include: ['domains','serviceType']}}).$promise
         .then(function (allExtractors) {
             $scope.safeDisplayedextractors = allExtractors;
             $scope.displayedextractors = [].concat($scope.safeDisplayedextractors);
@@ -86,75 +98,48 @@ app.controller('ExtractorsCtrl', function($scope, $state, $stateParams, DwExtrac
         })
         .then(function () {
             $scope.loading = false;
-        });
+        }
+    );
+
+    DwServiceType.find({filter: {include: []}}).$promise
+        .then(function (allServiceTypes) {
+            for (var i = 0; i < allServiceTypes.length; ++i) {
+                $scope.serviceTypes.push({
+                    value: allServiceTypes[i].name,
+                    name: allServiceTypes[i].description,
+                    id: allServiceTypes[i].id
+                });
+            }
+        })
+        .catch(function (err) {
+            console.log(err);
+        })
+        .then(function () {
+        }
+    );
+
+    DwDomain.find({filter: {include: []}}).$promise
+        .then(function (allDomains) {
+            for (var i = 0; i < allDomains.length; ++i) {
+                $scope.domains.push({
+                    value: allDomains[i].name,
+                    name: allDomains[i].description,
+                    id: allDomains[i].id
+                });
+            }
+        })
+        .catch(function (err) {
+            console.log(err);
+        })
+        .then(function () {
+        }
+    );
 
     if ($stateParams.id) {
         ExtractorsService.getExtractor($stateParams.id).$promise.then(function(result){
             $scope.extractor = result;})
     } else {
         $scope.extractor = {};
-    }
-
-    $scope.getDomains = function () {
-        return [];
-    }
-
-    //Search Functionality
-    function arrayObjectIndexOf(myArray, searchTerm, property) {
-        for (var i = 0, len = myArray.length; i < len; i++) {
-            if (myArray[i][property] === searchTerm) return i;
-        }
-        return -1;
-    }
-    $scope.aToB = function () {
-        for (var i in $scope.selectedA) {
-            var moveId = arrayObjectIndexOf($scope.items, $scope.selectedA[i], "id");
-            $scope.listB.push($scope.items[moveId]);
-            var delId = arrayObjectIndexOf($scope.listA, $scope.selectedA[i], "id");
-            $scope.listA.splice(delId, 1);
-        }
-        reset();
-    };
-    $scope.bToA = function () {
-        for (var i in $scope.selectedB) {
-            var moveId = arrayObjectIndexOf($scope.items, $scope.selectedB[i], "id");
-            $scope.listA.push($scope.items[moveId]);
-            var delId = arrayObjectIndexOf($scope.listB, $scope.selectedB[i], "id");
-            $scope.listB.splice(delId, 1);
-        }
-        reset();
-    };
-    function reset() {
-        $scope.selectedA = [];
-        $scope.selectedB = [];
-        $scope.toggle = 0;
-    }
-
-    $scope.toggleA = function () {
-        if ($scope.selectedA.length > 0) {
-            $scope.selectedA = [];
-        }
-        else {
-            for (var i in $scope.listA) {
-                $scope.selectedA.push($scope.listA[i].id);
-            }
-        }
-    }
-    $scope.toggleB = function () {
-        if ($scope.selectedB.length > 0) {
-            $scope.selectedB = [];
-        }
-        else {
-            for (var i in $scope.listB) {
-                $scope.selectedB.push($scope.listB[i].id);
-            }
-        }
-    }
-    $scope.selectA = function (i) {
-        $scope.selectedA.push(i);
-    };
-    $scope.selectB = function (i) {
-        $scope.selectedB.push(i);
     };
 });
 

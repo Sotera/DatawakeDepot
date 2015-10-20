@@ -24,7 +24,6 @@
     "domain": {
       "type": "belongsTo",
       "model": "DwDomain",
-      "foreignKey": "domainId",
       "options": {
         "validate": true,
         "forceId": true,
@@ -32,13 +31,13 @@
       }
     },
     "domainItems": {
-      "type": "hasMany",
+      "type": "belongsTo",
       "model": "DwDomainItem",
-      "foreignKey": "domainItemId",
+      "property": "mikeX",
       "options": {
         "validate": true,
         "forceId": true,
-        "persistent": false
+        "persistent": true
       }
     }
   },

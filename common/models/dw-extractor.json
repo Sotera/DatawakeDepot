@@ -25,13 +25,33 @@
       "type": "string",
       "required": true
     },
-    "serviceTypeID": {
+    "serviceTypeId": {
       "type": "string",
       "required": true
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "domains": {
+      "type": "hasAndBelongsToMany",
+      "model": "DwDomain",
+      "options": {
+        "validate": true,
+        "forceId": true,
+        "persistent": false
+      }
+    },
+    "serviceType": {
+      "type": "hasOne",
+      "model": "DwServiceType",
+      "foreignKey": "serviceTypeId",
+       "options": {
+        "validate": true,
+        "forceId": true,
+        "persistent": false
+      }
+    }
+  },
   "acls": [],
   "methods": {}
 }

@@ -31,24 +31,21 @@
   "relations": {
     "domain": {
       "type": "belongsTo",
-      "model": "DwDomain",
-      "foreignKey": "domainId"
+      "model": "DwDomain"
     },
-    "teams": {
+    "team": {
       "type": "belongsTo",
-      "model": "DwTeam",
-      "foreignKey": "teamId"
+      "model": "DwTeam"
     },
    "user": {
      "type": "hasAndBelongsToMany",
-     "model": "AminoUser",
-     "foreignKey": "userId"
+     "model": "AminoUser"
    },
-   "url": {
+   "urls": {
      "type": "hasMany",
-     "model": "DwTrailUrl",
-     "foreignKey": "urlId"
-  }},
+     "model": "DwTrailUrl"
+   }
+  },
   "acls": [],
   "methods": {}
 }

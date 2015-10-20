@@ -17,7 +17,12 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "trailUrl": {
+      "type": "hasMany",
+      "model": "DwTrailUrl"
+    }
+  },
   "acls": [],
   "methods": {}
 }

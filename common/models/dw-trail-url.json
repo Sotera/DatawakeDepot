@@ -25,7 +25,22 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "trail": {
+      "type": "belongsTo",
+      "model": "DwTrail",
+      "foreignKey": "trailId"
+    },
+    "urlExtractions": {
+      "type": "hasMany",
+      "model": "DwUrlExtraction"
+    },
+    "crawlType": {
+      "type": "hasOne",
+      "model": "DwCrawlType",
+      "foreignKey": "crawlTypeId"
+    }
+  },
   "acls": [],
   "methods": {}
 }

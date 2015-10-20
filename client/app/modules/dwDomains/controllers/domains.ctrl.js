@@ -1,9 +1,10 @@
 'use strict';
 var app = angular.module('com.module.dwDomains');
 
-app.controller('DomainsCtrl', function($scope, $state, $stateParams, DwDomain, DomainsService, gettextCatalog, AppAuth) {
+app.controller('DomainsCtrl', function($scope, $state, $stateParams, DwDomain, DwExtractor, DomainsService, gettextCatalog, AppAuth) {
     //Put the currentUser in $scope for convenience
     $scope.currentUser = AppAuth.currentUser;
+    $scope.extractors = [];
 
     $scope.formFields = [{
         key: 'id',
@@ -25,8 +26,14 @@ app.controller('DomainsCtrl', function($scope, $state, $stateParams, DwDomain, D
             label: gettextCatalog.getString('Description'),
             required: true
         }
+    }, {
+        key: 'extractors',
+        type: 'multiCheckbox',
+        templateOptions: {
+            label: 'Extractors',
+            options: $scope.extractors
+    }
     }];
-
 
     $scope.delete = function(id) {
         DomainsService.deleteDomain(id, function() {
@@ -62,5 +69,22 @@ app.controller('DomainsCtrl', function($scope, $state, $stateParams, DwDomain, D
     } else {
         $scope.domain = {};
     }
+
+    DwExtractor.find({filter: {include: []}}).$promise
+        .then(function (allExtractors) {
+            for (var i = 0; i < allExtractors.length; ++i) {
+                $scope.extractors.push({
+                    value: allExtractors[i].name,
+                    name: allExtractors[i].name,
+                    id: allExtractors[i].id
+                });
+            }
+        })
+        .catch(function (err) {
+            console.log(err);
+        })
+        .then(function () {
+        }
+    );
 });
 

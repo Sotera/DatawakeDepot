@@ -28,7 +28,7 @@
       }
     },
     "domainItems": {
-      "type": "hasMany",
+      "type": "belongsTo",
       "model": "DwDomainItem",
       "options": {
         "validate": true,
@@ -37,8 +37,35 @@
       }
     },
     "extractors": {
-      "type": "hasMany",
+      "type": "hasAndBelongsToMany",
       "model": "DwExtractor",
+      "options": {
+        "validate": true,
+        "forceId": true,
+        "persistent": false
+      }
+    },
+    "feeds": {
+      "type": "hasAndBelongsToMany",
+      "model": "DwFee",
+      "options": {
+        "validate": true,
+        "forceId": true,
+        "persistent": false
+      }
+    },
+    "trails": {
+      "type": "hasMany",
+      "model": "DwTrail",
+      "options": {
+        "validate": true,
+        "forceId": true,
+        "persistent": false
+      }
+    },
+    "teams": {
+      "type": "hasAndBelongsToMany",
+      "model": "DwTeam",
       "options": {
         "validate": true,
         "forceId": true,

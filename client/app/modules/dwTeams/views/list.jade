@@ -21,7 +21,8 @@
           td
             span.text-muted {{team.description}}
           td
-            //span.label.label-default(ng-repeat="domain in team.domains") {{domain.name}}
+            //span.label.label-default(ng-repeat="user in team.teamUsers") {{user.name}}
+            span.label.label-default {{team.teamUsers.length}}
           td(style='width: 120px')
             .btn-toolbar
                 button.btn.btn-sm.btn-default(ui-sref='app.dwTeams.edit({id:team.id})',ng-disabled='!currentUser.isAdmin')

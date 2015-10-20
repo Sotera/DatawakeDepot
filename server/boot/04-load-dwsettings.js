@@ -49,7 +49,7 @@ module.exports = function (app) {
   }*/
   log('Creating dwSettings');
   //JReeme sez: setMaxListeners so we don't have to see that ridiculous memory leak warning
-  app.models.DwSetting.getDataSource().setMaxListeners(32);
+  app.models.DwSetting.getDataSource().setMaxListeners(64);
   nameValuePairs.forEach(function (item) {
     dwSettingFindOrCreate(app, item.name, item.value);
   });

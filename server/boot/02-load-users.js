@@ -3,6 +3,12 @@
 var async = require('async');
 var log = require('debug')('boot:02-load-users');
 module.exports = function (app) {
+  //JReeme sez: setMaxListeners so we don't have to see that ridiculous memory leak warning
+  app.models.AminoUser.getDataSource().setMaxListeners(64);
+  app.models.Role.getDataSource().setMaxListeners(64);
+  app.models.RoleMapping.getDataSource().setMaxListeners(64);
+  app.models.DwTeam.getDataSource().setMaxListeners(64);
+
   var AminoUser = app.models.AminoUser;
   var Role = app.models.Role;
   var DwTeam = app.models.DwTeam;

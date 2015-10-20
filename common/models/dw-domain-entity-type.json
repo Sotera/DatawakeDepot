@@ -20,7 +20,28 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "domain": {
+      "type": "belongsTo",
+      "model": "DwDomain",
+      "foreignKey": "domainId",
+      "options": {
+        "validate": true,
+        "forceId": true,
+        "persistent": true
+      }
+    },
+    "domainItems": {
+      "type": "hasMany",
+      "model": "DwDomainItem",
+      "foreignKey": "domainItemId",
+      "options": {
+        "validate": true,
+        "forceId": true,
+        "persistent": false
+      }
+    }
+  },
   "acls": [],
   "methods": {}
 }

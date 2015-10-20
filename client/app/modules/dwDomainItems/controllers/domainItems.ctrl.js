@@ -1,10 +1,12 @@
 'use strict';
 var app = angular.module('com.module.dwDomainItems');
 
-app.controller('DomainItemsCtrl', function($scope, $state, $stateParams, DwDomainItem, DomainItemsService, gettextCatalog, AppAuth) {
+app.controller('DomainItemsCtrl', function($scope, $state, $stateParams, DwDomain, DwDomainItem, DwDomainEntityType, DomainItemsService, gettextCatalog, AppAuth) {
 
     //Put the currentUser in $scope for convenience
     $scope.currentUser = AppAuth.currentUser;
+    $scope.domains = [];
+    $scope.entityTypes = [];
 
     $scope.domainItem = {};
     $scope.formFields = [{
@@ -23,21 +25,27 @@ app.controller('DomainItemsCtrl', function($scope, $state, $stateParams, DwDomai
         }
     }, {
         key: 'domainId',
-        type: 'input',
+        type: 'select',
         templateOptions: {
             label: gettextCatalog.getString('Domain'),
-            required: false
+            options: $scope.domains,
+            valueProp: 'id',
+            labelProp: 'name',
+            required: true,
+            disabled: false
         }
     }, {
-        key: 'itemType',
-        type: 'input',
+        key: 'domainEntityTypeId',
+        type: 'select',
         templateOptions: {
-            label: gettextCatalog.getString('Item Type'),
-            disabled: false,
-            required: false
+            label: gettextCatalog.getString('Domain Entity Type'),
+            options: $scope.entityTypes,
+            valueProp: 'id',
+            labelProp: 'name',
+            required: true,
+            disabled: false
         }
     }];
-
 
     $scope.delete = function(id) {
         DomainItemsService.deleteDomainItem(id, function() {
@@ -53,13 +61,15 @@ app.controller('DomainItemsCtrl', function($scope, $state, $stateParams, DwDomai
         });
     };
 
-    $scope.domainItems = DomainItemsService.getDomainItems();
-
     $scope.loading = true;
-    DwDomainItem.find({filter: {include: []}}).$promise
-        .then(function (allDomains) {
-            $scope.safeDisplayeddomainItems = allDomains;
+    DwDomainItem.find({filter: {include: ['domain','domainEntityType']}}).$promise
+        .then(function (allDomainItems) {
+            $scope.safeDisplayeddomainItems = allDomainItems;
             $scope.displayedDomainItems = [].concat($scope.safeDisplayeddomainItems);
+
+            //if in edit mode, add handler to load picklist option here
+            if ($stateParams.id) {
+            }
         })
         .catch(function (err) {
             console.log(err);
@@ -68,6 +78,40 @@ app.controller('DomainItemsCtrl', function($scope, $state, $stateParams, DwDomai
             $scope.loading = false;
         });
 
+    DwDomain.find({filter: {include: []}}).$promise
+        .then(function (allDomains) {
+            for (var i = 0; i < allDomains.length; ++i) {
+                $scope.domains.push({
+                    value: allDomains[i].name,
+                    name: allDomains[i].description,
+                    id: allDomains[i].id
+                });
+            }
+        })
+        .catch(function (err) {
+            console.log(err);
+        })
+        .then(function () {
+        }
+    );
+
+    DwDomainEntityType.find({filter: {include: []}}).$promise
+        .then(function (allEntityTypes) {
+            for (var i = 0; i < allEntityTypes.length; ++i) {
+                $scope.entityTypes.push({
+                    value: allEntityTypes[i].name,
+                    name: allEntityTypes[i].description,
+                    id: allEntityTypes[i].id
+                });
+            }
+        })
+        .catch(function (err) {
+            console.log(err);
+        })
+        .then(function () {
+        }
+    );
+
     if ($stateParams.id) {
         DomainItemsService.getDomainItem($stateParams.id).$promise.then(function(result){
             $scope.domainItem = result;})
@@ -75,66 +119,5 @@ app.controller('DomainItemsCtrl', function($scope, $state, $stateParams, DwDomai
         $scope.domainItem = {};
     }
 
-    $scope.getDomains = function () {
-        return [];
-    }
-
-    //Search Functionality
-    function arrayObjectIndexOf(myArray, searchTerm, property) {
-        for (var i = 0, len = myArray.length; i < len; i++) {
-            if (myArray[i][property] === searchTerm) return i;
-        }
-        return -1;
-    }
-    $scope.aToB = function () {
-        for (var i in $scope.selectedA) {
-            var moveId = arrayObjectIndexOf($scope.items, $scope.selectedA[i], "id");
-            $scope.listB.push($scope.items[moveId]);
-            var delId = arrayObjectIndexOf($scope.listA, $scope.selectedA[i], "id");
-            $scope.listA.splice(delId, 1);
-        }
-        reset();
-    };
-    $scope.bToA = function () {
-        for (var i in $scope.selectedB) {
-            var moveId = arrayObjectIndexOf($scope.items, $scope.selectedB[i], "id");
-            $scope.listA.push($scope.items[moveId]);
-            var delId = arrayObjectIndexOf($scope.listB, $scope.selectedB[i], "id");
-            $scope.listB.splice(delId, 1);
-        }
-        reset();
-    };
-    function reset() {
-        $scope.selectedA = [];
-        $scope.selectedB = [];
-        $scope.toggle = 0;
-    }
-
-    $scope.toggleA = function () {
-        if ($scope.selectedA.length > 0) {
-            $scope.selectedA = [];
-        }
-        else {
-            for (var i in $scope.listA) {
-                $scope.selectedA.push($scope.listA[i].id);
-            }
-        }
-    }
-    $scope.toggleB = function () {
-        if ($scope.selectedB.length > 0) {
-            $scope.selectedB = [];
-        }
-        else {
-            for (var i in $scope.listB) {
-                $scope.selectedB.push($scope.listB[i].id);
-            }
-        }
-    }
-    $scope.selectA = function (i) {
-        $scope.selectedA.push(i);
-    };
-    $scope.selectB = function (i) {
-        $scope.selectedB.push(i);
-    };
 });
 

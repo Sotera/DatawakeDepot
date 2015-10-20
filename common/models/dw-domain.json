@@ -14,15 +14,38 @@
     },
     "description": {
       "type": "string"
-    },
-    "extractors": {
-      "type": [
-        "string"
-      ]
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "domainEntTypes": {
+      "type": "hasMany",
+      "model": "DwDomainEntityType",
+      "options": {
+        "validate": true,
+        "forceId": true,
+        "persistent": false
+      }
+    },
+    "domainItems": {
+      "type": "hasMany",
+      "model": "DwDomainItem",
+      "options": {
+        "validate": true,
+        "forceId": true,
+        "persistent": false
+      }
+    },
+    "extractors": {
+      "type": "hasMany",
+      "model": "DwExtractor",
+      "options": {
+        "validate": true,
+        "forceId": true,
+        "persistent": false
+      }
+    }
+  },
   "acls": [],
   "methods": {}
 }

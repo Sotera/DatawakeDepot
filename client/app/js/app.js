@@ -52,16 +52,16 @@ angular.module('loopbackApp', [
   'com.module.settings',
 
   'com.module.dwSettings',
-  'com.module.dwCrawlTypes',
-  'com.module.dwExtractors',
-  'com.module.dwServiceTypes',
-  'com.module.dwDomainEntityTypes',
-  'com.module.dwFeeds',
-
   'com.module.users',
   'com.module.dwTeams',
   'com.module.dwDomains',
+  'com.module.dwDomainEntityTypes',
   'com.module.dwDomainItems',
+  'com.module.dwCrawlTypes',
+  'com.module.dwServiceTypes',
+  'com.module.dwExtractors',
+  'com.module.dwFeeds',
+
   'com.module.dwTrails',
   'com.module.dwTrailUrls',
   'com.module.dwUrlExtractions'

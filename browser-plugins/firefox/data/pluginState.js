@@ -41,7 +41,7 @@ var PluginState = function () {
     url += '/' + me.currentTeam.id;
     url += '/domains';
     me.restGet(url,function(res){
-      cb(res.JSON);
+      cb(res.json);
     });
   };
   me.getTeamsForLoggedInUser = function (cb) {
@@ -49,7 +49,7 @@ var PluginState = function () {
     url += '/' + me.loggedInUser.id;
     url += '/teams';
     me.restGet(url,function(res){
-      cb(res.JSON);
+      cb(res.json);
     });
   };
   me.postMessageToToolBar = function (msg) {

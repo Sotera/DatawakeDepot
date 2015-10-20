@@ -107,13 +107,23 @@ function loginSuccessfulHandler(user) {
   //Pack up all the stuff the toolbar needs to do its thing into pluginState and
   //send it over
   pluginState.getTeamsForLoggedInUser(function (teams) {
+    if(!teams){
+      postLoginMessageToToolBar();
+      return;
+    }
     pluginState.currentTeamList = teams;
     if (!pluginState.currentTeamList.length) {
       postLoginMessageToToolBar();
       return;
     }
     pluginState.currentTeam = pluginState.currentTeamList[0];
+    postLoginMessageToToolBar();
+    return;
     pluginState.getDomainsForCurrentTeam(function (domains) {
+      if(!domains){
+        postLoginMessageToToolBar();
+        return;
+      }
       pluginState.currentDomainList = domains;
       if(!pluginState.currentDomainList.length){
         postLoginMessageToToolBar();

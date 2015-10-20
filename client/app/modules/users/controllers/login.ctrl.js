@@ -9,7 +9,7 @@
  * Contrller for Login Page
  **/
 angular.module('com.module.users')
-  .controller('LoginCtrl', function ($scope, $routeParams, $location, BrowserPluginService, UserLoginOrLogoutMsg,
+  .controller('LoginCtrl', function ($scope, $routeParams, $location, UserLoginOrLogoutMsg,
                                      CoreService, AminoUser, AppAuth, AuthProvider, gettextCatalog) {
     var TWO_WEEKS = 1000 * 60 * 60 * 24 * 7 * 2;
     var isFireFox = typeof InstallTrigger !== 'undefined';

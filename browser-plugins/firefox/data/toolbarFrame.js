@@ -2,7 +2,7 @@ window.trailingActive = false;
 //
 //Handle messages from the AddIn
 //
-function addInMessageHandler(event){
+function addInMessageHandler(event) {
   try {
     var msg = event.data;
     if (msg.type == 'login-success-target-toolbar-frame') {
@@ -24,40 +24,28 @@ function onLoad() {
   window.addEventListener('message', addInMessageHandler);
   postMessageToAddin({action: 'page-loaded'});
 }
-function clearDomains() {
+function syncSelectElementsWithPluginState() {
+  clearSelectElements();
+  var ps = window.pluginState;
+  addItemsToSelectElement(ps.currentTeamList, ps.currentTeam, '#teamList');
+}
+function clearSelectElements() {
   $('#domainList').children().remove().end();
-}
-function clearTrails() {
   $('#trailList').children().remove().end();
+  $('#teamList').children().remove().end();
 }
-function updateDomains(domains, currentDomain) {
-  clearDomains();
-  $.each(domains, function (i, domain) {
-    $('#domainList').append($('<option>', {
-      value: domain.name,
-      text: domain.name
+function addItemsToSelectElement(items, currentItem, idSelector) {
+  $.each(items, function (i, item) {
+    $(idSelector).append($('<option>', {
+      value: item.name,
+      text: item.name
     }));
   });
   //Select a domain (no blank domain in combo box unless we have none)
-  if (currentDomain && currentDomain.name) {
-    $('#domainList').val(currentDomain.name);
+  if (currentItem && currentItem.name) {
+    $(idSelector).val(currentItem.name);
   } else {
-    $('#domainList')[0].onchange();
-  }
-}
-function updateTrails(trails, currentTrail) {
-  clearTrails();
-  $.each(trails, function (i, trail) {
-    $('#trailList').append($('<option>', {
-      value: trail.name,
-      text: trail.name
-    }));
-  });
-  //Select a trail (no blank trail in combo box unless we have none)
-  if (currentTrail && currentTrail.name) {
-    $('#trailList').val(currentTrail.name);
-  } else {
-    $('#trailList')[0].onchange();
+    $(idSelector)[0].onchange();
   }
 }
 function toggleTrailing() {
@@ -94,6 +82,7 @@ function setUIStateToLoggedIn(pluginState) {
   $('#domainList').removeAttr('disabled');
   $('#trailList').removeAttr('disabled');
   $('#toggleTrailButton').addClass('disabled');
+  syncSelectElementsWithPluginState();
 }
 function setUIStateToLoggedOut() {
   //Do this check in case we're logged out via toolbar *and* a browser tab is
@@ -110,7 +99,7 @@ function setUIStateToLoggedOut() {
   $('#domainList').attr('disabled', 'disabled');
   $('#trailList').attr('disabled', 'disabled');
   $('#toggleTrailButton').addClass('disabled');
-  clearTrails();
+  clearSelectElements();
 }
 function toggleLogin() {
   if (window.pluginState) {

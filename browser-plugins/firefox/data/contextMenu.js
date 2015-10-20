@@ -1,6 +1,8 @@
 var {pluginState} = require('./pluginState');
 var contextMenu = require("sdk/context-menu");
 var self = require('sdk/self');
+var tabs = require("sdk/tabs");
+
 var menu = null;
 exports.init = function () {
   pluginState.onAddInModuleEvent('logged-out-target-context-menu', function () {
@@ -57,8 +59,17 @@ function addContextMenu() {
           context: contextMenu.PredicateContext(anyTextSelected),
           contentScriptFile: './injectedPageScripts/selected-text-handler.js',
           onMessage: handleContextMenuClick
-        }
-      )
+        }),
+      contextMenu.Item(
+        {
+          label: 'Search Image Space',
+          data: 'search-image-space',
+          context: contextMenu.SelectorContext('img'),
+          onMessage: function(imgSrc) {
+            tabs.open("https://imagecat.memexproxy.com/imagespace/#search/"+ encodeURIComponent(imgSrc) + "/content");
+          },
+          contentScriptFile: './injectedPageScripts/selected-image-handler.js'
+        })
     ]
   });
 };

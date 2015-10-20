@@ -33,7 +33,8 @@
     </div>
     <div class="box-footer">
         <div class="controls">
-            <button class="btn btn-primary btn-success" ng-click="onSubmit()" translate>Update profile</button>
+            <span><button class="btn btn-primary btn-success" ng-click="onSubmit()" translate>Update profile</button></span>
+            <span><button class="btn btn-primary btn-danger" ui-sref="app.home" translate>Cancel</button></span>
         </div>
     </div>
     <div ng-if="loading" class="overlay"></div>

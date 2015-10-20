@@ -4,8 +4,9 @@
     table.table.table-striped(st-table='displayedSettings', st-safe-src='safeDisplayedsettings')
       thead
         tr
-          th
+          th(colspan="3")
             input.input-sm.form-control(st-search='' type='search' placeholder='Search')
+      thead
         tr
           th.sortable(st-sort='name' st-sort-default="true") Setting
           th.sortable(st-sort='description') Value

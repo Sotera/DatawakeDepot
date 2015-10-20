@@ -2311,6 +2311,7 @@ Component: timeline
   -o-background-size: cover;
   background-size: cover;
 }
+
 /* Remove the background from the body element */
 .lockscreen > body {
   background: transparent;

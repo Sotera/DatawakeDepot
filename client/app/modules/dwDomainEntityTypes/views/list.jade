@@ -1,29 +1,26 @@
 
 .box
   .box-body.no-padding(style='min-height: 120px;')
-    table.table.table-striped(st-table='entityTypes')
+    table.table.table-striped(st-table='displayedEntityTypes', st-safe-src='safeDisplayedentityTypes')
       thead
-        //tr
-        //  th
-        //      input.input-sm.form-control(st-search='name' type='search' placeholder='Search across fields')
         tr
-          th(st-sort='name') Name
-          th(st-sort='description') Description
-          th Member Of Domains
           th
-              a.btn.btn-block.btn-success(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
-                  span.glyphicon.glyphicon-plus(style="margin-right: 10px")
-                  span Add EntityType
+              input.input-sm.form-control(st-search='' type='search' placeholder='Search')
+        tr
+          th.sortable(st-sort='name' st-sort-default="true") Entity Type
+          th.sortable(st-sort='description') Description
+          th.sortable Member Of Domains
+          th
+              a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
+                  &nbsp;Add Entity Type
       tbody
-        tr(ng-repeat='entityType in entityTypes')
+        tr(ng-repeat='entityType in displayedEntityTypes')
           td(style='width: 120px')
             a(href='', ui-sref='app.dwDomainEntityTypes.view({id: entityType.id})') {{entityType.name}}
           td
             span.text-muted {{entityType.description}}
           td
-            //span.label.label-default(ng-repeat="domain in entityType.domains") {{domain.name}}
-          td
-            span.text-muted {{entityType.domainId}}
+            span.label.label-default {{entityType.domainId}}
           td(style='width: 120px')
             .btn-toolbar
                 button.btn.btn-sm.btn-default(ui-sref='app.dwDomainEntityTypes.edit({id:entityType.id})',ng-disabled='!currentUser.isAdmin')

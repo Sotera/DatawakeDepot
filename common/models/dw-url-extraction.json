@@ -9,21 +9,16 @@
     },
     "value": {
       "type": "string"
+    },
+    "urlId": {
+      "type": "string"
+    },
+    "domainEntityTypeId": {
+      "type": "string"
     }
   },
   "validations": [],
-  "relations": {
-    "trailUrl": {
-      "type": "belongsTo",
-      "model": "DwTrailUrl",
-      "foreignKey": ""
-    },
-    "extractEntityType": {
-      "type": "hasOne",
-      "model": "DwDomainEntityType",
-      "foreignKey": ""
-    }
-  },
+  "relations": {},
   "acls": [],
   "methods": {}
 }

@@ -50,20 +50,25 @@ angular.module('loopbackApp', [
 */
   'com.module.sandbox',
   'com.module.settings',
+
+  'com.module.dwSettings',
+  'com.module.dwCrawlTypes',
+  'com.module.dwExtractors',
+  'com.module.dwServiceTypes',
+  'com.module.dwDomainEntityTypes',
+  'com.module.dwFeeds',
+
   'com.module.users',
   'com.module.dwTeams',
-
-  'com.module.dwCrawlTypes',
   'com.module.dwDomains',
   'com.module.dwDomainItems',
-  'com.module.dwDomainEntityTypes',
-  'com.module.dwExtractors',
-  'com.module.dwFeeds',
-  'com.module.dwServiceTypes',
-  'com.module.dwSettings',
   'com.module.dwTrails',
   'com.module.dwTrailUrls',
   'com.module.dwUrlExtractions'
+
+
+
+
 
 
 

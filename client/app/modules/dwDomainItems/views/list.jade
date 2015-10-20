@@ -1,27 +1,26 @@
 
 .box
   .box-body.no-padding(style='min-height: 120px;')
-    table.table.table-striped(st-table='domainItems')
+    table.table.table-striped(st-table='displayedDomainItems', st-safe-src='safeDisplayeddomainItems')
       thead
-        //tr
-        //  th
-        //      input.input-sm.form-control(st-search='name' type='search' placeholder='Search across fields')
         tr
-          th(st-sort='domainEntityTypeId') EntityType
-          th(st-sort='itemValue') Value
-          th(st-sort='domainId') Domain
           th
-              a.btn.btn-block.btn-success(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
-                  span.glyphicon.glyphicon-plus(style="margin-right: 10px")
-                  span Add DomainItem
+            input.input-sm.form-control(st-search='' type='search' placeholder='Search')
+        tr
+          th.sortable(st-sort='itemType' st-sort-default="true") Item Type
+          th.sortable(st-sort='itemValue') Value
+          th.sortable(st-sort='domainId') Domain
+          th
+              a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
+                  &nbsp;Add Domain Item
       tbody
-        tr(ng-repeat='domainItem in domainItems')
+        tr(ng-repeat='domainItem in displayedDomainItems')
           td(style='width: 120px')
-            a(href='', ui-sref='app.dwDomainItems.view({id: domainItem.id})') {{domainItem.id}}
+            a(href='', ui-sref='app.dwDomainItems.view({id: domainItem.id})') {{domainItem.itemType}}
           td
             span.text-muted {{domainItem.itemValue}}
           td
-            span.text-muted {{domainItem.domainId}}
+            span.label.label-default {{domainItem.domainId}}
           td(style='width: 120px')
             .btn-toolbar
                 button.btn.btn-sm.btn-default(ui-sref='app.dwDomainItems.edit({id:domainItem.id})',ng-disabled='!currentUser.isAdmin')

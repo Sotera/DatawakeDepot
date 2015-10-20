@@ -1,27 +1,26 @@
 
 .box
   .box-body.no-padding(style='min-height: 120px;')
-    table.table.table-striped(st-table='urlExtractions')
+    table.table.table-striped(st-table='displayedUrlExtractions', st-safe-src='safeDisplayedurlExtractions')
       thead
-        //tr
-        //  th
-        //      input.input-sm.form-control(st-search='name' type='search' placeholder='Search across fields')
         tr
-          th(st-sort='domainEntityTypeId') Domain EntityType
-          th(st-sort='value') Value
-          th(st-sort='trailId') Trail
           th
-              a.btn.btn-block.btn-success(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
-                  span.glyphicon.glyphicon-plus(style="margin-right: 10px")
-                  span Add UrlExtraction
+            input.input-sm.form-control(st-search='' type='search' placeholder='Search')
+        tr
+          th.sortable(st-sort='domainEntityTypeId' st-sort-default="true") Entity Type
+          th.sortable(st-sort='value') Value
+          th.sortable(st-sort='trailId') Trail
+          th
+              a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
+                &nbsp;Add UrlExtraction
       tbody
-        tr(ng-repeat='urlExtraction in urlExtractions')
+        tr(ng-repeat='urlExtraction in displayedUrlExtractions')
           td(style='width: 120px')
-            a(href='', ui-sref='app.dwUrlExtractions.view({id: urlExtraction.id})') {{urlExtraction.domainEntityTypeId}}
+            a(href='', ui-sref='app.dwUrlExtractions.view({id:urlExtraction.id})') {{urlExtraction.domainEntityTypeId}}
           td
             span.text-muted {{urlExtraction.value}}
           td
-            span.text-muted {{urlExtraction.trailId}}
+            span.label.label-default {{urlExtraction.trailId}}
           td(style='width: 120px')
             .btn-toolbar
                 button.btn.btn-sm.btn-default(ui-sref='app.dwUrlExtractions.edit({id:urlExtraction.id})',ng-disabled='!currentUser.isAdmin')

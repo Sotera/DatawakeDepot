@@ -16,13 +16,7 @@
     }
   },
   "validations": [],
-  "relations": {
-    "feeds": {
-      "type": "hasMany",
-      "model": "DwFeed",
-      "foreignKey": ""
-    }
-  },
+  "relations": {},
   "acls": [],
   "methods": {}
 }

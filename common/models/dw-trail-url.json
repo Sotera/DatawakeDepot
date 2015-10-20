@@ -16,27 +16,16 @@
     },
     "comments": {
       "type": "string"
+    },
+    "trailId": {
+      "type": "string"
+    },
+    "crawlTypeId": {
+      "type": "string"
     }
   },
   "validations": [],
-  "relations": {
-    "trail": {
-      "type": "belongsTo",
-      "model": "DwTrail",
-      "foreignKey": ""
-    },
-    "urlCrawl": {
-      "type": "hasOne",
-      "model": "DwCrawlType",
-      "foreignKey": ""
-    },
-    "extractions": {
-      "type": "hasMany",
-      "model": "DwUrlExtractions",
-      "foreignKey": ""
-    }
-  },
+  "relations": {},
   "acls": [],
   "methods": {}
 }
-

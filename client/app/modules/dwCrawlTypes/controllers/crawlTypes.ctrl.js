@@ -1,65 +1,57 @@
 'use strict';
-var app = angular.module('com.module.dwDomainEntityTypes');
+var app = angular.module('com.module.dwCrawlTypes');
 
-app.controller('EntityTypesCtrl', function($scope, $state, $stateParams, DwDomainEntityType, EntityTypesService, gettextCatalog, AppAuth) {
+app.controller('CrawlTypesCtrl', function($scope, $state, $stateParams, DwCrawlType, CrawlTypesService, gettextCatalog, AppAuth) {
 
-  //Put the currentUser in $scope for convenience
-  $scope.currentUser = AppAuth.currentUser;
+    //Put the currentUser in $scope for convenience
+    $scope.currentUser = AppAuth.currentUser;
 
-  $scope.entityType = {};
-  $scope.formFields = [{
-      key: 'id',
-      type: 'input',
-      templateOptions: {
-          label: gettextCatalog.getString('id'),
-          disabled: true
-      }
-  },{
-    key: 'name',
-    type: 'input',
-    templateOptions: {
-      label: gettextCatalog.getString('Name'),
-      required: true
-    }
-  }, {
-    key: 'description',
-    type: 'input',
-    templateOptions: {
-      label: gettextCatalog.getString('Description'),
-      required: false
-    }
-  }, {
-      key: 'domainId',
-      type: 'input',
-      templateOptions: {
-          label: gettextCatalog.getString('Domain'),
-          disabled: false,
-          required: false
-      }
-  }];
+    $scope.crawlType = {};
+    $scope.formFields = [{
+        key: 'id',
+        type: 'input',
+        templateOptions: {
+            label: gettextCatalog.getString('id'),
+            disabled: true
+        }
+    },{
+        key: 'name',
+        type: 'input',
+        templateOptions: {
+            label: gettextCatalog.getString('Name'),
+            required: true
+        }
+    }, {
+        key: 'description',
+        type: 'input',
+        templateOptions: {
+            label: gettextCatalog.getString('Description'),
+            required: false
+        }
+    }];
 
 
-  $scope.delete = function(id) {
-    EntityTypesService.deleteEntityType(id, function() {
-      $scope.safeDisplayedentityTypes = EntityTypesService.getEntityTypes();
-      $state.go('^.list');
-    });
-  };
+    $scope.delete = function(id) {
+        CrawlTypesService.deleteCrawlType(id, function() {
+            $scope.safeDisplayedcrawlTypes = CrawlTypesService.getCrawlTypes();
+            $state.go('^.list');
+        });
+    };
 
-  $scope.onSubmit = function() {
-    EntityTypesService.upsertEntityType($scope.entityType, function() {
-      $scope.safeDisplayedentityTypes = EntityTypesService.getEntityTypes();
-      $state.go('^.list');
-    });
-  };
+    $scope.onSubmit = function() {
+        CrawlTypesService.upsertCrawlType($scope.crawlType, function() {
+            $scope.safeDisplayedcrawlTypes = CrawlTypesService.getCrawlTypes();
+            $state.go('^.list');
+        });
+    };
 
-  $scope.entityTypes = EntityTypesService.getEntityTypes();
+    $scope.crawlTypes = CrawlTypesService.getCrawlTypes();
 
     $scope.loading = true;
-    DwDomainEntityType.find({filter: {include: []}}).$promise
-        .then(function (allEntityTypes) {
-            $scope.safeDisplayedentityTypes = allEntityTypes;
-            $scope.displayedEntityTypes = [].concat($scope.safeDisplayedentityTypes);
+    DwCrawlType.find({filter: {include: []}}).$promise
+        .then(function (allCrawlTypes) {
+            $scope.safeDisplayedcrawlTypes = allCrawlTypes;
+            $scope.displayedcrawlTypes = [].concat($scope.safeDisplayedcrawlTypes);
         })
         .catch(function (err) {
             console.log(err);
@@ -68,16 +60,16 @@ app.controller('EntityTypesCtrl', function($scope, $state, $stateParams, DwDomai
             $scope.loading = false;
         });
 
-  if ($stateParams.id) {
-    EntityTypesService.getEntityType($stateParams.id).$promise.then(function(result){
-      $scope.entityType = result;})
-  } else {
-    $scope.entityType = {};
-  }
+    if ($stateParams.id) {
+        CrawlTypesService.getCrawlType($stateParams.id).$promise.then(function(result){
+            $scope.crawlType = result;})
+    } else {
+        $scope.crawlType = {};
+    }
 
-  $scope.getDomains = function () {
-    return [];
-  }
+    $scope.getDomains = function () {
+        return [];
+    }
 
     //Search Functionality
     function arrayObjectIndexOf(myArray, searchTerm, property) {
@@ -136,6 +128,5 @@ app.controller('EntityTypesCtrl', function($scope, $state, $stateParams, DwDomai
     $scope.selectB = function (i) {
         $scope.selectedB.push(i);
     };
-
 });
 

@@ -18,33 +18,17 @@
       "type": "date"
     },
     "domainId": {
-      "type": "string",
-      "id": true
+      "type": "string"
+    },
+    "teamId": {
+      "type": "date"
+    },
+    "userId": {
+      "type": "date"
     }
   },
   "validations": [],
-  "relations": {
-    "domain": {
-      "type": "belongsTo",
-      "model": "DwDomain",
-      "foreignKey": ""
-    },
-    "teams": {
-      "type": "belongsTo",
-      "model": "DwTeam",
-      "foreignKey": ""
-    },
-    "user": {
-      "type": "hasAndBelongsToMany",
-      "model": "AminoUser",
-      "foreignKey": ""
-    },
-    "url": {
-      "type": "hasMany",
-      "model": "DwTrailUrl",
-      "foreignKey": ""
-    }
-  },
+  "relations": {},
   "acls": [],
   "methods": {}
 }

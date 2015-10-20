@@ -24,21 +24,14 @@
     "protocol": {
       "type": "string",
       "required": true
+    },
+    "serviceTypeID": {
+      "type": "string",
+      "required": true
     }
   },
   "validations": [],
-  "relations": {
-    "domains": {
-      "type": "hasAndBelongsToMany",
-      "model": "DwDomain",
-      "foreignKey": ""
-    },
-    "services": {
-      "type": "hasOne",
-      "model": "DwServiceType",
-      "foreignKey": ""
-    }
-  },
+  "relations": {},
   "acls": [],
   "methods": {}
 }

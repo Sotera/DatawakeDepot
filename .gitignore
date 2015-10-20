@@ -6,4 +6,4 @@ client/app/js/config.js
 client/app/js/lb-services.js
 db.json
 node_modules/
-
+dist/

@@ -14,46 +14,15 @@
     },
     "description": {
       "type": "string"
+    },
+    "extractors": {
+      "type": [
+        "string"
+      ]
     }
   },
   "validations": [],
-  "relations": {
-    "teams": {
-      "type": "hasAndBelongsToMany",
-      "model": "DwTeam",
-      "foreignKey": ""
-    },
-    "extractors": {
-      "type": "hasAndBelongsToMany",
-      "model": "DwExtractor",
-      "foreignKey": ""
-    },
-    "feeds": {
-      "type": "hasAndBelongsToMany",
-      "model": "DwFeed",
-      "foreignKey": ""
-    },
-    "trails": {
-      "type": "hasMany",
-      "model": "DwTrail",
-      "foreignKey": ""
-    },
-    "domainItems": {
-      "type": "embedsMany",
-      "model": "DwDomainItem",
-      "property": "domainItemList",
-      "options":{
-        "validate": true,
-        "forceId": false,
-        "persistent": true
-      }
-    },
-    "domainEntTypes": {
-      "type": "hasMany",
-      "model": "DwDomainEntityType",
-      "foreignKey": ""
-    }
-  },
+  "relations": {},
   "acls": [],
   "methods": {}
 }

@@ -7,20 +7,29 @@
       thead
         tr
           th
-          th(st-sort='username') Username
-          th Member Of
-          th(st-sort='email') E-Mail
-          th(st-sort='firstName') First Name
-          th(st-sort='lastName') Last Name
+            input.input-sm.form-control(st-search='' type='search' placeholder='search')
         tr
+          th.sortable(st-sort='username' st-sort-default="true") Username
+          th.sortable(st-sort='firstName') First Name
+          th.sortable(st-sort='lastName') Last Name
+          th.sortable(st-sort='email') E-Mail
+          th.sortable(st-sort='') Member Of
           th
-            a.btn.btn-block.btn-success(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
-              span.glyphicon.glyphicon-plus(style="margin-right: 10px")
-              span Add User
-          th
-            input.input-sm.form-control(st-search='username' type='search' placeholder='search')
+            a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
+              &nbsp;Add User
+
       tbody
         tr(ng-repeat='user in displayedUsers')
+          td(style='width: 120px')
+            a(href='', ui-sref='app.users.view({id: user.id})') {{user.username}}
+          td
+            span.text-muted {{user.firstName}}
+          td
+            span.text-muted {{user.lastName}}
+          td
+            span.text-muted {{user.email}}
+          td
+            span.label.label-default(ng-repeat="role in user.roles") {{role.name}}
           td(style='width: 120px')
             .btn-group
               button.btn.btn-sm.btn-default(ui-sref='app.users.password({id:user.id})',ng-disabled='!currentUser.isAdmin')
@@ -29,15 +38,5 @@
                 i.fa.fa-pencil
               button.btn.btn-sm.btn-danger(ng-click='delete({id:user.id})',ng-disabled='!currentUser.isAdmin')
                 i.fa.fa-trash-o
-          td(style='width: 120px')
-            a(href='', ui-sref='app.users.view({id: user.id})') {{user.username}}
-          td
-            span.label.label-default(ng-repeat="role in user.roles") {{role.name}}
-          td
-            span.text-muted {{user.email}}
-          td
-            span.text-muted {{user.firstName}}
-          td
-            span.text-muted {{user.lastName}}
   .overlay(ng-if='loading')
   .loading-img(ng-if='loading')

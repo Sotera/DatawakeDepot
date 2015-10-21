@@ -10,7 +10,7 @@
     "value": {
       "type": "string"
     },
-    "urlId": {
+    "trailUrlId": {
       "type": "string"
     },
     "domainEntityTypeId": {
@@ -18,7 +18,17 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "trailUrl": {
+      "type": "belongsTo",
+      "model": "DwTrailUrl"
+    },
+    "domainEntityType": {
+      "type": "hasOne",
+      "model": "DwDomainEntityType",
+      "foreignKey": "domainEntityTypeId"
+    }
+  },
   "acls": [],
   "methods": {}
 }

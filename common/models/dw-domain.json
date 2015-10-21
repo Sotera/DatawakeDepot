@@ -14,15 +14,65 @@
     },
     "description": {
       "type": "string"
-    },
-    "extractors": {
-      "type": [
-        "string"
-      ]
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "domainEntTypes": {
+      "type": "hasMany",
+      "model": "DwDomainEntityType",
+      "options": {
+        "validate": true,
+        "forceId": true,
+        "persistent": false
+      }
+    },
+    "domainItems": {
+      "type": "belongsTo",
+      "model": "DwDomainItem",
+      "options": {
+        "validate": true,
+        "forceId": true,
+        "persistent": false
+      }
+    },
+    "extractors": {
+      "type": "hasAndBelongsToMany",
+      "model": "DwExtractor",
+      "options": {
+        "validate": true,
+        "forceId": true,
+        "persistent": false
+      }
+    },
+    "feeds": {
+      "type": "hasAndBelongsToMany",
+      "model": "DwFee",
+      "options": {
+        "validate": true,
+        "forceId": true,
+        "persistent": false
+      }
+    },
+    "trails": {
+      "type": "hasMany",
+      "model": "DwTrail",
+      "options": {
+        "validate": true,
+        "forceId": true,
+        "persistent": false
+      }
+    },
+    "teams": {
+      "type": "hasAndBelongsToMany",
+      "model": "DwTeam",
+      "options": {
+        "validate": true,
+        "forceId": true,
+        "persistent": false
+      }
+    }
+  },
   "acls": [],
   "methods": {}
 }

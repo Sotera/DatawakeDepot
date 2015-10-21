@@ -16,7 +16,17 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "extractors": {
+      "type": "hasMany",
+      "model": "DwExtractor",
+      "options": {
+        "validate": true,
+        "forceId": true,
+        "persistent": false
+      }
+    }
+  },
   "acls": [],
   "methods": {}
 }

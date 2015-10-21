@@ -4,24 +4,30 @@
     table.table.table-striped(st-table='displayedTrails', st-safe-src='safeDisplayedtrails')
       thead
         tr
-          th
+          th(colspan="5")
             input.input-sm.form-control(st-search='' type='search' placeholder='Search')
+      thead
         tr
           th.sortable(st-sort='name' st-sort-default="true") Name
           th.sortable(st-sort='description') Description
-          th.sortable Based on Domain
+          th.sortable(st-sort='userId') Created By
+          th.sortable(st-sort='domainId') Based on Domain
           th.sortable(st-sort='timestamp') Timestamp
           th
               a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
-                &nbsp;Add Trail
+                &nbsp; Add Trail
       tbody
         tr(ng-repeat='trail in displayedTrails')
+          td.hidden
+            span {{trail.id}}
           td(style='width: 120px')
             a(href='', ui-sref='app.dwTrails.view({id: trail.id})') {{trail.name}}
           td
             span.text-muted {{trail.description}}
           td
-            span.label.label-default(ng-repeat="domain in trail.domains") {{domain.name}}
+            span.label.label-default {{trail.userId}}
+          td
+            span.label.label-default {{trail.domain.name}}
           td
             span.text-muted {{trail.timestamp}}
           td(style='width: 120px')

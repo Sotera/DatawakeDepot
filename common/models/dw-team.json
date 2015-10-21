@@ -31,7 +31,21 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "trails": {
+      "type": "hasMany",
+      "model": "DwTrail"
+    },
+    "domains": {
+      "type": "hasAndBelongsToMany",
+      "model": "DwDomain"
+    },
+    "users": {
+      "type": "hasAndBelongsToMany",
+      "model": "AminoUser",
+      "property": "users"
+    }
+  },
   "acls": [],
   "methods": {}
 }

@@ -19,7 +19,26 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "domain": {
+      "type": "belongsTo",
+      "model": "DwDomain",
+      "options": {
+        "validate": true,
+        "forceId": true,
+        "persistent": true
+      }
+    },
+    "domainEntityType": {
+      "type": "belongsTo",
+      "model": "DwDomainEntityType",
+      "options": {
+        "validate": true,
+        "forceId": true,
+        "persistent": true
+      }
+    }
+  },
   "acls": [],
   "methods": {}
 }

@@ -4,25 +4,34 @@
     table.table.table-striped(st-table='displayedDomains', st-safe-src='safeDisplayedDomains')
       thead
         tr
-          th
+          th(colspan="4")
             input.input-sm.form-control(st-search='' type='search' placeholder='Search')
+      thead
         tr
           th.sortable(st-sort='name' st-sort-default="true") Name
           th.sortable(st-sort='description') Description
-          th.sortable(st-sort='') Domain Items
+          th.sortable(st-sort='') Domain EntityTypes
+          th.sortable(st-sort='') # Domain Items
+          th.sortable(st-sort='') Extractors
           th
             a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
-                &nbsp;Add Domain
+                &nbsp; Add Domain
 
       tbody
         tr(ng-repeat='domain in displayedDomains')
-          td(style='width: 120px')
+          td.hidden
+            span {{domain.id}}
+          td.col-md-2
             a(ui-sref='app.dwDomains.view({id:domain.id})') {{domain.name}}
-          td
+          td.col-md-4
             span.text-muted {{domain.description}}
-          td
-            span {{domain.domainItems}}
-          td(style='width: 120px')
+          td.col-med-2
+            span.label.label-default(ng-repeat="domainEntType in domain.domainEntTypes") &nbsp;{{domainEntType.name}}
+          td.col-md-2
+            a(ui-sref='app.dwDomainItems.list({id:null, domainId:domain.id})') {{domain.domainItems.length}}
+          td.col-med-1
+            span.label.label-default(ng-repeat="extractor in domain.extractors") &nbsp;{{extractor.name}}
+          td.col-md-1.text-center
             .btn-toolbar
               button.btn.btn-sm.btn-default(ui-sref='app.dwDomains.edit({id:domain.id})',ng-disabled='!currentUser.isAdmin')
                 i.fa.fa-pencil

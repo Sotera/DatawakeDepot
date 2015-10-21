@@ -3,10 +3,7 @@
   "plural": "AminoUsers",
   "base": "User",
   "properties": {
-    "id": {
-      "type": "string",
-      "id": true
-    }
+    "domains": {}
   },
   "validations": [],
   "relations": {
@@ -31,12 +28,12 @@
       "foreignKey": "principalId",
       "through": "RoleMapping"
     },
-    "teams": {
+      "teams": {
       "type": "hasAndBelongsToMany",
       "model": "DwTeam",
       "foreignKey": ""
     },
-    "trails": {
+      "trails": {
       "type": "hasAndBelongsToMany",
       "model": "DwTrail",
       "foreignKey": ""

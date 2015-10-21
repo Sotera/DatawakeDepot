@@ -4,8 +4,9 @@
     table.table.table-striped(st-table='displayedextractors', st-safe-src='safeDisplayedextractors')
       thead
         tr
-          th
+          th(colspan="7")
             input.input-sm.form-control(st-search='' type='search' placeholder='Search')
+      thead
         tr
           th.sortable(st-sort='name' st-sort-default="true") Name
           th.sortable(st-sort='extractorUrl') Url
@@ -15,7 +16,7 @@
           th.sortable(st-sort='protocol') Protocol
           th
             a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
-              &nbsp;Add Extractor
+              &nbsp; Add Extractor
       tbody
         tr(ng-repeat='extractor in displayedextractors')
           td(style='width: 120px')
@@ -23,6 +24,7 @@
           td
             span.text-muted {{extractor.extractorUrl}}
           td
+            //span.text-muted {{extractor.serviceType.name}}
             span.text-muted {{extractor.serviceTypeId}}
           td
             span.text-muted {{extractor.index}}

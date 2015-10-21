@@ -4,12 +4,14 @@
     table.table.table-striped(st-table='displayedUrlExtractions', st-safe-src='safeDisplayedurlExtractions')
       thead
         tr
-          th
+          th(colspan="4")
             input.input-sm.form-control(st-search='' type='search' placeholder='Search')
+      thead
         tr
           th.sortable(st-sort='domainEntityTypeId' st-sort-default="true") Entity Type
           th.sortable(st-sort='value') Value
           th.sortable(st-sort='trailId') Trail
+          th.sortable(st-sort='trailUrlId') Url
           th
               a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
                 &nbsp;Add UrlExtraction
@@ -21,6 +23,8 @@
             span.text-muted {{urlExtraction.value}}
           td
             span.label.label-default {{urlExtraction.trailId}}
+          td
+            span.label.label-default {{urlExtraction.trailUrl.url}}
           td(style='width: 120px')
             .btn-toolbar
                 button.btn.btn-sm.btn-default(ui-sref='app.dwUrlExtractions.edit({id:urlExtraction.id})',ng-disabled='!currentUser.isAdmin')

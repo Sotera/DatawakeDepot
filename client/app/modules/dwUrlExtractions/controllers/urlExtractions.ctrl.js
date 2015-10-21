@@ -1,12 +1,13 @@
 'use strict';
 var app = angular.module('com.module.dwUrlExtractions');
 
-app.controller('UrlExtractionsCtrl', function($scope, $state, $stateParams, DwUrlExtraction, UrlExtractionsService, gettextCatalog, AppAuth) {
+app.controller('UrlExtractionsCtrl', function($scope, $state, $stateParams, DwDomainEntityType, DwTrail, DwUrlExtraction, UrlExtractionsService, gettextCatalog, AppAuth) {
 
   //Put the currentUser in $scope for convenience
   $scope.currentUser = AppAuth.currentUser;
+  $scope.trails = [];
+  $scope.domainEntityTypes = [];
 
-  $scope.urlExtraction = {};
   $scope.formFields = [{
     key: 'id',
     type: 'input',
@@ -14,12 +15,16 @@ app.controller('UrlExtractionsCtrl', function($scope, $state, $stateParams, DwUr
       label: gettextCatalog.getString('id'),
       disabled: true
     }
-  },{
+  }, {
     key: 'domainEntityTypeId',
-    type: 'input',
+    type: 'select',
     templateOptions: {
-      label: gettextCatalog.getString('Entity Type'),
-      required: true
+      label: gettextCatalog.getString('EntityType'),
+      options: $scope.domainEntityTypes,
+      valueProp: 'id',
+      labelProp: 'name',
+      required: true,
+      disabled: false
     }
   },{
     key: 'value',
@@ -28,12 +33,16 @@ app.controller('UrlExtractionsCtrl', function($scope, $state, $stateParams, DwUr
       label: gettextCatalog.getString('Value'),
       required: true
     }
-  },{
+  }, {
     key: 'trailId',
-    type: 'input',
+    type: 'select',
     templateOptions: {
       label: gettextCatalog.getString('Trail'),
-      required: false
+      options: $scope.trails,
+      valueProp: 'id',
+      labelProp: 'name',
+      required: true,
+      disabled: false
     }
   }];
 
@@ -52,10 +61,8 @@ app.controller('UrlExtractionsCtrl', function($scope, $state, $stateParams, DwUr
     });
   };
 
-  $scope.urlExtractions = UrlExtractionsService.getUrlExtractions();
-
   $scope.loading = true;
-  DwUrlExtraction.find({filter: {include: []}}).$promise
+  DwUrlExtraction.find({filter: {include: ['trailUrl']}}).$promise
       .then(function (allurlExtractions) {
         $scope.safeDisplayedurlExtractions = allurlExtractions;
         $scope.displayedUrlExtractions = [].concat($scope.safeDisplayedurlExtractions);
@@ -65,7 +72,42 @@ app.controller('UrlExtractionsCtrl', function($scope, $state, $stateParams, DwUr
       })
       .then(function () {
         $scope.loading = false;
-      });
+      }
+  );
+
+  DwTrail.find({filter: {include: []}}).$promise
+      .then(function (allTrails) {
+        for (var i = 0; i < allTrails.length; ++i) {
+          $scope.trails.push({
+            value: allTrails[i].name,
+            name: allTrails[i].description,
+            id: allTrails[i].id
+          });
+        }
+      })
+      .catch(function (err) {
+        console.log(err);
+      })
+      .then(function () {
+      }
+  );
+
+  DwDomainEntityType.find({filter: {include: []}}).$promise
+      .then(function (allEntTypes) {
+        for (var i = 0; i < allEntTypes.length; ++i) {
+          $scope.domainEntityTypes.push({
+            value: allEntTypes[i].name,
+            name: allEntTypes[i].description,
+            id: allEntTypes[i].id
+          });
+        }
+      })
+      .catch(function (err) {
+        console.log(err);
+      })
+      .then(function () {
+      }
+  );
 
   if ($stateParams.id) {
     UrlExtractionsService.getUrlExtraction($stateParams.id).$promise.then(function(result){
@@ -73,68 +115,6 @@ app.controller('UrlExtractionsCtrl', function($scope, $state, $stateParams, DwUr
   } else {
     $scope.urlExtraction = {};
   }
-
-  $scope.getDomains = function () {
-    return [];
-  }
-
-  //Search Functionality
-  function arrayObjectIndexOf(myArray, searchTerm, property) {
-    for (var i = 0, len = myArray.length; i < len; i++) {
-      if (myArray[i][property] === searchTerm) return i;
-    }
-    return -1;
-  }
-  $scope.aToB = function () {
-    for (var i in $scope.selectedA) {
-      var moveId = arrayObjectIndexOf($scope.items, $scope.selectedA[i], "id");
-      $scope.listB.push($scope.items[moveId]);
-      var delId = arrayObjectIndexOf($scope.listA, $scope.selectedA[i], "id");
-      $scope.listA.splice(delId, 1);
-    }
-    reset();
-  };
-  $scope.bToA = function () {
-    for (var i in $scope.selectedB) {
-      var moveId = arrayObjectIndexOf($scope.items, $scope.selectedB[i], "id");
-      $scope.listA.push($scope.items[moveId]);
-      var delId = arrayObjectIndexOf($scope.listB, $scope.selectedB[i], "id");
-      $scope.listB.splice(delId, 1);
-    }
-    reset();
-  };
-  function reset() {
-    $scope.selectedA = [];
-    $scope.selectedB = [];
-    $scope.toggle = 0;
-  }
-
-  $scope.toggleA = function () {
-    if ($scope.selectedA.length > 0) {
-      $scope.selectedA = [];
-    }
-    else {
-      for (var i in $scope.listA) {
-        $scope.selectedA.push($scope.listA[i].id);
-      }
-    }
-  }
-  $scope.toggleB = function () {
-    if ($scope.selectedB.length > 0) {
-      $scope.selectedB = [];
-    }
-    else {
-      for (var i in $scope.listB) {
-        $scope.selectedB.push($scope.listB[i].id);
-      }
-    }
-  }
-  $scope.selectA = function (i) {
-    $scope.selectedA.push(i);
-  };
-  $scope.selectB = function (i) {
-    $scope.selectedB.push(i);
-  };
 
 });
 

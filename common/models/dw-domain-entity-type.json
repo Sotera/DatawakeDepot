@@ -20,7 +20,27 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "domain": {
+      "type": "belongsTo",
+      "model": "DwDomain",
+      "options": {
+        "validate": true,
+        "forceId": true,
+        "persistent": true
+      }
+    },
+    "domainItems": {
+      "type": "belongsTo",
+      "model": "DwDomainItem",
+      "property": "mikeX",
+      "options": {
+        "validate": true,
+        "forceId": true,
+        "persistent": true
+      }
+    }
+  },
   "acls": [],
   "methods": {}
 }

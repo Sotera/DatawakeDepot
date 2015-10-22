@@ -36,6 +36,14 @@ var PluginState = function () {
       onComplete: callback
     }).get();
   };
+  me.getTrailsForCurrentTeamAndDomain = function (cb) {
+    var url = me.teamsUrl;
+    url += '/' + me.currentTeam.id;
+    url += '/domains';
+    me.restGet(url,function(res){
+      cb(res.json);
+    });
+  };
   me.getDomainsForCurrentTeam = function (cb) {
     var url = me.teamsUrl;
     url += '/' + me.currentTeam.id;
@@ -53,7 +61,7 @@ var PluginState = function () {
     });
   };
   me.postMessageToToolBar = function (msg) {
-    me.toolbarFrameSource.postMessage(msg, me.toolbarFrameOrigin);
+    me.toolbarFrameSource.postMessage(JSON.stringify(msg), me.toolbarFrameOrigin);
   };
   me.postEventToScraperContentScript = function (eventName, data) {
     if (!me.scraperContentScriptHandle) {

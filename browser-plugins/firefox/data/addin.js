@@ -107,44 +107,36 @@ function loginSuccessfulHandler(user) {
   //Pack up all the stuff the toolbar needs to do its thing into pluginState and
   //send it over
   pluginState.getTeamsForLoggedInUser(function (teams) {
-    if(!teams){
+    if (!teams || !teams.length) {
       postLoginMessageToToolBar();
       return;
     }
     pluginState.currentTeamList = teams;
-    if (!pluginState.currentTeamList.length) {
-      postLoginMessageToToolBar();
-      return;
-    }
-    pluginState.currentTeam = pluginState.currentTeamList[0];
-    postLoginMessageToToolBar();
-    return;
+    pluginState.currentTeam = teams[0];
     pluginState.getDomainsForCurrentTeam(function (domains) {
-      if(!domains){
+      if (!domains || !domains.length) {
         postLoginMessageToToolBar();
         return;
       }
       pluginState.currentDomainList = domains;
-      if(!pluginState.currentDomainList.length){
-        postLoginMessageToToolBar();
-        return;
-      }
-      pluginState.currentDomain = pluginState.currentDomainList[0];
+      pluginState.currentDomain = domains[0];
+      postLoginMessageToToolBar();
     });
   });
 }
 function postLoginMessageToToolBar() {
+  var semiPluginState = {
+    loggedInUser: pluginState.loggedInUser,
+    currentTeam: pluginState.currentTeam,
+    currentTeamList: pluginState.currentTeamList,
+    currentDomain: pluginState.currentDomain,
+    currentDomainList: pluginState.currentDomainList,
+    currentTrail: pluginState.currentTrail,
+    currentTrailList: pluginState.currentTrailList
+  };
   var msg = {
     type: 'login-success-target-toolbar-frame',
-    pluginState: {
-      loggedInUser: pluginState.loggedInUser,
-      currentTeam: pluginState.currentTeam,
-      currentTeamList: pluginState.currentTeamList,
-      currentDomain: pluginState.currentDomain,
-      currentDomainList: pluginState.currentDomainList,
-      currentTrail: pluginState.currentTrail,
-      currentTrailList: pluginState.currentTrailList
-    }
+    pluginState: semiPluginState
   };
   pluginState.postMessageToToolBar(msg);
 }

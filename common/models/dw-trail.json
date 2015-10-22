@@ -28,24 +28,7 @@
     }
   },
   "validations": [],
-  "relations": {
-    "domain": {
-      "type": "belongsTo",
-      "model": "DwDomain"
-    },
-    "team": {
-      "type": "belongsTo",
-      "model": "DwTeam"
-    },
-   "user": {
-     "type": "hasAndBelongsToMany",
-     "model": "AminoUser"
-   },
-   "urls": {
-     "type": "hasMany",
-     "model": "DwTrailUrl"
-   }
-  },
+  "relations": {},
   "acls": [],
   "methods": {}
 }

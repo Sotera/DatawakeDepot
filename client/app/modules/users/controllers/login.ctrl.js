@@ -122,11 +122,11 @@ angular.module('com.module.users')
               UserLoginOrLogoutMsg.broadcast(msg);
             })
             .catch(function (err) {
-              $scope.loginError = res.data.error;
+              $scope.loginError = err.data.error;
             });
         })
         .catch(function (err) {
-          $scope.loginError = res.data.error;
+          $scope.loginError = err.data.error;
         });
     };
   });

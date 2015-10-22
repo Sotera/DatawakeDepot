@@ -4,18 +4,19 @@ window.trailingActive = false;
 //
 function addInMessageHandler(event) {
   try {
-    var msg = event.data;
+    var msg = JSON.parse(event.data);
     if (msg.type == 'login-success-target-toolbar-frame') {
       setUIStateToLoggedIn(msg.pluginState);
     } else if (msg.type == 'logout-success-target-toolbar-frame') {
       setUIStateToLoggedOut();
-    } else if (msg.type == 'updated-teams-target-toolbar-frame') {
+    }
+/*    else if (msg.type == 'updated-teams-target-toolbar-frame') {
       updateTeams(msg.teams, msg.currentTeam);
     } else if (msg.type == 'updated-domains-target-toolbar-frame') {
       updateDomains(msg.domains, msg.currentDomain);
     } else if (msg.type == 'updated-trails-target-toolbar-frame') {
       updateTrails(msg.trails, msg.currentTrail);
-    }
+    }*/
   } catch (ex) {
     console.log('Error decoding message to toolbar frame: ' + ex);
   }
@@ -28,6 +29,7 @@ function syncSelectElementsWithPluginState() {
   clearSelectElements();
   var ps = window.pluginState;
   addItemsToSelectElement(ps.currentTeamList, ps.currentTeam, '#teamList');
+  addItemsToSelectElement(ps.currentDomainList, ps.currentDomain, '#domainList');
 }
 function clearSelectElements() {
   $('#domainList').children().remove().end();
@@ -96,6 +98,7 @@ function setUIStateToLoggedOut() {
     .html('Login')
     .addClass('btn-success')
     .removeClass('btn-danger');
+  $('#teamList').attr('disabled', 'disabled');
   $('#domainList').attr('disabled', 'disabled');
   $('#trailList').attr('disabled', 'disabled');
   $('#toggleTrailButton').addClass('disabled');

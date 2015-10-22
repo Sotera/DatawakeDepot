@@ -34,9 +34,6 @@ module.exports = function (app) {
   async.parallel([
       createAdminUsers
       , createAdminRoles
-      , createTestTeams
-      , createTestDomains
-      , createTestUsers
     ], function (err, result) {
       if (err) {
         log(err);
@@ -44,9 +41,6 @@ module.exports = function (app) {
       }
       var createdAdminUsers = result[0];
       var createdAdminRoles = result[1];
-      var createdTestTeams = result[2];
-      var createdTestDomains = result[3];
-      var createdTestUsers = result[4];
       //Add admin to admins group
       createdAdminRoles.filter(function (role) {
         return role.name === 'admins';
@@ -72,85 +66,8 @@ module.exports = function (app) {
           });
         });
       });
-      //Create test data relationships
-      addItemsToObjects(createdTestUsers, 'teams', createdTestTeams);
-      addItemsToObjects(createdTestTeams, 'domains', createdTestDomains);
-      /*    AminoUser.find({filter: {include: ['roles']}}).$promise
-       .then(function (allUsers) {});*/
     }
   );
-  function addItemsToObjects(objectsToAddItemsToArray, listPropertyToAddTo, objectsToAddArray) {
-    var numberOfItemsToAdd = 1;
-    var itemsToAddOffset = 1;
-    async.map(objectsToAddItemsToArray, function (objectToAddItemTo) {
-      objectToAddItemTo[listPropertyToAddTo](function (err, listToAddTo) {
-        if (err) {
-          log(err);
-          return;
-        }
-        if (listToAddTo.length) {
-          return;
-        }
-        for (var i = 0; i < numberOfItemsToAdd; ++i) {
-          var objectToAdd = objectsToAddArray[(i + itemsToAddOffset) % objectsToAddArray.length];
-          objectToAddItemTo[listPropertyToAddTo].add(objectToAdd, function (err) {
-            if (err) {
-              log(err);
-              return;
-            }
-          });
-        }
-        ++numberOfItemsToAdd;
-        ++itemsToAddOffset;
-      })
-    });
-  }
-
-  function createTestTeams(cb) {
-    var testTeamNames = [];
-    alphabet.forEach(function (letter) {
-      testTeamNames.push(letter);
-    });
-    var functionArray = [];
-    testTeamNames.forEach(function (teamName) {
-      functionArray.push(async.apply(findOrCreateObj, DwTeam, {where: {name: teamName}},
-        {name: 'Team ' + teamName, description: 'The ' + teamName + ' Team'}));
-    });
-    async.parallel(functionArray, cb);
-  }
-
-  function createTestDomains(cb) {
-    var testDomainNames = [];
-    alphabet.forEach(function (letter) {
-      testDomainNames.push(letter);
-    });
-    var functionArray = [];
-    testDomainNames.forEach(function (domainName) {
-      functionArray.push(async.apply(findOrCreateObj, DwDomain, {where: {name: domainName}},
-        {name: 'Domain ' + domainName, description: 'The ' + domainName + ' Domain'}));
-    });
-    async.parallel(functionArray, cb);
-  }
-
-  function createTestUsers(cb) {
-    var testUserNames = [];
-    alphabet.forEach(function (letter) {
-      testUserNames.push(letter);
-    });
-    var functionArray = [];
-    testUserNames.forEach(function (userName) {
-      var userMoniker = 'User' + userName;
-      functionArray.push(async.apply(findOrCreateObj, AminoUser, {where: {username: userMoniker}},
-        {
-          firstName: userMoniker + '_first',
-          lastName: userMoniker + '_last',
-          email: userMoniker + '@user.com',
-          username: userMoniker,
-          password: userMoniker + '_password'
-        }));
-    });
-    async.parallel(functionArray, cb);
-  }
 
   function createAdminRoles(cb) {
     var functionArray = [];

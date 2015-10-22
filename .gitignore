@@ -7,3 +7,4 @@ client/app/js/lb-services.js
 db.json
 node_modules/
 dist/
+providers.json

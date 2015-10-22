@@ -26,7 +26,7 @@
           td.col-md-4
             span.text-muted {{domain.description}}
           td.col-med-2
-            span.label.label-default(ng-repeat="domainEntType in domain.domainEntTypes") &nbsp;{{domainEntType.name}}
+            span.label.label-default(ng-repeat="domainEntType in domain.domainEntityTypes") &nbsp;{{domainEntType.name}}
           td.col-md-2
             a(ui-sref='app.dwDomainItems.list({id:null, domainId:domain.id})') {{domain.domainItems.length}}
           td.col-med-1

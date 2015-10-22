@@ -30,7 +30,7 @@ app.controller('EntityTypesCtrl', function($scope, $state, $stateParams, DwDomai
       required: false
     }
   }, {
-      key: 'domainId',
+      key: 'dwDomainId',
       type: 'select',
       templateOptions: {
           label: gettextCatalog.getString('Domain'),

@@ -13,19 +13,15 @@
   },
   "validations": [],
   "relations": {
-    "domainEntTypes": {
+    "domainEntityTypes": {
       "type": "hasMany",
       "model": "DwDomainEntityType",
       "foreignKey": "dwDomainId"
     },
     "domainItems": {
-      "type": "belongsTo",
+      "type": "hasMany",
       "model": "DwDomainItem",
-      "options": {
-        "validate": true,
-        "forceId": true,
-        "persistent": false
-      }
+      "foreignKey": "dwDomainId"
     },
     "extractors": {
       "type": "hasAndBelongsToMany",

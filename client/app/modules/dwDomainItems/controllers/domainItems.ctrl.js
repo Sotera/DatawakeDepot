@@ -24,7 +24,7 @@ app.controller('DomainItemsCtrl', function($scope, $state, $stateParams, DwDomai
             required: true
         }
     }, {
-        key: 'domainId',
+        key: 'dwDomainId',
         type: 'select',
         templateOptions: {
             label: gettextCatalog.getString('Domain'),
@@ -35,7 +35,7 @@ app.controller('DomainItemsCtrl', function($scope, $state, $stateParams, DwDomai
             disabled: false
         }
     }, {
-        key: 'domainEntityTypeId',
+        key: 'dwDomainEntityTypeId',
         type: 'select',
         templateOptions: {
             label: gettextCatalog.getString('Domain Entity Type'),

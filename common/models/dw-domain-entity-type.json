@@ -19,14 +19,9 @@
       "foreignKey": "dwDomainId"
     },
     "domainItems": {
-      "type": "belongsTo",
+      "type": "hasMany",
       "model": "DwDomainItem",
-      "property": "mikeX",
-      "options": {
-        "validate": true,
-        "forceId": true,
-        "persistent": true
-      }
+      "foreignKey": "dwDomainEntityTypeId"
     }
   },
   "acls": [],

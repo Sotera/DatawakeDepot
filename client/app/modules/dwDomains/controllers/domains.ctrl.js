@@ -50,7 +50,7 @@ app.controller('DomainsCtrl', function($scope, $state, $stateParams, DwDomain, D
     };
 
     $scope.loading = true;
-    DwDomain.find({filter: {include: ['domainItems','domainEntTypes','extractors']}}).$promise
+    DwDomain.find({filter: {include: ['domainEntityTypes','domainItems','extractors']}}).$promise
         .then(function (allDomains) {
             $scope.safeDisplayedDomains = allDomains;
             $scope.displayedDomains = [].concat($scope.safeDisplayedDomains);

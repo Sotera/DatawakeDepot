@@ -1,13 +1,8 @@
 {
   "name": "DwDomain",
-  "plural": "dwDomains",
   "base": "PersistedModel",
   "idInjection": true,
   "properties": {
-    "id": {
-      "type": "string",
-      "id": true
-    },
     "name": {
       "type": "string",
       "required": true
@@ -21,11 +16,7 @@
     "domainEntTypes": {
       "type": "hasMany",
       "model": "DwDomainEntityType",
-      "options": {
-        "validate": true,
-        "forceId": true,
-        "persistent": false
-      }
+      "foreignKey": "dwDomainId"
     },
     "domainItems": {
       "type": "belongsTo",

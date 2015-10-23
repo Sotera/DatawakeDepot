@@ -26,38 +26,22 @@
     "extractors": {
       "type": "hasAndBelongsToMany",
       "model": "DwExtractor",
-      "options": {
-        "validate": true,
-        "forceId": true,
-        "persistent": false
-      }
+      "foreignKey": "dwDomainId"
     },
     "feeds": {
       "type": "hasAndBelongsToMany",
-      "model": "DwFee",
-      "options": {
-        "validate": true,
-        "forceId": true,
-        "persistent": false
-      }
+      "model": "DwFeed",
+      "foreignKey": "dwDomainId"
     },
     "trails": {
       "type": "hasMany",
       "model": "DwTrail",
-      "options": {
-        "validate": true,
-        "forceId": true,
-        "persistent": false
-      }
+      "foreignKey": "dwDomainId"
     },
     "teams": {
       "type": "hasAndBelongsToMany",
       "model": "DwTeam",
-      "options": {
-        "validate": true,
-        "forceId": true,
-        "persistent": false
-      }
+      "foreignKey": "dwDomainId"
     }
   },
   "acls": [],

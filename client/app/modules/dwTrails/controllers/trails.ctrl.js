@@ -1,11 +1,13 @@
 'use strict';
 var app = angular.module('com.module.dwTrails');
 
-app.controller('TrailsCtrl', function($scope, $state, $stateParams, DwDomain, DwTrail, TrailsService, gettextCatalog, AppAuth) {
+app.controller('TrailsCtrl', function($scope, $state, $stateParams, DwDomain, DwTeam, AminoUser, DwTrail, TrailsService, gettextCatalog, AppAuth) {
 
   //Put the currentUser in $scope for convenience
   $scope.currentUser = AppAuth.currentUser;
   $scope.domains = [];
+  $scope.teams = [];
+  $scope.users = [];
 
   $scope.trail = {};
   $scope.formFields = [{
@@ -38,7 +40,7 @@ app.controller('TrailsCtrl', function($scope, $state, $stateParams, DwDomain, Dw
           required: false
     }
   }, {
-      key: 'domainId',
+      key: 'dwDomainId',
       type: 'select',
       templateOptions: {
           label: gettextCatalog.getString('Domain'),
@@ -49,20 +51,18 @@ app.controller('TrailsCtrl', function($scope, $state, $stateParams, DwDomain, Dw
           disabled: false
       }
   }, {
-      key: 'teamId',
-      type: 'input',
+      key: 'dwTeamId',
+      type: 'multiCheckbox',
       templateOptions: {
-          label: gettextCatalog.getString('Team'),
-          required: false,
-          disabled: true
+          label: 'Teams',
+          options: $scope.teams
       }
   }, {
-      key: 'userId',
-      type: 'input',
+      key: 'dwUserId',
+      type: 'multiCheckbox',
       templateOptions: {
-          label: gettextCatalog.getString('Created By'),
-          required: false,
-          disabled: true
+          label: 'Users',
+          options: $scope.users
       }
   }];
 
@@ -81,7 +81,7 @@ app.controller('TrailsCtrl', function($scope, $state, $stateParams, DwDomain, Dw
   };
 
   $scope.loading = true;
-  DwTrail.find({filter: {include: ['domain','team','user','urls']}}).$promise
+  DwTrail.find({filter: {include: ['domain','team','users','trailUrls']}}).$promise
       .then(function (allTrails) {
           $scope.safeDisplayedtrails = allTrails;
           $scope.displayedTrails = [].concat($scope.safeDisplayedtrails);
@@ -101,6 +101,40 @@ app.controller('TrailsCtrl', function($scope, $state, $stateParams, DwDomain, Dw
                   value: allDomains[i].name,
                   name: allDomains[i].description,
                   id: allDomains[i].id
+              });
+          }
+      })
+      .catch(function (err) {
+          console.log(err);
+      })
+      .then(function () {
+      }
+  );
+
+  DwTeam.find({filter: {include: []}}).$promise
+      .then(function (allTeams) {
+          for (var i = 0; i < allTeams.length; ++i) {
+              $scope.teams.push({
+                  value: allTeams[i].name,
+                  name: allTeams[i].description,
+                  id: allTeams[i].id
+              });
+          }
+      })
+      .catch(function (err) {
+          console.log(err);
+      })
+      .then(function () {
+      }
+  );
+
+  AminoUser.find({filter: {include: []}}).$promise
+      .then(function (allUsers) {
+          for (var i = 0; i < allUsers.length; ++i) {
+              $scope.users.push({
+                  value: allUsers[i].email,
+                  name: allUsers[i].firstName,
+                  id: allUsers[i].id
               });
           }
       })

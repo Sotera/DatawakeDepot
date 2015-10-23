@@ -10,8 +10,10 @@
         tr
           th.sortable(st-sort='name' st-sort-default="true") Name
           th.sortable(st-sort='description') Description
+          th.sortable(st-sort='domain.trails.name') Trail
           th.sortable(st-sort='') Domain EntityTypes
-          th.sortable(st-sort='') # Domain Items
+          th.sortable(st-sort='') Domain Feeds
+          th.sortable(st-sort='') # DomainItems
           th.sortable(st-sort='') Extractors
           th
             a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
@@ -21,13 +23,17 @@
         tr(ng-repeat='domain in displayedDomains')
           td.hidden
             span {{domain.id}}
-          td.col-md-2
+          td.col-md-1
             a(ui-sref='app.dwDomains.view({id:domain.id})') {{domain.name}}
-          td.col-md-4
+          td.col-md-1
             span.text-muted {{domain.description}}
-          td.col-med-2
+          td.col-med-1
+            span.label.label-default(ng-repeat="trail in domain.trails") &nbsp;{{trail.name}}
+          td.col-med-1
             span.label.label-default(ng-repeat="domainEntType in domain.domainEntityTypes") &nbsp;{{domainEntType.name}}
-          td.col-md-2
+          td.col-med-1
+            a(ui-sref='app.dwFeeds.list({id:null, domainId:domain.id})') {{domain.feeds.length}}
+          td.col-md-1
             a(ui-sref='app.dwDomainItems.list({id:null, domainId:domain.id})') {{domain.domainItems.length}}
           td.col-med-1
             span.label.label-default(ng-repeat="extractor in domain.extractors") &nbsp;{{extractor.name}}

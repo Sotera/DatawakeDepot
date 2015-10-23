@@ -22,6 +22,11 @@
       "type": "hasMany",
       "model": "DwDomainItem",
       "foreignKey": "dwDomainEntityTypeId"
+    },
+    "urlExtractions": {
+      "type": "hasMany",
+      "model": "DwUrlExtraction",
+      "foreignKey": "dwDomainEntityTypeId"
     }
   },
   "acls": [],

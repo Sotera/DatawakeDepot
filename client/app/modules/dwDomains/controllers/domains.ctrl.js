@@ -32,7 +32,7 @@ app.controller('DomainsCtrl', function($scope, $state, $stateParams, DwDomain, D
         templateOptions: {
             label: 'Extractors',
             options: $scope.extractors
-    }
+        }
     }];
 
     $scope.delete = function(id) {
@@ -50,7 +50,7 @@ app.controller('DomainsCtrl', function($scope, $state, $stateParams, DwDomain, D
     };
 
     $scope.loading = true;
-    DwDomain.find({filter: {include: ['domainEntityTypes','domainItems','extractors']}}).$promise
+    DwDomain.find({filter: {include: ['domainEntityTypes','domainItems','extractors','trails']}}).$promise
         .then(function (allDomains) {
             $scope.safeDisplayedDomains = allDomains;
             $scope.displayedDomains = [].concat($scope.safeDisplayedDomains);

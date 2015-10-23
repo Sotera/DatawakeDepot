@@ -21,26 +21,33 @@ var PluginState = function () {
   me.datawakeDepotContentScriptHandle = null;
   me.scraperContentScriptHandle = null;
   me.pageModDatawakeDepotIncludeFilter = null;
-  me.restPost = function(url, content, callback){
+  me.restPost = function (url, content, callback) {
     url = me.loginUrl + url;
     Request({
       url: url,
       onComplete: callback
     }).post();
   };
-  me.restGet = function(url, callback){
+  me.restGet = function (url, queryStringObj, callback) {
+    queryStringObj = queryStringObj || {};
+    queryStringObj.access_token = me.loggedInUser.accessToken;
+    var queryStringJson = me.convertObjToQueryString(queryStringObj);
     url = me.loginUrl + url;
-    url += '?access_token=' + me.loggedInUser.accessToken;
+    url += '?' + queryStringJson;
     Request({
       url: url,
       onComplete: callback
     }).get();
   };
   me.getTrailsForCurrentTeamAndDomain = function (cb) {
-    var url = me.teamsUrl;
-    url += '/' + me.currentTeam.id;
-    url += '/domains';
-    me.restGet(url,function(res){
+    var url = me.trailsUrl;
+    var filter = {
+      where: {
+        and: [{teamId: '562a519905f829d23dbcd9ef'},
+          {domainId: '562a519b05f829d23dbcd9f3'}]
+      }
+    };
+    me.restGet(url, {filter: JSON.stringify(filter)}, function (res) {
       cb(res.json);
     });
   };
@@ -48,7 +55,7 @@ var PluginState = function () {
     var url = me.teamsUrl;
     url += '/' + me.currentTeam.id;
     url += '/domains';
-    me.restGet(url,function(res){
+    me.restGet(url, {}, function (res) {
       cb(res.json);
     });
   };
@@ -56,7 +63,7 @@ var PluginState = function () {
     var url = me.usersUrl;
     url += '/' + me.loggedInUser.id;
     url += '/teams';
-    me.restGet(url,function(res){
+    me.restGet(url, {}, function (res) {
       cb(res.json);
     });
   };
@@ -87,17 +94,25 @@ var PluginState = function () {
   me.onAddInModuleEvent = function (eventName, cb) {
     on(exports, eventName, cb);
   };
-  me.onScraperContentScriptAttach = function(worker){
+  me.onScraperContentScriptAttach = function (worker) {
     me.scraperContentScriptHandle = worker;
     me.postEventToAddInModule('page-scraper-content-script-attached-target-addin');
     me.postEventToScraperContentScript('page-attached-target-content-script');
   }
-  me.onDatawakeDepotContentScriptAttach = function(worker){
+  me.onDatawakeDepotContentScriptAttach = function (worker) {
     me.datawakeDepotContentScriptHandle = worker;
     me.postEventToAddInModule('page-datawake-depot-content-script-attached-target-addin');
     me.postEventToDatawakeDepotContentScript('page-attached-target-content-script');
   }
-  me.reset = function(){
+  me.convertObjToQueryString = function (obj) {
+    var str = [];
+    for (var p in obj)
+      if (obj.hasOwnProperty(p)) {
+        str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+      }
+    return str.join("&");
+  }
+  me.reset = function () {
     me.loggedInUser = null;
     me.currentTeam = null;
     me.currentTeamList = [];
@@ -107,6 +122,6 @@ var PluginState = function () {
     me.currentTrailList = [];
   }
 };
-if(exports.pluginState == null){
+if (exports.pluginState == null) {
   exports.pluginState = new PluginState();
 }

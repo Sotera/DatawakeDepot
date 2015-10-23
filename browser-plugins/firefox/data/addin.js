@@ -120,7 +120,15 @@ function loginSuccessfulHandler(user) {
       }
       pluginState.currentDomainList = domains;
       pluginState.currentDomain = domains[0];
-      postLoginMessageToToolBar();
+      pluginState.getTrailsForCurrentTeamAndDomain(function(trails){
+        if (!trails || !trails.length) {
+          postLoginMessageToToolBar();
+          return;
+        }
+        pluginState.currentTrailList = trails;
+        pluginState.currentTrail = trails[0];
+        postLoginMessageToToolBar();
+      });
     });
   });
 }

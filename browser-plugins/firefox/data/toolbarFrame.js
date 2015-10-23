@@ -30,6 +30,7 @@ function syncSelectElementsWithPluginState() {
   var ps = window.pluginState;
   addItemsToSelectElement(ps.currentTeamList, ps.currentTeam, '#teamList');
   addItemsToSelectElement(ps.currentDomainList, ps.currentDomain, '#domainList');
+  addItemsToSelectElement(ps.currentTrailList, ps.currentTrail, '#trailList');
 }
 function clearSelectElements() {
   $('#domainList').children().remove().end();

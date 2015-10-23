@@ -21,7 +21,8 @@
           td(style='width: 120px')
             span.text-muted {{domainItem.domainEntityType.name}}
           td
-            a(ui-sref='app.dwDomains.list({search:domain.id})') {{domainItem.domain.name}}
+            span.label.label-default
+                a(ui-sref='app.dwDomains.list({search:domain.id})') {{domainItem.domain.name}}
           td(style='width: 120px')
             .btn-toolbar
                 button.btn.btn-sm.btn-default(ui-sref='app.dwDomainItems.edit({id:domainItem.id})',ng-disabled='!currentUser.isAdmin')

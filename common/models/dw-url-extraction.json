@@ -3,30 +3,26 @@
   "plural": "dwUrlExtractions",
   "base": "PersistedModel",
   "properties": {
-    "id": {
-      "type": "string",
-      "id": true
-    },
     "value": {
-      "type": "string"
-    },
-    "trailUrlId": {
-      "type": "string"
-    },
-    "domainEntityTypeId": {
       "type": "string"
     }
   },
   "validations": [],
   "relations": {
+    "trail": {
+      "type": "belongsTo",
+      "model": "DwTrail",
+      "foreignKey": "dwTrailId"
+    },
     "trailUrl": {
       "type": "belongsTo",
-      "model": "DwTrailUrl"
+      "model": "DwTrailUrl",
+      "foreignKey": "dwTrailUrlId"
     },
     "domainEntityType": {
-      "type": "hasOne",
+      "type": "belongsTo",
       "model": "DwDomainEntityType",
-      "foreignKey": "domainEntityTypeId"
+      "foreignKey": "dwDomainEntityTypeId"
     }
   },
   "acls": [],

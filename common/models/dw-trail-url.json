@@ -3,10 +3,6 @@
   "plural": "dwTrailUrls",
   "base": "PersistedModel",
   "properties": {
-    "id": {
-      "type": "string",
-      "id": true
-    },
     "url": {
       "type": "string",
       "required": true
@@ -16,12 +12,6 @@
     },
     "comments": {
       "type": "string"
-    },
-    "trailId": {
-      "type": "string"
-    },
-    "crawlTypeId": {
-      "type": "string"
     }
   },
   "validations": [],
@@ -29,14 +19,15 @@
     "trail": {
       "type": "belongsTo",
       "model": "DwTrail",
-      "foreignKey": "trailId"
+      "foreignKey": "dwTrailId"
     },
     "urlExtractions": {
       "type": "hasMany",
-      "model": "DwUrlExtraction"
+      "model": "DwUrlExtraction",
+      "foreignKey": "dwTrailUrlId"
     },
     "crawlType": {
-      "type": "hasOne",
+      "type": "belongsTo",
       "model": "DwCrawlType",
       "foreignKey": "crawlTypeId"
     }

@@ -4,25 +4,25 @@
     table.table.table-striped(st-table='displayedUrlExtractions', st-safe-src='safeDisplayedurlExtractions')
       thead
         tr
-          th(colspan="4")
+          th(colspan="5")
             input.input-sm.form-control(st-search='' type='search' placeholder='Search')
       thead
         tr
-          th.sortable(st-sort='domainEntityTypeId' st-sort-default="true") Entity Type
+          th.sortable(st-sort='domainEntityType.name' st-sort-default="true") Entity Type
           th.sortable(st-sort='value') Value
-          th.sortable(st-sort='trailId') Trail
-          th.sortable(st-sort='trailUrlId') Url
+          th.sortable(st-sort='trail.name') Trail
+          th.sortable(st-sort='trailUrl.url') Url
           th
               a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
                 &nbsp;Add UrlExtraction
       tbody
         tr(ng-repeat='urlExtraction in displayedUrlExtractions')
           td(style='width: 120px')
-            a(href='', ui-sref='app.dwUrlExtractions.view({id:urlExtraction.id})') {{urlExtraction.domainEntityTypeId}}
+            a(href='', ui-sref='app.dwUrlExtractions.view({id:urlExtraction.id})') {{urlExtraction.domainEntityType.name}}
           td
             span.text-muted {{urlExtraction.value}}
           td
-            span.label.label-default {{urlExtraction.trailId}}
+            span.label.label-default {{urlExtraction.trail.name}}
           td
             span.label.label-default {{urlExtraction.trailUrl.url}}
           td(style='width: 120px')

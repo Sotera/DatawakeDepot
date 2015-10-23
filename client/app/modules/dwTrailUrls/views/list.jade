@@ -9,9 +9,9 @@
       thead
         tr
           th.sortable(st-sort='url' st-sort-default="true") URL
-          th.sortable(st-sort='trailId') Trail
+          th.sortable(st-sort='trail.name') Trail
           th.sortable(st-sort='timestamp') Timestamp
-          th.sortable(st-sort='crawlType') Crawl Type
+          th.sortable(st-sort='dwCrawlTypeId') Crawl Type
           th.sortable(st-sort='comments') Comments
           th
               a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
@@ -25,7 +25,7 @@
           td
             span.text-muted {{trailUrl.timestamp}}
           td
-            span.text-muted {{trailUrl.crawlTypeId}}
+            span.text-muted {{trailUrl.dwCrawlTypeId}}
           td
             span.text-muted {{trailUrl.comments}}
           td(style='width: 120px')

@@ -1,21 +1,13 @@
 {
   "name": "DwDomainEntityType",
-  "plural": "dwDomainEntityTypes",
   "base": "PersistedModel",
   "idInjection": true,
   "properties": {
-    "id": {
-      "type": "string",
-      "id": true
-    },
     "name": {
       "type": "string",
       "required": true
     },
     "description": {
-      "type": "string"
-    },
-    "domainId": {
       "type": "string"
     }
   },
@@ -24,21 +16,17 @@
     "domain": {
       "type": "belongsTo",
       "model": "DwDomain",
-      "options": {
-        "validate": true,
-        "forceId": true,
-        "persistent": true
-      }
+      "foreignKey": "dwDomainId"
     },
     "domainItems": {
-      "type": "belongsTo",
+      "type": "hasMany",
       "model": "DwDomainItem",
-      "property": "mikeX",
-      "options": {
-        "validate": true,
-        "forceId": true,
-        "persistent": true
-      }
+      "foreignKey": "dwDomainEntityTypeId"
+    },
+    "urlExtractions": {
+      "type": "hasMany",
+      "model": "DwUrlExtraction",
+      "foreignKey": "dwDomainEntityTypeId"
     }
   },
   "acls": [],

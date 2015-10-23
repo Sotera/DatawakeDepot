@@ -1,10 +1,11 @@
 'use strict';
 var app = angular.module('com.module.dwTrailUrls');
 
-app.controller('TrailUrlsCtrl', function($scope, $state, $stateParams, DwCrawlType, DwTrailUrl, TrailUrlsService, gettextCatalog, AppAuth) {
+app.controller('TrailUrlsCtrl', function($scope, $state, $stateParams, DwCrawlType, DwTrail, DwTrailUrl, TrailUrlsService, gettextCatalog, AppAuth) {
 
   //Put the currentUser in $scope for convenience
   $scope.currentUser = AppAuth.currentUser;
+  $scope.trails = [];
   $scope.crawlTypes = [];
 
   $scope.trailUrl = {};
@@ -22,15 +23,19 @@ app.controller('TrailUrlsCtrl', function($scope, $state, $stateParams, DwCrawlTy
       label: gettextCatalog.getString('Url'),
       required: true
     }
-  },{
-    key: 'trailId',
-    type: 'input',
-    templateOptions: {
-      label: gettextCatalog.getString('Trail'),
-      required: true
-    }
   }, {
-    key: 'crawlTypeId',
+      key: 'dwTrailId',
+      type: 'select',
+      templateOptions: {
+          label: gettextCatalog.getString('Trail'),
+          options: $scope.trails,
+          valueProp: 'id',
+          labelProp: 'name',
+          required: true,
+          disabled: false
+      }
+  }, {
+    key: 'dwCrawlTypeId',
     type: 'select',
     templateOptions: {
       label: gettextCatalog.getString('CrawlType'),
@@ -93,6 +98,23 @@ app.controller('TrailUrlsCtrl', function($scope, $state, $stateParams, DwCrawlTy
                   value: allCrawlTypes[i].name,
                   name: allCrawlTypes[i].description,
                   id: allCrawlTypes[i].id
+              });
+          }
+      })
+      .catch(function (err) {
+          console.log(err);
+      })
+      .then(function () {
+      }
+  );
+
+  DwTrail.find({filter: {include: []}}).$promise
+      .then(function (allTrails) {
+          for (var i = 0; i < allTrails.length; ++i) {
+              $scope.trails.push({
+                  value: allTrails[i].name,
+                  name: allTrails[i].description,
+                  id: allTrails[i].id
               });
           }
       })

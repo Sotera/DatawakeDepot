@@ -3,10 +3,6 @@
   "plural": "dwTrails",
   "base": "PersistedModel",
   "properties": {
-    "id": {
-      "type": "string",
-      "id": true
-    },
     "name": {
       "type": "string",
       "required": true
@@ -16,19 +12,36 @@
     },
     "timestamp": {
       "type": "date"
-    },
-    "domainId": {
-      "type": "string"
-    },
-    "teamId": {
-      "type": "string"
-    },
-    "userId": {
-      "type": "string"
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "domain": {
+      "type": "belongsTo",
+      "model": "DwDomain",
+      "foreignKey": "dwDomainId"
+    },
+    "team": {
+      "type": "belongsTo",
+      "model": "DwTeam",
+      "foreignKey": "dwTeamId"
+    },
+   "users": {
+     "type": "hasAndBelongsToMany",
+     "model": "AminoUser",
+     "foreignKey": "dwUserId"
+   },
+   "trailUrls": {
+     "type": "hasMany",
+     "model": "DwTrailUrl",
+     "foreignKey": "dwTrailId"
+   },
+   "urlExtractions": {
+     "type": "hasMany",
+     "model": "DwUrlExtraction",
+     "foreignKey": "dwTrailId"
+   }
+  },
   "acls": [],
   "methods": {}
 }

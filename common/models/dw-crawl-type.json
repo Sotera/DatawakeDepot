@@ -4,10 +4,6 @@
   "base": "PersistedModel",
   "idInjection": true,
   "properties": {
-    "id": {
-      "type": "string",
-      "id": true
-    },
     "name": {
       "type": "string",
       "required": true
@@ -20,7 +16,8 @@
   "relations": {
     "trailUrl": {
       "type": "hasMany",
-      "model": "DwTrailUrl"
+      "model": "DwTrailUrl",
+      "foreignKey": "crawlTypeId"
     }
   },
   "acls": [],

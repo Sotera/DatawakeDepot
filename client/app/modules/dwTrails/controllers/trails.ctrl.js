@@ -127,8 +127,8 @@ app.controller('TrailsCtrl', function($scope, $state, $stateParams, DwDomain, Dw
       .then(function (allTeams) {
           for (var i = 0; i < allTeams.length; ++i) {
               $scope.teams.push({
-                  value: allTeams[i].name,
-                  name: allTeams[i].description,
+                  value: allTeams[i].id,
+                  name: allTeams[i].name,
                   id: allTeams[i].id
               });
           }

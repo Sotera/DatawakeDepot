@@ -14,10 +14,10 @@
           th.sortable(st-sort='index') Index
           th.sortable(st-sort='credentials') Credentials
           th.sortable(st-sort='protocol') Protocol
-          th.sortable(st-sort='feed') Feed
+          th.sortable(st-sort='') Transmissions
           th
             a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
-              &nbsp;Add Feed
+              &nbsp; Add Feed
       tbody
         tr(ng-repeat='feed in displayedfeeds')
           td(style='width: 120px')
@@ -32,8 +32,8 @@
             span.text-muted {{feed.credentials}}
           td
             span.text-muted {{feed.protocol}}
-          td
-            span.text-muted {{feed.feedId}}
+          td.col-med-1
+            a(ui-sref='app.dwTransmissions.list({id:null, feedId:feed.id})') {{feed.transmissions.length}}
           td(style='width: 120px')
             .btn-toolbar
                 button.btn.btn-sm.btn-default(ui-sref='app.dwFeeds.edit({id:feed.id})',ng-disabled='!currentUser.isAdmin')

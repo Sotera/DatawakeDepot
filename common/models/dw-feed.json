@@ -2,11 +2,8 @@
   "name": "DwFeed",
   "plural": "dwFeeds",
   "base": "PersistedModel",
+  "idInjection": true,
   "properties": {
-    "id": {
-      "type": "string",
-      "id": true
-    },
     "name": {
       "type": "string",
       "required": true
@@ -23,24 +20,6 @@
     "protocol": {
       "type": "string"
     },
-    "serviceTypeId": {
-      "type": "string"
-    },
-    "domains": {
-      "type": [
-        "string"
-      ]
-    },
-    "teams": {
-      "type": [
-        "string"
-      ]
-    },
-    "trails": {
-      "type": [
-        "string"
-      ]
-    },
     "transmissions": {
       "type": [
         "string"
@@ -48,7 +27,58 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "domains": {
+      "type": "hasAndBelongsToMany",
+      "model": "DwDomain",
+      "foreignKey": "dwDomainId",
+      "options": {
+        "validate": true,
+        "forceId": true,
+        "persistent": false
+      }
+    },
+    "teams": {
+      "type": "hasAndBelongsToMany",
+      "model": "DwTeam",
+      "foreignKey": "dwTeamId",
+      "options": {
+        "validate": true,
+        "forceId": true,
+        "persistent": false
+      }
+    },
+    "trails": {
+      "type": "hasAndBelongsToMany",
+      "model": "DwTrail",
+      "foreignKey": "dwTrailId",
+      "options": {
+        "validate": true,
+        "forceId": true,
+        "persistent": false
+      }
+    },
+    "serviceType": {
+      "type": "hasOne",
+      "model": "DwServiceType",
+      "foreignKey": "dwServiceTypeId",
+      "options": {
+        "validate": true,
+        "forceId": true,
+        "persistent": false
+      }
+    },
+    "transmissions": {
+      "type": "hasMany",
+      "model": "DwTransmission",
+      "foreignKey": "dwFeedId",
+      "options": {
+        "validate": true,
+        "forceId": true,
+        "persistent": false
+      }
+    }
+  },
   "acls": [],
   "methods": {}
 }

@@ -2,27 +2,33 @@
   "name": "DwTransmission",
   "plural": "dwTransmissions",
   "base": "PersistedModel",
+  "idInjection": true,
   "properties": {
-    "id": {
-      "type": "string",
-      "id": true
-    },
     "transmission": {
       "type": "string",
       "required": true
     },
-    "status": {
+    "transmitStatus": {
       "type": "string"
     },
     "timestamp": {
-      "type": "date"
-    },
-    "feedId": {
-      "type": "string"
+      "type": "date",
+      "defaultFn": "$now"
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "feeds": {
+      "type": "belongsTo",
+      "model": "DwFeed",
+      "foreignKey": "dwFeedId",
+      "options": {
+        "validate": true,
+        "forceId": true,
+        "persistent": false
+      }
+    }
+  },
   "acls": [],
   "methods": {}
 }

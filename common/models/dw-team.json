@@ -13,21 +13,6 @@
     },
     "description": {
       "type": "string"
-    },
-    "users": {
-      "type": [
-        "string"
-      ]
-    },
-    "domains": {
-      "type": [
-        "string"
-      ]
-    },
-    "trails": {
-      "type": [
-        "string"
-      ]
     }
   },
   "validations": [],
@@ -45,7 +30,12 @@
     "users": {
       "type": "hasAndBelongsToMany",
       "model": "AminoUser",
-      "foreignKey": "userId"
+      "foreignKey": "dwUserId"
+    },
+    "feeds": {
+      "type": "hasAndBelongsToMany",
+      "model": "DwFeed",
+      "foreignKey": "dwTeamId"
     }
   },
   "acls": [],

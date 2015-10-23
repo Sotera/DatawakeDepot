@@ -48,7 +48,7 @@ angular.module('loopbackApp', [
   'com.module.products',
 
 */
-  'com.module.sandbox',
+  //'com.module.sandbox',
   'com.module.settings',
 
   'com.module.dwSettings',
@@ -61,7 +61,7 @@ angular.module('loopbackApp', [
   'com.module.dwServiceTypes',
   'com.module.dwExtractors',
   'com.module.dwFeeds',
-
+  'com.module.dwTransmissions',
   'com.module.dwTrails',
   'com.module.dwTrailUrls',
   'com.module.dwUrlExtractions'

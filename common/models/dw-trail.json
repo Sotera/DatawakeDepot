@@ -2,6 +2,7 @@
   "name": "DwTrail",
   "plural": "dwTrails",
   "base": "PersistedModel",
+  "idInjection": true,
   "properties": {
     "name": {
       "type": "string",
@@ -15,7 +16,8 @@
       "default": "Body"
     },
     "timestamp": {
-      "type": "date"
+      "type": "date",
+      "defaultFn": "$now"
     }
   },
   "validations": [],
@@ -43,6 +45,11 @@
     "urlExtractions": {
       "type": "hasMany",
       "model": "DwUrlExtraction",
+      "foreignKey": "dwTrailId"
+    },
+    "feeds": {
+      "type": "hasAndBelongsToMany",
+      "model": "DwFeed",
       "foreignKey": "dwTrailId"
     }
   },

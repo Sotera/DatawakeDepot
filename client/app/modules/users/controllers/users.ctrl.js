@@ -110,6 +110,14 @@ app.controller('UsersCtrl', function ($scope, $stateParams, $state, CoreService,
       options: $scope.displayRoles,
       disabled: !$scope.currentUser.isAdmin
     }
+  }, {
+    key: 'memberTeams',
+    type: 'multiCheckbox',
+    templateOptions: {
+      label: 'Teams',
+      options: $scope.teams,
+      disabled: !$scope.currentUser.isAdmin
+    }
   }];
 
   Role.find().$promise
@@ -122,7 +130,7 @@ app.controller('UsersCtrl', function ($scope, $stateParams, $state, CoreService,
         });
       }
       $scope.loading = true;
-      AminoUser.find({filter: {include: ['roles']}}).$promise
+      AminoUser.find({filter: {include: ['roles','teams']}}).$promise
         .then(function (allUsers) {
           $scope.safeDisplayedUsers = allUsers;
           $scope.displayedUsers = [].concat($scope.safeDisplayedUsers);
@@ -135,7 +143,7 @@ app.controller('UsersCtrl', function ($scope, $stateParams, $state, CoreService,
                   where: {
                     id: $stateParams.id
                   },
-                  include: ['roles', 'identities', 'credentials', 'accessTokens']
+                  include: ['roles', 'identities', 'credentials', 'accessTokens','teams']
                 }
               }
             ).$promise

@@ -84,30 +84,44 @@ module.exports = function (app) {
 
   /* dwExtractors */
   app.get('/modules/dwExtractors/views/main', function (req, res) {
-    res.render('dwExtractors/views/main', {title: 'Datawake Domain Entity Types'});
+    res.render('dwExtractors/views/main', {title: 'Datawake Domain Extractors'});
   });
   app.get('/modules/dwExtractors/views/list', function (req, res) {
-    res.render('dwExtractors/views/list', {title: 'Datawake Domain Entity Types'});
+    res.render('dwExtractors/views/list', {title: 'Datawake Domain Extractors'});
   });
   app.get('/modules/dwExtractors/views/form', function (req, res) {
-    res.render('dwExtractors/views/form', {title: 'Datawake Domain Entity Types'});
+    res.render('dwExtractors/views/form', {title: 'Datawake Domain Extractors'});
   });
   app.get('/modules/dwExtractors/views/view', function (req, res) {
-    res.render('dwExtractors/views/view', {title: 'Datawake  Domain Entity Types'});
+    res.render('dwExtractors/views/view', {title: 'Datawake  Domain Extractors'});
   });
 
   /* dwFeeds */
   app.get('/modules/dwFeeds/views/main', function (req, res) {
-    res.render('dwFeeds/views/main', {title: 'Datawake Domain Entity Types'});
+    res.render('dwFeeds/views/main', {title: 'Datawake Domain Feeds'});
   });
   app.get('/modules/dwFeeds/views/list', function (req, res) {
-    res.render('dwFeeds/views/list', {title: 'Datawake Domain Entity Types'});
+    res.render('dwFeeds/views/list', {title: 'Datawake Domain Feeds'});
   });
   app.get('/modules/dwFeeds/views/form', function (req, res) {
-    res.render('dwFeeds/views/form', {title: 'Datawake Domain Entity Types'});
+    res.render('dwFeeds/views/form', {title: 'Datawake Domain Feeds'});
   });
   app.get('/modules/dwFeeds/views/view', function (req, res) {
-    res.render('dwFeeds/views/view', {title: 'Datawake  Domain Entity Types'});
+    res.render('dwFeeds/views/view', {title: 'Datawake  DomainFeeds'});
+  });
+
+  /* dwTransmissions */
+  app.get('/modules/dwTransmissions/views/main', function (req, res) {
+    res.render('dwTransmissions/views/main', {title: 'Datawake Domain Transmissions'});
+  });
+  app.get('/modules/dwTransmissions/views/list', function (req, res) {
+    res.render('dwTransmissions/views/list', {title: 'Datawake Domain Transmissions'});
+  });
+  app.get('/modules/dwTransmissions/views/form', function (req, res) {
+    res.render('dwTransmissions/views/form', {title: 'Datawake Domain Transmissions'});
+  });
+  app.get('/modules/dwTransmissions/views/view', function (req, res) {
+    res.render('dwTransmissions/views/view', {title: 'Datawake  Domain Transmissions'});
   });
 
   /* dwServiceTypes */
@@ -140,16 +154,16 @@ module.exports = function (app) {
 
   /* dwTeams */
   app.get('/modules/dwTeams/views/main', function (req, res) {
-    res.render('dwTeams/views/main', {title: 'Datawake Domain Entity Types'});
+    res.render('dwTeams/views/main', {title: 'Datawake Domain Teams'});
   });
   app.get('/modules/dwTeams/views/list', function (req, res) {
-    res.render('dwTeams/views/list', {title: 'Datawake Domain Entity Types'});
+    res.render('dwTeams/views/list', {title: 'Datawake Domain Teams'});
   });
   app.get('/modules/dwTeams/views/form', function (req, res) {
-    res.render('dwTeams/views/form', {title: 'Datawake Domain Entity Types'});
+    res.render('dwTeams/views/form', {title: 'Datawake Domain Teams'});
   });
   app.get('/modules/dwTeams/views/view', function (req, res) {
-    res.render('dwTeams/views/view', {title: 'Datawake  Domain Entity Types'});
+    res.render('dwTeams/views/view', {title: 'Datawake  Domain Teams'});
   });
 
   /* dwTrails */

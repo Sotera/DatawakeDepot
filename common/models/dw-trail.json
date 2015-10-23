@@ -2,6 +2,7 @@
   "name": "DwTrail",
   "plural": "dwTrails",
   "base": "PersistedModel",
+  "idInjection": true,
   "properties": {
     "name": {
       "type": "string",
@@ -10,8 +11,13 @@
     "description": {
       "type": "string"
     },
+    "scrape": {
+      "type": "string",
+      "default": "Body"
+    },
     "timestamp": {
-      "type": "date"
+      "type": "date",
+      "defaultFn": "$now"
     }
   },
   "validations": [],
@@ -26,21 +32,26 @@
       "model": "DwTeam",
       "foreignKey": "dwTeamId"
     },
-   "users": {
-     "type": "hasAndBelongsToMany",
-     "model": "AminoUser",
-     "foreignKey": "dwUserId"
-   },
-   "trailUrls": {
-     "type": "hasMany",
-     "model": "DwTrailUrl",
-     "foreignKey": "dwTrailId"
-   },
-   "urlExtractions": {
-     "type": "hasMany",
-     "model": "DwUrlExtraction",
-     "foreignKey": "dwTrailId"
-   }
+    "users": {
+      "type": "hasAndBelongsToMany",
+      "model": "AminoUser",
+      "foreignKey": "dwUserId"
+    },
+    "trailUrls": {
+      "type": "hasMany",
+      "model": "DwTrailUrl",
+      "foreignKey": "dwTrailId"
+    },
+    "urlExtractions": {
+      "type": "hasMany",
+      "model": "DwUrlExtraction",
+      "foreignKey": "dwTrailId"
+    },
+    "feeds": {
+      "type": "hasAndBelongsToMany",
+      "model": "DwFeed",
+      "foreignKey": "dwTrailId"
+    }
   },
   "acls": [],
   "methods": {}

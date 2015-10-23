@@ -1,12 +1,18 @@
 'use strict';
 var app = angular.module('com.module.dwFeeds');
 
-app.controller('FeedsCtrl', function($scope, $state, $stateParams, DwFeed, FeedsService, gettextCatalog, AppAuth) {
+app.controller('FeedsCtrl', function($scope, $state, $stateParams, DwFeed, DwServiceType, FeedsService, gettextCatalog, AppAuth) {
 
     //Put the currentUser in $scope for convenience
     $scope.currentUser = AppAuth.currentUser;
-
     $scope.feed = {};
+    $scope.protocols = [
+        {"name": "ES","description": "Elastic Search"},
+        {"name": "ReST","description": "ReSTful Url" },
+        {"name": "Kafka","description": "Kafka Queue"}
+    ];
+    $scope.serviceTypes = [];
+
     $scope.formFields = [{
         key: 'id',
         type: 'input',
@@ -44,23 +50,23 @@ app.controller('FeedsCtrl', function($scope, $state, $stateParams, DwFeed, Feeds
         }
     }, {
         key: 'protocol',
-        type: 'input',
+        type: 'select',
         templateOptions: {
             label: gettextCatalog.getString('Protocol'),
-            required: false
+            options: $scope.protocols,
+            valueProp: 'name',
+            labelProp: 'name',
+            required: true,
+            disabled: false
         }
     }, {
-        key: 'serviceTypeId',
-        type: 'input',
+        key: 'dwServiceTypeId',
+        type: 'select',
         templateOptions: {
             label: gettextCatalog.getString('ServiceType'),
-            required: false
-        }
-    }, {
-        key: 'feedId',
-        type: 'input',
-        templateOptions: {
-            label: gettextCatalog.getString('Feed'),
+            options: $scope.serviceTypes,
+            valueProp: 'id',
+            labelProp: 'name',
             required: true,
             disabled: false
         }
@@ -81,10 +87,8 @@ app.controller('FeedsCtrl', function($scope, $state, $stateParams, DwFeed, Feeds
         });
     };
 
-    $scope.feeds = FeedsService.getFeeds();
-
     $scope.loading = true;
-    DwFeed.find({filter: {include: []}}).$promise
+    DwFeed.find({filter: {include: ['transmissions']}}).$promise
         .then(function (allFeeds) {
             $scope.safeDisplayedfeeds = allFeeds;
             $scope.displayedfeeds = [].concat($scope.safeDisplayedfeeds);
@@ -94,7 +98,25 @@ app.controller('FeedsCtrl', function($scope, $state, $stateParams, DwFeed, Feeds
         })
         .then(function () {
             $scope.loading = false;
-        });
+        }
+    );
+
+    DwServiceType.find({filter: {include: []}}).$promise
+        .then(function (allServiceTypes) {
+            for (var i = 0; i < allServiceTypes.length; ++i) {
+                $scope.serviceTypes.push({
+                    value: allServiceTypes[i].name,
+                    name: allServiceTypes[i].description,
+                    id: allServiceTypes[i].id
+                });
+            }
+        })
+        .catch(function (err) {
+            console.log(err);
+        })
+        .then(function () {
+        }
+    );
 
     if ($stateParams.id) {
         FeedsService.getFeed($stateParams.id).$promise.then(function(result){
@@ -102,67 +124,5 @@ app.controller('FeedsCtrl', function($scope, $state, $stateParams, DwFeed, Feeds
     } else {
         $scope.feed = {};
     }
-
-    $scope.getDomains = function () {
-        return [];
-    }
-
-    //Search Functionality
-    function arrayObjectIndexOf(myArray, searchTerm, property) {
-        for (var i = 0, len = myArray.length; i < len; i++) {
-            if (myArray[i][property] === searchTerm) return i;
-        }
-        return -1;
-    }
-    $scope.aToB = function () {
-        for (var i in $scope.selectedA) {
-            var moveId = arrayObjectIndexOf($scope.items, $scope.selectedA[i], "id");
-            $scope.listB.push($scope.items[moveId]);
-            var delId = arrayObjectIndexOf($scope.listA, $scope.selectedA[i], "id");
-            $scope.listA.splice(delId, 1);
-        }
-        reset();
-    };
-    $scope.bToA = function () {
-        for (var i in $scope.selectedB) {
-            var moveId = arrayObjectIndexOf($scope.items, $scope.selectedB[i], "id");
-            $scope.listA.push($scope.items[moveId]);
-            var delId = arrayObjectIndexOf($scope.listB, $scope.selectedB[i], "id");
-            $scope.listB.splice(delId, 1);
-        }
-        reset();
-    };
-    function reset() {
-        $scope.selectedA = [];
-        $scope.selectedB = [];
-        $scope.toggle = 0;
-    }
-
-    $scope.toggleA = function () {
-        if ($scope.selectedA.length > 0) {
-            $scope.selectedA = [];
-        }
-        else {
-            for (var i in $scope.listA) {
-                $scope.selectedA.push($scope.listA[i].id);
-            }
-        }
-    }
-    $scope.toggleB = function () {
-        if ($scope.selectedB.length > 0) {
-            $scope.selectedB = [];
-        }
-        else {
-            for (var i in $scope.listB) {
-                $scope.selectedB.push($scope.listB[i].id);
-            }
-        }
-    }
-    $scope.selectA = function (i) {
-        $scope.selectedA.push(i);
-    };
-    $scope.selectB = function (i) {
-        $scope.selectedB.push(i);
-    };
 });
 

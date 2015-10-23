@@ -14,10 +14,11 @@
           th.sortable(st-sort='firstName') First Name
           th.sortable(st-sort='lastName') Last Name
           th.sortable(st-sort='email') E-Mail
-          th.sortable(st-sort='') Member Of
+          th.sortable(st-sort='') Member Roles
+          th.sortable(st-sort='') Member Teams
           th
             a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
-              &nbsp;Add User
+              &nbsp; Add User
 
       tbody
         tr(ng-repeat='user in displayedUsers')
@@ -31,6 +32,8 @@
             span.text-muted {{user.email}}
           td
             span.label.label-default(ng-repeat="role in user.roles") {{role.name}}
+          td
+            span.label.label-default(ng-repeat="team in user.teams") {{user.team.name}}
           td(style='width: 120px')
             .btn-group
               button.btn.btn-sm.btn-default(ui-sref='app.users.password({id:user.id})',ng-disabled='!currentUser.isAdmin')

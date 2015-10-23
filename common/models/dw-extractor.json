@@ -3,10 +3,6 @@
   "plural": "dwExtractors",
   "base": "PersistedModel",
   "properties": {
-    "id": {
-      "type": "string",
-      "id": true
-    },
     "name": {
       "type": "string",
       "required": true
@@ -22,10 +18,6 @@
       "type": "string"
     },
     "protocol": {
-      "type": "string",
-      "required": true
-    },
-    "serviceTypeId": {
       "type": "string",
       "required": true
     }
@@ -44,8 +36,8 @@
     "serviceType": {
       "type": "hasOne",
       "model": "DwServiceType",
-      "foreignKey": "serviceTypeId",
-       "options": {
+      "foreignKey": "dwServiceTypeId",
+      "options": {
         "validate": true,
         "forceId": true,
         "persistent": false

@@ -17,7 +17,7 @@
     "trailUrl": {
       "type": "hasMany",
       "model": "DwTrailUrl",
-      "foreignKey": "crawlTypeId"
+      "foreignKey": "dwCrawlTypeId"
     }
   },
   "acls": [],

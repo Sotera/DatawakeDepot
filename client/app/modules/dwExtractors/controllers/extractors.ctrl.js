@@ -60,7 +60,7 @@ app.controller('ExtractorsCtrl', function($scope, $state, $stateParams, DwDomain
             disabled: false
         }
     }, {
-        key: 'serviceTypeId',
+        key: 'dwServiceTypeId',
         type: 'select',
         templateOptions: {
             label: gettextCatalog.getString('ServiceType'),

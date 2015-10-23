@@ -20,6 +20,17 @@
     "extractors": {
       "type": "hasMany",
       "model": "DwExtractor",
+      "foreignKey": "dwServiceTypeId",
+      "options": {
+        "validate": true,
+        "forceId": true,
+        "persistent": false
+      }
+    },
+    "feeds": {
+      "type": "hasMany",
+      "model": "DwFeed",
+      "foreignKey": "dwServiceTypeId",
       "options": {
         "validate": true,
         "forceId": true,

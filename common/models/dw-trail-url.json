@@ -7,11 +7,14 @@
       "type": "string",
       "required": true
     },
-    "timestamp": {
-      "type": "date"
+    "scrapedContent": {
+      "type": "string"
     },
     "comments": {
       "type": "string"
+    },
+    "timestamp": {
+      "type": "date"
     }
   },
   "validations": [],
@@ -29,7 +32,7 @@
     "crawlType": {
       "type": "belongsTo",
       "model": "DwCrawlType",
-      "foreignKey": "crawlTypeId"
+      "foreignKey": "dwCrawlTypeId"
     }
   },
   "acls": [],

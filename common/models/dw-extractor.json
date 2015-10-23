@@ -45,7 +45,7 @@
       "type": "hasOne",
       "model": "DwServiceType",
       "foreignKey": "serviceTypeId",
-       "options": {
+      "options": {
         "validate": true,
         "forceId": true,
         "persistent": false

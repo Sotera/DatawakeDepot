@@ -10,6 +10,10 @@
     "description": {
       "type": "string"
     },
+    "scrape": {
+      "type": "string",
+      "default": "Body"
+    },
     "timestamp": {
       "type": "date"
     }
@@ -26,21 +30,21 @@
       "model": "DwTeam",
       "foreignKey": "dwTeamId"
     },
-   "users": {
-     "type": "hasAndBelongsToMany",
-     "model": "AminoUser",
-     "foreignKey": "dwUserId"
-   },
-   "trailUrls": {
-     "type": "hasMany",
-     "model": "DwTrailUrl",
-     "foreignKey": "dwTrailId"
-   },
-   "urlExtractions": {
-     "type": "hasMany",
-     "model": "DwUrlExtraction",
-     "foreignKey": "dwTrailId"
-   }
+    "users": {
+      "type": "hasAndBelongsToMany",
+      "model": "AminoUser",
+      "foreignKey": "dwUserId"
+    },
+    "trailUrls": {
+      "type": "hasMany",
+      "model": "DwTrailUrl",
+      "foreignKey": "dwTrailId"
+    },
+    "urlExtractions": {
+      "type": "hasMany",
+      "model": "DwUrlExtraction",
+      "foreignKey": "dwTrailId"
+    }
   },
   "acls": [],
   "methods": {}

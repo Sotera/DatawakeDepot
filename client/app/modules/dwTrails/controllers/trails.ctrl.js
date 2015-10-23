@@ -7,6 +7,7 @@ app.controller('TrailsCtrl', function($scope, $state, $stateParams, DwDomain, Dw
   $scope.currentUser = AppAuth.currentUser;
   $scope.domains = [];
   $scope.teams = [];
+  $scope.scrapeTypes = [{value:"URL"},{value:"Body"}];
   $scope.users = [];
 
   $scope.trail = {};
@@ -31,6 +32,17 @@ app.controller('TrailsCtrl', function($scope, $state, $stateParams, DwDomain, Dw
       label: gettextCatalog.getString('Description'),
       required: false
     }
+  }, {
+      key: 'scrape',
+      type: 'select',
+      templateOptions: {
+          label: gettextCatalog.getString('Scrape?'),
+          options: $scope.scrapeTypes,
+          valueProp: 'value',
+          labelProp: 'value',
+          required: true,
+          disabled: false
+      }
   }, {
       key: 'timestamp',
       type: 'input',
@@ -99,7 +111,7 @@ app.controller('TrailsCtrl', function($scope, $state, $stateParams, DwDomain, Dw
           for (var i = 0; i < allDomains.length; ++i) {
               $scope.domains.push({
                   value: allDomains[i].name,
-                  name: allDomains[i].description,
+                  name: allDomains[i].name,
                   id: allDomains[i].id
               });
           }

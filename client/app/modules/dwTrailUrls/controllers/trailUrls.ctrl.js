@@ -23,6 +23,12 @@ app.controller('TrailUrlsCtrl', function($scope, $state, $stateParams, DwCrawlTy
       label: gettextCatalog.getString('Url'),
       required: true
     }
+  },{
+      key: 'scrapedContent',
+      type: 'textarea',
+      templateOptions: {
+          label: gettextCatalog.getString('Scraped Content')
+      }
   }, {
       key: 'dwTrailId',
       type: 'select',

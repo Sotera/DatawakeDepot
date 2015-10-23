@@ -10,8 +10,8 @@
         tr
           th.sortable(st-sort='name' st-sort-default="true") Entity Type
           th.sortable(st-sort='description') Description
-          th.sortable Member Of Domains
-          th.sortable # Domain Items
+          th.sortable Domain
+          th.sortable # Instances
           th
               a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
                   &nbsp;Add Entity Type

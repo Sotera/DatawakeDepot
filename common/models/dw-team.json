@@ -34,16 +34,18 @@
   "relations": {
     "trails": {
       "type": "hasMany",
-      "model": "DwTrail"
+      "model": "DwTrail",
+      "foreignKey": "dwTeamId"
     },
     "domains": {
       "type": "hasAndBelongsToMany",
-      "model": "DwDomain"
+      "model": "DwDomain",
+      "foreignKey": "dwTeamId"
     },
     "users": {
       "type": "hasAndBelongsToMany",
       "model": "AminoUser",
-      "property": "users"
+      "foreignKey": "userId"
     }
   },
   "acls": [],

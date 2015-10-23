@@ -1,11 +1,12 @@
 'use strict';
 var app = angular.module('com.module.dwTeams');
 
-app.controller('TeamsCtrl', function($scope, $state, $stateParams, AminoUser, DwTeam, TeamsService, gettextCatalog, AppAuth) {
+app.controller('TeamsCtrl', function($scope, $state, $stateParams, AminoUser, DwDomain, DwTeam, TeamsService, gettextCatalog, AppAuth) {
 
   //Put the currentUser in $scope for convenience
   $scope.currentUser = AppAuth.currentUser;
   $scope.users = [];
+  $scope.domains = [];
 
   $scope.formFields = [{
       key: 'id',
@@ -29,15 +30,22 @@ app.controller('TeamsCtrl', function($scope, $state, $stateParams, AminoUser, Dw
       required: false
     }
   }, {
-    key: 'teamUsers',
+    key: 'teamDomains',
     type: 'multiCheckbox',
     templateOptions: {
-      label: 'Users',
-      options: $scope.users,
+      label: 'Domains',
+      options: $scope.domains,
       disabled: !$scope.currentUser.isAdmin
     }
+  }, {
+      key: 'teamUsers',
+      type: 'multiCheckbox',
+      templateOptions: {
+          label: 'Users',
+          options: $scope.users,
+          disabled: !$scope.currentUser.isAdmin
+      }
   }];
-
 
   $scope.delete = function(id) {
     TeamsService.deleteTeam(id, function() {
@@ -74,6 +82,23 @@ app.controller('TeamsCtrl', function($scope, $state, $stateParams, AminoUser, Dw
                   value: allUsers[i].username,
                   name: allUsers[i].username,
                   id: allUsers[i].id
+              });
+          }
+      })
+      .catch(function (err) {
+          console.log(err);
+      })
+      .then(function () {
+      }
+  );
+
+  DwDomain.find({filter: {include: []}}).$promise
+      .then(function (allDomains) {
+          for (var i = 0; i < allDomains.length; ++i) {
+              $scope.domains.push({
+                  value: allDomains[i].name,
+                  name: allDomains[i].description,
+                  id: allDomains[i].id
               });
           }
       })

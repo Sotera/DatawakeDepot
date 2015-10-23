@@ -11,6 +11,7 @@
           th.sortable(st-sort='name' st-sort-default="true") Name
           th.sortable(st-sort='description') Description
           th.sortable(st-sort='domainId') Domain
+          th.sortable(st-sort='scrape') Scrape
           th.sortable(st-sort='userId') # Users
           th.sortable(st-sort='') # URLs
           th.sortable(st-sort='timestamp') Timestamp
@@ -28,9 +29,11 @@
           td
             span.label.label-default {{trail.domain.name}}
           td
+            span.text-muted {{trail.scrape}}
+          td
             span.label.label-default &nbsp;{{trail.dwUserId.length}}
           td
-            a(ui-sref='app.dwFeeds.list({id:null, domainId:domain.id})') {{trail.trailUrls.length}}
+            a(ui-sref='app.dwTrailUrls.list({id:null, domainId:domain.id})') {{trail.trailUrls.length}}
           td
             span.text-muted {{trail.timestamp}}
           td(style='width: 120px')

@@ -3,10 +3,6 @@
   "plural": "dwTeams",
   "base": "PersistedModel",
   "properties": {
-    "id": {
-      "type": "string",
-      "id": true
-    },
     "name": {
       "type": "string",
       "required": true
@@ -30,7 +26,7 @@
     "users": {
       "type": "hasAndBelongsToMany",
       "model": "AminoUser",
-      "foreignKey": "dwUserId"
+      "foreignKey": "userId"
     },
     "feeds": {
       "type": "hasAndBelongsToMany",

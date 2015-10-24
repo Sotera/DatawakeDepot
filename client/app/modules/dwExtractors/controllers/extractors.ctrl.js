@@ -70,6 +70,17 @@ app.controller('ExtractorsCtrl', function($scope, $state, $stateParams, DwDomain
             required: true,
             disabled: false
         }
+
+    }, {
+        key: 'dwDomains',
+        type: 'multiCheckbox',
+        templateOptions: {
+            label: 'Domains',
+            options: $scope.domains,
+            valueProp: 'id',
+            required: false,
+            disabled: false
+        }
     }];
 
 
@@ -88,7 +99,7 @@ app.controller('ExtractorsCtrl', function($scope, $state, $stateParams, DwDomain
     };
 
     $scope.loading = true;
-    DwExtractor.find({filter: {include: ['domains','serviceType']}}).$promise
+    DwExtractor.find({filter: {include: ['serviceType','domains']}}).$promise
         .then(function (allExtractors) {
             $scope.safeDisplayedextractors = allExtractors;
             $scope.displayedextractors = [].concat($scope.safeDisplayedextractors);

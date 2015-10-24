@@ -19,9 +19,9 @@
           td
             span.text-muted {{domainItem.itemValue}}
           td(style='width: 120px')
-            span.text-muted {{domainItem.domainEntityType.name}}
+            span.label.label-default {{domainItem.domainEntityType.name}}
           td
-            span.label.label-default
+            span.text-muted
                 a(ui-sref='app.dwDomains.list({search:domain.id})') {{domainItem.domain.name}}
           td(style='width: 120px')
             .btn-toolbar

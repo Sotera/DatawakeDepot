@@ -1,10 +1,11 @@
 'use strict';
 var app = angular.module('com.module.dwDomains');
 
-app.controller('DomainsCtrl', function($scope, $state, $stateParams, DwDomain, DwExtractor, DomainsService, gettextCatalog, AppAuth) {
+app.controller('DomainsCtrl', function($scope, $state, $stateParams, DwFeed, DwDomain, DwExtractor, DomainsService, gettextCatalog, AppAuth) {
     //Put the currentUser in $scope for convenience
     $scope.currentUser = AppAuth.currentUser;
     $scope.extractors = [];
+    $scope.feeds = [];
 
     $scope.formFields = [{
         key: 'id',
@@ -27,7 +28,14 @@ app.controller('DomainsCtrl', function($scope, $state, $stateParams, DwDomain, D
             required: true
         }
     }, {
-        key: 'extractors',
+        key: 'dwFeeds',
+        type: 'multiCheckbox',
+        templateOptions: {
+            label: 'Feeds',
+            options: $scope.feeds
+        }
+    }, {
+        key: 'dwExtractors',
         type: 'multiCheckbox',
         templateOptions: {
             label: 'Extractors',
@@ -50,7 +58,7 @@ app.controller('DomainsCtrl', function($scope, $state, $stateParams, DwDomain, D
     };
 
     $scope.loading = true;
-    DwDomain.find({filter: {include: ['domainEntityTypes','domainItems','extractors','trails']}}).$promise
+    DwDomain.find({filter: {include: ['domainEntityTypes','domainItems','extractors','trails','feeds']}}).$promise
         .then(function (allDomains) {
             $scope.safeDisplayedDomains = allDomains;
             $scope.displayedDomains = [].concat($scope.safeDisplayedDomains);
@@ -77,6 +85,23 @@ app.controller('DomainsCtrl', function($scope, $state, $stateParams, DwDomain, D
                     value: allExtractors[i].name,
                     name: allExtractors[i].name,
                     id: allExtractors[i].id
+                });
+            }
+        })
+        .catch(function (err) {
+            console.log(err);
+        })
+        .then(function () {
+        }
+    );
+
+    DwFeed.find({filter: {include: []}}).$promise
+        .then(function (allFeeds) {
+            for (var i = 0; i < allFeeds.length; ++i) {
+                $scope.feeds.push({
+                    value: allFeeds[i].name,
+                    name: allFeeds[i].name,
+                    id: allFeeds[i].id
                 });
             }
         })

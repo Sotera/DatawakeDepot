@@ -17,7 +17,7 @@
     },
     "timestamp": {
       "type": "date",
-      "defaultFn": "$now"
+      "defaultFn": "now"
     }
   },
   "validations": [],

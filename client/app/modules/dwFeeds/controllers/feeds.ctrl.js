@@ -1,7 +1,7 @@
 'use strict';
 var app = angular.module('com.module.dwFeeds');
 
-app.controller('FeedsCtrl', function($scope, $state, $stateParams, DwFeed, DwServiceType, FeedsService, gettextCatalog, AppAuth) {
+app.controller('FeedsCtrl', function($scope, $state, $stateParams, DwDomain, DwTrail, AminoUser, DwFeed, DwServiceType, FeedsService, gettextCatalog, AppAuth) {
 
     //Put the currentUser in $scope for convenience
     $scope.currentUser = AppAuth.currentUser;
@@ -12,6 +12,9 @@ app.controller('FeedsCtrl', function($scope, $state, $stateParams, DwFeed, DwSer
         {"name": "Kafka","description": "Kafka Queue"}
     ];
     $scope.serviceTypes = [];
+    $scope.domains = [];
+    $scope.trails = [];
+    $scope.users = [];
 
     $scope.formFields = [{
         key: 'id',
@@ -70,6 +73,27 @@ app.controller('FeedsCtrl', function($scope, $state, $stateParams, DwFeed, DwSer
             required: true,
             disabled: false
         }
+    }, {
+        key: 'dwDomains',
+        type: 'multiCheckbox',
+        templateOptions: {
+            label: 'Domains',
+            options: $scope.domains
+        }
+    }, {
+        key: 'dwTrails',
+        type: 'multiCheckbox',
+        templateOptions: {
+            label: 'Trails',
+            options: $scope.trails
+        }
+    }, {
+        key: 'AminoUsers',
+        type: 'multiCheckbox',
+        templateOptions: {
+            label: 'Users',
+            options: $scope.users
+        }
     }];
 
 
@@ -88,7 +112,7 @@ app.controller('FeedsCtrl', function($scope, $state, $stateParams, DwFeed, DwSer
     };
 
     $scope.loading = true;
-    DwFeed.find({filter: {include: ['transmissions']}}).$promise
+    DwFeed.find({filter: {include: ['transmissions','teams','trails','domains','serviceType']}}).$promise
         .then(function (allFeeds) {
             $scope.safeDisplayedfeeds = allFeeds;
             $scope.displayedfeeds = [].concat($scope.safeDisplayedfeeds);
@@ -108,6 +132,57 @@ app.controller('FeedsCtrl', function($scope, $state, $stateParams, DwFeed, DwSer
                     value: allServiceTypes[i].name,
                     name: allServiceTypes[i].description,
                     id: allServiceTypes[i].id
+                });
+            }
+        })
+        .catch(function (err) {
+            console.log(err);
+        })
+        .then(function () {
+        }
+    );
+
+    DwDomain.find({filter: {include: []}}).$promise
+        .then(function (allDomains) {
+            for (var i = 0; i < allDomains.length; ++i) {
+                $scope.domains.push({
+                    value: allDomains[i].name,
+                    name: allDomains[i].name,
+                    id: allDomains[i].id
+                });
+            }
+        })
+        .catch(function (err) {
+            console.log(err);
+        })
+        .then(function () {
+        }
+    );
+
+    DwTrail.find({filter: {include: []}}).$promise
+        .then(function (allTrails) {
+            for (var i = 0; i < allTrails.length; ++i) {
+                $scope.trails.push({
+                    value: allTrails[i].id,
+                    name: allTrails[i].name,
+                    id: allTrails[i].id
+                });
+            }
+        })
+        .catch(function (err) {
+            console.log(err);
+        })
+        .then(function () {
+        }
+    );
+
+    AminoUser.find({filter: {include: []}}).$promise
+        .then(function (allUsers) {
+            for (var i = 0; i < allUsers.length; ++i) {
+                $scope.users.push({
+                    value: allUsers[i].email,
+                    name: allUsers[i].firstName,
+                    id: allUsers[i].id
                 });
             }
         })

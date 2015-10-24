@@ -36,7 +36,8 @@
           td.col-md-1
             a(ui-sref='app.dwDomainItems.list({id:null, domainId:domain.id})') {{domain.domainItems.length}}
           td.col-med-1
-            span.label.label-default(ng-repeat="extractor in domain.extractors") &nbsp;{{extractor.name}}
+            span.text-muted {{domain.dwExtractors.length}}
+            //span.label.label-default(ng-repeat="extractor in domain.dwExtractors") &nbsp;{{extractor.name}}
           td.col-md-1.text-center
             .btn-toolbar
               button.btn.btn-sm.btn-default(ui-sref='app.dwDomains.edit({id:domain.id})',ng-disabled='!currentUser.isAdmin')

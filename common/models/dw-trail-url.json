@@ -14,7 +14,8 @@
       "type": "string"
     },
     "timestamp": {
-      "type": "date"
+      "type": "date",
+      "defaultFn": "now"
     }
   },
   "validations": [],

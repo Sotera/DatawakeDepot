@@ -33,7 +33,7 @@
     "teams": {
       "type": "hasAndBelongsToMany",
       "model": "DwTeam",
-      "foreignKey": "dwUserId"
+      "foreignKey": "userId"
     },
     "trails": {
       "type": "hasAndBelongsToMany",

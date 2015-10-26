@@ -118,9 +118,9 @@ module.exports = function (app) {
             {
               name: trailMoniker,
               description: 'The ' + trailName + ' Trail',
-              userId: myAminoUser.id,
-              teamId: team.id,
-              domainId: domain.id
+              dwUserId: myAminoUser.id,
+              dwTeamId: team.id,
+              dwDomainId: domain.id
             }));
         });
         async.parallel(functionArray, cb);

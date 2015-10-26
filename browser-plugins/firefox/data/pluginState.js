@@ -43,8 +43,8 @@ var PluginState = function () {
     var url = me.trailsUrl;
     var filter = {
       where: {
-        and: [{teamId: '562a519905f829d23dbcd9ef'},
-          {domainId: '562a519b05f829d23dbcd9f3'}]
+        and: [{dwTeamId: me.currentTeam.id},
+          {dwDomainId: me.currentDomain.id}]
       }
     };
     me.restGet(url, {filter: JSON.stringify(filter)}, function (res) {

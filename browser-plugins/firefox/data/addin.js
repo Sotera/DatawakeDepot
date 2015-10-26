@@ -28,21 +28,22 @@ exports.init = function () {
         case 'set-trailing-active':
           pluginState.trailingActive = msg.data;
           break;
+        case 'set-current-team-target-addin':
+          pluginState.currentTeam = pluginState.currentTeamList.filter(function(el){
+            return el.name == msg.value;
+          })[0];
+          pluginState.postEventToAddInModule('get-domains-for-current-team');
+          break;
         case 'set-current-domain-target-addin':
-          for (var i = 0; i < pluginState.currentDomainList.length; ++i) {
-            if (pluginState.currentDomainList[i].name == msg.domainValue) {
-              pluginState.currentDomain = pluginState.currentDomainList[i];
-              break;
-            }
-          }
+          pluginState.currentDomain = pluginState.currentDomainList.filter(function(el){
+            return el.name == msg.value;
+          })[0];
+          pluginState.postEventToAddInModule('get-trails-for-current-team-and-domain');
           break;
         case 'set-current-trail-target-addin':
-          for (var i = 0; i < pluginState.currentTrailList.length; ++i) {
-            if (pluginState.currentTrailList[i].name == msg.trailValue) {
-              pluginState.currentTrail = pluginState.currentTrailList[i];
-              break;
-            }
-          }
+          pluginState.currentTrail = pluginState.currentTrailList.filter(function(el){
+            return el.name == msg.value;
+          })[0];
           break;
       }
     }
@@ -88,6 +89,54 @@ exports.init = function () {
       loginSuccessfulHandler(user);
     });
   });
+  //Here we listen for when to get Team/Domain/Trail info from the server
+  pluginState.onAddInModuleEvent('get-teams-for-logged-in-user', function (data) {
+    pluginState.getTeamsForLoggedInUser(function (teams) {
+      if (!teams || !teams.length) {
+        pluginState.currentTeamList = [];
+        pluginState.currentTeam = null;
+        pluginState.currentDomainList = [];
+        pluginState.currentDomain = null;
+        pluginState.currentTrailList = [];
+        pluginState.currentTrail = null;
+        pluginState.postEventToAddInModule('post-plugin-state-to-toolbar');
+      }else{
+        pluginState.currentTeamList = teams;
+        pluginState.currentTeam = teams[0];
+        pluginState.postEventToAddInModule('get-domains-for-current-team');
+      }
+    });
+  });
+  pluginState.onAddInModuleEvent('get-domains-for-current-team', function (data) {
+    pluginState.getDomainsForCurrentTeam(function (domains) {
+      if (!domains || !domains.length) {
+        pluginState.currentDomainList = [];
+        pluginState.currentDomain = null;
+        pluginState.currentTrailList = [];
+        pluginState.currentTrail = null;
+        pluginState.postEventToAddInModule('post-plugin-state-to-toolbar');
+      }else{
+        pluginState.currentDomainList = domains;
+        pluginState.currentDomain = domains[0];
+        pluginState.postEventToAddInModule('get-trails-for-current-team-and-domain');
+      }
+    });
+  });
+  pluginState.onAddInModuleEvent('get-trails-for-current-team-and-domain', function (data) {
+    pluginState.getTrailsForCurrentTeamAndDomain(function (trails) {
+      if (!trails || !trails.length) {
+        pluginState.currentTrailList = [];
+        pluginState.currentTrail = null;
+      }else{
+        pluginState.currentTrailList = trails;
+        pluginState.currentTrail = trails[0];
+      }
+      pluginState.postEventToAddInModule('post-plugin-state-to-toolbar');
+    });
+  });
+  pluginState.onAddInModuleEvent('post-plugin-state-to-toolbar', function (data) {
+    postPluginStateToToolBar();
+  });
 };
 function logoutSuccessfulHandler(tellToolBar) {
   pluginState.reset();
@@ -102,37 +151,11 @@ function logoutSuccessfulHandler(tellToolBar) {
   pluginState.postMessageToToolBar(msg);
 }
 function loginSuccessfulHandler(user) {
-  pluginState.postEventToAddInModule('logged-in-target-context-menu');
   pluginState.loggedInUser = user;
-  //Pack up all the stuff the toolbar needs to do its thing into pluginState and
-  //send it over
-  pluginState.getTeamsForLoggedInUser(function (teams) {
-    if (!teams || !teams.length) {
-      postLoginMessageToToolBar();
-      return;
-    }
-    pluginState.currentTeamList = teams;
-    pluginState.currentTeam = teams[0];
-    pluginState.getDomainsForCurrentTeam(function (domains) {
-      if (!domains || !domains.length) {
-        postLoginMessageToToolBar();
-        return;
-      }
-      pluginState.currentDomainList = domains;
-      pluginState.currentDomain = domains[0];
-      pluginState.getTrailsForCurrentTeamAndDomain(function(trails){
-        if (!trails || !trails.length) {
-          postLoginMessageToToolBar();
-          return;
-        }
-        pluginState.currentTrailList = trails;
-        pluginState.currentTrail = trails[0];
-        postLoginMessageToToolBar();
-      });
-    });
-  });
+  pluginState.postEventToAddInModule('logged-in-target-context-menu');
+  pluginState.postEventToAddInModule('get-teams-for-logged-in-user');
 }
-function postLoginMessageToToolBar() {
+function postPluginStateToToolBar() {
   var semiPluginState = {
     loggedInUser: pluginState.loggedInUser,
     currentTeam: pluginState.currentTeam,
@@ -148,28 +171,4 @@ function postLoginMessageToToolBar() {
   };
   pluginState.postMessageToToolBar(msg);
 }
-function refreshTeamsDomainsTrails() {
-  //Get trails for particular user
-  pluginState.restGet(pluginState.domainsUrl,
-    function (res) {
-      pluginState.currentDomainList = res.json;
-      var msg = {
-        type: 'updated-domains-target-toolbar-frame',
-        domains: pluginState.currentDomainList,
-        currentDomain: pluginState.currentDomain
-      }
-      pluginState.postMessageToToolBar(msg);
-    }
-  );
-  pluginState.restGet(pluginState.trailsUrl,
-    function (res) {
-      pluginState.currentTrailList = res.json;
-      var msg = {
-        type: 'updated-trails-target-toolbar-frame',
-        trails: pluginState.currentTrailList,
-        currentTrail: pluginState.currentTrail
-      }
-      pluginState.postMessageToToolBar(msg);
-    }
-  );
-}
+

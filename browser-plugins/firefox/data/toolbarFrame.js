@@ -10,13 +10,6 @@ function addInMessageHandler(event) {
     } else if (msg.type == 'logout-success-target-toolbar-frame') {
       setUIStateToLoggedOut();
     }
-/*    else if (msg.type == 'updated-teams-target-toolbar-frame') {
-      updateTeams(msg.teams, msg.currentTeam);
-    } else if (msg.type == 'updated-domains-target-toolbar-frame') {
-      updateDomains(msg.domains, msg.currentDomain);
-    } else if (msg.type == 'updated-trails-target-toolbar-frame') {
-      updateTrails(msg.trails, msg.currentTrail);
-    }*/
   } catch (ex) {
     console.log('Error decoding message to toolbar frame: ' + ex);
   }
@@ -31,6 +24,9 @@ function syncSelectElementsWithPluginState() {
   addItemsToSelectElement(ps.currentTeamList, ps.currentTeam, '#teamList');
   addItemsToSelectElement(ps.currentDomainList, ps.currentDomain, '#domainList');
   addItemsToSelectElement(ps.currentTrailList, ps.currentTrail, '#trailList');
+  if(ps.currentTrail){
+    $('#trailList')[0].onchange();
+  }
 }
 function clearSelectElements() {
   $('#domainList').children().remove().end();
@@ -44,11 +40,8 @@ function addItemsToSelectElement(items, currentItem, idSelector) {
       text: item.name
     }));
   });
-  //Select a domain (no blank domain in combo box unless we have none)
   if (currentItem && currentItem.name) {
     $(idSelector).val(currentItem.name);
-  } else {
-    $(idSelector)[0].onchange();
   }
 }
 function toggleTrailing() {
@@ -56,6 +49,7 @@ function toggleTrailing() {
     $('#loginButton').removeClass('disabled');
     $('#domainList').removeAttr('disabled');
     $('#trailList').removeAttr('disabled');
+    $('#teamList').removeAttr('disabled');
     $('#toggleTrailButton')
       .addClass('btn-success')
       .removeClass('red-throb')
@@ -64,6 +58,7 @@ function toggleTrailing() {
     $('#loginButton').addClass('disabled');
     $('#domainList').attr('disabled', 'disabled');
     $('#trailList').attr('disabled', 'disabled');
+    $('#teamList').attr('disabled', 'disabled');
     $('#toggleTrailButton')
       .removeClass('btn-success')
       .addClass('red-throb')
@@ -122,20 +117,20 @@ function toggleLogin() {
 function teamSelectionChanged() {
   postMessageToAddin({
     action: 'set-current-team-target-addin',
-    teamValue: $('#teamList').val()
+    value: $('#teamList').val()
   });
 }
 function domainSelectionChanged() {
   postMessageToAddin({
     action: 'set-current-domain-target-addin',
-    domainValue: $('#domainList').val()
+    value: $('#domainList').val()
   });
 }
 function trailSelectionChanged() {
   $('#toggleTrailButton').removeClass('disabled');
   postMessageToAddin({
     action: 'set-current-trail-target-addin',
-    trailValue: $('#trailList').val()
+    value: $('#trailList').val()
   });
 }
 //

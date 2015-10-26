@@ -31,52 +31,27 @@
     "domains": {
       "type": "hasAndBelongsToMany",
       "model": "DwDomain",
-      "foreignKey": "dwDomainId",
-      "options": {
-        "validate": true,
-        "forceId": true,
-        "persistent": false
-      }
+      "foreignKey": "dwDomainId"
     },
     "teams": {
       "type": "hasAndBelongsToMany",
       "model": "DwTeam",
-      "foreignKey": "dwTeamId",
-      "options": {
-        "validate": true,
-        "forceId": true,
-        "persistent": false
-      }
+      "foreignKey": "dwTeamId"
     },
     "trails": {
       "type": "hasAndBelongsToMany",
       "model": "DwTrail",
-      "foreignKey": "dwTrailId",
-      "options": {
-        "validate": true,
-        "forceId": true,
-        "persistent": false
-      }
+      "foreignKey": "dwTrailId"
     },
     "serviceType": {
-      "type": "hasOne",
+      "type": "belongsTo",
       "model": "DwServiceType",
-      "foreignKey": "dwServiceTypeId",
-      "options": {
-        "validate": true,
-        "forceId": true,
-        "persistent": false
-      }
+      "foreignKey": "dwServiceTypeId"
     },
     "transmissions": {
       "type": "hasMany",
       "model": "DwTransmission",
-      "foreignKey": "dwFeedId",
-      "options": {
-        "validate": true,
-        "forceId": true,
-        "persistent": false
-      }
+      "foreignKey": "dwFeedId"
     }
   },
   "acls": [],

@@ -27,21 +27,12 @@
     "domains": {
       "type": "hasAndBelongsToMany",
       "model": "DwDomain",
-      "options": {
-        "validate": true,
-        "forceId": true,
-        "persistent": false
-      }
+      "foreignKey": "dwDomainId"
     },
     "serviceType": {
-      "type": "hasOne",
+      "type": "belongsTo",
       "model": "DwServiceType",
-      "foreignKey": "dwServiceTypeId",
-      "options": {
-        "validate": true,
-        "forceId": true,
-        "persistent": false
-      }
+      "foreignKey": "dwServiceTypeId"
     }
   },
   "acls": [],

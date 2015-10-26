@@ -14,6 +14,7 @@
           th.sortable(st-sort='index') Index
           th.sortable(st-sort='credentials') Credentials
           th.sortable(st-sort='protocol') Protocol
+          th Domains
           th
             a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
               &nbsp; Add Extractor
@@ -24,14 +25,16 @@
           td
             span.text-muted {{extractor.extractorUrl}}
           td
-            //span.text-muted {{extractor.serviceType.name}}
-            span.text-muted {{extractor.serviceTypeId}}
+            span.text-muted {{extractor.serviceType.name}}
           td
             span.text-muted {{extractor.index}}
           td
             span.text-muted {{extractor.credentials}}
           td
             span.text-muted {{extractor.protocol}}
+          td
+            span {{extractor.domains.length}}
+            //span.label.label-default(ng-repeat="domain in extractor.domains") {{domain.name}}
           td(style='width: 120px')
             .btn-toolbar
                 button.btn.btn-sm.btn-default(ui-sref='app.dwExtractors.edit({id:extractor.id})',ng-disabled='!currentUser.isAdmin')

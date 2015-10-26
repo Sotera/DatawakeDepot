@@ -10,9 +10,10 @@
         tr
           th.sortable(st-sort='url' st-sort-default="true") URL
           th.sortable(st-sort='trail.name') Trail
-          th.sortable(st-sort='timestamp') Timestamp
+          th # Extractions
           th.sortable(st-sort='dwCrawlTypeId') Crawl Type
           th.sortable(st-sort='comments') Comments
+          th.sortable(st-sort='timestamp') Timestamp
           th
               a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
                 &nbsp;Add Trail URL
@@ -23,11 +24,13 @@
           td
             span.label.label-default {{trailUrl.trail.name}}
           td
-            span.text-muted {{trailUrl.timestamp}}
+            span.text-muted {{trailUrl.urlExtractions.length}}
           td
-            span.text-muted {{trailUrl.dwCrawlTypeId}}
+            span.text-muted {{trailUrl.crawlType.name}}
           td
             span.text-muted {{trailUrl.comments}}
+          td
+            span.text-muted {{trailUrl.timestamp}}
           td(style='width: 120px')
             .btn-toolbar
                 button.btn.btn-sm.btn-default(ui-sref='app.dwTrailUrls.edit({id:trailUrl.id})',ng-disabled='!currentUser.isAdmin')

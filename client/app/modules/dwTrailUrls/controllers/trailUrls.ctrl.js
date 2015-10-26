@@ -84,7 +84,7 @@ app.controller('TrailUrlsCtrl', function($scope, $state, $stateParams, DwCrawlTy
   };
 
   $scope.loading = true;
-  DwTrailUrl.find({filter: {include: ['trail','crawlType']}}).$promise
+  DwTrailUrl.find({filter: {include: ['trail','crawlType','urlExtractions']}}).$promise
       .then(function (allTrailUrls) {
         $scope.safeDisplayedtrailUrls = allTrailUrls;
         $scope.displayedTrailUrls = [].concat($scope.safeDisplayedtrailUrls);

@@ -1,6 +1,7 @@
 {
   "name": "DwDomain",
   "base": "PersistedModel",
+  "plural": "dwDomains",
   "idInjection": true,
   "properties": {
     "name": {
@@ -25,8 +26,7 @@
     },
     "extractors": {
       "type": "hasAndBelongsToMany",
-      "model": "DwExtractor",
-      "foreignKey": "dwDomainId"
+      "model": "DwExtractor"
     },
     "feeds": {
       "type": "hasAndBelongsToMany",

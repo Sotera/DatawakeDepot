@@ -111,7 +111,7 @@ app.controller('UsersCtrl', function ($scope, $stateParams, $state, CoreService,
       disabled: !$scope.currentUser.isAdmin
     }
   }, {
-    key: 'memberTeams',
+    key: 'dwTeams',
     type: 'multiCheckbox',
     templateOptions: {
       label: 'Teams',

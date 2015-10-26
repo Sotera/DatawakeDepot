@@ -64,17 +64,24 @@ app.controller('TrailsCtrl', function($scope, $state, $stateParams, DwDomain, Dw
       }
   }, {
       key: 'dwTeamId',
-      type: 'multiCheckbox',
+      type: 'select',
       templateOptions: {
-          label: 'Teams',
-          options: $scope.teams
+          label: gettextCatalog.getString('Team'),
+          options: $scope.teams,
+          valueProp: 'id',
+          labelProp: 'name',
+          required: true,
+          disabled: false
       }
   }, {
-      key: 'dwUserId',
+      key: 'AminoUsers',
       type: 'multiCheckbox',
       templateOptions: {
           label: 'Users',
-          options: $scope.users
+          options: $scope.users,
+          valueProp: 'id',
+          required: false,
+          disabled: false
       }
   }];
 

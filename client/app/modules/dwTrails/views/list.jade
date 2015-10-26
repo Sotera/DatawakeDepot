@@ -28,13 +28,13 @@
           td
             span.text-muted {{trail.description}}
           td
-            span.text-muted {{trail.dwTeamId}}
+            span.text-muted {{trail.team.name}}
           td
             span.label.label-default {{trail.domain.name}}
           td
             span.text-muted {{trail.scrape}}
           td
-            span.label.label-default &nbsp;{{trail.dwUserId.length}}
+            span {{trail.AminoUsers.length}}
           td
             a(ui-sref='app.dwTrailUrls.list({id:null, domainId:domain.id})') {{trail.trailUrls.length}}
           td

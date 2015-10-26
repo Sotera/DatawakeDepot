@@ -12,6 +12,7 @@
           th.sortable(st-sort='feedUrl') Url
           th.sortable(st-sort='serviceTypeId') ServiceType
           th.sortable(st-sort='index') Index
+          th Payload
           th.sortable(st-sort='credentials') Credentials
           th.sortable(st-sort='protocol') Protocol
           th.sortable(st-sort='') Transmissions
@@ -25,9 +26,14 @@
           td
             span.text-muted {{feed.feedUrl}}
           td
-            span.text-muted {{feed.serviceTypeId}}
+            span.text-muted {{feed.serviceType.name}}
           td
             span.text-muted {{feed.index}}
+          td
+            //span.label.label-default(ng-repeat="domain in feed.domains") {{domain.name}}
+            //span.label.label-default(ng-repeat="trail in feed.trails") {{trail.name}}
+            //span.label.label-default(ng-repeat="user in feed.users") {{user.email}}
+            span -- payload link --
           td
             span.text-muted {{feed.credentials}}
           td

@@ -100,7 +100,7 @@ app.controller('DomainItemsCtrl', function($scope, $state, $stateParams, DwDomai
             for (var i = 0; i < allEntityTypes.length; ++i) {
                 $scope.entityTypes.push({
                     value: allEntityTypes[i].name,
-                    name: allEntityTypes[i].description,
+                    name: allEntityTypes[i].name + " - " + allEntityTypes[i].description,
                     id: allEntityTypes[i].id
                 });
             }

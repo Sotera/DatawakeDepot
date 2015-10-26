@@ -14,7 +14,7 @@
           th.sortable(st-sort='trailUrl.url') Url
           th
               a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
-                &nbsp;Add UrlExtraction
+                &nbsp; Add UrlExtraction
       tbody
         tr(ng-repeat='urlExtraction in displayedUrlExtractions')
           td(style='width: 120px')
@@ -24,7 +24,7 @@
           td
             span.label.label-default {{urlExtraction.trail.name}}
           td
-            span.label.label-default {{urlExtraction.trailUrl.url}}
+            span.text-muted {{urlExtraction.trailUrl.url}}
           td(style='width: 120px')
             .btn-toolbar
                 button.btn.btn-sm.btn-default(ui-sref='app.dwUrlExtractions.edit({id:urlExtraction.id})',ng-disabled='!currentUser.isAdmin')

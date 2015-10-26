@@ -25,6 +25,7 @@ var PluginState = function () {
     url = me.loginUrl + url;
     Request({
       url: url,
+      content: content,
       onComplete: callback
     }).post();
   };

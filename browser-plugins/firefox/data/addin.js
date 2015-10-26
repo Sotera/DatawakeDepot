@@ -58,7 +58,7 @@ exports.init = function () {
     }
     pluginState.restPost(pluginState.trailsUrlsUrl,
       {
-        trailId: pluginState.currentTrail.trailId,
+        dwTrailId: pluginState.currentTrail.id,
         url: tab.url
       }, function (res) {
         console.log(res.text);

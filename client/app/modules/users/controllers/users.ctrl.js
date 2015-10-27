@@ -1,6 +1,6 @@
 'use strict';
 var app = angular.module('com.module.users');
-app.controller('UsersCtrl', function ($scope, $stateParams, $state, CoreService, AminoUser, Role, AppAuth, gettextCatalog) {
+app.controller('UsersCtrl', function ($scope, $stateParams, $state, CoreService, AminoUser, DwTeam, Role, AppAuth, gettextCatalog) {
 
   //Define a couple of scope methods
   $scope.delete = function (id) {
@@ -30,7 +30,8 @@ app.controller('UsersCtrl', function ($scope, $stateParams, $state, CoreService,
       firstName: $scope.user.firstName,
       lastName: $scope.user.lastName,
       username: $scope.user.email,
-      password: $scope.user.password
+      password: $scope.user.password,
+      //teams: $scope.user.teams
     };
     AminoUser.create(newUser).$promise
       .then(function (newUser) {
@@ -63,6 +64,7 @@ app.controller('UsersCtrl', function ($scope, $stateParams, $state, CoreService,
   $scope.displayRoles = [];
   $scope.user = {};
   $scope.user.memberRoles = [];
+  $scope.plTeams = [];
 
   //Setup formly fields for add & edit routes
   $scope.formFields = [{
@@ -111,11 +113,13 @@ app.controller('UsersCtrl', function ($scope, $stateParams, $state, CoreService,
       disabled: !$scope.currentUser.isAdmin
     }
   }, {
-    key: 'dwTeams',
+    key: 'teams',
     type: 'multiCheckbox',
     templateOptions: {
       label: 'Teams',
-      options: $scope.teams,
+      options: $scope.plTeams,
+      valueProp: 'id',
+      labelProp: 'name',
       disabled: !$scope.currentUser.isAdmin
     }
   }];
@@ -180,6 +184,24 @@ app.controller('UsersCtrl', function ($scope, $stateParams, $state, CoreService,
     .catch(function (err) {
       console.log(err);
     });
+
+    DwTeam.find({filter: {include: []}}).$promise
+        .then(function (allTeams) {
+              for (var i = 0; i < allTeams.length; ++i) {
+                  $scope.plTeams.push({
+                      value: allTeams[i].id,
+                      name: allTeams[i].name,
+                      id: allTeams[i].id
+                  });
+              }
+        })
+        .catch(function (err) {
+          console.log(err);
+        })
+      .then(function () {
+      }
+    );
+
   return;
   //Dual list management for Roles/Teams
   //http://www.bootply.com/mRcBel7RWm

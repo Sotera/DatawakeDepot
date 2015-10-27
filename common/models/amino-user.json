@@ -2,6 +2,10 @@
   "name": "AminoUser",
   "plural": "AminoUsers",
   "base": "User",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
   "properties": {
     "domains": {
       "type": {}
@@ -32,8 +36,7 @@
     },
     "teams": {
       "type": "hasAndBelongsToMany",
-      "model": "DwTeam",
-      "foreignKey": "userId"
+      "model": "DwTeam"
     },
     "trails": {
       "type": "hasAndBelongsToMany",

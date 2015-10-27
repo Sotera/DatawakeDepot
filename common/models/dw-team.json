@@ -2,6 +2,10 @@
   "name": "DwTeam",
   "plural": "dwTeams",
   "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
   "properties": {
     "name": {
       "type": "string",
@@ -25,8 +29,7 @@
     },
     "users": {
       "type": "hasAndBelongsToMany",
-      "model": "AminoUser",
-      "foreignKey": "userId"
+      "model": "AminoUser"
     },
     "feeds": {
       "type": "hasAndBelongsToMany",

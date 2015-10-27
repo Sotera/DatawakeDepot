@@ -47,6 +47,8 @@
   "acls": [
     {
       "accessType": "*",
+      "model":"*",
+      "property":"*",
       "principalType": "ROLE",
       "principalId": "admin",
       "permission": "ALLOW"

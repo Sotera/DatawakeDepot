@@ -23,32 +23,35 @@ app.controller('UsersCtrl', function ($scope, $stateParams, $state, CoreService,
         return false;
       });
   };
-
   $scope.onSubmit = function () {
     var newUser = {
       email: $scope.user.email,
       firstName: $scope.user.firstName,
       lastName: $scope.user.lastName,
       username: $scope.user.email,
-      password: $scope.user.password,
-      //teams: $scope.user.teams
+      password: $scope.user.password
     };
     AminoUser.create(newUser).$promise
       .then(function (newUser) {
         CoreService.toastSuccess('New user created.', newUser.username);
-        var newUserId = newUser.id;
-        for (var i = 0; i < $scope.user.memberRoles.length; ++i) {
-          var role = $scope.user.memberRoles[i];
-          for (var j = 0; j < $scope.displayRoles.length; ++j) {
-            if (role === $scope.displayRoles[j].name) {
-              var roleId = $scope.displayRoles[j].id;
-              AminoUser.addRole({userId: newUserId, roleId: roleId}, function (role) {
+        $scope.user.memberRoles.forEach(function (memberRole) {
+          $scope.displayRoles.forEach(function (displayRole) {
+            if (memberRole === displayRole.name) {
+              AminoUser.addRole({userId: newUser.id, roleId: displayRole.id}, function (role) {
                 CoreService.toastSuccess('Role added: ' + role.name);
               });
-              break;
             }
-          }
-        }
+          });
+        });
+        $scope.user.memberTeams.forEach(function (memberTeam) {
+          $scope.displayTeams.forEach(function (displayTeam) {
+            if (memberTeam === displayTeam.id) {
+              AminoUser.teams.link({id: newUser.id, fk: displayTeam.id}, null, function (value, header) {
+                CoreService.toastSuccess('Team added: ' + display.name);
+              });
+            }
+          });
+        });
         $state.go('^.list');
       })
       .catch(function (err) {
@@ -57,15 +60,14 @@ app.controller('UsersCtrl', function ($scope, $stateParams, $state, CoreService,
         $state.go('^.list');
       });
   };
-
   //Put the currentUser in $scope for convenience
   $scope.currentUser = AppAuth.currentUser;
   //Put displayRoles in $scope
   $scope.displayRoles = [];
+  $scope.displayTeams = [];
   $scope.user = {};
   $scope.user.memberRoles = [];
-  $scope.plTeams = [];
-
+  $scope.user.memberTeams = [];
   //Setup formly fields for add & edit routes
   $scope.formFields = [{
     key: 'email',
@@ -113,17 +115,14 @@ app.controller('UsersCtrl', function ($scope, $stateParams, $state, CoreService,
       disabled: !$scope.currentUser.isAdmin
     }
   }, {
-    key: 'teams',
+    key: 'memberTeams',
     type: 'multiCheckbox',
     templateOptions: {
       label: 'Teams',
-      options: $scope.plTeams,
-      valueProp: 'id',
-      labelProp: 'name',
+      options: $scope.displayTeams,
       disabled: !$scope.currentUser.isAdmin
     }
   }];
-
   Role.find().$promise
     .then(function (allRoles) {
       for (var i = 0; i < allRoles.length; ++i) {
@@ -134,7 +133,7 @@ app.controller('UsersCtrl', function ($scope, $stateParams, $state, CoreService,
         });
       }
       $scope.loading = true;
-      AminoUser.find({filter: {include: ['roles','teams']}}).$promise
+      AminoUser.find({filter: {include: ['roles', 'teams']}}).$promise
         .then(function (allUsers) {
           $scope.safeDisplayedUsers = allUsers;
           $scope.displayedUsers = [].concat($scope.safeDisplayedUsers);
@@ -147,7 +146,7 @@ app.controller('UsersCtrl', function ($scope, $stateParams, $state, CoreService,
                   where: {
                     id: $stateParams.id
                   },
-                  include: ['roles', 'identities', 'credentials', 'accessTokens','teams']
+                  include: ['roles', 'identities', 'credentials', 'accessTokens', 'teams']
                 }
               }
             ).$promise
@@ -169,7 +168,7 @@ app.controller('UsersCtrl', function ($scope, $stateParams, $state, CoreService,
               .catch(function (err) {
                 console.log(err);
               });
-          }else{
+          } else {
             //Hack to get around some sort of formly bug
             //$scope.user.password = $scope.user.lastName = ' ';
           }
@@ -184,24 +183,22 @@ app.controller('UsersCtrl', function ($scope, $stateParams, $state, CoreService,
     .catch(function (err) {
       console.log(err);
     });
-
-    DwTeam.find({filter: {include: []}}).$promise
-        .then(function (allTeams) {
-              for (var i = 0; i < allTeams.length; ++i) {
-                  $scope.plTeams.push({
-                      value: allTeams[i].id,
-                      name: allTeams[i].name,
-                      id: allTeams[i].id
-                  });
-              }
-        })
-        .catch(function (err) {
-          console.log(err);
-        })
-      .then(function () {
+  DwTeam.find({filter: {include: []}}).$promise
+    .then(function (allTeams) {
+      for (var i = 0; i < allTeams.length; ++i) {
+        $scope.displayTeams.push({
+          value: allTeams[i].id,
+          name: allTeams[i].name,
+          id: allTeams[i].id
+        });
       }
-    );
-
+    })
+    .catch(function (err) {
+      console.log(err);
+    })
+    .then(function () {
+    }
+  );
   return;
   //Dual list management for Roles/Teams
   //http://www.bootply.com/mRcBel7RWm

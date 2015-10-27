@@ -31,7 +31,7 @@ header.header .logo {
   content: '\25BC';
 }
 
-/* Change the white to any color ;) */
+/* Changes the form text area color to white instead of yellow (Chrome) */
 input:-webkit-autofill {
   -webkit-box-shadow: 0 0 0px 1000px white inset !important;
 }
@@ -65,3 +65,12 @@ textarea:-webkit-autofill {
   background: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed', GradientType=0 );
 }
+
+html,
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: subpixel-antialiased;
+  font-smoothing: subpixel-antialiased;
+  letter-spacing:.01px;
+}
+

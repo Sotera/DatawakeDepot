@@ -38,11 +38,13 @@ app.controller('TeamsCtrl', function($scope, $state, $stateParams, AminoUser, Dw
       disabled: !$scope.currentUser.isAdmin
     }
   }, {
-      key: 'teamUsers',
+      key: 'users',
       type: 'multiCheckbox',
       templateOptions: {
           label: 'Users',
           options: $scope.users,
+          valueProp: 'id',
+          labelProp: 'name',
           disabled: !$scope.currentUser.isAdmin
       }
   }];

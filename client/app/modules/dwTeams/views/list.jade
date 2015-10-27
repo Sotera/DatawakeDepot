@@ -23,9 +23,9 @@
           td
             span.text-muted {{team.description}}
           td
-            span.label.label-default(ng-repeat="user in team.teamUsers") {{user}}
+            span.label.label-default(ng-repeat="user in team.users") {{user.email}}
           td
-            span.label.label-default(ng-repeat="domain in team.teamDomains") {{domain}}
+            span.label.label-default(ng-repeat="domain in team.domains") {{domain}}
           td
             span.label.label-default &nbsp;{{team.trails.length}}
           td(style='width: 120px')

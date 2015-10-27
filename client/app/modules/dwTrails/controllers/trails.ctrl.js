@@ -80,6 +80,7 @@ app.controller('TrailsCtrl', function($scope, $state, $stateParams, DwDomain, Dw
           label: 'Users',
           options: $scope.users,
           valueProp: 'id',
+          labelProp: 'email',
           required: false,
           disabled: false
       }

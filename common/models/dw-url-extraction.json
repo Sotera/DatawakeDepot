@@ -2,6 +2,10 @@
   "name": "DwUrlExtraction",
   "plural": "dwUrlExtractions",
   "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
   "properties": {
     "value": {
       "type": "string"
@@ -9,11 +13,6 @@
   },
   "validations": [],
   "relations": {
-    "trail": {
-      "type": "belongsTo",
-      "model": "DwTrail",
-      "foreignKey": "dwTrailId"
-    },
     "trailUrl": {
       "type": "belongsTo",
       "model": "DwTrailUrl",

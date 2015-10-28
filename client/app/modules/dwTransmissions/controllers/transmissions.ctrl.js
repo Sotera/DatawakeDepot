@@ -18,12 +18,16 @@ app.controller('TransmissionsCtrl', function($scope, $state, $stateParams, DwFee
             label: gettextCatalog.getString('id'),
             disabled: true
         }
-    },{
-        key: 'timestamp',
-        type: 'input',
+    }, {
+        key: 'dwFeedId',
+        type: 'select',
         templateOptions: {
-            label: gettextCatalog.getString('Timestamp'),
-            disabled: true
+            label: gettextCatalog.getString('Feed'),
+            options: $scope.feeds,
+            valueProp: 'id',
+            labelProp: 'name',
+            required: true,
+            disabled: false
         }
     },{
         key: 'transmission',
@@ -43,17 +47,14 @@ app.controller('TransmissionsCtrl', function($scope, $state, $stateParams, DwFee
             required: true,
             disabled: false
         }
-    }, {
-        key: 'dwFeedId',
-        type: 'select',
+    },{
+        key: 'timestamp',
+        type: 'input',
         templateOptions: {
-            label: gettextCatalog.getString('Feed'),
-            options: $scope.feeds,
-            valueProp: 'id',
-            labelProp: 'name',
-            required: true,
-            disabled: false
+            label: gettextCatalog.getString('Timestamp'),
+            disabled: true
         }
+
     }];
 
 

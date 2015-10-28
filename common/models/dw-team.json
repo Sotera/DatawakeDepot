@@ -24,8 +24,7 @@
     },
     "domains": {
       "type": "hasAndBelongsToMany",
-      "model": "DwDomain",
-      "foreignKey": "dwTeamId"
+      "model": "DwDomain"
     },
     "users": {
       "type": "hasAndBelongsToMany",
@@ -33,8 +32,7 @@
     },
     "feeds": {
       "type": "hasAndBelongsToMany",
-      "model": "DwFeed",
-      "foreignKey": "dwTeamId"
+      "model": "DwFeed"
     }
   },
   "acls": [],

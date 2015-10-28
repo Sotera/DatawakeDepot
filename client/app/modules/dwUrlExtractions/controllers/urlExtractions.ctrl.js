@@ -1,11 +1,10 @@
 'use strict';
 var app = angular.module('com.module.dwUrlExtractions');
 
-app.controller('UrlExtractionsCtrl', function($scope, $state, $stateParams, DwDomainEntityType, DwTrail, DwTrailUrl, DwUrlExtraction, UrlExtractionsService, gettextCatalog, AppAuth) {
+app.controller('UrlExtractionsCtrl', function($scope, $state, $stateParams, DwDomainEntityType, DwTrailUrl, DwUrlExtraction, UrlExtractionsService, gettextCatalog, AppAuth) {
 
   //Put the currentUser in $scope for convenience
   $scope.currentUser = AppAuth.currentUser;
-  $scope.trails = [];
   $scope.domainEntityTypes = [];
   $scope.trailUrls = [];
 
@@ -16,6 +15,17 @@ app.controller('UrlExtractionsCtrl', function($scope, $state, $stateParams, DwDo
       label: gettextCatalog.getString('id'),
       disabled: true
     }
+  }, {
+      key: 'dwTrailUrlId',
+      type: 'select',
+      templateOptions: {
+          label: gettextCatalog.getString('Trail Url'),
+          options: $scope.trailUrls,
+          valueProp: 'id',
+          labelProp: 'name',
+          required: true,
+          disabled: false
+      }
   }, {
     key: 'dwDomainEntityTypeId',
     type: 'select',
@@ -34,28 +44,6 @@ app.controller('UrlExtractionsCtrl', function($scope, $state, $stateParams, DwDo
       label: gettextCatalog.getString('Value'),
       required: true
     }
-  }, {
-    key: 'dwTrailId',
-    type: 'select',
-    templateOptions: {
-      label: gettextCatalog.getString('Trail'),
-      options: $scope.trails,
-      valueProp: 'id',
-      labelProp: 'name',
-      required: true,
-      disabled: false
-    }
-  }, {
-      key: 'dwTrailUrlId',
-      type: 'select',
-      templateOptions: {
-          label: gettextCatalog.getString('Trail Url'),
-          options: $scope.trailUrls,
-          valueProp: 'id',
-          labelProp: 'name',
-          required: true,
-          disabled: false
-      }
   }];
 
 
@@ -74,7 +62,7 @@ app.controller('UrlExtractionsCtrl', function($scope, $state, $stateParams, DwDo
   };
 
   $scope.loading = true;
-  DwUrlExtraction.find({filter: {include: ['trail','trailUrl','domainEntityType']}}).$promise
+  DwUrlExtraction.find({filter: {include: [{relation:'trailUrl',scope:{include: ['trail']}},'domainEntityType']}}).$promise
       .then(function (allUrlExtractions) {
         $scope.safeDisplayedurlExtractions = allUrlExtractions;
         $scope.displayedUrlExtractions = [].concat($scope.safeDisplayedurlExtractions);
@@ -84,23 +72,6 @@ app.controller('UrlExtractionsCtrl', function($scope, $state, $stateParams, DwDo
       })
       .then(function () {
         $scope.loading = false;
-      }
-  );
-
-  DwTrail.find({filter: {include: []}}).$promise
-      .then(function (allTrails) {
-        for (var i = 0; i < allTrails.length; ++i) {
-          $scope.trails.push({
-            value: allTrails[i].name,
-            name: allTrails[i].description,
-            id: allTrails[i].id
-          });
-        }
-      })
-      .catch(function (err) {
-        console.log(err);
-      })
-      .then(function () {
       }
   );
 

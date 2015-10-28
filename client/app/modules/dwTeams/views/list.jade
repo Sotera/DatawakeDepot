@@ -23,16 +23,16 @@
           td
             span.text-muted {{team.description}}
           td
-            span.label.label-default(ng-repeat="user in team.users") {{user.email}}
+            span.label.label-default(ng-repeat="user in team.users") {{user.username}}
           td
-            span.label.label-default(ng-repeat="domain in team.domains") {{domain}}
+            span.label.label-default(ng-repeat="domain in team.domains") {{domain.name}}
           td
             span.label.label-default &nbsp;{{team.trails.length}}
           td(style='width: 120px')
             .btn-toolbar
                 button.btn.btn-sm.btn-default(ui-sref='app.dwTeams.edit({id:team.id})',ng-disabled='!currentUser.isAdmin')
                     i.fa.fa-pencil
-                button.btn.btn-sm.btn-danger(ng-click='delete({id:team.id})',ng-disabled='!currentUser.isAdmin')
+                button.btn.btn-sm.btn-danger(ng-click='delete({id:team})',ng-disabled='!currentUser.isAdmin')
                     i.fa.fa-trash-o
   .overlay(ng-if='loading')
   .loading-img(ng-if='loading')

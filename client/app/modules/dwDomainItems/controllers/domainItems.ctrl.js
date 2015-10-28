@@ -16,13 +16,6 @@ app.controller('DomainItemsCtrl', function($scope, $state, $stateParams, DwDomai
             label: gettextCatalog.getString('id'),
             disabled: true
         }
-    },{
-        key: 'itemValue',
-        type: 'input',
-        templateOptions: {
-            label: gettextCatalog.getString('Value'),
-            required: true
-        }
     }, {
         key: 'dwDomainId',
         type: 'select',
@@ -44,6 +37,13 @@ app.controller('DomainItemsCtrl', function($scope, $state, $stateParams, DwDomai
             labelProp: 'name',
             required: true,
             disabled: false
+        }
+    },{
+        key: 'itemValue',
+        type: 'input',
+        templateOptions: {
+            label: gettextCatalog.getString('Value'),
+            required: true
         }
     }];
 

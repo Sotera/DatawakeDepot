@@ -49,8 +49,8 @@ app.controller('TeamsCtrl', function($scope, $state, $stateParams, AminoUser, Dw
       }
   }];
 
-  $scope.delete = function(id) {
-    TeamsService.deleteTeam(id, function() {
+  $scope.delete = function(team) {
+    TeamsService.deleteTeam(team, function() {
       $scope.safeDisplayedteams = TeamsService.getTeams();
       $state.go('^.list');
     });

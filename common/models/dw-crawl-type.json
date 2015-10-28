@@ -3,6 +3,9 @@
   "plural": "dwCrawlTypes",
   "base": "PersistedModel",
   "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
   "properties": {
     "name": {
       "type": "string",
@@ -17,7 +20,7 @@
     "trailUrl": {
       "type": "hasMany",
       "model": "DwTrailUrl",
-      "foreignKey": "dwCrawlTypeId"
+      "foreignKey": "dwTrailUrlId"
     }
   },
   "acls": [],

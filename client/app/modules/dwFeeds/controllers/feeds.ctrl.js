@@ -1,20 +1,19 @@
 'use strict';
 var app = angular.module('com.module.dwFeeds');
 
-app.controller('FeedsCtrl', function($scope, $state, $stateParams, DwDomain, DwTrail, AminoUser, DwFeed, DwServiceType, FeedsService, gettextCatalog, AppAuth) {
+app.controller('FeedsCtrl', function($scope, $state, $stateParams, DwDomain, DwTrail, DwTeam, DwFeed, DwServiceType, FeedsService, gettextCatalog, AppAuth) {
 
     //Put the currentUser in $scope for convenience
     $scope.currentUser = AppAuth.currentUser;
     $scope.feed = {};
-    $scope.protocols = [
-        {"name": "ES","description": "Elastic Search"},
-        {"name": "ReST","description": "ReSTful Url" },
-        {"name": "Kafka","description": "Kafka Queue"}
+    $scope.plProtocols = [
+        {"name": "HTTP","description": "HTTP://"},
+        {"name": "HTTPS","description": "HTTPS://" }
     ];
-    $scope.serviceTypes = [];
-    $scope.domains = [];
-    $scope.trails = [];
-    $scope.users = [];
+    $scope.plServiceTypes = [];
+    $scope.plDomains = [];
+    $scope.plTrails = [];
+    $scope.plTeams = [];
 
     $scope.formFields = [{
         key: 'id',
@@ -56,7 +55,7 @@ app.controller('FeedsCtrl', function($scope, $state, $stateParams, DwDomain, DwT
         type: 'select',
         templateOptions: {
             label: gettextCatalog.getString('Protocol'),
-            options: $scope.protocols,
+            options: $scope.plProtocols,
             valueProp: 'name',
             labelProp: 'name',
             required: true,
@@ -67,38 +66,41 @@ app.controller('FeedsCtrl', function($scope, $state, $stateParams, DwDomain, DwT
         type: 'select',
         templateOptions: {
             label: gettextCatalog.getString('ServiceType'),
-            options: $scope.serviceTypes,
+            options: $scope.plServiceTypes,
             valueProp: 'id',
             labelProp: 'name',
             required: true,
             disabled: false
         }
     }, {
+        key: 'dwTeams',
+        type: 'multiCheckbox',
+        templateOptions: {
+            label: 'Teams',
+            options: $scope.plTeams,
+            valueProp: 'id'
+        }
+    }, {
         key: 'dwDomains',
         type: 'multiCheckbox',
         templateOptions: {
             label: 'Domains',
-            options: $scope.domains
+            options: $scope.plDomains,
+            valueProp: 'id'
         }
     }, {
         key: 'dwTrails',
         type: 'multiCheckbox',
         templateOptions: {
             label: 'Trails',
-            options: $scope.trails
-        }
-    }, {
-        key: 'AminoUsers',
-        type: 'multiCheckbox',
-        templateOptions: {
-            label: 'Users',
-            options: $scope.users
+            options: $scope.plTrails,
+            valueProp: 'id'
         }
     }];
 
 
-    $scope.delete = function(id) {
-        FeedsService.deleteFeed(id, function() {
+    $scope.delete = function(feed) {
+        FeedsService.deleteFeed(feed, function() {
             $scope.safeDisplayedfeeds = FeedsService.getFeeds();
             $state.go('^.list');
         });
@@ -128,7 +130,7 @@ app.controller('FeedsCtrl', function($scope, $state, $stateParams, DwDomain, DwT
     DwServiceType.find({filter: {include: []}}).$promise
         .then(function (allServiceTypes) {
             for (var i = 0; i < allServiceTypes.length; ++i) {
-                $scope.serviceTypes.push({
+                $scope.plServiceTypes.push({
                     value: allServiceTypes[i].name,
                     name: allServiceTypes[i].description,
                     id: allServiceTypes[i].id
@@ -145,9 +147,9 @@ app.controller('FeedsCtrl', function($scope, $state, $stateParams, DwDomain, DwT
     DwDomain.find({filter: {include: []}}).$promise
         .then(function (allDomains) {
             for (var i = 0; i < allDomains.length; ++i) {
-                $scope.domains.push({
+                $scope.plDomains.push({
                     value: allDomains[i].name,
-                    name: allDomains[i].name,
+                    name: allDomains[i].description,
                     id: allDomains[i].id
                 });
             }
@@ -162,9 +164,9 @@ app.controller('FeedsCtrl', function($scope, $state, $stateParams, DwDomain, DwT
     DwTrail.find({filter: {include: []}}).$promise
         .then(function (allTrails) {
             for (var i = 0; i < allTrails.length; ++i) {
-                $scope.trails.push({
-                    value: allTrails[i].id,
-                    name: allTrails[i].name,
+                $scope.plTrails.push({
+                    value: allTrails[i].name,
+                    name: allTrails[i].description,
                     id: allTrails[i].id
                 });
             }
@@ -176,13 +178,13 @@ app.controller('FeedsCtrl', function($scope, $state, $stateParams, DwDomain, DwT
         }
     );
 
-    AminoUser.find({filter: {include: []}}).$promise
-        .then(function (allUsers) {
-            for (var i = 0; i < allUsers.length; ++i) {
-                $scope.users.push({
-                    value: allUsers[i].email,
-                    name: allUsers[i].firstName,
-                    id: allUsers[i].id
+    DwTeam.find({filter: {include: []}}).$promise
+        .then(function (allTeams) {
+            for (var i = 0; i < allTeams.length; ++i) {
+                $scope.plTeams.push({
+                    value: allTeams[i].name,
+                    name: allTeams[i].description,
+                    id: allTeams[i].id
                 });
             }
         })

@@ -10,10 +10,11 @@
         tr
           th.sortable(st-sort='name' st-sort-default="true") Name
           th.sortable(st-sort='description') Description
-          th.sortable(st-sort='domain.trails.name') Trail
+          th.sortable(st-sort='domain.teams.name') Teams
+          th.sortable(st-sort='domain.trails.name') Trails
           th.sortable(st-sort='') Domain EntityTypes
           th.sortable(st-sort='') Domain Feeds
-          th.sortable(st-sort='') # DomainItems
+          th.sortable(st-sort='') # Items
           th.sortable(st-sort='') Extractors
           th
             a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
@@ -25,24 +26,25 @@
             span {{domain.id}}
           td.col-md-1
             a(ui-sref='app.dwDomains.view({id:domain.id})') {{domain.name}}
-          td.col-md-1
+          td.col-md-2
             span.text-muted {{domain.description}}
           td.col-med-1
-            span.label.label-default(ng-repeat="trail in domain.trails") &nbsp;{{trail.name}}
+            span.label.label-default(ng-repeat="team in domain.teams") {{team.name}}
           td.col-med-1
-            span.label.label-default(ng-repeat="domainEntType in domain.domainEntityTypes") &nbsp;{{domainEntType.name}}
+            span.label.label-default(ng-repeat="trail in domain.trails") {{trail.name}}
+          td.col-med-1
+            span.label.label-default(ng-repeat="domainEntType in domain.domainEntityTypes") {{domainEntType.name}}
           td.col-med-1
             a(ui-sref='app.dwFeeds.list({id:null, domainId:domain.id})') {{domain.feeds.length}}
           td.col-md-1
             a(ui-sref='app.dwDomainItems.list({id:null, domainId:domain.id})') {{domain.domainItems.length}}
           td.col-med-1
-            span.text-muted {{domain.dwExtractors.length}}
-            //span.label.label-default(ng-repeat="extractor in domain.dwExtractors") &nbsp;{{extractor.name}}
+            span.label.label-default(ng-repeat="extractor in domain.extractors") {{extractor.name}}
           td.col-md-1.text-center
             .btn-toolbar
               button.btn.btn-sm.btn-default(ui-sref='app.dwDomains.edit({id:domain.id})',ng-disabled='!currentUser.isAdmin')
                 i.fa.fa-pencil
-              button.btn.btn-sm.btn-danger(ng-click='delete({id:domain.id})',ng-disabled='!currentUser.isAdmin')
+              button.btn.btn-sm.btn-danger(ng-click='delete({id:domain})',ng-disabled='!currentUser.isAdmin')
                 i.fa.fa-trash-o
   .overlay(ng-if='loading')
   .loading-img(ng-if='loading')

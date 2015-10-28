@@ -15,6 +15,7 @@
           th.sortable(st-sort='scrape') Scrape
           th.sortable(st-sort='userId') # Users
           th.sortable(st-sort='') # URLs
+          th.sortable(st-sort='') Feeds
           th.sortable(st-sort='timestamp') Timestamp
           th
               a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
@@ -34,16 +35,18 @@
           td
             span.text-muted {{trail.scrape}}
           td
-            span {{trail.AminoUsers.length}}
+            span.label.label-default(ng-repeat="user in trail.users") {{user.username}}
           td
             a(ui-sref='app.dwTrailUrls.list({id:null, domainId:domain.id})') {{trail.trailUrls.length}}
+          td
+            span.label.label-default(ng-repeat="feed in trail.feeds") {{feed.name}}
           td
             span.text-muted {{trail.timestamp}}
           td(style='width: 120px')
             .btn-toolbar
                 button.btn.btn-sm.btn-default(ui-sref='app.dwTrails.edit({id:trail.id})',ng-disabled='!currentUser.isAdmin')
                     i.fa.fa-pencil
-                button.btn.btn-sm.btn-danger(ng-click='delete({id:trail.id})',ng-disabled='!currentUser.isAdmin')
+                button.btn.btn-sm.btn-danger(ng-click='delete({id:trail})',ng-disabled='!currentUser.isAdmin')
                     i.fa.fa-trash-o
   .overlay(ng-if='loading')
   .loading-img(ng-if='loading')

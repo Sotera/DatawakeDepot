@@ -2,6 +2,10 @@
   "name": "DwServiceType",
   "plural": "dwServiceTypes",
   "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
   "properties": {
     "name": {
       "type": "string",

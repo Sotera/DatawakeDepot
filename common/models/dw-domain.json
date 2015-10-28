@@ -3,6 +3,9 @@
   "base": "PersistedModel",
   "plural": "dwDomains",
   "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
   "properties": {
     "name": {
       "type": "string",
@@ -30,8 +33,7 @@
     },
     "feeds": {
       "type": "hasAndBelongsToMany",
-      "model": "DwFeed",
-      "foreignKey": "dwDomainId"
+      "model": "DwFeed"
     },
     "trails": {
       "type": "hasMany",
@@ -40,8 +42,7 @@
     },
     "teams": {
       "type": "hasAndBelongsToMany",
-      "model": "DwTeam",
-      "foreignKey": "dwDomainId"
+      "model": "DwTeam"
     }
   },
   "acls": [],

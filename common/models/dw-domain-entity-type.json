@@ -2,6 +2,9 @@
   "name": "DwDomainEntityType",
   "base": "PersistedModel",
   "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
   "properties": {
     "name": {
       "type": "string",

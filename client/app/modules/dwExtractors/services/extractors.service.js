@@ -14,10 +14,19 @@ app.service('ExtractorsService', ['$state', 'CoreService', 'DwExtractor', 'gette
   };
 
   this.upsertExtractor = function(extractor, cb) {
-    DwExtractor.upsert(extractor, function() {
-      CoreService.toastSuccess(gettextCatalog.getString(
-          'Extractor saved'), gettextCatalog.getString(
-          'Your extractor is safe with us!'));
+    DwExtractor.upsert(extractor, function(newExtractor) {
+      CoreService.toastSuccess(gettextCatalog.getString('Extractor saved'), gettextCatalog.getString('Your extractor is safe with us!'));
+
+      //TODO: We must first remove all linked items before adding them, otherwise we can't account for removed links
+
+      //For Many-To-Many relationships you MUST manually link the two models for INCLUDE to work in relationships
+      if(extractor.dwDomains) {
+          extractor.dwDomains.forEach(function (domain) {
+              DwExtractor.domains.link({id: newExtractor.id, fk: domain}, null, function (value, header) {
+                  //success
+              });
+          });
+      };
       cb();
     }, function(err) {
       CoreService.toastSuccess(gettextCatalog.getString(
@@ -26,14 +35,20 @@ app.service('ExtractorsService', ['$state', 'CoreService', 'DwExtractor', 'gette
     });
   };
 
-  this.deleteExtractor = function(id, cb) {
+  this.deleteExtractor = function(extractor, cb) {
     CoreService.confirm(gettextCatalog.getString('Are you sure?'),
         gettextCatalog.getString('Deleting this cannot be undone'),
         function() {
-          DwExtractor.deleteById(id, function() {
-            CoreService.toastSuccess(gettextCatalog.getString(
-                'Extractor deleted'), gettextCatalog.getString(
-                'Your extractor is deleted!'));
+          DwExtractor.deleteById(extractor.id, function() {
+            CoreService.toastSuccess(gettextCatalog.getString('Extractor deleted'), gettextCatalog.getString('Your extractor is deleted!'));
+            //For Many-To-Many relationships you MUST manually link the two models for INCLUDE to work in relationships
+            if(extractor.dwDomains) {
+                extractor.dwDomains.forEach(function (domain) {
+                    DwExtractor.domains.unlink({id: extractor.id, fk: domain}, null, function (value, header) {
+                        //success
+                    });
+                });
+            };
             cb();
           }, function(err) {
             CoreService.toastError(gettextCatalog.getString(

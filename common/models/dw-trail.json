@@ -3,6 +3,9 @@
   "plural": "dwTrails",
   "base": "PersistedModel",
   "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
   "properties": {
     "name": {
       "type": "string",
@@ -34,23 +37,16 @@
     },
     "users": {
       "type": "hasAndBelongsToMany",
-      "model": "AminoUser",
-      "foreignKey": "dwUserId"
+      "model": "AminoUser"
     },
     "trailUrls": {
       "type": "hasMany",
       "model": "DwTrailUrl",
       "foreignKey": "dwTrailId"
     },
-    "urlExtractions": {
-      "type": "hasMany",
-      "model": "DwUrlExtraction",
-      "foreignKey": "dwTrailId"
-    },
     "feeds": {
       "type": "hasAndBelongsToMany",
-      "model": "DwFeed",
-      "foreignKey": "dwTrailId"
+      "model": "DwFeed"
     }
   },
   "acls": [],

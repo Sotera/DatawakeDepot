@@ -2,6 +2,10 @@
   "name": "DwExtractor",
   "plural": "dwExtractors",
   "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
   "properties": {
     "name": {
       "type": "string",
@@ -26,8 +30,7 @@
   "relations": {
     "domains": {
       "type": "hasAndBelongsToMany",
-      "model": "DwDomain",
-      "foreignKey": "dwDomainId"
+      "model": "DwDomain"
     },
     "serviceType": {
       "type": "belongsTo",

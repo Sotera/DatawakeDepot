@@ -1,11 +1,12 @@
 'use strict';
 var app = angular.module('com.module.dwDomains');
 
-app.controller('DomainsCtrl', function($scope, $state, $stateParams, DwFeed, DwDomain, DwExtractor, DomainsService, gettextCatalog, AppAuth) {
+app.controller('DomainsCtrl', function($scope, $state, $stateParams, DwFeed, DwDomain, DwTeam, DwExtractor, DomainsService, gettextCatalog, AppAuth) {
     //Put the currentUser in $scope for convenience
     $scope.currentUser = AppAuth.currentUser;
-    $scope.extractors = [];
-    $scope.feeds = [];
+    $scope.plExtractors = [];
+    $scope.plFeeds = [];
+    $scope.plTeams=[];
 
     $scope.formFields = [{
         key: 'id',
@@ -28,23 +29,33 @@ app.controller('DomainsCtrl', function($scope, $state, $stateParams, DwFeed, DwD
             required: true
         }
     }, {
+        key: 'dwTeams',
+        type: 'multiCheckbox',
+        templateOptions: {
+            label: 'Teams',
+            options: $scope.plTeams,
+            valueProp: 'id'
+        }
+    }, {
         key: 'dwFeeds',
         type: 'multiCheckbox',
         templateOptions: {
             label: 'Feeds',
-            options: $scope.feeds
+            options: $scope.plFeeds,
+            valueProp: 'id'
         }
     }, {
         key: 'dwExtractors',
         type: 'multiCheckbox',
         templateOptions: {
             label: 'Extractors',
-            options: $scope.extractors
+            options: $scope.plExtractors,
+            valueProp: 'id'
         }
     }];
 
-    $scope.delete = function(id) {
-        DomainsService.deleteDomain(id, function() {
+    $scope.delete = function(domain) {
+        DomainsService.deleteDomain(domain, function() {
             $scope.safeDisplayedDomains = DomainsService.getDomains();
             $state.go('^.list');
         });
@@ -52,13 +63,14 @@ app.controller('DomainsCtrl', function($scope, $state, $stateParams, DwFeed, DwD
 
     $scope.onSubmit = function() {
         DomainsService.upsertDomain($scope.domain, function() {
+
             $scope.safeDisplayedDomains = DomainsService.getDomains();
             $state.go('^.list');
         });
     };
 
     $scope.loading = true;
-    DwDomain.find({filter: {include: ['domainEntityTypes','domainItems','extractors','trails','feeds']}}).$promise
+    DwDomain.find({filter: {include: ['domainEntityTypes','domainItems','extractors','trails','feeds','teams']}}).$promise
         .then(function (allDomains) {
             $scope.safeDisplayedDomains = allDomains;
             $scope.displayedDomains = [].concat($scope.safeDisplayedDomains);
@@ -81,7 +93,7 @@ app.controller('DomainsCtrl', function($scope, $state, $stateParams, DwFeed, DwD
     DwExtractor.find({filter: {include: []}}).$promise
         .then(function (allExtractors) {
             for (var i = 0; i < allExtractors.length; ++i) {
-                $scope.extractors.push({
+                $scope.plExtractors.push({
                     value: allExtractors[i].name,
                     name: allExtractors[i].name,
                     id: allExtractors[i].id
@@ -98,10 +110,27 @@ app.controller('DomainsCtrl', function($scope, $state, $stateParams, DwFeed, DwD
     DwFeed.find({filter: {include: []}}).$promise
         .then(function (allFeeds) {
             for (var i = 0; i < allFeeds.length; ++i) {
-                $scope.feeds.push({
+                $scope.plFeeds.push({
                     value: allFeeds[i].name,
                     name: allFeeds[i].name,
                     id: allFeeds[i].id
+                });
+            }
+        })
+        .catch(function (err) {
+            console.log(err);
+        })
+        .then(function () {
+        }
+    );
+
+    DwTeam.find({filter: {include: []}}).$promise
+        .then(function (allTeams) {
+            for (var i = 0; i < allTeams.length; ++i) {
+                $scope.plTeams.push({
+                    value: allTeams[i].name,
+                    name: allTeams[i].name,
+                    id: allTeams[i].id
                 });
             }
         })

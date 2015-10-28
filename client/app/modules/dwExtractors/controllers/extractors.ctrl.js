@@ -5,13 +5,12 @@ app.controller('ExtractorsCtrl', function($scope, $state, $stateParams, DwDomain
 
     //Put the currentUser in $scope for convenience
     $scope.currentUser = AppAuth.currentUser;
-    $scope.protocols = [
-        {"name": "ES","description": "Elastic Search"},
-        {"name": "ReST","description": "ReSTful Url" },
-        {"name": "Kafka","description": "Kafka Queue"}
+    $scope.plProtocols = [
+        {"name": "HTTP","description": "HTTP://"},
+        {"name": "HTTPS","description": "HTTPS://" }
     ];
-    $scope.serviceTypes = [];
-    $scope.domains = [];
+    $scope.plServiceTypes = [];
+    $scope.plDomains = [];
 
     $scope.formFields = [{
         key: 'id',
@@ -53,7 +52,7 @@ app.controller('ExtractorsCtrl', function($scope, $state, $stateParams, DwDomain
         type: 'select',
         templateOptions: {
             label: gettextCatalog.getString('Protocol'),
-            options: $scope.protocols,
+            options: $scope.plProtocols,
             valueProp: 'name',
             labelProp: 'name',
             required: true,
@@ -64,7 +63,7 @@ app.controller('ExtractorsCtrl', function($scope, $state, $stateParams, DwDomain
         type: 'select',
         templateOptions: {
             label: gettextCatalog.getString('ServiceType'),
-            options: $scope.serviceTypes,
+            options: $scope.plServiceTypes,
             valueProp: 'id',
             labelProp: 'name',
             required: true,
@@ -76,7 +75,7 @@ app.controller('ExtractorsCtrl', function($scope, $state, $stateParams, DwDomain
         type: 'multiCheckbox',
         templateOptions: {
             label: 'Domains',
-            options: $scope.domains,
+            options: $scope.plDomains,
             valueProp: 'id',
             required: false,
             disabled: false
@@ -84,8 +83,8 @@ app.controller('ExtractorsCtrl', function($scope, $state, $stateParams, DwDomain
     }];
 
 
-    $scope.delete = function(id) {
-        ExtractorsService.deleteExtractor(id, function() {
+    $scope.delete = function(extractor) {
+        ExtractorsService.deleteExtractor(extractor, function() {
             $scope.safeDisplayedextractors = ExtractorsService.getExtractors();
             $state.go('^.list');
         });
@@ -115,7 +114,7 @@ app.controller('ExtractorsCtrl', function($scope, $state, $stateParams, DwDomain
     DwServiceType.find({filter: {include: []}}).$promise
         .then(function (allServiceTypes) {
             for (var i = 0; i < allServiceTypes.length; ++i) {
-                $scope.serviceTypes.push({
+                $scope.plServiceTypes.push({
                     value: allServiceTypes[i].name,
                     name: allServiceTypes[i].description,
                     id: allServiceTypes[i].id
@@ -132,7 +131,7 @@ app.controller('ExtractorsCtrl', function($scope, $state, $stateParams, DwDomain
     DwDomain.find({filter: {include: []}}).$promise
         .then(function (allDomains) {
             for (var i = 0; i < allDomains.length; ++i) {
-                $scope.domains.push({
+                $scope.plDomains.push({
                     value: allDomains[i].name,
                     name: allDomains[i].description,
                     id: allDomains[i].id

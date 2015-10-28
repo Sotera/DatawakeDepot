@@ -3,6 +3,9 @@
   "plural": "dwTransmissions",
   "base": "PersistedModel",
   "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
   "properties": {
     "transmission": {
       "type": "string",

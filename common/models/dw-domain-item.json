@@ -3,6 +3,9 @@
   "plural": "dwDomainItems",
   "base": "PersistedModel",
   "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
   "properties": {
     "itemValue": {
       "type": "string"

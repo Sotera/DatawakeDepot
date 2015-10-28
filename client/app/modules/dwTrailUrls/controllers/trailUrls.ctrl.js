@@ -16,6 +16,17 @@ app.controller('TrailUrlsCtrl', function($scope, $state, $stateParams, DwCrawlTy
       label: gettextCatalog.getString('id'),
       disabled: true
     }
+  }, {
+      key: 'dwTrailId',
+      type: 'select',
+      templateOptions: {
+          label: gettextCatalog.getString('Trail'),
+          options: $scope.trails,
+          valueProp: 'id',
+          labelProp: 'name',
+          required: true,
+          disabled: false
+      }
   },{
     key: 'url',
     type: 'input',
@@ -28,17 +39,6 @@ app.controller('TrailUrlsCtrl', function($scope, $state, $stateParams, DwCrawlTy
       type: 'textarea',
       templateOptions: {
           label: gettextCatalog.getString('Scraped Content')
-      }
-  }, {
-      key: 'dwTrailId',
-      type: 'select',
-      templateOptions: {
-          label: gettextCatalog.getString('Trail'),
-          options: $scope.trails,
-          valueProp: 'id',
-          labelProp: 'name',
-          required: true,
-          disabled: false
       }
   }, {
     key: 'dwCrawlTypeId',

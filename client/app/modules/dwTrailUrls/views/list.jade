@@ -9,8 +9,8 @@
       thead
         tr
           th.sortable(st-sort='url' st-sort-default="true") URL
-          th.sortable(st-sort='trail.name') Trail
           th # Extractions
+          th.sortable(st-sort='trail.name') Trail
           th.sortable(st-sort='dwCrawlTypeId') Crawl Type
           th.sortable(st-sort='comments') Comments
           th.sortable(st-sort='timestamp') Timestamp
@@ -22,9 +22,9 @@
           td(style='width: 120px')
             a(href='', ui-sref='app.dwTrailUrls.view({id: trailUrl.id})') {{trailUrl.url}}
           td
-            span.label.label-default {{trailUrl.trail.name}}
-          td
             span.text-muted {{trailUrl.urlExtractions.length}}
+          td
+            span.label.label-default {{trailUrl.trail.name}}
           td
             span.text-muted {{trailUrl.crawlType.name}}
           td

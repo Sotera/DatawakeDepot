@@ -29,17 +29,17 @@
           td
             span.text-muted {{domain.description}}
           td
-            span.label.label-default(ng-repeat="team in domain.teams") {{team.name}}
+            span.label.label-ltgray(ng-repeat="team in domain.teams") {{team.name}}
           td
-            span.label.label-default(ng-repeat="trail in domain.trails") {{trail.name}}
+            span.label.label-ltgray(ng-repeat="trail in domain.trails") {{trail.name}}
           td
-            span.label.label-default(ng-repeat="domainEntType in domain.domainEntityTypes") {{domainEntType.name}}
+            span.label.label-ltgray(ng-repeat="domainEntType in domain.domainEntityTypes") {{domainEntType.name}}
           td.td-center
             a(ui-sref='app.dwFeeds.list({id:null, domainId:domain.id})') {{domain.feeds.length}}
           td.td-center
             a(ui-sref='app.dwDomainItems.list({id:null, domainId:domain.id})') {{domain.domainItems.length}}
           td.td-center
-            span.label.label-default(ng-repeat="extractor in domain.extractors") {{extractor.name}}
+            span.label.label-ltgray(ng-repeat="extractor in domain.extractors") {{extractor.name}}
           td.td-center
             .btn-toolbar
               button.btn.btn-sm.btn-default(ui-sref='app.dwDomains.edit({id:domain.id})',ng-disabled='!currentUser.isAdmin')

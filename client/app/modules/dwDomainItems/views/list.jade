@@ -19,9 +19,9 @@
           td
             span.text-muted {{domainItem.itemValue}}
           td(style='width: 120px')
-            span.label.label-default {{domainItem.domainEntityType.name}}
+            span.label.label-ltgray {{domainItem.domainEntityType.name}}
           td.td-center
-            span.text-muted
+            span.label.label-ltgray
                 a(ui-sref='app.dwDomains.list({search:domain.id})') {{domainItem.domain.name}}
           td.td-center(style='width: 120px')
             .btn-toolbar

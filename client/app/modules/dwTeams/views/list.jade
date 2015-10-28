@@ -23,11 +23,11 @@
           td
             span.text-muted {{team.description}}
           td
-            span.label.label-default(ng-repeat="user in team.users") {{user.username}}
+            span.label.label-ltgray(ng-repeat="user in team.users") {{user.username}}
           td
-            span.label.label-default(ng-repeat="domain in team.domains") {{domain.name}}
+            span.label.label-ltgray(ng-repeat="domain in team.domains") {{domain.name}}
           td.td-center
-            span.label.label-default &nbsp;{{team.trails.length}}
+            span.label.label-ltgray &nbsp;{{team.trails.length}}
           td.td-center(style='width: 120px')
             .btn-toolbar
                 button.btn.btn-sm.btn-default(ui-sref='app.dwTeams.edit({id:team.id})',ng-disabled='!currentUser.isAdmin')

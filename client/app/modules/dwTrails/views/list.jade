@@ -31,15 +31,15 @@
           td
             span.text-muted {{trail.team.name}}
           td.td-center
-            span.label.label-default {{trail.domain.name}}
+            span.label.label-ltgray {{trail.domain.name}}
           td
             span.text-muted {{trail.scrape}}
           td.td-center
-            span.label.label-default(ng-repeat="user in trail.users") {{user.username}}
+            span.label.label-ltgray(ng-repeat="user in trail.users") {{user.username}}
           td.td-center
             a(ui-sref='app.dwTrailUrls.list({id:null, domainId:domain.id})') {{trail.trailUrls.length}}
           td.td-center
-            span.label.label-default(ng-repeat="feed in trail.feeds") {{feed.name}}
+            span.label.label-ltgray(ng-repeat="feed in trail.feeds") {{feed.name}}
           td
             span.text-muted {{trail.timestamp}}
           td.td-center(style='width: 120px')

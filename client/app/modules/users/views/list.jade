@@ -31,9 +31,9 @@
           td
             span.text-muted {{user.email}}
           td.td-center
-            span.label.label-default(ng-repeat="role in user.roles") {{role.name}}
+            span.label.label-ltgray(ng-repeat="role in user.roles") {{role.name}}
           td.td-center
-            span.label.label-default(ng-repeat="team in user.teams") {{team.name}}
+            span.label.label-ltgray(ng-repeat="team in user.teams") {{team.name}}
           td.td-center(style='width: 120px')
             .btn-group
               button.btn.btn-sm.btn-default(ui-sref='app.users.password({id:user.id})',ng-disabled='!currentUser.isAdmin')

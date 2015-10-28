@@ -38,8 +38,10 @@
           td.td-center
             a(ui-sref='app.dwTrailUrls.list({id:null, domainId:domain.id})') {{trail.trailUrls.length}}
           td
+            span.label.label-default(ng-repeat="feed in trail.feeds") {{feed.name}}
+          td
             span.text-muted {{trail.timestamp}}
-          td.td-center(style='width: 120px')
+          td(style='width: 120px')
             .btn-toolbar
                 button.btn.btn-sm.btn-default(ui-sref='app.dwTrails.edit({id:trail.id})',ng-disabled='!currentUser.isAdmin')
                     i.fa.fa-pencil

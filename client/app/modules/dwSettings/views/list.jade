@@ -8,9 +8,9 @@
             input.input-sm.form-control(st-search='' type='search' placeholder='Search')
       thead
         tr
-          th.sortable(st-sort='name' st-sort-default="true") Setting
-          th.sortable(st-sort='description') Value
-          th
+          th.sortable.col-sm-6.col-md-6.col-lg-6(st-sort='name' st-sort-default="true") Setting
+          th.sortable.col-sm-6.col-md-6.col-lg-6(st-sort='description') Value
+          th.col-sm-2.col-md-2.col-lg-2.td-center
               a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
                 &nbsp;Add Setting
       tbody
@@ -19,7 +19,7 @@
             a(href='', ui-sref='app.dwSettings.view({id: setting.id})') {{setting.setting}}
           td
             span.text-muted {{setting.value}}
-          td(style='width: 120px')
+          td.td-center(style='width: 120px')
             .btn-toolbar
                 button.btn.btn-sm.btn-default(ui-sref='app.dwSettings.edit({id:setting.id})',ng-disabled='!currentUser.isAdmin')
                     i.fa.fa-pencil

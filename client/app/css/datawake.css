@@ -74,3 +74,6 @@ body {
   letter-spacing:.01px;
 }
 
+.td-center {
+  text-align: center;
+}

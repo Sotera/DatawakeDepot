@@ -83,7 +83,7 @@ app.controller('DomainItemsCtrl', function($scope, $state, $stateParams, DwDomai
             for (var i = 0; i < allDomains.length; ++i) {
                 $scope.domains.push({
                     value: allDomains[i].name,
-                    name: allDomains[i].description,
+                    name: allDomains[i].name + " - " + allDomains[i].description,
                     id: allDomains[i].id
                 });
             }

@@ -75,12 +75,29 @@ app.controller('UrlExtractionsCtrl', function($scope, $state, $stateParams, DwDo
       }
   );
 
+  DwTrail.find({filter: {include: []}}).$promise
+      .then(function (allTrails) {
+        for (var i = 0; i < allTrails.length; ++i) {
+          $scope.trails.push({
+            value: allTrails[i].name,
+            name: allTrails[i].name + " - " + allTrails[i].description,
+            id: allTrails[i].id
+          });
+        }
+      })
+      .catch(function (err) {
+        console.log(err);
+      })
+      .then(function () {
+      }
+  );
+
   DwDomainEntityType.find({filter: {include: []}}).$promise
       .then(function (allEntTypes) {
         for (var i = 0; i < allEntTypes.length; ++i) {
           $scope.domainEntityTypes.push({
             value: allEntTypes[i].name,
-            name: allEntTypes[i].description,
+            name: allEntTypes[i].name + " - " + allEntTypes[i].description,
             id: allEntTypes[i].id
           });
         }

@@ -102,7 +102,7 @@ app.controller('TrailUrlsCtrl', function($scope, $state, $stateParams, DwCrawlTy
           for (var i = 0; i < allCrawlTypes.length; ++i) {
               $scope.crawlTypes.push({
                   value: allCrawlTypes[i].name,
-                  name: allCrawlTypes[i].description,
+                  name: allCrawlTypes[i].name + " - " + allCrawlTypes[i].description,
                   id: allCrawlTypes[i].id
               });
           }
@@ -119,7 +119,7 @@ app.controller('TrailUrlsCtrl', function($scope, $state, $stateParams, DwCrawlTy
           for (var i = 0; i < allTrails.length; ++i) {
               $scope.trails.push({
                   value: allTrails[i].name,
-                  name: allTrails[i].description,
+                  name: allTrails[i].name + " - " + allTrails[i].description,
                   id: allTrails[i].id
               });
           }

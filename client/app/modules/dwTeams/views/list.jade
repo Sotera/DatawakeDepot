@@ -4,16 +4,16 @@
     table.table.table-striped(st-table='displayedteams', st-safe-src='safeDisplayedteams')
       thead
         tr
-          th(colspan="4")
+          th(colspan="6")
             input.input-sm.form-control(st-search='' type='search' placeholder='Search')
       thead
         tr
-          th.sortable(st-sort='name' st-sort-default="true") Name
-          th.sortable(st-sort='description') Description
-          th.sortable(st-sort='') Members
-          th.sortable(st-sort='') Domains
-          th.sortable(st-sort='') Trails
-          th
+          th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='name' st-sort-default="true") Name
+          th.sortable.col-sm-4.col-md-4.col-lg-4(st-sort='description') Description
+          th.sortable.col-sm-1.col-md-1.col-lg-1.td-center(st-sort='') Members
+          th.sortable.col-sm-2.col-md-2.col-lg-2.td-center(st-sort='') Domains
+          th.sortable.col-sm-1.col-md-1.col-lg-1.td-center(st-sort='') Trails
+          th.col-sm-2.col-md-2.col-lg-2.td-center
               a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
                 &nbsp; Add Team
       tbody
@@ -26,9 +26,9 @@
             span.label.label-default(ng-repeat="user in team.users") {{user.username}}
           td
             span.label.label-default(ng-repeat="domain in team.domains") {{domain.name}}
-          td
+          td.td-center
             span.label.label-default &nbsp;{{team.trails.length}}
-          td(style='width: 120px')
+          td.td-center(style='width: 120px')
             .btn-toolbar
                 button.btn.btn-sm.btn-default(ui-sref='app.dwTeams.edit({id:team.id})',ng-disabled='!currentUser.isAdmin')
                     i.fa.fa-pencil

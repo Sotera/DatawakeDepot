@@ -4,43 +4,43 @@
     table.table.table-striped(st-table='displayedDomains', st-safe-src='safeDisplayedDomains')
       thead
         tr
-          th(colspan="6")
+          th(colspan="8")
             input.input-sm.form-control(st-search='' type='search' placeholder='Search')
       thead
         tr
-          th.sortable(st-sort='name' st-sort-default="true") Name
-          th.sortable(st-sort='description') Description
+          th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='name' st-sort-default="true") Name
+          th.sortable.col-sm-3.col-md-3.col-lg-3(st-sort='description') Description
           th.sortable(st-sort='domain.teams.name') Teams
-          th.sortable(st-sort='domain.trails.name') Trails
-          th.sortable(st-sort='') Domain EntityTypes
-          th.sortable(st-sort='') Domain Feeds
-          th.sortable(st-sort='') # Items
-          th.sortable(st-sort='') Extractors
+          th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='domain.trails.name') Trail
+          th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='') EntityTypes
+          th.sortable.col-sm-1.col-md-1.col-lg-1.td-center(st-sort='') Feeds
+          th.sortable.col-sm-1.col-md-1.col-lg-1.td-center.text-nowrap(st-sort='') # Items
+          th.sortable.col-sm-1.col-md-1.col-lg-1.td-center(st-sort='') Extractors
           th
-            a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
+            a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom.col-sm-2.col-md-2.col-lg-2(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
                 &nbsp; Add Domain
 
       tbody
         tr(ng-repeat='domain in displayedDomains')
           td.hidden
             span {{domain.id}}
-          td.col-md-1
+          td
             a(ui-sref='app.dwDomains.view({id:domain.id})') {{domain.name}}
-          td.col-md-2
+          td
             span.text-muted {{domain.description}}
-          td.col-med-1
+          td
             span.label.label-default(ng-repeat="team in domain.teams") {{team.name}}
-          td.col-med-1
+          td
             span.label.label-default(ng-repeat="trail in domain.trails") {{trail.name}}
-          td.col-med-1
+          td
             span.label.label-default(ng-repeat="domainEntType in domain.domainEntityTypes") {{domainEntType.name}}
-          td.col-med-1
+          td.td-center
             a(ui-sref='app.dwFeeds.list({id:null, domainId:domain.id})') {{domain.feeds.length}}
-          td.col-md-1
+          td.td-center
             a(ui-sref='app.dwDomainItems.list({id:null, domainId:domain.id})') {{domain.domainItems.length}}
-          td.col-med-1
+          td.td-center
             span.label.label-default(ng-repeat="extractor in domain.extractors") {{extractor.name}}
-          td.col-md-1.text-center
+          td.td-center
             .btn-toolbar
               button.btn.btn-sm.btn-default(ui-sref='app.dwDomains.edit({id:domain.id})',ng-disabled='!currentUser.isAdmin')
                 i.fa.fa-pencil

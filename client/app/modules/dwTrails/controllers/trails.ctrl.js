@@ -28,18 +28,27 @@ app.controller('TrailsCtrl', function($scope, $state, $stateParams, DwDomain, Dw
           valueProp: 'id',
           labelProp: 'name',
           required: true,
-          disabled: false
+          disabled: false,
+          onChange: function($viewValue){
+              $scope.loadDomains($viewValue);
+          }
       }
   }, {
       key: 'dwDomainId',
       type: 'select',
+      expressionProperties: {
+          // This watches for form changes and enables/disables the Domain dropdoawn as necessary
+          'templateOptions.disabled': function () {
+              return $scope.plDomains.length<=0;
+          }
+      },
       templateOptions: {
           label: gettextCatalog.getString('Domain'),
           options: $scope.plDomains,
           valueProp: 'id',
           labelProp: 'name',
           required: true,
-          disabled: false
+          disabled: true
       }
   },{
       key: 'name',
@@ -97,6 +106,25 @@ app.controller('TrailsCtrl', function($scope, $state, $stateParams, DwDomain, Dw
       }
   }];
 
+  $scope.loadDomains = function(teamId){
+      //Populate plDomains from the domains for the given teamId in plTeams
+      $scope.plTeams.forEach(function (team){
+          if (team.id == teamId){
+              if( team.domains) {
+                  for (var i = 0; i < team.domains.length; ++i) {
+                      $scope.plDomains.push({
+                          value: team.domains[i].name,
+                          name: team.domains[i].name,
+                          id: team.domains[i].id
+                      });
+                  }
+              } else {
+                  $scope.plDomains.length =0;
+              }
+          }
+      });
+  }
+
   $scope.delete = function(trail) {
     TrailsService.deleteTrail(trail, function() {
       $scope.safeDisplayedtrails = TrailsService.getTrails();
@@ -116,46 +144,21 @@ app.controller('TrailsCtrl', function($scope, $state, $stateParams, DwDomain, Dw
       .then(function (allTrails) {
           $scope.safeDisplayedtrails = allTrails;
           $scope.displayedTrails = [].concat($scope.safeDisplayedtrails);
+
+          for (var i = 0; i < $scope.currentUser.teams.length; ++i) {
+            $scope.plTeams.push({
+                value: $scope.currentUser.teams[i].name,
+                name: $scope.currentUser.teams[i].name,
+                id: $scope.currentUser.teams[i].id,
+                domains: $scope.currentUser.teams[i].domains
+            });
+          }
       })
       .catch(function (err) {
           console.log(err);
       })
       .then(function () {
           $scope.loading = false;
-      }
-  );
-
-  DwDomain.find({filter: {include: []}}).$promise
-      .then(function (allDomains) {
-          for (var i = 0; i < allDomains.length; ++i) {
-              $scope.plDomains.push({
-                  value: allDomains[i].name,
-                  name: allDomains[i].name,
-                  id: allDomains[i].id
-              });
-          }
-      })
-      .catch(function (err) {
-          console.log(err);
-      })
-      .then(function () {
-      }
-  );
-
-  DwTeam.find({filter: {include: []}}).$promise
-      .then(function (allTeams) {
-          for (var i = 0; i < allTeams.length; ++i) {
-              $scope.plTeams.push({
-                  value: allTeams[i].id,
-                  name: allTeams[i].name,
-                  id: allTeams[i].id
-              });
-          }
-      })
-      .catch(function (err) {
-          console.log(err);
-      })
-      .then(function () {
       }
   );
 

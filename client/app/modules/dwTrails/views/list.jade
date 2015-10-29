@@ -18,7 +18,7 @@
           th.sortable.col-sm-1.col-md-1.col-lg-1.td-center(st-sort='') Feeds
           th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='timestamp') Timestamp
           th.col-sm-2.col-md-2.col-lg-2.td-center
-              a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
+              a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add')
                 &nbsp; Add Trail
       tbody
         tr(ng-repeat='trail in displayedTrails')

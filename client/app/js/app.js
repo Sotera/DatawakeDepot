@@ -50,7 +50,7 @@ angular.module('loopbackApp', [
 */
   //'com.module.sandbox',
   'com.module.settings',
-
+  'com.module.dwForensic',
   'com.module.dwSettings',
   'com.module.users',
   'com.module.dwTeams',

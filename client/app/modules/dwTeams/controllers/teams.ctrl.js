@@ -99,7 +99,7 @@ app.controller('TeamsCtrl', function($scope, $state, $stateParams, AminoUser, Dw
           for (var i = 0; i < allDomains.length; ++i) {
               $scope.domains.push({
                   value: allDomains[i].name,
-                  name: allDomains[i].description,
+                  name: allDomains[i].name,
                   id: allDomains[i].id
               });
           }

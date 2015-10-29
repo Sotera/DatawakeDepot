@@ -80,7 +80,7 @@ app.controller('UrlExtractionsCtrl', function($scope, $state, $stateParams, DwDo
         for (var i = 0; i < allEntTypes.length; ++i) {
           $scope.domainEntityTypes.push({
             value: allEntTypes[i].name,
-            name: allEntTypes[i].description,
+            name: allEntTypes[i].name + " - " + allEntTypes[i].description,
             id: allEntTypes[i].id
           });
         }

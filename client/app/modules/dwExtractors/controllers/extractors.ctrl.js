@@ -133,7 +133,7 @@ app.controller('ExtractorsCtrl', function($scope, $state, $stateParams, DwDomain
             for (var i = 0; i < allDomains.length; ++i) {
                 $scope.plDomains.push({
                     value: allDomains[i].name,
-                    name: allDomains[i].description,
+                    name: allDomains[i].name,
                     id: allDomains[i].id
                 });
             }

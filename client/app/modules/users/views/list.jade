@@ -6,17 +6,17 @@
     table.table.table-striped(st-table='displayedUsers', st-safe-src='safeDisplayedUsers')
       thead
         tr
-          th(colspan="6")
+          th(colspan="7")
             input.input-sm.form-control(st-search='' type='search' placeholder='search')
       thead
         tr
-          th.sortable(st-sort='username' st-sort-default="true") Username
-          th.sortable(st-sort='firstName') First Name
-          th.sortable(st-sort='lastName') Last Name
-          th.sortable(st-sort='email') E-Mail
-          th.sortable(st-sort='') Member Roles
-          th.sortable(st-sort='') Member Teams
-          th
+          th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='username' st-sort-default="true") Username
+          th.sortable.col-xs-2.text-nowrap(st-sort='firstName') First Name
+          th.sortable.col-xs-2.text-nowrap(st-sort='lastName') Last Name
+          th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='email') E-Mail
+          th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='') Roles
+          th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='') Teams
+          th.col-sm-2.col-md-2.col-lg-2.td-center
             a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
               &nbsp; Add User
 
@@ -30,11 +30,11 @@
             span.text-muted {{user.lastName}}
           td
             span.text-muted {{user.email}}
-          td
-            span.label.label-default(ng-repeat="role in user.roles") {{role.name}}
-          td
-            span.label.label-default(ng-repeat="team in user.teams") {{team.name}}
-          td(style='width: 120px')
+          td.td-center
+            span.label.label-ltgray(ng-repeat="role in user.roles") {{role.name}}
+          td.td-center
+            span.label.label-ltgray(ng-repeat="team in user.teams") {{team.name}}
+          td.td-center(style='width: 120px')
             .btn-group
               button.btn.btn-sm.btn-default(ui-sref='app.users.password({id:user.id})',ng-disabled='!currentUser.isAdmin')
                 i.fa.fa-key

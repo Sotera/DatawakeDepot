@@ -74,3 +74,39 @@ body {
   letter-spacing:.01px;
 }
 
+.td-center {
+  text-align: center;
+}
+
+.label-ltgray {
+  color: #666;
+  background-color: #d4d4d4;
+  border: 1px solid #ccc;
+}
+
+.label + .label {
+  margin-left: 2px;
+}
+
+@media screen and (min-width: 992px) {
+  .left-side {
+    top: 50px;
+  }
+  /*Right side strech mode*/
+  .right-side.strech {
+    margin-left: 0px;
+  }
+  .right-side.strech > .content-header {
+    margin-top: 0px;
+  }
+  /* Left side collapse */
+  .left-side.collapse-left {
+    left: -220px;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .relative {
+    position: absolute;
+  }
+}

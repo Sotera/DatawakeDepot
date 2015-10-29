@@ -54,7 +54,7 @@ angular.module('com.module.core')
 
     $scope.toggleSidebar = function() {
       var $ = angular.element;
-      if ($(window).width() <= 992) {
+      if ($(window).width() <= 1200) {
         $('.row-offcanvas').toggleClass('active');
         $('.left-side').removeClass('collapse-left');
         $('.right-side').removeClass('strech');

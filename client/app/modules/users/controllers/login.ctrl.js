@@ -99,10 +99,14 @@ angular.module('com.module.users')
               where: {
                 id: AppAuth.currentUser.id
               },
-              include: ['roles', 'identities', 'credentials', 'accessTokens']
+              include: ['roles', 'identities', 'credentials', 'accessTokens',{relation:'teams',scope:{include: [{relation:'domains',scope:{include:['trails']}}]}}]
+
+                //{"include":[{"relation":"teams","scope":{"include":[{"relation":"domains","scope":{"include":["trails"]}}]}}]}
             }
           }).$promise
             .then(function (user) {
+              AppAuth.currentUser.teams = user.teams;
+              AppAuth.currentUser.trails = user.trails;
               AppAuth.currentUser.roles = user.roles;
               var admins = AppAuth.currentUser.roles.filter(function (u) {
                 return u.name === 'admins';

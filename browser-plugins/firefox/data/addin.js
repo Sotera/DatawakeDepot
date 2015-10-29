@@ -1,3 +1,4 @@
+var self = require('sdk/self');
 var {setInterval, clearInterval} = require('sdk/timers');
 var {pluginState} = require('./pluginState');
 exports.init = function () {
@@ -67,7 +68,13 @@ exports.init = function () {
   });
   //Here we listen for when the Scraper content script is fired up and ready.
   pluginState.onAddInModuleEvent('page-scraper-content-script-attached-target-addin', function (data) {
-    pluginState.addScraperContentScriptEventHandler('zipped-html-body', function (pageContents) {
+    pluginState.addScraperContentScriptEventHandler(data.contentScriptKey, 'send-css-urls-target-addin', function (scriptData) {
+      pluginState.postEventToScraperContentScript(scriptData.contentScriptKey, 'load-css-urls-target-content-script',
+        {cssUrls: [
+          self.data.url('injectedPageCSS/textHighlights.css')
+        ]});
+    });
+    pluginState.addScraperContentScriptEventHandler(data.contentScriptKey, 'zipped-html-body', function (pageContents) {
       //TODO: Work out some scraper eventing so we don't do the DOM operation if we're not trailing.
       //This will work for now though.
       if (!pluginState.trailingActive) {

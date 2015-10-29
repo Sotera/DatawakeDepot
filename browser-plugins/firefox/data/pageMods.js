@@ -4,10 +4,13 @@ exports.init = function () {
   try {
     pageMod.PageMod({
       include: '*',
-      exclude: pluginState.pageModDatawakeDepotIncludeFilter,
+      //exclude: pluginState.pageModDatawakeDepotIncludeFilter,
       contentScriptFile: [
         './vendor/jszip/jszip.min.js',
         './vendor/jquery/jquery-2.1.4.min.js',
+        './vendor/jquery/jquery.highlight.js',
+        //'./vendor/highlightRegex/highlightRegex.min.js',
+        './injectedPageScripts/datawake-analysis.js',
         './injectedPageScripts/scraper.js'],
       attachTo: ['existing', 'top', 'frame'],
       onAttach: pluginState.onScraperContentScriptAttach

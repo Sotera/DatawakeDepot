@@ -19,7 +19,7 @@ var PluginState = function () {
   me.toolbarFrameSource = null;
   me.toolbarFrameOrigin = null;
   me.datawakeDepotContentScriptHandle = null;
-  me.scraperContentScriptHandle = null;
+  me.scraperContentScriptHandles = {};
   me.pageModDatawakeDepotIncludeFilter = null;
   me.restPost = function (url, content, callback) {
     url = me.loginUrl + url;
@@ -71,11 +71,12 @@ var PluginState = function () {
   me.postMessageToToolBar = function (msg) {
     me.toolbarFrameSource.postMessage(JSON.stringify(msg), me.toolbarFrameOrigin);
   };
-  me.postEventToScraperContentScript = function (eventName, data) {
-    if (!me.scraperContentScriptHandle) {
+  me.postEventToScraperContentScript = function (contentScriptKey, eventName, data) {
+    var contentScriptHandle = me.scraperContentScriptHandles[contentScriptKey];
+    if (!contentScriptHandle) {
       return;
     }
-    me.scraperContentScriptHandle.port.emit(eventName, data);
+    contentScriptHandle.port.emit(eventName, data);
   };
   me.postEventToDatawakeDepotContentScript = function (eventName, data) {
     if (!me.datawakeDepotContentScriptHandle) {
@@ -83,8 +84,12 @@ var PluginState = function () {
     }
     me.datawakeDepotContentScriptHandle.port.emit(eventName, data);
   };
-  me.addScraperContentScriptEventHandler = function (eventName, cb) {
-    me.scraperContentScriptHandle.port.on(eventName, cb);
+  me.addScraperContentScriptEventHandler = function (contentScriptKey, eventName, cb) {
+    var contentScriptHandle = me.scraperContentScriptHandles[contentScriptKey];
+    if (!contentScriptHandle) {
+      return;
+    }
+    contentScriptHandle.port.on(eventName, cb);
   };
   me.addDatawakeDepotContentScriptEventHandler = function (eventName, cb) {
     me.datawakeDepotContentScriptHandle.port.on(eventName, cb);
@@ -96,9 +101,12 @@ var PluginState = function () {
     on(exports, eventName, cb);
   };
   me.onScraperContentScriptAttach = function (worker) {
-    me.scraperContentScriptHandle = worker;
-    me.postEventToAddInModule('page-scraper-content-script-attached-target-addin');
-    me.postEventToScraperContentScript('page-attached-target-content-script');
+    var newContentScriptKey = me.generateUUID();
+    me.scraperContentScriptHandles[newContentScriptKey] = worker;
+    me.postEventToAddInModule('page-scraper-content-script-attached-target-addin',
+      {contentScriptKey: newContentScriptKey});
+    me.postEventToScraperContentScript(newContentScriptKey, 'page-attached-target-content-script',
+      {contentScriptKey: newContentScriptKey});
   }
   me.onDatawakeDepotContentScriptAttach = function (worker) {
     me.datawakeDepotContentScriptHandle = worker;
@@ -122,6 +130,15 @@ var PluginState = function () {
     me.currentTrail = null;
     me.currentTrailList = [];
   }
+  me.generateUUID = function () {
+    var d = new Date().getTime();
+    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      var r = (d + Math.random() * 16) % 16 | 0;
+      d = Math.floor(d / 16);
+      return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+    });
+    return uuid;
+  };
 };
 if (exports.pluginState == null) {
   exports.pluginState = new PluginState();

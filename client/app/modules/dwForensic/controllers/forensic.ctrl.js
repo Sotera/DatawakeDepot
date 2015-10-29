@@ -6,28 +6,23 @@ app.controller('ForensicCtrl', function($scope, $state, $stateParams, DwTrail, F
     $scope.trail = {};
     //Put the currentUser in $scope for convenience
     $scope.currentUser = AppAuth.currentUser;
-    $scope.trails = [];
-    $scope.currentTrail = [];
+    $scope.userTeams = [];
 
-    $scope.loading = true;
-    DwTrail.find({filter: {include: []}}).$promise
-        .then(function (alltrails) {
-            if(alltrails) {
-                $scope.trails = alltrails;
-            }
-        })
-        .catch(function (err) {
-            console.log(err);
-        })
-        .then(function () {
-            $scope.loading = false;
-        });
 
-    if ($stateParams.id) {
-        ForensicService.getTrail($stateParams.id).$promise.then(function(result){
-            $scope.trail = result;})
-    } else {
-        $scope.trail = {};
+    //Load the currentUser's Teams into a local array
+    if(AppAuth.currentUser.teams) {
+        $scope.loading = true;
+
+       for (var i = 0; i < $scope.currentUser.teams.length; ++i) {
+           $scope.userTeams.push({
+               value: $scope.currentUser.teams[i].name,
+               name: $scope.currentUser.teams[i].name,
+               id: $scope.currentUser.teams[i].id,
+               domains: $scope.currentUser.teams[i].domains
+           });
+        }
+        $scope.loading = false;
     }
+
 });
 

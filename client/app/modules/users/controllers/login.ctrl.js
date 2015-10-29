@@ -99,7 +99,9 @@ angular.module('com.module.users')
               where: {
                 id: AppAuth.currentUser.id
               },
-              include: ['roles', 'identities', 'credentials', 'accessTokens',{relation:'teams',scope:{include: ['domains']}}]
+              include: ['roles', 'identities', 'credentials', 'accessTokens',{relation:'teams',scope:{include: [{relation:'domains',scope:{include:['trails']}}]}}]
+
+                //{"include":[{"relation":"teams","scope":{"include":[{"relation":"domains","scope":{"include":["trails"]}}]}}]}
             }
           }).$promise
             .then(function (user) {

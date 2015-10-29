@@ -1,12 +1,17 @@
 <div class="box">
   <div class="box-body no-padding" style="min-height: 120px;">
     <table class="table table-bordered table-striped">
+
       <tr>
-        <th>Trail Name</th>
+        <th>Team </th>
+        <th>Team's Domains</th>
       </tr>
-      <tr ng-repeat="trail in trails">
+      <tr ng-repeat="team in userTeams">
         <td>
-          <span class="text-muted">{{trail.name}}</span>
+          <span class="text-muted">{{team.name}}</span>
+        </td>
+        <td>
+          <span ng-repeat="domain in team.domains">{{domain.name}}&nbsp;</span>
         </td>
       </tr>
     </table>

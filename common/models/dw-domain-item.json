@@ -9,6 +9,9 @@
   "properties": {
     "itemValue": {
       "type": "string"
+    },
+    "coreItem": {
+      "type": "boolean"
     }
   },
   "validations": [],

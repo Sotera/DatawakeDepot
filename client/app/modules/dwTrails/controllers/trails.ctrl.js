@@ -90,7 +90,6 @@ app.controller('TrailsCtrl', function($scope, $state, $stateParams, DwDomain, Dw
           label: 'Users',
           options: $scope.plUsers,
           valueProp: 'id',
-          //labelProp: 'username',
           required: false,
           disabled: false
       }
@@ -145,13 +144,33 @@ app.controller('TrailsCtrl', function($scope, $state, $stateParams, DwDomain, Dw
           $scope.safeDisplayedtrails = allTrails;
           $scope.displayedTrails = [].concat($scope.safeDisplayedtrails);
 
-          for (var i = 0; i < $scope.currentUser.teams.length; ++i) {
-            $scope.plTeams.push({
-                value: $scope.currentUser.teams[i].name,
-                name: $scope.currentUser.teams[i].name,
-                id: $scope.currentUser.teams[i].id,
-                domains: $scope.currentUser.teams[i].domains
-            });
+          //Admins get all teams
+          if($scope.currentUser.isAdmin){
+              DwTeam.find({filter: {include: []}}).$promise
+                  .then(function (allTeams) {
+                      for (var i = 0; i < allTeams.length; ++i) {
+                          $scope.plTeams.push({
+                              value: allTeams[i].id,
+                              name: allTeams[i].name,
+                              id: allTeams[i].id
+                          });
+                      }
+                  })
+                  .catch(function (err) {
+                      console.log(err);
+                  })
+                  .then(function () {
+                  }
+              );
+          } else {
+              for (var i = 0; i < $scope.currentUser.teams.length; ++i) {
+                $scope.plTeams.push({
+                    value: $scope.currentUser.teams[i].name,
+                    name: $scope.currentUser.teams[i].name,
+                    id: $scope.currentUser.teams[i].id,
+                    domains: $scope.currentUser.teams[i].domains
+                });
+              }
           }
       })
       .catch(function (err) {

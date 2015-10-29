@@ -167,6 +167,12 @@ img {
 .bg-yellow,
 .bg-aqua,
 .bg-blue,
+.bg-blue2,
+.bg-blue3,
+.bg-blue4,
+.bg-blue5,
+.bg-blue6,
+.bg-blue7,
 .bg-light-blue,
 .bg-green,
 .bg-navy,
@@ -197,6 +203,24 @@ img {
 }
 .bg-blue {
   background-color: #0073b7 !important;
+}
+.bg-blue2 {
+  background-color: #003399 !important;
+}
+.bg-blue3 {
+  background-color: #0033FF !important;
+}
+.bg-blue4 {
+  background-color: #0066FF !important;
+}
+.bg-blue5 {
+  background-color: #0099FF !important;
+}
+.bg-blue6 {
+  background-color: #00CCFF !important;
+}
+.bg-blue7 {
+  background-color: #99CCFF !important;
 }
 .bg-light-blue {
   background-color: #3c8dbc !important;

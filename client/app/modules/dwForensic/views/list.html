@@ -1,20 +1,24 @@
 <div class="box">
   <div class="box-body no-padding" style="min-height: 120px;">
-    <table class="table table-bordered table-striped">
 
-      <tr>
-        <th>Team </th>
-        <th>Team's Domains</th>
-      </tr>
-      <tr ng-repeat="team in userTeams">
-        <td>
-          <span class="text-muted">{{team.name}}</span>
-        </td>
-        <td>
-          <span ng-repeat="domain in team.domains">{{domain.name}}&nbsp;</span>
-        </td>
-      </tr>
-    </table>
+      <table class="table table-bordered table-striped" ng-repeat="team in currentUser.teams">
+          <tr>
+              <th>TEAM: {{team.name}}</th>
+          </tr>
+          <tr>
+              <td>
+                   <table ng-repeat="domain in team.domains">
+                       <tr>
+                           <th>DOMAIN: {{domain.name}}</th>
+                       </tr>
+                       <tr ng-repeat="trail in domain.trails">
+                           <td>{{trail.name}}</td>
+                       </tr>
+                   </table>
+              </td>
+          <tr/>
+      </table>
+
   </div>
   <div ng-if="loading" class="overlay"></div>
   <div ng-if="loading" class="loading-img"></div>

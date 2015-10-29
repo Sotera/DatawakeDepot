@@ -45,6 +45,13 @@ app.controller('DomainItemsCtrl', function($scope, $state, $stateParams, DwDomai
             label: gettextCatalog.getString('Value'),
             required: true
         }
+    },{
+        key: 'coreItem',
+        type: 'checkbox',
+        templateOptions: {
+            label: gettextCatalog.getString('Core Item?'),
+            required: false
+        }
     }];
 
     $scope.delete = function(id) {

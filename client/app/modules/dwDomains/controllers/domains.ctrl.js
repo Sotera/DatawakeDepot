@@ -7,6 +7,7 @@ app.controller('DomainsCtrl', function($scope, $state, $stateParams, DwFeed, DwD
     $scope.plExtractors = [];
     $scope.plFeeds = [];
     $scope.plTeams=[];
+    //$scope.domainList = [];
 
     $scope.formFields = [{
         key: 'id',
@@ -70,24 +71,36 @@ app.controller('DomainsCtrl', function($scope, $state, $stateParams, DwFeed, DwD
     };
 
     $scope.loading = true;
-    DwDomain.find({filter: {include: ['domainEntityTypes','domainItems','extractors','trails','feeds','teams']}}).$promise
-        .then(function (allDomains) {
-            $scope.safeDisplayedDomains = allDomains;
-            $scope.displayedDomains = [].concat($scope.safeDisplayedDomains);
-        })
-        .catch(function (err) {
-            console.log(err);
-        })
-        .then(function () {
-            $scope.loading = false;
-        });
+    if($scope.currentUser.isAdmin){
+        DwDomain.find({filter: {include: ['domainEntityTypes','domainItems','extractors','trails','feeds','teams']}}).$promise
+            .then(function (allDomains) {
+                $scope.safeDisplayedDomains = allDomains;
+                $scope.displayedDomains = [].concat($scope.safeDisplayedDomains);
+            })
+            .catch(function (err) {
+                console.log(err);
+            })
+            .then(function () {
+                $scope.loading = false;
+            });
 
-    if ($stateParams.id) {
-        DomainsService.getDomain($stateParams.id).$promise.then(function(result){
-            $scope.domain = result;
-        })
-    } else {
-        $scope.domain = {};
+        if ($stateParams.id) {
+            DomainsService.getDomain($stateParams.id).$promise.then(function(result){
+                $scope.domain = result;
+            })
+        } else {
+            $scope.domain = {};
+        }
+    }else{
+        if($scope.currentUser.teams){
+            $scope.userDomains = [];
+            for (var i = 0; i < $scope.currentUser.teams.length; ++i) {
+                $scope.userDomains.push.apply($scope.userDomains,$scope.currentUser.teams[i].domains);
+            }
+            $scope.safeDisplayedDomains = $scope.userDomains;
+            $scope.displayedDomains = [].concat($scope.safeDisplayedDomains);
+        }
+        $scope.loading = false;
     }
 
     DwExtractor.find({filter: {include: []}}).$promise

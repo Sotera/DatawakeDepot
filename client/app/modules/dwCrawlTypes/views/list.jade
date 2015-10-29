@@ -11,7 +11,7 @@
           th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='name' st-sort-default="true") Name
           th.sortable.col-sm-6.col-md-6.col-lg-6(st-sort='description') Description
           th.col-sm-2.col-md-2.col-lg-2.td-center
-              a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
+              a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-style="{'visibility': currentUser.isAdmin?'visible':'hidden'}")
                 &nbsp;Add Crawl Type
       tbody
         tr(ng-repeat='crawlType in displayedcrawlTypes')
@@ -21,9 +21,9 @@
             span.text-muted {{crawlType.description}}
           td.td-center(style='width: 120px')
             .btn-toolbar
-                button.btn.btn-sm.btn-default(ui-sref='app.dwCrawlTypes.edit({id:crawlType.id})',ng-disabled='!currentUser.isAdmin')
+                button.btn.btn-sm.btn-default(ui-sref='app.dwCrawlTypes.edit({id:crawlType.id})',ng-style="{'visibility': currentUser.isAdmin?'visible':'hidden'}")
                     i.fa.fa-pencil
-                button.btn.btn-sm.btn-danger(ng-click='delete({id:crawlType.id})',ng-disabled='!currentUser.isAdmin')
+                button.btn.btn-sm.btn-danger(ng-click='delete({id:crawlType.id})',ng-style="{'visibility': currentUser.isAdmin?'visible':'hidden'}")
                     i.fa.fa-trash-o
   .overlay(ng-if='loading')
   .loading-img(ng-if='loading')

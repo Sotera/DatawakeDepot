@@ -51,31 +51,37 @@ app.controller('TeamsCtrl', function($scope, $state, $stateParams, AminoUser, Dw
 
   $scope.delete = function(team) {
     TeamsService.deleteTeam(team, function() {
-      $scope.safeDisplayedteams = TeamsService.getTeams();
+      $scope.safeDisplayedTeams = TeamsService.getTeams();
       $state.go('^.list');
     });
   };
 
   $scope.onSubmit = function() {
     TeamsService.upsertTeam($scope.team, function() {
-      $scope.safeDisplayedteams = TeamsService.getTeams();
+      $scope.safeDisplayedTeams = TeamsService.getTeams();
       $state.go('^.list');
     });
   };
 
   $scope.loading = true;
-  DwTeam.find({filter: {include: ['trails','domains','users']}}).$promise
-      .then(function (allTeams) {
-        $scope.safeDisplayedteams = allTeams;
-        $scope.displayedteams = [].concat($scope.safeDisplayedteams);
-      })
-      .catch(function (err) {
-        console.log(err);
-      })
-      .then(function () {
-        $scope.loading = false;
-      }
-  );
+  if($scope.currentUser.isAdmin){
+      DwTeam.find({filter: {include: ['trails','domains','users']}}).$promise
+          .then(function (allTeams) {
+            $scope.safeDisplayedTeams = allTeams;
+            $scope.displayedTeams = [].concat($scope.safeDisplayedTeams);
+          })
+          .catch(function (err) {
+            console.log(err);
+          })
+          .then(function () {
+            $scope.loading = false;
+          }
+      );
+  }else{
+      $scope.safeDisplayedTeams = $scope.currentUser.teams;
+      $scope.displayedTeams = [].concat($scope.safeDisplayedTeams);
+  }
+  $scope.loading = false;
 
   AminoUser.find({filter: {include: []}}).$promise
       .then(function (allUsers) {

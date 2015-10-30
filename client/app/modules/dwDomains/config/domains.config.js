@@ -5,7 +5,7 @@ app.run(function($rootScope, DwDomain, gettextCatalog) {
     $rootScope.addMenu(gettextCatalog.getString('Domains'), 'app.dwDomains.list', 'ion-ios-color-filter-outline');
 
     DwDomain.find(function(data) {
-        $rootScope.addDashboardBox(gettextCatalog.getString('Domains'), 'bg-blue3', 'ion-ios-color-filter-outline', data.length, 'app.dwDomains.list');
+        $rootScope.addDashboardBox(gettextCatalog.getString('Domains'), 'bg-blue5', 'ion-ios-color-filter-outline', data.length, 'app.dwDomains.list');
     });
 
 });

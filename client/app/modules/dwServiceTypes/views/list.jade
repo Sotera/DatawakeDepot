@@ -11,7 +11,7 @@
           th.sortable.col-sm-3.col-md-3.col-lg-3(st-sort='name' st-sort-default="true") Name
           th.sortable.col-sm-7.col-md-7.col-lg-7(st-sort='description') Description
           th.col-sm-2.col-md-2.col-lg-2.td-center
-              a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-style="{'visibility': currentUser.isAdmin?'visible':'hidden'}")
+              a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
                 &nbsp;Add Service Type
       tbody
         tr(ng-repeat='serviceType in displayedserviceTypes')
@@ -21,9 +21,9 @@
             span.text-muted {{serviceType.description}}
           td.td-center(style='width: 120px')
             .btn-toolbar
-                button.btn.btn-sm.btn-default(ui-sref='app.dwServiceTypes.edit({id:serviceType.id})',ng-style="{'visibility': currentUser.isAdmin?'visible':'hidden'}")
+                button.btn.btn-sm.btn-default(ui-sref='app.dwServiceTypes.edit({id:serviceType.id})', ng-disabled='!currentUser.isAdmin')
                     i.fa.fa-pencil
-                button.btn.btn-sm.btn-danger(ng-click='delete({id:serviceType.id})',ng-style="{'visibility': currentUser.isAdmin?'visible':'hidden'}")
+                button.btn.btn-sm.btn-danger(ng-click='delete({id:serviceType.id})', ng-disabled='!currentUser.isAdmin')
                     i.fa.fa-trash-o
   .overlay(ng-if='loading')
   .loading-img(ng-if='loading')

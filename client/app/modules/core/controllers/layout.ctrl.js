@@ -9,9 +9,7 @@ angular.module('com.module.core')
    * @requires CoreService
    * @requires gettextCatalog
    **/
-  .controller('LayoutCtrl', function($scope, $rootScope, $cookies, CoreService,
-    gettextCatalog) {
-
+  .controller('LayoutCtrl', function($scope, $rootScope, $cookies, CoreService, gettextCatalog) {
     // angular translate
     $scope.locale = {
       isopen: false

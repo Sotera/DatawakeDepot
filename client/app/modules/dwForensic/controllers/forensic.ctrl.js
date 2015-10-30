@@ -38,10 +38,12 @@ app.controller('ForensicCtrl', function($scope, $state, $stateParams, DwTrail, D
     };
 
     $scope.drawGraph = function() {
+        //convert to a list of entity types
         var graphView = ForensicService.getGraphViews($scope.selectedViews);
-        console.info(JSON.stringify(graphView));
-        
-        var graph = ForensicService.getBrowsePathEdgesWithInfo($scope.selectedTrail.id, graphView);
+        //var trail = ForensicService.getTrails($scope.selectedTrail.id);
+        var trail = ForensicService.getTrail();
+        console.log(JSON.stringify(trail));
+        var graph = ForensicService.getBrowsePathEdgesWithInfo(trail, graphView);
         return ForensicService.processEdges(graph['edges'], graph['nodes'])
     };
 

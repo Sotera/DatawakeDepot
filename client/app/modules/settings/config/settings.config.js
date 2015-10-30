@@ -13,5 +13,16 @@ angular.module('com.module.settings')
       return valor;
     };
 
+    $rootScope.getCollapsedStatus = function(){
+        if(angular.element('.left-side.sidebar-offcanvas.collapse-left').length >0){
+            return("collapse-left");
+        }
+    }
+
+    $rootScope.getStretchedStatus = function(){
+        if(angular.element('.right-side.at-view-fade-in.at-view-fade-out.strech').length >0){
+            return("strech");
+        }
+    }
 
   });

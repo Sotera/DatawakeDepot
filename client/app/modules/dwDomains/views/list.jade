@@ -17,7 +17,7 @@
           th.sortable.col-sm-1.col-md-1.col-lg-1.td-center.text-nowrap(st-sort='') # Items
           th.sortable.col-sm-1.col-md-1.col-lg-1.td-center(st-sort='') Extractors
           th
-            a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom.col-sm-2.col-md-2.col-lg-2(ui-sref='^.add', ng-disabled='!currentUser.isAdmin',ng-style="{'visibility': currentUser.isAdmin?'visible':'hidden'}")
+            a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom.col-sm-2.col-md-2.col-lg-2(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
                 &nbsp; Add Domain
 
       tbody
@@ -42,9 +42,9 @@
             span.label.label-ltgray(ng-repeat="extractor in domain.extractors") {{extractor.name}}
           td.td-center
             .btn-toolbar
-              button.btn.btn-sm.btn-default(ui-sref='app.dwDomains.edit({id:domain.id})',ng-style="{'visibility': currentUser.isAdmin?'visible':'hidden'}")
+              button.btn.btn-sm.btn-default(ui-sref='app.dwDomains.edit({id:domain.id})',, ng-disabled='!currentUser.isAdmin')
                 i.fa.fa-pencil
-              button.btn.btn-sm.btn-danger(ng-click='delete({id:domain})',ng-style="{'visibility': currentUser.isAdmin?'visible':'hidden'}")
+              button.btn.btn-sm.btn-danger(ng-click='delete({id:domain})',, ng-disabled='!currentUser.isAdmin')
                 i.fa.fa-trash-o
   .overlay(ng-if='loading')
   .loading-img(ng-if='loading')

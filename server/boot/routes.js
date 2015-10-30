@@ -1,12 +1,19 @@
 'use strict';
 var async = require('async');
 var log = require('debug')('routes');
+var testDataLoaded = false;
 module.exports = function (app) {
   app.get('/load-test-data', function (req, res) {
+    if (testDataLoaded) {
+      res.end('<h1>Test Data Created!</h2>');
+      return;
+    }
+    testDataLoaded = true;
     var AminoUser = app.models.AminoUser;
     var DwTeam = app.models.DwTeam;
     var DwTrail = app.models.DwTrail;
     var DwDomain = app.models.DwDomain;
+    var DwDomainEntityType = app.models.DwDomainEntityType;
     var alphabet = 'ABCDEF'.split('');
     //var alphabet = 'ABCDEFGHIJKLM'.split('');
     //var alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
@@ -32,7 +39,10 @@ module.exports = function (app) {
               log(err);
               return;
             }
-            createTestTrails(createdTestDomains, function () {
+            var functionArray = [];
+            functionArray.push(async.apply(createTestTrails, createdTestDomains));
+            functionArray.push(async.apply(createTestDomainEntityTypes, createdTestDomains));
+            async.parallel(functionArray, function(err, result){
               res.end('<h1>Test Data Created!</h2>');
             });
           });
@@ -91,6 +101,26 @@ module.exports = function (app) {
 
     function randomInt(low, high) {
       return Math.floor(Math.random() * (high - low) + low);
+    }
+
+    function createTestDomainEntityTypes(testDomains, cb) {
+      var alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+      var testDomainEntityTypesNames = [];
+      alphabet.forEach(function (letter) {
+        testDomainEntityTypesNames.push(letter);
+      });
+      var functionArray = [];
+      testDomainEntityTypesNames.forEach(function(domainEntityTypeName){
+        var domain = testDomains[randomInt(1, testDomains.length)];
+        var domainEntityTypeMoniker = 'DomainEntityType' + domainEntityTypeName;
+        functionArray.push(async.apply(findOrCreateObj, DwDomainEntityType, {where: {name: domainEntityTypeMoniker}},
+          {
+            name: domainEntityTypeMoniker,
+            description: 'The ' + domainEntityTypeName + ' DomainEntityType',
+            dwDomainId: domain.id
+          }));
+      });
+      async.parallel(functionArray, cb);
     }
 
     function createTestTrails(testDomains, cb) {

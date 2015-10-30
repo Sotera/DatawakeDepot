@@ -11,8 +11,12 @@ app.controller('ForensicCtrl', function($scope, $state, $stateParams, DwTrail, F
     $scope.selectedTeam = null;
     $scope.selectedDomain = null;
     $scope.selectedTrail = null;
-    $scope.views =[ {id: 1, label: "phone"}, {id: 2, label: "email"},{id: 3, label: "bitcoin"}, {id: 4, label: "PERSON"},{id: 5, label: "ORGANIZATION"}, {id: 6, label: "MISC"}];
     $scope.selectedViews = [];
+    //Setup the view dropdown menu
+    //TODO: This should be coming from the DB.
+    $scope.views =[ {id: 1, label: "phone"}, {id: 2, label: "email"},{id: 3, label: "bitcoin"}, {id: 4, label: "PERSON"},{id: 5, label: "ORGANIZATION"}, {id: 6, label: "MISC"}];
+    $scope.viewSettings = {buttonClasses: 'btn btn-primary btn-sm'};
+    $scope.viewCustomText = {buttonDefaultText: 'Select Views'};
 
     $scope.getTrails = function() {
         return $scope.currentUser.trails;
@@ -35,6 +39,6 @@ app.controller('ForensicCtrl', function($scope, $state, $stateParams, DwTrail, F
     $scope.trailChanged = function (trail) {
         $scope.selectedTrail = trail;
     }
-    
+
 });
 

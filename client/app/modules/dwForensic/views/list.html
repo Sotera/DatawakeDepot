@@ -64,13 +64,11 @@
                 </li>
             </ul>
         </div>
-        <!-- View selection button-->
-        <!--<div class="btn-group">-->
-            <!--<select size="5" multiple ng-multiple="true" ng-model="selectedViews"-->
-                    <!--ng-options="view for view in views"></select>-->
-        <!--</div>-->
-
-        <div ng-dropdown-multiselect="select" options="views" selected-model="selectedViews"></div>
+        <!-- Views selection -->
+        <div class="btn-group">
+            <div ng-dropdown-multiselect="" options="views" selected-model="selectedViews"
+                 extra-settings="viewSettings" translation-texts="viewCustomText"></div>
+        </div>
 
 
     </div>

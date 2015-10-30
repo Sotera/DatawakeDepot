@@ -22,7 +22,7 @@
           td(style='width: 120px')
             a(href='', ui-sref='app.dwTrailUrls.view({id: trailUrl.id})') {{trailUrl.url}}
           td.td-center
-            span.text-muted {{trailUrl.urlExtractions.length}}
+            a(ui-sref='app.dwUrlExtractions.list({id:null, id: trailUrl.id})') {{trailUrl.urlExtractions.length}}
           td
             span.label.label-ltgray {{trailUrl.trail.name}}
           td

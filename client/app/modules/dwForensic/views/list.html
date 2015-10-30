@@ -69,6 +69,13 @@
             <div ng-dropdown-multiselect="" options="views" selected-model="selectedViews"
                  extra-settings="viewSettings" translation-texts="viewCustomText"></div>
         </div>
+        <!-- Draw Graph -->
+        <div class="btn-group">
+            <button ng-disabled="!selectedTeam || !selectedDomain || !selectedTrail || !selectedViews.length > 0"
+                    class="btn btn-success btn-sm" ng-click="drawGraph()">
+                <span class="glyphicon glyphicon-edit"></span> Draw Graph
+            </button>
+        </div>
 
 
     </div>

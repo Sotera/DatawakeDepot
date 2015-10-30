@@ -1,7 +1,7 @@
 'use strict';
 var app = angular.module('com.module.dwForensic');
 
-app.controller('ForensicCtrl', function($scope, $state, $stateParams, DwTrail, ForensicService, gettextCatalog, AppAuth) {
+app.controller('ForensicCtrl', function($scope, $state, $stateParams, DwTrail, DwDomainEntityType, ForensicService, gettextCatalog, AppAuth) {
 
     $scope.trail = {};
     //Put the currentUser in $scope for convenience
@@ -12,15 +12,11 @@ app.controller('ForensicCtrl', function($scope, $state, $stateParams, DwTrail, F
     $scope.selectedDomain = null;
     $scope.selectedTrail = null;
     $scope.selectedViews = [];
-    //Setup the view dropdown menu
-    //TODO: This should be coming from the DB.
-    $scope.views =[ {id: 1, label: "phone"}, {id: 2, label: "email"},{id: 3, label: "bitcoin"}, {id: 4, label: "PERSON"},{id: 5, label: "ORGANIZATION"}, {id: 6, label: "MISC"}];
-    $scope.viewSettings = {buttonClasses: 'btn btn-primary btn-sm'};
-    $scope.viewCustomText = {buttonDefaultText: 'Select Views'};
 
-    $scope.getTrails = function() {
-        return $scope.currentUser.trails;
-    }
+    //Setup the view dropdown menu
+    $scope.views = ForensicService.getDomainEntityTypes();
+    $scope.viewSettings = {buttonClasses: 'btn btn-primary btn-sm', displayProp: 'name', idProp: 'name'};
+    $scope.viewCustomText = {buttonDefaultText: 'Select Views'};
 
     $scope.teamChanged = function (team) {
         $scope.selectedTeam = team;
@@ -34,11 +30,20 @@ app.controller('ForensicCtrl', function($scope, $state, $stateParams, DwTrail, F
         $scope.selectedDomain = domain;
         $scope.selectedTrail = null;
         $scope.trails = domain.trails;
-    }
+    };
 
     $scope.trailChanged = function (trail) {
         $scope.selectedTrail = trail;
-    }
+        $scope.views = ForensicService.getDomainEntityTypes();
+    };
+
+    $scope.drawGraph = function() {
+        var graphView = ForensicService.getGraphViews($scope.selectedViews);
+        console.info(JSON.stringify(graphView));
+        
+        var graph = ForensicService.getBrowsePathEdgesWithInfo($scope.selectedTrail.id, graphView);
+        return ForensicService.processEdges(graph['edges'], graph['nodes'])
+    };
 
 });
 

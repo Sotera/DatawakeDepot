@@ -6,23 +6,35 @@ app.controller('ForensicCtrl', function($scope, $state, $stateParams, DwTrail, F
     $scope.trail = {};
     //Put the currentUser in $scope for convenience
     $scope.currentUser = AppAuth.currentUser;
-    $scope.userTeams = [];
+    $scope.domains = [];
+    $scope.trails = [];
+    $scope.selectedTeam = null;
+    $scope.selectedDomain = null;
+    $scope.selectedTrail = null;
+    $scope.views =[ {id: 1, label: "phone"}, {id: 2, label: "email"},{id: 3, label: "bitcoin"}, {id: 4, label: "PERSON"},{id: 5, label: "ORGANIZATION"}, {id: 6, label: "MISC"}];
+    $scope.selectedViews = [];
 
-
-    //Load the currentUser's Teams into a local array
-    if(AppAuth.currentUser.teams) {
-        $scope.loading = true;
-
-       for (var i = 0; i < $scope.currentUser.teams.length; ++i) {
-           $scope.userTeams.push({
-               value: $scope.currentUser.teams[i].name,
-               name: $scope.currentUser.teams[i].name,
-               id: $scope.currentUser.teams[i].id,
-               domains: $scope.currentUser.teams[i].domains
-           });
-        }
-        $scope.loading = false;
+    $scope.getTrails = function() {
+        return $scope.currentUser.trails;
     }
 
+    $scope.teamChanged = function (team) {
+        $scope.selectedTeam = team;
+        $scope.selectedDomain = null;
+        $scope.selectedTrail = null;
+        $scope.domains = team.domains;
+    };
+
+
+    $scope.domainChanged = function (domain) {
+        $scope.selectedDomain = domain;
+        $scope.selectedTrail = null;
+        $scope.trails = domain.trails;
+    }
+
+    $scope.trailChanged = function (trail) {
+        $scope.selectedTrail = trail;
+    }
+    
 });
 

@@ -14,6 +14,7 @@ module.exports = function (app) {
     var DwTrail = app.models.DwTrail;
     var DwDomain = app.models.DwDomain;
     var DwDomainEntityType = app.models.DwDomainEntityType;
+    var DwDomainEntity= app.models.DwDomainEntity;
     var alphabet = 'ABCDEF'.split('');
     //var alphabet = 'ABCDEFGHIJKLM'.split('');
     //var alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
@@ -24,6 +25,7 @@ module.exports = function (app) {
       ], function (err, result) {
         if (err) {
           log(err);
+          res.end('<h1>Test Data Created!</h2>');
           return;
         }
         var createdTestTeams = result[0];
@@ -37,13 +39,16 @@ module.exports = function (app) {
           function (err, result) {
             if (err) {
               log(err);
+              res.end('<h1>Test Data Created!</h2>');
               return;
             }
             var functionArray = [];
             functionArray.push(async.apply(createTestTrails, createdTestDomains));
             functionArray.push(async.apply(createTestDomainEntityTypes, createdTestDomains));
-            async.parallel(functionArray, function(err, result){
-              res.end('<h1>Test Data Created!</h2>');
+            async.parallel(functionArray, function (err, result) {
+              createTestDomainEntities(createdTestDomains, function (err, result) {
+                res.end('<h1>Test Data Created!</h2>');
+              });
             });
           });
       }
@@ -103,14 +108,52 @@ module.exports = function (app) {
       return Math.floor(Math.random() * (high - low) + low);
     }
 
+    function createTestDomainEntities(testDomains, cb) {
+      var alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+      var testDomainEntityNames = [];
+      alphabet.forEach(function (letter) {
+        testDomainEntityNames.push(letter);
+      });
+      var arrayLength = testDomainEntityNames.length;
+      var functionArray = [];
+      for (var i = 0; i < arrayLength; ++i) {
+        var domain = testDomains[randomInt(1, testDomains.length)];
+        functionArray.push(async.apply(findOrCreateObj, DwDomain, {
+          where: {name: domain.name},
+          include: ['domainEntityTypes']
+        }, {}));
+      }
+      async.parallel(functionArray, function (err, domains) {
+        var functionArray = [];
+        for (var i = 0; i < arrayLength; ++i) {
+          var domainEntityName = testDomainEntityNames[i];
+          var domain = domains[i];
+          var domainEntityTypes = domain.domainEntityTypes;
+          var domainEntityType = domainEntityTypes()[randomInt(0, domainEntityTypes.length)];
+          var domainEntityTypeId = domainEntityType.id;
+          var domainEntityMoniker = 'DomainEntity' + domainEntityName;
+          functionArray.push(async.apply(findOrCreateObj, DwDomainEntity, {where: {name: domainEntityMoniker}},
+            {
+              name: domainEntityMoniker,
+              description: 'The ' + domainEntityName + ' DomainEntity',
+              dwDomainId: domain.id,
+              dwDomainEntityTypeId:domainEntityTypeId
+            }));
+        }
+        async.parallel(functionArray, function (err, entities) {
+          cb(err, entities);
+        });
+      });
+    }
+
     function createTestDomainEntityTypes(testDomains, cb) {
       var alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-      var testDomainEntityTypesNames = [];
+      var testDomainEntityTypeNames = [];
       alphabet.forEach(function (letter) {
-        testDomainEntityTypesNames.push(letter);
+        testDomainEntityTypeNames.push(letter);
       });
       var functionArray = [];
-      testDomainEntityTypesNames.forEach(function(domainEntityTypeName){
+      testDomainEntityTypeNames.forEach(function (domainEntityTypeName) {
         var domain = testDomains[randomInt(1, testDomains.length)];
         var domainEntityTypeMoniker = 'DomainEntityType' + domainEntityTypeName;
         functionArray.push(async.apply(findOrCreateObj, DwDomainEntityType, {where: {name: domainEntityTypeMoniker}},

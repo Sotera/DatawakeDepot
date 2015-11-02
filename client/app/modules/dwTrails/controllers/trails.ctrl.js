@@ -216,11 +216,42 @@ app.controller('TrailsCtrl', function($scope, $state, $stateParams, DwDomain, Dw
   );
 
   if ($stateParams.id) {
-      TrailsService.getTrail($stateParams.id).$promise.then(function(result){
-          $scope.trail = result;})
+      $scope.loading = true;
+      DwTrail.findOne({
+          filter: {
+              where: {
+                  id: $stateParams.id
+              },
+              fields:{
+                  'id':true,
+                  'name':true,
+                  'description':true,
+                  'timestamp':true,
+                  'dwDomainId':true,
+                  'dwTeamId':true},
+              //include: ['team','users','trailUrls','feeds','domain']
+              include: [
+                  'team',
+                  {relation:'trailUrls',
+                      scope:{include:['urlExtractions','crawlType']}
+                  },
+                  {relation:'domain',
+                      scope:{
+                          fields:[
+                              "name",
+                              "description"
+                          ],
+                          include:['domainEntityTypes']}
+                  }
+              ]
+          }
+      }).$promise
+      .then(function (trail) {
+          $scope.trail = trail;
+      });
+      $scope.loading = false;
   } else {
       $scope.trail = {};
   }
-
 });
 

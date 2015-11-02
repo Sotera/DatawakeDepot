@@ -1,7 +1,7 @@
 'use strict';
 var app = angular.module('com.module.dwForensic');
 
-app.controller('ForensicCtrl', function($scope, $state, $stateParams, DwTrail, DwDomainEntityType, ForensicService, gettextCatalog, AppAuth) {
+app.controller('ForensicCtrl', function($scope, $state, $stateParams, DwTrail, DwTrailUrl, DwDomainEntityType, ForensicService, gettextCatalog, AppAuth) {
 
     $scope.trail = {};
     //Put the currentUser in $scope for convenience
@@ -37,15 +37,24 @@ app.controller('ForensicCtrl', function($scope, $state, $stateParams, DwTrail, D
         $scope.views = ForensicService.getDomainEntityTypes();
     };
 
-    $scope.drawGraph = function() {
-        //convert to a list of entity types
-        var graphView = ForensicService.getGraphViews($scope.selectedViews);
-        //var trail = ForensicService.getTrails($scope.selectedTrail.id);
-        var trail = ForensicService.getTrail();
-        console.log(JSON.stringify(trail));
-        var graph = ForensicService.getBrowsePathEdgesWithInfo(trail, graphView);
-        return ForensicService.processEdges(graph['edges'], graph['nodes'])
-    };
 
+    $scope.drawGraph = function(trailId) {
+        DwTrail.find({filter: {"where": {"id": trailId}, include: ['domain','team',{"relation": "trailUrls", "scope": {"include": "urlExtractions"}}]}}).$promise
+            .then(function (trail) {
+                console.log("Getting trail");
+                console.log(JSON.stringify(trail));
+
+                //TODO: This is only here for debugging.
+                $scope.trail = trail;
+
+                var graphViews = ForensicService.buildGraphViews($scope.selectedViews);
+                var graph = ForensicService.getBrowsePathEdgesWithInfo(trail, graphViews);
+                return ForensicService.processEdges(graph['edges'], graph['nodes'])
+            })
+            .catch(function (err) {
+                console.log("Error getting trail: " + trailId);
+                console.log(err);
+            });
+    };
 });
 

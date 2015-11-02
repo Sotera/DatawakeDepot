@@ -7,22 +7,24 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
         return DwDomainEntityType.find();
     }
 
-    this.getTrails = function () {
-        return DwTrail.find();
-    };
-
-    this.getTrail = function (trailId) {
-        console.log("TrailId: "+ trailId);
-        // Test String
-        // {"filter": {"where": {"id": "56324649079ebbfc18d25129"}, "include": "trailUrls"}}
-        return DwTrail.find({"filter": {"where": {"id": "56324649079ebbfc18d25129"}}, "include": "trailUrls"})
+    this.getTrail = function(trailId) {
+        DwTrail.find({filter: {"where": {"id": trailId}, include: ['domain','team',{"relation": "trailUrls", "scope": {"include": "urlExtractions"}}]}}).$promise
+            .then(function (trail) {
+                console.log("Getting trail");
+                console.log(JSON.stringify(trail));
+                return trail;
+            })
+            .catch(function (err) {
+                console.log("Error getting trail: " + trailId);
+                console.log(err);
+            });
     };
 
     this.processEdges = function (edges, nodes) {
         console.info("how the hell do I make an edge?")
     };
 
-    this.getGraphViews = function (selectedViews) {
+    this.buildGraphViews = function (selectedViews) {
         var graphViews = [];
         for (var i in selectedViews) {
             graphViews.push(selectedViews[i].id);
@@ -34,9 +36,6 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
         var edges = [];
         var nodes = {};
         var edgeBuffer = [];
-
-        console.log(JSON.stringify(trail));
-        //var urls = this.getTrailUrls(trail.id);
 
         //var trailUrls = DwTrailUrls.getTrailUrl(trail_id)
         //for (var trailUrl in trailUrls) {
@@ -71,41 +70,40 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
     };
 
     this.getBrowsePathEdgesWithInfo = function (trail, views) {
-        console.log(JSON.stringify(trail));
-        //return {edges: [], nodes: []}
         var browsePathGraph = this.getBrowsePath(trail);
-        var nodes = browsePathGraph['nodes'];
-        var edges = browsePathGraph['edges'];
-        // Get browse path url's
-        var urls = Object.keys(browsePathGraph['nodes']);
-        // Get entities for each browse path URL.
-        for (var url in urls) {
-            // TODO: Using this wrong
-            // Get entities for each url in the trail
-            var urlEntities = DwDomainItems.getDomainItems(url);
-            for (var type in urlEntities) {
-                name = urlEntities['name'];
-                switch (type) {
-                    case 'website':
-                        var group = name.split('/')[2]
-                        break;
-                    case 'phone':
-                        var group = 'length=' + name.length;
-                        break;
-                    case 'email':
-                        var group = name.split('@')[1];
-                        break;
-                    case 'info':
-                        var group = name.split('->')[0]
-                        break;
-                }
-                var node = {"id": name, "type": type, "size": 5, "gropName": group};
-                if (!(name in nodes)) {
-                    nodes[name] = node;
-                }
-                edges.push(url, name)
-            }
-        }
+        return {edges: [], nodes: []}
+        //var nodes = browsePathGraph['nodes'];
+        //var edges = browsePathGraph['edges'];
+        //// Get browse path url's
+        //var urls = Object.keys(browsePathGraph['nodes']);
+        //// Get entities for each browse path URL.
+        //for (var url in urls) {
+        //    // TODO: Using this wrong
+        //    // Get entities for each url in the trail
+        //    var urlEntities = DwDomainItems.getDomainItems(url);
+        //    for (var type in urlEntities) {
+        //        name = urlEntities['name'];
+        //        switch (type) {
+        //            case 'website':
+        //                var group = name.split('/')[2]
+        //                break;
+        //            case 'phone':
+        //                var group = 'length=' + name.length;
+        //                break;
+        //            case 'email':
+        //                var group = name.split('@')[1];
+        //                break;
+        //            case 'info':
+        //                var group = name.split('->')[0]
+        //                break;
+        //        }
+        //        var node = {"id": name, "type": type, "size": 5, "gropName": group};
+        //        if (!(name in nodes)) {
+        //            nodes[name] = node;
+        //        }
+        //        edges.push(url, name)
+        //    }
+        //}
     };
 
 }]);

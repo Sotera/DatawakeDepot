@@ -57,6 +57,14 @@ app.controller('TransmissionsCtrl', function($scope, $state, $stateParams, DwFee
 
     }];
 
+    $scope.set_color = function (transmission) {
+        if (transmission.transmitStatus == "FAILED") {
+            return {
+                background: "red",
+                color: "white"
+            }
+        }
+    }
 
     $scope.delete = function(id) {
         TransmissionsService.deleteTransmission(id, function() {

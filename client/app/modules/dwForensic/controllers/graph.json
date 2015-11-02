@@ -1,0 +1,59 @@
+{
+  "nodes": [
+    {
+      "id": "http://www.google.com",
+      "type": "browse path",
+      "size": 10,
+      "timestamps": [
+        "2015-10-30T18:45:38.457Z"
+      ],
+      "groupName": "www.google.com",
+      "group": 0,
+      "index": 0,
+      "community": "n/a"
+    },
+    {
+      "id": "http://www.cnn.com",
+      "type": "browse path",
+      "size": 10,
+      "timestamps": [
+        "2015-10-30T18:45:50.078Z"
+      ],
+      "groupName": "www.cnn.com",
+      "group": 1,
+      "index": 1,
+      "community": "n/a"
+    },
+    {
+      "id": "555-123.1234",
+      "size": 5,
+      "group": 2,
+      "index": 2,
+      "community": "n/a"
+    },
+    {
+      "id": "admin@admin.com",
+      "size": 5,
+      "group": 2,
+      "index": 3,
+      "community": "n/a"
+    }
+  ],
+  "links": [
+    {
+      "source": 0,
+      "target": 1,
+      "value": 1
+    },
+    {
+      "source": 0,
+      "target": 2,
+      "value": 1
+    },
+    {
+      "source": 1,
+      "target": 3,
+      "value": 1
+    }
+  ]
+}

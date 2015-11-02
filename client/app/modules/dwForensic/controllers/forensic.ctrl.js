@@ -39,7 +39,7 @@ app.controller('ForensicCtrl', function($scope, $state, $stateParams, DwTrail, D
 
 
     $scope.drawGraph = function(trailId) {
-        DwTrail.find({filter: {"where": {"id": trailId}, include: ['domain','team',{"relation": "trailUrls", "scope": {"include": "urlExtractions"}}]}}).$promise
+        DwTrail.findOne({filter: {"where": {"id": trailId}, include: ['domain','team',{"relation": "trailUrls", "scope": {"include": "urlExtractions"}}]}}).$promise
             .then(function (trail) {
                 console.log("Getting trail");
                 console.log(JSON.stringify(trail));
@@ -49,7 +49,12 @@ app.controller('ForensicCtrl', function($scope, $state, $stateParams, DwTrail, D
 
                 var graphViews = ForensicService.buildGraphViews($scope.selectedViews);
                 var graph = ForensicService.getBrowsePathEdgesWithInfo(trail, graphViews);
-                return ForensicService.processEdges(graph['edges'], graph['nodes'])
+                console.log("graph");
+                console.log(JSON.stringify(graph));
+                var fullGraph =  ForensicService.processEdges(graph['edges'], graph['nodes'])
+                console.log("full graph");
+                console.log(JSON.stringify(fullGraph));
+                return fullGraph
             })
             .catch(function (err) {
                 console.log("Error getting trail: " + trailId);

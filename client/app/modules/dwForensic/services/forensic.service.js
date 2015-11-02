@@ -7,8 +7,13 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
         return DwDomainEntityType.find();
     }
 
-    this.getTrail = function(trailId) {
-        DwTrail.find({filter: {"where": {"id": trailId}, include: ['domain','team',{"relation": "trailUrls", "scope": {"include": "urlExtractions"}}]}}).$promise
+    this.getTrail = function (trailId) {
+        DwTrail.find({
+            filter: {
+                "where": {"id": trailId},
+                include: ['domain', 'team', {"relation": "trailUrls", "scope": {"include": "urlExtractions"}}]
+            }
+        }).$promise
             .then(function (trail) {
                 console.log("Getting trail");
                 console.log(JSON.stringify(trail));
@@ -20,8 +25,48 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
             });
     };
 
-    this.processEdges = function (edges, nodes) {
-        console.info("how the hell do I make an edge?")
+    this.processEdges = function (rawEdges, rawNodes) {
+        var nodes = []
+        var edges = []
+        var curr_node = 0
+        var node_map  = {}
+        var groups = {}
+        var curr_group = 0
+
+
+        //process add nodes
+        for (var name in rawNodes) {
+            var node = rawNodes[name];
+            console.log("node-name: " + name);
+            if (!(name in nodes)) {
+                var groupName = node.groupName;
+                if (!(groupName in groups)) {
+                    groups[groupName] = curr_group;
+                    curr_group ++;
+                }
+                var group = groups[groupName];
+                node["group"] = group;
+                node["index"] = curr_node;
+                node["community"] = "n/a";
+
+                nodes.push(node);
+                node_map[name] = curr_node;
+                curr_node ++;
+            }
+        }
+
+        for (var edgeNo in rawEdges) {
+            var value = 1;
+            //if (edgeName.length > 2) {
+            //    value = edge[2];
+            //}
+            edges.push({"source":node_map[rawEdges[edgeNo].nodeA],'target':node_map[rawEdges[edgeNo].nodeB],'value':value})
+        }
+
+        var graph = {'nodes':nodes, 'links':edges}
+
+        return graph
+
     };
 
     this.buildGraphViews = function (selectedViews) {
@@ -33,77 +78,75 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
     };
 
     this.getBrowsePath = function (trail) {
+        console.log("getBrowsePath");
+        console.log(JSON.stringify(trail));
         var edges = [];
         var nodes = {};
         var edgeBuffer = [];
 
-        //var trailUrls = DwTrailUrls.getTrailUrl(trail_id)
-        //for (var trailUrl in trailUrls) {
-        //  var url = trailUrl['url']
-        //  if (!(url in nodes)) {
-        //    nodes[url] = {
-        //      'id': url,
-        //      'type': 'browse path',
-        //      'size': 10,
-        //      'timestamps': [],
-        //      'groupName': url.split('/')[2]
-        //    }
-        //  }
-        //  nodes[url]['timestamps'].push(trailUrl['timestamp']);
-        //  edgeBuffer.push(url);
-        //  if (edge_buffer.length === 2) {
-        //    if (edge_buffer[0] != edge_buffer[1]) {
-        //      if (!('chrome://newtab/' in edge_buffer[1])) {
-        //        var users1 = nodes[edge_buffer[0]]['userNames'][-1]
-        //        var users2 = nodes[edge_buffer[1]]['userNames'][-1]
-        //        if (users1 === users2) {
-        //          edges.append((edge_buffer[0], edge_buffer[1]))
-        //        }
-        //      }
-        //    }
-        //    edge_buffer = [edge_buffer[1]]
-        //  }
-        //
-        //
-        //}
-        return null
+        //Create browse path nodes.
+        for (var trailUrl in trail.trailUrls) {
+            var url = trail.trailUrls[trailUrl].url;
+            console.log(url);
+            if (!(url in nodes)) {
+                nodes[url] = {
+                    'id': url,
+                    'type': 'browse path',
+                    'size': 10,
+                    'timestamps': [],
+                    'groupName': url.split('/')[2]
+                }
+            }
+            nodes[url]['timestamps'].push(trail.trailUrls[trailUrl].timestamp);
+            edgeBuffer.push(url);
+            if (edgeBuffer.length === 2) {
+                if (edgeBuffer[0] != edgeBuffer[1]) {
+                    edges.push({nodeA: edgeBuffer[0], nodeB: edgeBuffer[1]});
+                }
+                edgeBuffer = [edgeBuffer[1]]
+            }
+        }
+        return {edges: edges, nodes: nodes}
     };
 
     this.getBrowsePathEdgesWithInfo = function (trail, views) {
         var browsePathGraph = this.getBrowsePath(trail);
-        return {edges: [], nodes: []}
-        //var nodes = browsePathGraph['nodes'];
-        //var edges = browsePathGraph['edges'];
-        //// Get browse path url's
-        //var urls = Object.keys(browsePathGraph['nodes']);
-        //// Get entities for each browse path URL.
-        //for (var url in urls) {
-        //    // TODO: Using this wrong
-        //    // Get entities for each url in the trail
-        //    var urlEntities = DwDomainItems.getDomainItems(url);
-        //    for (var type in urlEntities) {
-        //        name = urlEntities['name'];
-        //        switch (type) {
-        //            case 'website':
-        //                var group = name.split('/')[2]
-        //                break;
-        //            case 'phone':
-        //                var group = 'length=' + name.length;
-        //                break;
-        //            case 'email':
-        //                var group = name.split('@')[1];
-        //                break;
-        //            case 'info':
-        //                var group = name.split('->')[0]
-        //                break;
-        //        }
-        //        var node = {"id": name, "type": type, "size": 5, "gropName": group};
-        //        if (!(name in nodes)) {
-        //            nodes[name] = node;
-        //        }
-        //        edges.push(url, name)
-        //    }
-        //}
+        console.log(JSON.stringify(browsePathGraph));
+
+        var nodes = browsePathGraph['nodes'];
+        var edges = browsePathGraph['edges'];
+
+        for (var trailUrl in trail.trailUrls) {
+            var url = trail.trailUrls[trailUrl].url;
+            for (var entities in trail.trailUrls[trailUrl].urlExtractions) {
+                var entity = trail.trailUrls[trailUrl].urlExtractions[entities];
+                console.log("Entity")
+                console.log(JSON.stringify(entity));
+                var name = entity.value;
+                var type = entity.type;
+                switch (type) {
+                    case 'website':
+                        var group = name.split('/')[2];
+                        break;
+                    case 'phone':
+                        var group = 'length=' + name.length;
+                        break;
+                    case 'email':
+                        var group = name.split('@')[1];
+                        break;
+                    case 'info':
+                        var group = name.split('->')[0];
+                        break;
+                }
+                var node = {"id": name, "type": type, "size": 5, "gropName": group};
+                if (!(name in nodes)) {
+                    nodes[name] = node;
+                }
+                edges.push({nodeA: url, nodeB: name});
+            }
+        }
+
+        return {edges: edges, nodes: nodes}
     };
 
 }]);

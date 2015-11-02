@@ -153,5 +153,24 @@ app.controller('DomainsCtrl', function($scope, $state, $stateParams, DwFeed, DwD
         .then(function () {
         }
     );
+
+    if ($stateParams.id) {
+        $scope.loading = true;
+        DwDomain.findOne({
+            filter: {
+                where: {
+                    id: $stateParams.id
+                },
+                fields:{'name':true,'description':true,'id':true},
+                include: ['domainEntityTypes','domainItems']
+            }
+        }).$promise
+            .then(function (domain) {
+                $scope.domain = domain;
+            });
+        $scope.loading = false;
+    } else {
+        $scope.domain = {};
+    }
 });
 

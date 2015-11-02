@@ -5,7 +5,10 @@ div.box
                 i.fa.fa-arrow-left &nbsp;Back to Domains
     div.box-body
         div
-            h2 {{domain.name}}
+            h2 Domain: {{domain.name}}
 
+            h3 Teams
+                ul
+                    li( ng-repeat="user in domain.teams") {{team.name}}
             h3 Raw
                 pre {{domain|json}}

@@ -5,10 +5,16 @@ div.box
                 i.fa.fa-arrow-left &nbsp;Back to Teams
     div.box-body
         div
-            h2 {{team.name}}
+            h2 {{team.name}} - {{team.description}}
 
-            h3 Members
+            h3 Team Users:
                 ul
-                    li( ng-repeat="user in team.users") {{user.name}}
-            h3 Raw
+                    li( ng-repeat="user in team.users") {{user.username}}
+            h3 Domains:
+                ul
+                    li( ng-repeat="domain in team.domains") {{domain.name}}
+            h3 Trails:
+                ul
+                    li( ng-repeat="trail in team.trails") {{trail.name}}
+            h3 Raw:
                 pre {{team|json}}

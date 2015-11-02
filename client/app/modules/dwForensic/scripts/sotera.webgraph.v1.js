@@ -11,7 +11,8 @@
  limitations under the License.
  */
 
-
+'use strict';
+var app = angular.module('com.module.dwForensic');
 var SWG = (function() {
 
     // container for all public functions and objects

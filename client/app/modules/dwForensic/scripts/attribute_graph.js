@@ -16,7 +16,8 @@
 
  */
 
-
+'use strict';
+var app = angular.module('com.module.dwForensic');
 /*jslint browser: true, unparam: true */
 
 /*globals tangelo, $, d3, SWG */

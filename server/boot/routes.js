@@ -14,7 +14,7 @@ module.exports = function (app) {
     var DwTrail = app.models.DwTrail;
     var DwDomain = app.models.DwDomain;
     var DwDomainEntityType = app.models.DwDomainEntityType;
-    var DwDomainEntity= app.models.DwDomainEntity;
+    var DwDomainItem = app.models.DwDomainItem;
     var alphabet = 'ABCDEF'.split('');
     //var alphabet = 'ABCDEFGHIJKLM'.split('');
     //var alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
@@ -46,7 +46,7 @@ module.exports = function (app) {
             functionArray.push(async.apply(createTestTrails, createdTestDomains));
             functionArray.push(async.apply(createTestDomainEntityTypes, createdTestDomains));
             async.parallel(functionArray, function (err, result) {
-              createTestDomainEntities(createdTestDomains, function (err, result) {
+              createTestDomainItems(createdTestDomains, function (err, result) {
                 res.end('<h1>Test Data Created!</h2>');
               });
             });
@@ -108,40 +108,61 @@ module.exports = function (app) {
       return Math.floor(Math.random() * (high - low) + low);
     }
 
-    function createTestDomainEntities(testDomains, cb) {
+    function createTestDomainItems(testDomains, cb) {
       var alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-      var testDomainEntityNames = [];
+      var testDomainItemNames = [];
       alphabet.forEach(function (letter) {
-        testDomainEntityNames.push(letter);
+        testDomainItemNames.push(letter);
       });
-      var arrayLength = testDomainEntityNames.length;
       var functionArray = [];
-      for (var i = 0; i < arrayLength; ++i) {
+      testDomainItemNames.forEach(function () {
         var domain = testDomains[randomInt(1, testDomains.length)];
         functionArray.push(async.apply(findOrCreateObj, DwDomain, {
           where: {name: domain.name},
           include: ['domainEntityTypes']
         }, {}));
-      }
+      });
       async.parallel(functionArray, function (err, domains) {
-        var functionArray = [];
-        for (var i = 0; i < arrayLength; ++i) {
-          var domainEntityName = testDomainEntityNames[i];
-          var domain = domains[i];
-          var domainEntityTypes = domain.domainEntityTypes;
-          var domainEntityType = domainEntityTypes()[randomInt(0, domainEntityTypes.length)];
-          var domainEntityTypeId = domainEntityType.id;
-          var domainEntityMoniker = 'DomainEntity' + domainEntityName;
-          functionArray.push(async.apply(findOrCreateObj, DwDomainEntity, {where: {name: domainEntityMoniker}},
-            {
-              name: domainEntityMoniker,
-              description: 'The ' + domainEntityName + ' DomainEntity',
-              dwDomainId: domain.id,
-              dwDomainEntityTypeId:domainEntityTypeId
-            }));
+        if (err) {
+          log(err);
+          return;
         }
-        async.parallel(functionArray, function (err, entities) {
-          cb(err, entities);
+        var functionArray = [];
+        domains.forEach(function (domain) {
+          functionArray.push(async.apply(domain.domainEntityTypes));
+        });
+        //Do this to load domain collections
+        async.parallel(functionArray, function (err, domainEntityTypes) {
+          if (err) {
+            log(err);
+            return;
+          }
+          //-->
+          var functionArray = [];
+          var arrayLength = testDomainItemNames.length;
+          for (var i = 0; i < arrayLength; ++i) {
+            var domainItemName = testDomainItemNames[i];
+            var entityTypes = domainEntityTypes[i];
+            var domain = domains[i];
+            var domainEntityType = entityTypes[randomInt(0, entityTypes.length)];
+            if(domainEntityType){
+              var domainEntityTypeId = domainEntityType.id.toString();
+              var domainId = domain.id.toString();
+              var domainItemMoniker = 'DomainItem' + domainItemName;
+              functionArray.push(async.apply(findOrCreateObj, DwDomainItem, {where: {name: domainItemMoniker}},
+                {
+                  name: domainItemMoniker,
+                  coreItem: (randomInt(0, 2) === 0),
+                  itemValue: 'The ' + domainItemName + ' Item Value',
+                  dwDomainId: domainId,
+                  dwDomainEntityTypeId: domainEntityTypeId
+                }));
+            }
+          }
+          async.parallel(functionArray, function (err, entities) {
+            cb(err, entities);
+          });
+          //-->
         });
       });
     }
@@ -155,12 +176,13 @@ module.exports = function (app) {
       var functionArray = [];
       testDomainEntityTypeNames.forEach(function (domainEntityTypeName) {
         var domain = testDomains[randomInt(1, testDomains.length)];
+        var domainId = domain.id.toString();
         var domainEntityTypeMoniker = 'DomainEntityType' + domainEntityTypeName;
         functionArray.push(async.apply(findOrCreateObj, DwDomainEntityType, {where: {name: domainEntityTypeMoniker}},
           {
             name: domainEntityTypeMoniker,
             description: 'The ' + domainEntityTypeName + ' DomainEntityType',
-            dwDomainId: domain.id
+            dwDomainId: domainId
           }));
       });
       async.parallel(functionArray, cb);
@@ -191,9 +213,9 @@ module.exports = function (app) {
             {
               name: trailMoniker,
               description: 'The ' + trailName + ' Trail',
-              dwUserId: myAminoUser.id,
-              dwTeamId: team.id,
-              dwDomainId: domain.id
+              //dwUserId: myAminoUser.id.toString(),
+              dwTeamId: team.id.toString(),
+              dwDomainId: domain.id.toString()
             }));
         });
         async.parallel(functionArray, cb);

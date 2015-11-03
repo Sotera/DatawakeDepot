@@ -37,12 +37,19 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, DwTrail, 
         $scope.views = ForensicService.getDomainEntityTypes();
     };
 
-
     $scope.drawGraph = function (trailId) {
         DwTrail.findOne({
             filter: {
                 "where": {"id": trailId},
-                include: ['domain', 'team', {"relation": "trailUrls", "scope": {"include": "urlExtractions"}}]
+                "include": ["domain", "team", {
+                    "relation": "trailUrls",
+                    "scope": {
+                        "include": [{
+                            "relation": "urlExtractions",
+                            "scope": {"where": {"dwDomainEntityTypeId": "5633a82f6462880e2192840c"}}
+                        }]
+                    }
+                }]
             }
         }).$promise
             .then(function (trail) {
@@ -76,42 +83,6 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, DwTrail, 
             repulsion = parseInt(repulsion_scale(nodes.length));
         }
         console.log("default repulsion = " + repulsion);
-
-        //min_timestamp = -1;
-        //max_timestamp = -1;
-        //min_hits = -1;
-        //max_hits = -1;
-
-        //USERS.all = {};
-        //USERS.max = 1;
-        for (var i in nodes) {
-            var node = nodes[i];
-
-            //for (var j in node.userNames) {
-            //    var username = node.userNames[j];
-            //    if (!(username in USERS.all)) {
-            //        USERS.all[username] = USERS.max;
-            //        USERS.max = USERS.max + 1
-            //    }
-            //}
-
-            //if (node.timestamps) {
-            //    var ts = node.timestamps[node.timestamps.length - 1];
-            //    if (min_timestamp == -1 || ts < min_timestamp)
-            //        min_timestamp = ts;
-            //    if (ts > max_timestamp)
-            //        max_timestamp = ts;
-            //}
-            //if (node.hits) {
-            //    if (node.hits > max_hits)
-            //        max_hits = node.hits;
-            //    if (min_hits == -1 || node.hits < min_hits)
-            //        min_hits = node.hits;
-            //}
-            if (node.community) {
-                communities[node.community] = node.community;
-            }
-        }
 
         SWG.drawGraph('node_graph', graph);
         SWG.show_base_legend();

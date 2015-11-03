@@ -7,24 +7,6 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
         return DwDomainEntityType.find();
     }
 
-    this.getTrail = function (trailId) {
-        DwTrail.find({
-            filter: {
-                "where": {"id": trailId},
-                include: ['domain', 'team', {"relation": "trailUrls", "scope": {"include": "urlExtractions"}}]
-            }
-        }).$promise
-            .then(function (trail) {
-                console.log("Getting trail");
-                console.log(JSON.stringify(trail));
-                return trail;
-            })
-            .catch(function (err) {
-                console.log("Error getting trail: " + trailId);
-                console.log(err);
-            });
-    };
-
     this.processEdges = function (rawEdges, rawNodes) {
         var nodes = []
         var edges = []
@@ -124,6 +106,7 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
                 console.log(JSON.stringify(entity));
                 var name = entity.value;
                 var type = entity.type;
+
                 switch (type) {
                     case 'website':
                         var group = name.split('/')[2];

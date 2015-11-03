@@ -22,7 +22,7 @@
           td
             span.text-muted {{transmission.feeds.name}}
           td
-            span.text-muted {{transmission.transmitStatus}}
+            span.text-muted(ng-style="set_color(transmission)") &nbsp;{{transmission.transmitStatus}}&nbsp;
           td
             span.text-muted {{transmission.timestamp}}
           td.td-center(style='width: 120px')

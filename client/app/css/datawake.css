@@ -110,3 +110,54 @@ body {
     position: absolute;
   }
 }
+
+.small-box h4 {
+  font-size: 30px;
+  font-weight: bold;
+  margin: 0 0 10px 0;
+  white-space: nowrap;
+  padding: 0;
+}
+
+.small-box .icon {
+  position: absolute;
+  top: auto;
+  bottom: 5px;
+  right: 5px;
+  z-index: 0;
+  font-size: 90px;
+  color: rgba(0, 0, 0, 0.15);
+}
+
+.bg-blue8,
+.bg-blue9,
+.bg-blue10,
+.bg-blue11,
+.bg-blue12,
+.bg-blue13 {
+  color: #f9f9f9 !important;
+}
+
+.bg-blue8 {
+  background-color: #74b6ce !important;
+}
+
+.bg-blue9 {
+  background-color: #52accc !important;
+}
+
+.bg-blue10 {
+  background-color: #4796b3 !important;
+}
+
+.bg-blue11 {
+  background-color: #096484 !important;
+}
+
+.bg-blue12 {
+  background-color: #04a4cc !important;
+}
+
+.bg-blue13 {
+  background-color: #0074a2 !important;
+}

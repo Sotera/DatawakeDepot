@@ -17,11 +17,7 @@ module.exports = function(app) {
     }, {
       type: 'select',
       key: 'appTheme',
-<<<<<<< .merge_file_zVszi2
-      value: 'skin-blue',
-=======
       value: 'skin-black',
->>>>>>> .merge_file_iRpNry
       options: [
         'skin-blue',
         'skin-black'
@@ -31,11 +27,7 @@ module.exports = function(app) {
       key: 'appLayout',
       value: 'fixed',
       options: [
-<<<<<<< .merge_file_zVszi2
-        'skin-blue',
-=======
         'fixed',
->>>>>>> .merge_file_iRpNry
         'not-fixed'
       ]
     }, {

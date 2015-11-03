@@ -15,7 +15,7 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, DwTrail, 
 
     //Setup the view dropdown menu
     $scope.views = ForensicService.getDomainEntityTypes();
-    $scope.viewSettings = {buttonClasses: 'btn btn-primary btn-sm', displayProp: 'name', idProp: 'name'};
+    $scope.viewSettings = {buttonClasses: 'btn btn-primary btn-sm', displayProp: 'name'};
     $scope.viewCustomText = {buttonDefaultText: 'Select Views'};
 
     $scope.teamChanged = function (team) {
@@ -38,6 +38,7 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, DwTrail, 
     };
 
     $scope.drawGraph = function (trailId) {
+        var graphViews = ForensicService.buildGraphViews($scope.selectedViews);
         DwTrail.findOne({
             filter: {
                 "where": {"id": trailId},
@@ -46,7 +47,7 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, DwTrail, 
                     "scope": {
                         "include": [{
                             "relation": "urlExtractions",
-                            "scope": {"where": {"dwDomainEntityTypeId": "5633a82f6462880e2192840c"}}
+                            "scope": {"where": {"dwDomainEntityTypeId": {"inq": graphViews}}}
                         }]
                     }
                 }]
@@ -56,11 +57,7 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, DwTrail, 
                 console.log("Getting trail");
                 console.log(JSON.stringify(trail));
 
-                //TODO: This is only here for debugging.
-                $scope.trail = trail;
-
-                var graphViews = ForensicService.buildGraphViews($scope.selectedViews);
-                var graph = ForensicService.getBrowsePathEdgesWithInfo(trail, graphViews);
+                var graph = ForensicService.getBrowsePathEdgesWithInfo(trail);
                 console.log("graph");
                 console.log(JSON.stringify(graph));
                 var fullGraph = ForensicService.processEdges(graph['edges'], graph['nodes'])

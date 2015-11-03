@@ -241,7 +241,8 @@ app.controller('TrailsCtrl', function($scope, $state, $stateParams, DwDomain, Dw
                               "name",
                               "description"
                           ],
-                          include:['domainEntityTypes']}
+                          include:['domainEntityTypes']
+                      }
                   }
               ]
           }

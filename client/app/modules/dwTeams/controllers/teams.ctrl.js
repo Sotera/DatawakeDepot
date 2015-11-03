@@ -118,10 +118,34 @@ app.controller('TeamsCtrl', function($scope, $state, $stateParams, AminoUser, Dw
   );
 
   if ($stateParams.id) {
-    TeamsService.getTeam($stateParams.id).$promise.then(function(result){
-      $scope.team = result;})
+      $scope.loading = true;
+      DwTeam.findOne({
+          filter: {
+              where: {
+                  id: $stateParams.id
+              },
+              fields:{},
+              include: [
+                  'users',
+                  'trails',
+                  {relation:'domains',
+                      scope:{
+                          fields:[
+                              "name",
+                              "description",
+                              "id"
+                          ]
+                      }
+                  }
+              ]
+          }
+      }).$promise
+          .then(function (domain) {
+              $scope.team = domain;
+          });
+      $scope.loading = false;
   } else {
-    $scope.team = {};
+      $scope.team = {};
   }
 
 });

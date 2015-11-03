@@ -11,7 +11,7 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
         var nodes = []
         var edges = []
         var curr_node = 0
-        var node_map  = {}
+        var node_map = {}
         var groups = {}
         var curr_group = 0
 
@@ -24,7 +24,7 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
                 var groupName = node.groupName;
                 if (!(groupName in groups)) {
                     groups[groupName] = curr_group;
-                    curr_group ++;
+                    curr_group++;
                 }
                 var group = groups[groupName];
                 node["group"] = group;
@@ -33,17 +33,21 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
 
                 nodes.push(node);
                 node_map[name] = curr_node;
-                curr_node ++;
+                curr_node++;
             }
         }
 
         for (var edgeNo in rawEdges) {
             var value = 1;
 
-            edges.push({"source":node_map[rawEdges[edgeNo].nodeA],'target':node_map[rawEdges[edgeNo].nodeB],'value':value})
+            edges.push({
+                "source": node_map[rawEdges[edgeNo].nodeA],
+                'target': node_map[rawEdges[edgeNo].nodeB],
+                'value': value
+            })
         }
 
-        var graph = {'nodes':nodes, 'links':edges}
+        var graph = {'nodes': nodes, 'links': edges}
 
         return graph
 
@@ -58,8 +62,6 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
     };
 
     this.getBrowsePath = function (trail) {
-        console.log("getBrowsePath");
-        console.log(JSON.stringify(trail));
         var edges = [];
         var nodes = {};
         var edgeBuffer = [];
@@ -74,6 +76,7 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
                     'type': 'browse path',
                     'size': 10,
                     'timestamps': [],
+                    'name': url,
                     'groupName': url.split('/')[2]
                 }
             }
@@ -89,21 +92,23 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
         return {edges: edges, nodes: nodes}
     };
 
-    this.getBrowsePathEdgesWithInfo = function (trail, views) {
+    this.getBrowsePathEdgesWithInfo = function (trail) {
         var browsePathGraph = this.getBrowsePath(trail);
-        console.log(JSON.stringify(browsePathGraph));
 
         var nodes = browsePathGraph['nodes'];
         var edges = browsePathGraph['edges'];
 
+        console.log("trail");
+        console.log(JSON.stringify(trail));
         for (var trailUrl in trail.trailUrls) {
+            console.log(JSON.stringify(trail.trailUrls[trailUrl]));
             var url = trail.trailUrls[trailUrl].url;
             for (var entities in trail.trailUrls[trailUrl].urlExtractions) {
                 var entity = trail.trailUrls[trailUrl].urlExtractions[entities];
                 console.log("Entity")
                 console.log(JSON.stringify(entity));
                 var name = entity.value;
-                var type = entity.type;
+                var type = entity.domainEntityType.name;
 
                 switch (type) {
                     case 'website':
@@ -119,7 +124,7 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
                         var group = name.split('->')[0];
                         break;
                 }
-                var node = {"id": name, "type": type, "size": 5, "gropName": group};
+                var node = {"id": name, "type": type, "size": 5, "groupName": group, "name": type + "->" + name};
                 if (!(name in nodes)) {
                     nodes[name] = node;
                 }
@@ -127,7 +132,7 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
             }
         }
 
-        return {edges: edges, nodes: nodes}
+        return this.processEdges(edges, nodes);
     };
 
 }]);

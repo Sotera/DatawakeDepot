@@ -41,13 +41,22 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, DwTrail, 
         var graphViews = ForensicService.buildGraphViews($scope.selectedViews);
         DwTrail.findOne({
             filter: {
-                "where": {"id": trailId},
+                "where": {
+                    "id": trailId
+                },
                 "include": ["domain", "team", {
                     "relation": "trailUrls",
                     "scope": {
                         "include": [{
                             "relation": "urlExtractions",
-                            "scope": {"where": {"dwDomainEntityTypeId": {"inq": graphViews}}}
+                            "scope": {
+                                "where": {
+                                    "dwDomainEntityTypeId": {
+                                        "inq": graphViews
+                                    }
+                                },
+                                "include": "domainEntityType"
+                            }
                         }]
                     }
                 }]
@@ -58,71 +67,12 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, DwTrail, 
                 console.log(JSON.stringify(trail));
 
                 var graph = ForensicService.getBrowsePathEdgesWithInfo(trail);
-                console.log("graph");
-                console.log(JSON.stringify(graph));
-                var fullGraph = ForensicService.processEdges(graph['edges'], graph['nodes'])
-                console.log("full graph");
-                console.log(JSON.stringify(fullGraph));
-                change_graph(fullGraph)
+                change_graph(graph)
             })
             .catch(function (err) {
                 console.log("Error getting trail: " + trailId);
                 console.log(err);
             });
     };
-
-    $scope.change_graph = function (graph) {
-
-        communities = {};
-        var nodes = graph.nodes.slice();
-        var repulsion = 30;
-        if (nodes.length < 50) {
-            repulsion = parseInt(repulsion_scale(nodes.length));
-        }
-        console.log("default repulsion = " + repulsion);
-
-        SWG.drawGraph('node_graph', graph);
-        SWG.show_base_legend();
-
-        SWG.viz.selectAll(".node").on('click', function (d) {
-            console.log("selected: " + JSON.stringify(d));
-            selected_data = d;
-        });
-
-        SWG.viz.selectAll(".node").on('click', function (d) {
-            showLinkDialog(d);
-            SWG.viz.selectAll(".node").style("stroke-width", function (d) {
-                return 0;
-            });
-            d3.select(this).style("stroke", function (d) {
-                return 'yellow';
-            }).style("stroke-width", function (d) {
-                return 4;
-            });
-        });
-
-        SWG.viz.selectAll(".link")
-            .attr("class", function (d) {
-                if (d[0].name && d[2].name) {
-                    var type1 = d[0].name.substring(0, d[0].name.indexOf(":"));
-                    var type2 = d[2].name.substring(0, d[2].name.indexOf(":"));
-                    if (type1.indexOf('browse path') == 0 && type2.indexOf('browse path') == 0) {
-                        return "link boldlink";
-                    }
-                }
-                return "link";
-            })
-            .attr("marker-end", function (d) {
-                if (d[0].name && d[2].name) {
-                    var type1 = d[0].name.substring(0, d[0].name.indexOf(":"));
-                    var type2 = d[2].name.substring(0, d[2].name.indexOf(":"));
-                    if (type1.indexOf('browse path') == 0 && type2.indexOf('browse path') == 0) {
-                        return "url(#arrowhead)";
-                    }
-                }
-                return "";
-            });
-    }
-
 });
 

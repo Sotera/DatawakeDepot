@@ -76,16 +76,17 @@
                 <span class="glyphicon glyphicon-edit"></span> Draw Graph
             </button>
         </div>
-        <!--<pre ng-bind-html="trail | json"></pre>-->
+    </div>
+    <!--<pre ng-bind-html="trail | json"></pre>-->
+    <div id=node_graph></div>
+
+    <!-- Create an SVG element to represent the legend -->
+    <svg id=legend height=100% style="position:fixed; top:100px; right:0px; pointer-events:none;"></svg>
+
+    <!-- This empty row at the bottom of the container keeps other content from touching the bottom of the screen -->
+    <div class="row" style="margin-bottom: 10px"></div>
 
 
-    </div>
-    <div id="node_graph" class="col-md-6"></div>
-    <div class="col-md-3">
-        <svg id="legend" height='400px' style="pointer-events:none;"></svg>
-    </div>
-    <div id="dialog" title="Highlighted Vertices"/>
-    <div id="link-dialog" title="Vertex Details"/>
-    <div ng-if="loading" class="overlay"></div>
-    <div ng-if="loading" class="loading-img"></div>
-</div>
+    <div id="dialog" title="Highlighted Vertices"></div>
+    <div id="link-dialog" title="Vertex Details"></div>
+

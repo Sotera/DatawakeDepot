@@ -39,9 +39,7 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
 
         for (var edgeNo in rawEdges) {
             var value = 1;
-            //if (edgeName.length > 2) {
-            //    value = edge[2];
-            //}
+
             edges.push({"source":node_map[rawEdges[edgeNo].nodeA],'target':node_map[rawEdges[edgeNo].nodeB],'value':value})
         }
 

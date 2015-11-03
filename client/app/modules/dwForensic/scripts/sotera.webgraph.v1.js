@@ -439,18 +439,18 @@ var SWG = (function() {
     pubs.show_base_legend = show_base_legend
 
     function show_legend(keys,colorFunc){
-        // Construct a color legend.
-        $("#legend").svgColorLegend({
-            cmapFunc: colorFunc,
-            xoffset: 10,
-            yoffset: 10,
-            categories: keys,
-            heightPadding: 5,
-            widthPadding: 7,
-            textSpacing: 19,
-            legendMargins: {top: 5, left: 5, bottom: 5, right: 5},
-            clear: true
-        });
+        //// Construct a color legend.
+        //$("#legend").svgColorLegend({
+        //    cmapFunc: colorFunc,
+        //    xoffset: 10,
+        //    yoffset: 10,
+        //    categories: keys,
+        //    heightPadding: 5,
+        //    widthPadding: 7,
+        //    textSpacing: 19,
+        //    legendMargins: {top: 5, left: 5, bottom: 5, right: 5},
+        //    clear: true
+        //});
     }
     pubs.show_legend = show_legend
 

@@ -1,30 +1,5 @@
 <div class="box">
     <div class="box-body no-padding" style="min-height: 120px;">
-
-        <table class="table table-bordered table-striped" ng-repeat="team in currentUser.teams">
-            <tr>
-                <th>TEAM: {{team.name}}</th>
-            </tr>
-            <tr>
-                <td>
-                    <table ng-repeat="domain in team.domains">
-                        <tr>
-                            <th>DOMAIN: {{domain.name}}</th>
-                        </tr>
-                        <tr>
-                            <td>
-                                <table ng-repeat="trail in domain.trails">
-                                    <tr>
-                                        <td>{{trail.name}}</td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-
-                    </table>
-                </td>
-            <tr/>
-        </table>
         <!-- Team Select-->
         <div class="btn-group">
             <button type="button" data-toggle="dropdown" class="btn btn-primary btn-sm dropdown-toggle">Team:
@@ -76,17 +51,83 @@
                 <span class="glyphicon glyphicon-edit"></span> Draw Graph
             </button>
         </div>
+        <div class="row"></div>
+        <tabset class="nav-tabs-custom">
+            <tab heading="Graph">
+                <div class="row">
+                    <div id=node_graph></div>
+                    <svg id=legend height=100% style="position:fixed; top:100px; right:0px; pointer-events:none;"></svg>
+                    <div id="dialog" title="Highlighted Vertices"></div>
+                    <div id="link-dialog" title="Vertex Details"></div>
+                </div>
+            </tab>
+            <tab heading="Visited Links">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <td>
+                            <a href="#" ng-click="sortType = 'name'; sortReverse = !sortReverse">
+                                URL
+                                <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="#" ng-click="sortType = 'ts'; sortReverse = !sortReverse">
+                                Timestamp
+                                <span ng-show="sortType == 'ts' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'ts' && sortReverse" class="fa fa-caret-up"></span>
+                            </a>
+                        </td>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr ng-repeat="page in visitedGrid | orderBy:sortType:sortReverse ">
+                        <td>{{ page.url }}</td>
+                        <td>{{ page.timestamp }}</td>
+                        <td>{{ page.dwDomainEntityTypeId }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </tab>
+            <tab heading="Entities">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <td>
+                            <a href="#" ng-click="sortType = 'name'; sortReverse = !sortReverse">
+                                Entity
+                                <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="#" ng-click="sortType = 'type'; sortReverse = !sortReverse">
+                                Type
+                                <span ng-show="sortType == 'type' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'type' && sortReverse" class="fa fa-caret-up"></span>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="#" ng-click="sortType = 'count'; sortReverse = !sortReverse">
+                                Count
+                                <span ng-show="sortType == 'count' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'count' && sortReverse" class="fa fa-caret-up"></span>
+                            </a>
+                        </td>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr ng-repeat="entity in entitiesGrid | orderBy:sortType:sortReverse ">
+                        <td>{{ entity.name }}</td>
+                        <td>{{ entity.type }}</td>
+                        <td>{{ entity.count }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </tab>
+        </tabset>
     </div>
-    <!--<pre ng-bind-html="trail | json"></pre>-->
-    <div id=node_graph></div>
-
-    <!-- Create an SVG element to represent the legend -->
-    <svg id=legend height=100% style="position:fixed; top:100px; right:0px; pointer-events:none;"></svg>
-
-    <!-- This empty row at the bottom of the container keeps other content from touching the bottom of the screen -->
-    <div class="row" style="margin-bottom: 10px"></div>
-
-
-    <div id="dialog" title="Highlighted Vertices"></div>
-    <div id="link-dialog" title="Vertex Details"></div>
-
+</div>

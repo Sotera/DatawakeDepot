@@ -18,6 +18,12 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, DwTrail, 
     $scope.viewSettings = {buttonClasses: 'btn btn-primary btn-sm', displayProp: 'name'};
     $scope.viewCustomText = {buttonDefaultText: 'Select Views'};
 
+    //Setup the visited pages grid
+    $scope.sortType     = 'name'; // set the default sort type
+    $scope.sortReverse  = false;  // set the default sort order
+    $scope.visitedSearch   = '';     // set the default search/filter term
+
+
     $scope.teamChanged = function (team) {
         $scope.selectedTeam = team;
         $scope.selectedDomain = null;
@@ -68,6 +74,9 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, DwTrail, 
 
                 var graph = ForensicService.getBrowsePathEdgesWithInfo(trail);
                 change_graph(graph)
+                $scope.visitedGrid = trail.trailUrls;
+                $scope.entitiesGrid = ForensicService.getEntities(trail);
+                console.log(JSON.stringify($scope.visitedGrid));
             })
             .catch(function (err) {
                 console.log("Error getting trail: " + trailId);

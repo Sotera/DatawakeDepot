@@ -19,7 +19,6 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
         //process add nodes
         for (var name in rawNodes) {
             var node = rawNodes[name];
-            console.log("node-name: " + name);
             if (!(name in nodes)) {
                 var groupName = node.groupName;
                 if (!(groupName in groups)) {
@@ -69,7 +68,6 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
         //Create browse path nodes.
         for (var trailUrl in trail.trailUrls) {
             var url = trail.trailUrls[trailUrl].url;
-            console.log(url);
             if (!(url in nodes)) {
                 nodes[url] = {
                     'id': url,
@@ -98,15 +96,10 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
         var nodes = browsePathGraph['nodes'];
         var edges = browsePathGraph['edges'];
 
-        console.log("trail");
-        console.log(JSON.stringify(trail));
         for (var trailUrl in trail.trailUrls) {
-            console.log(JSON.stringify(trail.trailUrls[trailUrl]));
             var url = trail.trailUrls[trailUrl].url;
             for (var entities in trail.trailUrls[trailUrl].urlExtractions) {
                 var entity = trail.trailUrls[trailUrl].urlExtractions[entities];
-                console.log("Entity")
-                console.log(JSON.stringify(entity));
                 var name = entity.value;
                 var type = entity.domainEntityType.name;
 
@@ -135,4 +128,26 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
         return this.processEdges(edges, nodes);
     };
 
+    this.getEntities = function (trail) {
+        var entities = {};
+        for (var trailUrlIndex in trail.trailUrls) {
+            var trailUrl = trail.trailUrls[trailUrlIndex];
+            for (var extractionIndex in trailUrl.urlExtractions) {
+                var extraction = trailUrl.urlExtractions[extractionIndex];
+                var key = extraction.value + "-" + extraction.domainEntityType.name;
+                var entity = null;
+                if (entities.hasOwnProperty(key)){
+                    entity = entities[key];
+                    entity.count = entity.count+1;
+
+                } else {
+                    entity = {name: extraction.value, type: extraction.domainEntityType.name, count: 1}
+                }
+                entities[key] = entity;
+            }
+        }
+        return entities;
+    };
 }]);
+
+

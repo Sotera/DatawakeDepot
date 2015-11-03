@@ -1,8 +1,19 @@
 'use strict';
 var async = require('async');
+var deepExtend = require('deep-extend');
 var log = require('debug')('routes');
 var testDataLoaded = false;
+var createdTestTeams = null;
+var createdTestDomains = null;
+var createdTestUsers = null;
+var createdTestTrails = null;
+var createdTestTrailUrls = null;
+var createdTestTrailUrlExtractions = null;
+var createdTestDomainEntityTypes = null;
 module.exports = function (app) {
+  app.get('/test', function (req, res) {
+    res.end(generateHtml());
+  });
   app.get('/load-test-data', function (req, res) {
     if (testDataLoaded) {
       res.end('<h1>Test Data Created!</h2>');
@@ -12,12 +23,11 @@ module.exports = function (app) {
     var AminoUser = app.models.AminoUser;
     var DwTeam = app.models.DwTeam;
     var DwTrail = app.models.DwTrail;
+    var DwTrailUrl = app.models.DwTrailUrl;
     var DwDomain = app.models.DwDomain;
+    var DwUrlExtraction = app.models.DwUrlExtraction;
     var DwDomainEntityType = app.models.DwDomainEntityType;
     var DwDomainItem = app.models.DwDomainItem;
-    var alphabet = 'ABCDEF'.split('');
-    //var alphabet = 'ABCDEFGHIJKLM'.split('');
-    //var alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
     async.parallel([
         createTestTeams
         , createTestDomains
@@ -28,13 +38,13 @@ module.exports = function (app) {
           res.end('<h1>Test Data Created!</h2>');
           return;
         }
-        var createdTestTeams = result[0];
-        var createdTestDomains = result[1];
-        var createdTestUsers = result[2];
+        createdTestTeams = result[0];
+        createdTestDomains = result[1];
+        createdTestUsers = result[2];
         //Create test data relationships
         async.parallel([
-            async.apply(addItemsToObjects, createdTestUsers, 'teams', createdTestTeams)
-            , async.apply(addItemsToObjects, createdTestTeams, 'domains', createdTestDomains)
+            async.apply(linkSomeHasAndBelongsToMany, createdTestUsers, 'teams', createdTestTeams, 'users')
+            //, async.apply(addItemsToObjects, createdTestTeams, 'domains', createdTestDomains)
           ],
           function (err, result) {
             if (err) {
@@ -47,12 +57,81 @@ module.exports = function (app) {
             functionArray.push(async.apply(createTestDomainEntityTypes, createdTestDomains));
             async.parallel(functionArray, function (err, result) {
               createTestDomainItems(createdTestDomains, function (err, result) {
-                res.end('<h1>Test Data Created!</h2>');
+                createTestTrailUrls(createdTestTrails, function (err, result) {
+                  createdTestTrailUrls = result;
+                  createTestUrlExtractions(createdTestTrailUrls, createdTestDomainEntityTypes, function (err, result) {
+                    res.end('<h1>Test Data Created!</h2>');
+                  });
+                });
               });
             });
           });
       }
     );
+    function createTestUrlExtractions(trailUrls, domainEntityTypes, cb) {
+      var cheerio = require('cheerio');
+      var numberOfTrailUrlExtractions = randomInt(25, 75);
+      var functionArray = [];
+      for (var i = 0; i < numberOfTrailUrlExtractions; ++i) {
+        var trailUrl = trailUrls[randomInt(0, trailUrls.length)];
+        var trailUrlId = trailUrl.id.toString();
+        var domainEntityTypeId = domainEntityTypes[randomInt(0, domainEntityTypes.length)].id.toString();
+        var numberOfExtractionTerms = randomInt(25, 75);
+        var scrapedContent = trailUrl.scrapedContent;
+        var $ = cheerio.load(scrapedContent);
+        var body = $('body');
+        var bodyWords = body.html().split(/\W+/);
+        for (var j = 0; j < numberOfExtractionTerms; ++j) {
+          var value = bodyWords[randomInt(0, bodyWords.length)];
+          if (value.length < 4) {
+            continue;
+          }
+          functionArray.push(async.apply(findOrCreateObj, DwUrlExtraction, {where: {value: value}},
+            {
+              value: value,
+              dwDomainEntityTypeId: domainEntityTypeId,
+              dwTrailUrlId: trailUrlId.toString()
+            }));
+        }
+      }
+      async.parallel(functionArray, function (err, trailUrlExtractions) {
+        cb(err, trailUrlExtractions);
+      });
+    }
+
+    function createTestTrailUrls(testTrails, cb) {
+      var numberOfTrailUrls = 100;
+      var words = getWords(numberOfTrailUrls);
+      var functionArray = [];
+      for (var i = 0; i < numberOfTrailUrls; ++i) {
+        var trailUrl = 'http://www.' + words[i] + '.net';
+        var trailId = testTrails[randomInt(0, testTrails.length)].id.toString();
+        functionArray.push(async.apply(findOrCreateObj, DwTrailUrl, {where: {url: trailUrl}},
+          {
+            url: trailUrl,
+            scrapedContent: generateHtml(),
+            comments: getSentence(50),
+            dwTrailId: trailId.toString()
+          }));
+      }
+      async.parallel(functionArray, function (err, trailUrls) {
+        cb(err, trailUrls);
+      });
+    }
+
+    function linkSomeHasAndBelongsToMany(firstArray, firstProperty, secondArray, secondProperty, cb) {
+      firstArray.forEach(function (firstArrayElement) {
+        //Get random half of the second array
+        var randomHalfSecondArray = shuffle(secondArray).slice(0, secondArray.length / 2);
+        //Add each second array element to firstArray[firstProperty]
+        randomHalfSecondArray.forEach(function (randomHalfSecondArrayElement) {
+          firstArrayElement[firstProperty].add(randomHalfSecondArrayElement, function (err, result) {
+            var r = result;
+          });
+        });
+      });
+    }
+
     function addItemsToObjects(objectsToAddItemsToArray, listPropertyToAddTo, objectsToAddArray, cb) {
       var functionArray = [];
       objectsToAddItemsToArray.forEach(function (objectToAddItemTo) {
@@ -104,12 +183,7 @@ module.exports = function (app) {
       return array;
     }
 
-    function randomInt(low, high) {
-      return Math.floor(Math.random() * (high - low) + low);
-    }
-
     function createTestDomainItems(testDomains, cb) {
-      var alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
       var testDomainItemNames = [];
       alphabet.forEach(function (letter) {
         testDomainItemNames.push(letter);
@@ -145,7 +219,7 @@ module.exports = function (app) {
             var entityTypes = domainEntityTypes[i];
             var domain = domains[i];
             var domainEntityType = entityTypes[randomInt(0, entityTypes.length)];
-            if(domainEntityType){
+            if (domainEntityType) {
               var domainEntityTypeId = domainEntityType.id.toString();
               var domainId = domain.id.toString();
               var domainItemMoniker = 'DomainItem' + domainItemName;
@@ -168,7 +242,6 @@ module.exports = function (app) {
     }
 
     function createTestDomainEntityTypes(testDomains, cb) {
-      var alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
       var testDomainEntityTypeNames = [];
       alphabet.forEach(function (letter) {
         testDomainEntityTypeNames.push(letter);
@@ -185,11 +258,13 @@ module.exports = function (app) {
             dwDomainId: domainId
           }));
       });
-      async.parallel(functionArray, cb);
+      async.parallel(functionArray, function (err, result) {
+        createdTestDomainEntityTypes = result;
+        cb(err, result);
+      });
     }
 
     function createTestTrails(testDomains, cb) {
-      var alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
       var testTrailNames = [];
       alphabet.forEach(function (letter) {
         testTrailNames.push(letter);
@@ -218,56 +293,78 @@ module.exports = function (app) {
               dwDomainId: domain.id.toString()
             }));
         });
-        async.parallel(functionArray, cb);
+        async.parallel(functionArray, function (err, result) {
+          createdTestTrails = result;
+          cb(err, result);
+        });
+      });
+    }
+
+    function createCollectionEntry(objectTemplate, collection, minCount, maxCount, cb) {
+      var numberOfEntries = randomInt(minCount, maxCount);
+      var words = getWords(numberOfEntries);
+      var functionArray = [];
+      for (var i = 0; i < words.length; ++i) {
+        //var moniker = 'fripper';
+        var moniker = words[i];
+        var searchProperty = '';
+        var searchPropertyValue = '';
+        var objectToInsert = {};
+        deepExtend(objectToInsert, objectTemplate);
+        for (var property in objectToInsert) {
+          if (objectToInsert[property].indexOf('__search-moniker__') != -1) {
+            objectToInsert[property] = objectToInsert[property].replace('__search-moniker__', moniker);
+            searchProperty = property;
+            searchPropertyValue = objectToInsert[property];
+          }
+          else {
+            objectToInsert[property] = objectToInsert[property].replace('__moniker__', moniker);
+          }
+        }
+        var filter = {};
+        filter['where'] = {};
+        filter['where'][searchProperty] = searchPropertyValue;
+        functionArray.push(async.apply(findOrCreateObj, collection, filter, objectToInsert));
+      }
+      async.series(functionArray, function (err, results) {
+        var retVal = [];
+        results.forEach(function (result) {
+          if (result) {
+            retVal.push(result);
+          }
+        });
+        cb(err, retVal);
       });
     }
 
     function createTestTeams(cb) {
-      var testTeamNames = [];
-      alphabet.forEach(function (letter) {
-        testTeamNames.push(letter);
+      createCollectionEntry({
+        name: 'Team___search-moniker__',
+        description: 'The __moniker__ Team'
+      }, DwTeam, 10, 30, function (err, result) {
+        cb(err, result);
       });
-      var functionArray = [];
-      testTeamNames.forEach(function (teamName) {
-        var teamMoniker = 'Team' + teamName;
-        functionArray.push(async.apply(findOrCreateObj, DwTeam, {where: {name: teamMoniker}},
-          {name: teamMoniker, description: 'The ' + teamName + ' Team'}));
-      });
-      async.parallel(functionArray, cb);
     }
 
     function createTestDomains(cb) {
-      var testDomainNames = [];
-      alphabet.forEach(function (letter) {
-        testDomainNames.push(letter);
+      createCollectionEntry({
+        name: 'Domain___search-moniker__',
+        description: 'The __moniker__ Domain'
+      }, DwDomain, 10, 30, function (err, result) {
+        cb(err, result);
       });
-      var functionArray = [];
-      testDomainNames.forEach(function (domainName) {
-        var domainMoniker = 'Domain' + domainName;
-        functionArray.push(async.apply(findOrCreateObj, DwDomain, {where: {name: domainMoniker}},
-          {name: domainMoniker, description: 'The ' + domainName + ' Domain'}));
-      });
-      async.parallel(functionArray, cb);
     }
 
     function createTestUsers(cb) {
-      var testUserNames = [];
-      alphabet.forEach(function (letter) {
-        testUserNames.push(letter);
+      createCollectionEntry({
+        firstName: '__moniker___first',
+        lastName: '__moniker___last',
+        email: '__moniker__@user.com',
+        username: '__moniker__@user.com',
+        password: 'password'
+      }, AminoUser, 10, 30, function (err, result) {
+        cb(err, result);
       });
-      var functionArray = [];
-      testUserNames.forEach(function (userName) {
-        var userMoniker = 'User' + userName;
-        functionArray.push(async.apply(findOrCreateObj, AminoUser, {where: {username: userMoniker}},
-          {
-            firstName: userMoniker + '_first',
-            lastName: userMoniker + '_last',
-            email: userMoniker + '@user.com',
-            username: userMoniker,
-            password: userMoniker + '_password'
-          }));
-      });
-      async.parallel(functionArray, cb);
     }
 
     function findOrCreateObj(model, query, objToCreate, cb) {
@@ -279,7 +376,7 @@ module.exports = function (app) {
             if (err) {
               log(err);
             }
-            cb(err, createdObj);
+            cb(err, created ? createdObj : null);
           });
       } catch (err) {
         log(err);
@@ -287,3 +384,51 @@ module.exports = function (app) {
     }
   });
 };
+function getSentence(numberOfWords, minWordLength, maxWordLength) {
+  return getWords(numberOfWords, minWordLength, maxWordLength).join(' ') + '.';
+}
+function getWords(numberOfWords, minWordLength, maxWordLength) {
+  numberOfWords = numberOfWords || 250;
+  minWordLength = minWordLength || 5;
+  maxWordLength = maxWordLength || 7;
+  var wordList = require('word-list-json');
+  var wordListCursor = 0;
+  while (wordList[++wordListCursor].length < minWordLength);
+  var startWordIdx = wordListCursor;
+  while (wordList[++wordListCursor].length <= maxWordLength);
+  var endWordIdx = wordListCursor;
+  var words = [];
+  for (var i = 0; i < numberOfWords; ++i) {
+    words.push(wordList[randomInt(startWordIdx, endWordIdx)]);
+  }
+  return words;
+}
+function sometimes(howOftenOneToFifty) {
+  howOftenOneToFifty = howOftenOneToFifty || 100;
+  for (var i = 0; i < howOftenOneToFifty; ++i) {
+    if (randomInt(0, 100) === 0) {
+      return true;
+    }
+  }
+  return false;
+}
+function randomInt(low, high) {
+  return Math.floor(Math.random() * (high - low) + low);
+}
+function generateHtml(wordCount) {
+  wordCount = wordCount || 1000;
+  var words = getWords(wordCount);
+  var html = '<html><head><h1>'
+  html += getSentence(randomInt(4, 8));
+  html += '</h1></head><body>';
+  var para = '';
+  for (var i = 0; i < wordCount; ++i) {
+    para += words[i] + ' ';
+    if (sometimes(2)) {
+      html += '<p>' + para + '</p>';
+      para = '';
+    }
+  }
+  html += '</body></html>';
+  return html;
+}

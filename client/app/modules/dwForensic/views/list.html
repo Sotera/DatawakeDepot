@@ -1,60 +1,63 @@
 <div class="box">
     <div class="box-body no-padding" style="min-height: 120px;">
-        <!-- Team Select-->
-        <div class="btn-group">
-            <button type="button" data-toggle="dropdown" class="btn btn-primary btn-sm dropdown-toggle">Team:
-                {{selectedTeam.name}}
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" id="team_select">
-                <li ng-repeat="team in currentUser.teams" ng-click="teamChanged(team)" class="pointer"
-                    ng-class="{selected : team === selectedTeam}">
-                    {{team.name}}
-                </li>
-            </ul>
-        </div>
-        <!-- Domain Select-->
-        <div class="btn-group">
-            <button type="button" data-toggle="dropdown" class="btn btn-primary btn-sm dropdown-toggle">Domain:
-                {{selectedDomain.name}}
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" id="domain_select">
-                <li ng-repeat="domain in domains" ng-click="domainChanged(domain)" class="pointer"
-                    ng-class="{selected : domain === selectedDomain}">
-                    {{domain.name}}
-                </li>
-            </ul>
-        </div>
-        <!--Trail Selection Button-->
-        <div class="btn-group">
-            <button type="button" data-toggle="dropdown" class="btn btn-primary btn-sm dropdown-toggle">Trail:
-                {{selectedTrail.name}}
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" id="trail_select">
-                <li ng-repeat="trail in trails" ng-click="trailChanged(trail)" class="pointer"
-                    ng-class="{selected : trail === selectedTrail}">
-                    {{trail.name}}
-                </li>
-            </ul>
-        </div>
-        <!-- Views selection -->
-        <div class="btn-group">
-            <div ng-dropdown-multiselect="" options="views" selected-model="selectedViews"
-                 extra-settings="viewSettings" translation-texts="viewCustomText"></div>
-        </div>
-        <!-- Draw Graph -->
-        <div class="btn-group">
-            <button ng-disabled="!selectedTeam || !selectedDomain || !selectedTrail || !selectedViews.length > 0"
-                    class="btn btn-success btn-sm" ng-click="drawGraph()">
-                <span class="glyphicon glyphicon-edit"></span> Draw Graph
-            </button>
-        </div>
+
         <div class="row"></div>
         <tabset class="nav-tabs-custom">
             <tab heading="Graph">
                 <div class="row">
+                    <div style="margin-left: 5px">
+                        <!-- Team Select-->
+                        <div class="btn-group">
+                            <button type="button" data-toggle="dropdown" class="btn btn-primary btn-sm dropdown-toggle">Team:
+                                {{selectedTeam.name}}
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" id="team_select">
+                                <li ng-repeat="team in currentUser.teams" ng-click="teamChanged(team)" class="pointer"
+                                    ng-class="{selected : team === selectedTeam}">
+                                    {{team.name}}
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Domain Select-->
+                        <div class="btn-group">
+                            <button type="button" data-toggle="dropdown" class="btn btn-primary btn-sm dropdown-toggle">Domain:
+                                {{selectedDomain.name}}
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" id="domain_select">
+                                <li ng-repeat="domain in domains" ng-click="domainChanged(domain)" class="pointer"
+                                    ng-class="{selected : domain === selectedDomain}">
+                                    {{domain.name}}
+                                </li>
+                            </ul>
+                        </div>
+                        <!--Trail Selection Button-->
+                        <div class="btn-group">
+                            <button type="button" data-toggle="dropdown" class="btn btn-primary btn-sm dropdown-toggle">Trail:
+                                {{selectedTrail.name}}
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" id="trail_select">
+                                <li ng-repeat="trail in trails" ng-click="trailChanged(trail)" class="pointer"
+                                    ng-class="{selected : trail === selectedTrail}">
+                                    {{trail.name}}
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Views selection -->
+                        <div class="btn-group">
+                            <div ng-dropdown-multiselect="" options="views" selected-model="selectedViews"
+                                 extra-settings="viewSettings" translation-texts="viewCustomText"></div>
+                        </div>
+                        <!-- Draw Graph -->
+                        <div class="btn-group">
+                            <button ng-disabled="!selectedTeam || !selectedDomain || !selectedTrail || !selectedViews.length > 0"
+                                    class="btn btn-success btn-sm" ng-click="drawGraph()">
+                                <span class="glyphicon glyphicon-edit"></span> Draw Graph
+                            </button>
+                        </div>
+                    </div>
                     <div id=node_graph></div>
                     <svg id=legend height=100% style="position:fixed; top:100px; right:0px; pointer-events:none;"></svg>
                     <div id="dialog" title="Highlighted Vertices"></div>

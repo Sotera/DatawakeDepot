@@ -104,10 +104,35 @@ app.controller('TransmissionsCtrl', function($scope, $state, $stateParams, DwFee
     );
 
     if ($stateParams.id) {
-        TransmissionsService.getTransmission($stateParams.id).$promise.then(function(result){
-            $scope.transmission = result;})
+        $scope.loading = true;
+        DwTransmission.findOne({
+            filter: {
+                where: {
+                    id: $stateParams.id
+                },
+                fields:{},
+                include: [
+                    {relation:'feeds',
+                        scope:{
+                            fields:[
+                                "name",
+                                "feedUrl",
+                                "protocol",
+                                "dwServiceTypeId",
+                                "id"
+                            ]
+                        }
+                    }
+                ]
+            }
+        }).$promise
+            .then(function (transmission) {
+                $scope.transmission = transmission;
+            });
+        $scope.loading = false;
     } else {
         $scope.transmission = {};
     }
+
 });
 

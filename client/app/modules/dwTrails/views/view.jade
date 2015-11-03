@@ -5,10 +5,8 @@ div.box
                 i.fa.fa-arrow-left &nbsp;Back to Trails
     div.box-body
         div
-            h2 {{trail.name}}
+            h2 Trail: {{trail.name}}
 
-            h3 Associated Domain
-                ul
-                    li( ng-repeat="domain in trail.domains") {{domain.name}}
+            h3 Domain: {{trail.domain.name}}
             h3 Raw
                 pre {{trail|json}}

@@ -17,7 +17,7 @@ module.exports = function(app) {
     }, {
       type: 'select',
       key: 'appTheme',
-      value: 'skin-blue',
+      value: 'skin-black',
       options: [
         'skin-blue',
         'skin-black'
@@ -27,7 +27,7 @@ module.exports = function(app) {
       key: 'appLayout',
       value: 'fixed',
       options: [
-        'skin-blue',
+        'fixed',
         'not-fixed'
       ]
     }, {

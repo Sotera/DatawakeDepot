@@ -361,7 +361,6 @@ function show_hits_legend() {
  Display all vertex details in a popup dialog
  */
 function showLinkDialog(data) {
-
   // close previous dialog and remove all content
   $("#link-dialog").dialog().dialog("close");
   d3.select("#link-dialog").selectAll("div").remove();
@@ -412,7 +411,7 @@ function showLinkDialog(data) {
   // display links to other tools
   if (type != "selection") {
     mainDiv.append("h4").text("Memex Tools");
-    getExternalLinks(mainDiv, type, id)
+    //getExternalLinks(mainDiv, type, id)
     mainDiv.append("hr");
 
     // list the visit history
@@ -476,14 +475,7 @@ function showLinkDialog(data) {
   }
 
   $("#link-dialog").dialog({
-    height: 500,
-    width: 500,
-    position: {
-      my: "right top",
-      at: "right bottom",
-      of: $(".navbar")[0]
-    }
-    //position: [100,100]
+    position: {my: "left top", at: "left+250 top+220"}
   });
 }
 

@@ -116,7 +116,7 @@ app.controller('ExtractorsCtrl', function($scope, $state, $stateParams, DwDomain
             for (var i = 0; i < allServiceTypes.length; ++i) {
                 $scope.plServiceTypes.push({
                     value: allServiceTypes[i].name,
-                    name: allServiceTypes[i].description,
+                    name: allServiceTypes[i].name + " - " + allServiceTypes[i].description,
                     id: allServiceTypes[i].id
                 });
             }

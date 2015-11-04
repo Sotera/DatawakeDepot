@@ -28,7 +28,7 @@ module.exports = function (app) {
     var DwUrlExtraction = app.models.DwUrlExtraction;
     var DwDomainEntityType = app.models.DwDomainEntityType;
     var DwDomainItem = app.models.DwDomainItem;
-    async.parallel([
+    async.series([
         createTestTeams
         , createTestDomains
         , createTestUsers
@@ -42,8 +42,8 @@ module.exports = function (app) {
         createdTestDomains = result[1];
         createdTestUsers = result[2];
         //Create test data relationships
-        async.parallel([
-            async.apply(linkSomeHasAndBelongsToMany, createdTestUsers, 'teams', createdTestTeams, 'users')
+        async.series([
+            async.apply(linkSomeHasAndBelongsToMany, createdTestUsers, 'teams', createdTestTeams)
             //, async.apply(addItemsToObjects, createdTestTeams, 'domains', createdTestDomains)
           ],
           function (err, result) {
@@ -55,7 +55,7 @@ module.exports = function (app) {
             var functionArray = [];
             functionArray.push(async.apply(createTestTrails, createdTestDomains));
             functionArray.push(async.apply(createTestDomainEntityTypes, createdTestDomains));
-            async.parallel(functionArray, function (err, result) {
+            async.series(functionArray, function (err, result) {
               createTestDomainItems(createdTestDomains, function (err, result) {
                 createTestTrailUrls(createdTestTrails, function (err, result) {
                   createdTestTrailUrls = result;
@@ -94,7 +94,7 @@ module.exports = function (app) {
             }));
         }
       }
-      async.parallel(functionArray, function (err, trailUrlExtractions) {
+      async.series(functionArray, function (err, trailUrlExtractions) {
         cb(err, trailUrlExtractions);
       });
     }
@@ -114,56 +114,31 @@ module.exports = function (app) {
             dwTrailId: trailId.toString()
           }));
       }
-      async.parallel(functionArray, function (err, trailUrls) {
+      async.series(functionArray, function (err, trailUrls) {
         cb(err, trailUrls);
       });
     }
 
-    function linkSomeHasAndBelongsToMany(firstArray, firstProperty, secondArray, secondProperty, cb) {
+    function linkSomeHasAndBelongsToMany(firstArray, firstProperty, secondArray, cb) {
       firstArray.forEach(function (firstArrayElement) {
         //Get random half of the second array
         var randomHalfSecondArray = shuffle(secondArray).slice(0, secondArray.length / 2);
         //Add each second array element to firstArray[firstProperty]
+        var functionArray = [];
         randomHalfSecondArray.forEach(function (randomHalfSecondArrayElement) {
-          firstArrayElement[firstProperty].add(randomHalfSecondArrayElement, function (err, result) {
-            var r = result;
-          });
+          functionArray.push(async.apply(addObjectToEmbeddedList,
+            firstArrayElement[firstProperty],
+            randomHalfSecondArrayElement));
+        });
+        async.series(functionArray, function (err, results) {
+          cb(err, results);
         });
       });
     }
 
-    function addItemsToObjects(objectsToAddItemsToArray, listPropertyToAddTo, objectsToAddArray, cb) {
-      var functionArray = [];
-      objectsToAddItemsToArray.forEach(function (objectToAddItemTo) {
-        var list = objectToAddItemTo[listPropertyToAddTo];
-        functionArray.push(async.apply(getEmbeddedList, list, objectsToAddArray));
-      });
-      async.parallel(functionArray, cb);
-    }
-
-    function getEmbeddedList(list, objectsToAddArray, cb) {
-      list(function (err, listToAddTo) {
-        if (err) {
-          cb(err, null);
-          return;
-        }
-        if (listToAddTo.length) {
-          cb(null, null);
-          return;
-        }
-        var randomizedArray = shuffle(objectsToAddArray);
-        var numberOfItemsToAdd = randomInt(0, randomizedArray.length);
-        var functionArray = [];
-        for (var i = 0; i < numberOfItemsToAdd; ++i) {
-          functionArray.push(async.apply(addObjectToEmbeddedList, list, randomizedArray[i]));
-        }
-        async.parallel(functionArray, cb);
-      })
-    }
-
     function addObjectToEmbeddedList(list, obj, cb) {
-      list.add(obj, function (err) {
-        cb(err);
+      list.add(obj, function (err, results) {
+        cb(err, results);
       });
     }
 
@@ -196,7 +171,7 @@ module.exports = function (app) {
           include: ['domainEntityTypes']
         }, {}));
       });
-      async.parallel(functionArray, function (err, domains) {
+      async.series(functionArray, function (err, domains) {
         if (err) {
           log(err);
           return;
@@ -206,7 +181,7 @@ module.exports = function (app) {
           functionArray.push(async.apply(domain.domainEntityTypes));
         });
         //Do this to load domain collections
-        async.parallel(functionArray, function (err, domainEntityTypes) {
+        async.series(functionArray, function (err, domainEntityTypes) {
           if (err) {
             log(err);
             return;
@@ -233,7 +208,7 @@ module.exports = function (app) {
                 }));
             }
           }
-          async.parallel(functionArray, function (err, entities) {
+          async.series(functionArray, function (err, entities) {
             cb(err, entities);
           });
           //-->
@@ -258,7 +233,7 @@ module.exports = function (app) {
             dwDomainId: domainId
           }));
       });
-      async.parallel(functionArray, function (err, result) {
+      async.series(functionArray, function (err, result) {
         createdTestDomainEntityTypes = result;
         cb(err, result);
       });
@@ -293,7 +268,7 @@ module.exports = function (app) {
               dwDomainId: domain.id.toString()
             }));
         });
-        async.parallel(functionArray, function (err, result) {
+        async.series(functionArray, function (err, result) {
           createdTestTrails = result;
           cb(err, result);
         });

@@ -129,7 +129,7 @@ var SWG = (function() {
             var node = nodes[i]
             if (node.name){
                 var nodetext = node.name.toLowerCase()
-                var type = nodetext.substring(0,nodetext.indexOf(":"))
+                var type = node.groupName;
                 if (type.length > 0) {
                     if (type in pubs.node_types) pubs.node_types[type]['count'] += 1
                     else pubs.node_types[type] = {'count':1 ,'group':node.group}
@@ -440,17 +440,17 @@ var SWG = (function() {
 
     function show_legend(keys,colorFunc){
         //// Construct a color legend.
-        //$("#legend").svgColorLegend({
-        //    cmapFunc: colorFunc,
-        //    xoffset: 10,
-        //    yoffset: 10,
-        //    categories: keys,
-        //    heightPadding: 5,
-        //    widthPadding: 7,
-        //    textSpacing: 19,
-        //    legendMargins: {top: 5, left: 5, bottom: 5, right: 5},
-        //    clear: true
-        //});
+        $("#legend").svgColorLegend({
+            cmapFunc: colorFunc,
+            xoffset: 10,
+            yoffset: 10,
+            categories: keys,
+            heightPadding: 5,
+            widthPadding: 7,
+            textSpacing: 19,
+            legendMargins: {top: 20, left: 5, bottom: 5, right: 5},
+            clear: true
+        });
     }
     pubs.show_legend = show_legend
 

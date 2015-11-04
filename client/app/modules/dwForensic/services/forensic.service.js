@@ -105,21 +105,7 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
                 var entity = trail.trailUrls[trailUrl].urlExtractions[entities];
                 var name = entity.value;
                 var type = entity.domainEntityType.name;
-
-                switch (type) {
-                    case 'website':
-                        var group = name.split('/')[2];
-                        break;
-                    case 'phone':
-                        var group = 'length=' + name.length;
-                        break;
-                    case 'email':
-                        var group = name.split('@')[1];
-                        break;
-                    case 'info':
-                        var group = name.split('->')[0];
-                        break;
-                }
+                var group = type;
                 var node = {"id": name, "type": type, "size": 5, "groupName": group, "name": type + "->" + name};
                 if (!(name in nodes)) {
                     nodes[name] = node;

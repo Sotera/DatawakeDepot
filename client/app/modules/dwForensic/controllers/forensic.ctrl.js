@@ -95,7 +95,7 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser
             },
             "include": [{
                 "relation": "teams",
-                "scope": {"include": [{"relation": "domains", "scope": {"include": ["trails"]}}]}
+                "scope": {"include": [{"relation": "domains", "scope": {"include": [{"relation": "trails"}]}}]}
             }]
         }
     };

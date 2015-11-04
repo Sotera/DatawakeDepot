@@ -1,7 +1,7 @@
 'use strict';
 var app = angular.module('com.module.dwDomainEntityTypes');
 
-app.service('EntityTypesService', ['$state', 'CoreService', 'DwDomainEntityType', 'gettextCatalog', function($state, CoreService, DwDomainEntityType, gettextCatalog) {
+app.service('EntityTypesService', ['$state', 'CoreService', 'DwDomainEntityType', 'gettextCatalog','DwDomainItem', function($state, CoreService, DwDomainEntityType, gettextCatalog, DwDomainItem) {
 
   this.getEntityTypes = function() {
     return DwDomainEntityType.find({filter: {include: ['domain','domainItems']}});

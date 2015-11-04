@@ -1,11 +1,12 @@
 'use strict';
 var app = angular.module('com.module.dwForensic');
 
-app.controller('ForensicCtrl', function ($scope, $state, $stateParams, DwTrail, DwTrailUrl, DwDomainEntityType, ForensicService, gettextCatalog, AppAuth) {
+app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser, DwTrail, DwDomainEntityType, ForensicService, gettextCatalog, AppAuth) {
 
     $scope.trail = {};
     //Put the currentUser in $scope for convenience
     $scope.currentUser = AppAuth.currentUser;
+    $scope.teams = [];
     $scope.domains = [];
     $scope.trails = [];
     $scope.selectedTeam = null;
@@ -19,9 +20,9 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, DwTrail, 
     $scope.viewCustomText = {buttonDefaultText: 'Select Views'};
 
     //Setup the visited pages grid
-    $scope.sortType     = 'name'; // set the default sort type
-    $scope.sortReverse  = false;  // set the default sort order
-    $scope.visitedSearch   = '';     // set the default search/filter term
+    $scope.sortType = 'name'; // set the default sort type
+    $scope.sortReverse = false;  // set the default sort order
+    $scope.visitedSearch = '';     // set the default search/filter term
 
 
     $scope.teamChanged = function (team) {
@@ -43,12 +44,12 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, DwTrail, 
         $scope.views = ForensicService.getDomainEntityTypes();
     };
 
-    $scope.drawGraph = function (trailId) {
+    $scope.drawGraph = function () {
         var graphViews = ForensicService.buildGraphViews($scope.selectedViews);
-        DwTrail.findOne({
+        var filter = {
             filter: {
                 "where": {
-                    "id": trailId
+                    "id": $scope.selectedTrail.id
                 },
                 "include": ["domain", "team", {
                     "relation": "trailUrls",
@@ -67,7 +68,10 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, DwTrail, 
                     }
                 }]
             }
-        }).$promise
+        };
+        console.log("Trail Filter");
+        console.log(JSON.stringify(filter));
+        DwTrail.findOne(filter).$promise
             .then(function (trail) {
                 console.log("Getting trail");
                 console.log(JSON.stringify(trail));
@@ -83,5 +87,27 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, DwTrail, 
                 console.log(err);
             });
     };
-});
 
+    var userFilter = {
+        filter: {
+            where: {
+                id: AppAuth.currentUser.id
+            },
+            "include": [{
+                "relation": "teams",
+                "scope": {"include": [{"relation": "domains", "scope": {"include": ["trails"]}}]}
+            }]
+        }
+    };
+    console.log("userFilter");
+    console.log(JSON.stringify(userFilter));
+    AminoUser.findOne(userFilter).$promise
+        .then(function (user) {
+            $scope.teams = user.teams;
+
+        })
+        .catch(function (err) {
+            console.log("Error getting trail: " + trailId);
+            console.log(err);
+        });
+});

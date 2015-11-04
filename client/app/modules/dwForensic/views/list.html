@@ -6,7 +6,7 @@
             <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" id="team_select">
-            <li ng-repeat="team in currentUser.teams" ng-click="teamChanged(team)" class="pointer"
+            <li ng-repeat="team in teams" ng-click="teamChanged(team)" class="pointer"
                 ng-class="{selected : team === selectedTeam}">
                 {{team.name}}
             </li>

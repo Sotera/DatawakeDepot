@@ -146,13 +146,14 @@ app.controller('TrailsCtrl', function($scope, $state, $stateParams, DwDomain, Dw
 
           //Admins get all teams
           if($scope.currentUser.isAdmin){
-              DwTeam.find({filter: {include: []}}).$promise
+              DwTeam.find({filter: {include: ["domains"]}}).$promise
                   .then(function (allTeams) {
                       for (var i = 0; i < allTeams.length; ++i) {
                           $scope.plTeams.push({
                               value: allTeams[i].id,
                               name: allTeams[i].name,
-                              id: allTeams[i].id
+                              id: allTeams[i].id,
+                              domains: allTeams[i].domains
                           });
                       }
                   })

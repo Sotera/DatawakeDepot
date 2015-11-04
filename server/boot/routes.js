@@ -10,6 +10,10 @@ var createdTestTrails = null;
 var createdTestTrailUrls = null;
 var createdTestTrailUrlExtractions = null;
 var createdTestDomainEntityTypes = null;
+var wordList = require('word-list-json');
+for (var i = 0; i < wordList.length; ++i) {
+  wordList[i] = wordList[i].charAt(0).toUpperCase() + wordList[i].slice(1);
+}
 module.exports = function (app) {
   app.get('/test', function (req, res) {
     res.end(generateHtml());
@@ -41,10 +45,10 @@ module.exports = function (app) {
         createdTestTeams = result[0];
         createdTestDomains = result[1];
         createdTestUsers = result[2];
-        //Create test data relationships
+        //Create data relationships amongst users, teams & domains
         async.series([
             async.apply(linkSomeHasAndBelongsToMany, createdTestUsers, 'teams', createdTestTeams)
-            //, async.apply(addItemsToObjects, createdTestTeams, 'domains', createdTestDomains)
+            , async.apply(linkSomeHasAndBelongsToMany, createdTestTeams, 'domains', createdTestDomains)
           ],
           function (err, result) {
             if (err) {
@@ -52,30 +56,112 @@ module.exports = function (app) {
               res.end('<h1>Test Data Created!</h2>');
               return;
             }
-            var functionArray = [];
-            functionArray.push(async.apply(createTestTrails, createdTestDomains));
-            functionArray.push(async.apply(createTestDomainEntityTypes, createdTestDomains));
-            async.series(functionArray, function (err, result) {
-              createTestDomainItems(createdTestDomains, function (err, result) {
-                createTestTrailUrls(createdTestTrails, function (err, result) {
-                  createdTestTrailUrls = result;
-                  createTestUrlExtractions(createdTestTrailUrls, createdTestDomainEntityTypes, function (err, result) {
-                    res.end('<h1>Test Data Created!</h2>');
+            //Now swap in a createdTestTeams that has the domains property filled out
+            //And swap in a createdTestUsers that has the teams property filled out
+            AminoUser.find({include: ['teams']}, function (err, testUsers) {
+              async.map(testUsers, function (testUser, cb) {
+                testUser.teams({include: ['domains']}, function (err, teams) {
+                  async.map(teams, function (team, cb) {
+                    team.deepDomains = [];
+                    team.domains(function (err, domains) {
+                      domains.forEach(function (domain) {
+                        team.deepDomains.push(domain);
+                      });
+                      cb(err, domains);
+                    });
+                  }, function (err, domains) {
+                    cb(err, teams);
                   });
                 });
+              }, function (err, results) {
+                if (err) {
+                  log(err);
+                  res.end('<h1>Test Data Created!</h2>');
+                  return;
+                }
+                createdTestUsers = [];
+                for (var i = 0; i < testUsers.length; ++i) {
+                  if (results[i] && results[i].length) {
+                    testUsers[i].deepTeams = results[i];
+                    createdTestUsers.push(testUsers[i]);
+                  }
+                }
+                //Now we can create some trails
+                async.series([
+                    createTestTrails,
+                    createTestDomainEntityTypes,
+                    createTestDomainItems,
+                    createTestTrailUrls,
+                    createTestUrlExtractions
+                  ], function (err, results) {
+                    res.end('<h1>Test Data Created!</h2>');
+                  }
+                );
               });
             });
           });
       }
     );
-    function createTestUrlExtractions(trailUrls, domainEntityTypes, cb) {
+    function createTestTrailUrls(cb) {
+      createCollectionEntry({
+        url: 'http://www.__moniker__.net',
+        scrapedContent: '__htmlContent__',
+        comments: '__commentsContent__',
+        dwTrailId: '__trailId__'
+      }, DwTrailUrl, 5, 10, function (err, results) {
+        createdTestTrailUrls = results;
+        cb(err, results);
+      });
+    }
+
+    function createTestDomainItems(cb) {
+      createCollectionEntry({
+        name: 'DomainItem___search-moniker__',
+        coreItem: randomInt(0, 2),
+        dwDomainEntityTypeId: '__domainEntityTypeId__',
+        description: 'The __moniker__ DomainItem',
+        itemValue: 'The __moniker__ Item Value',
+        users: '__hasAndBelongsToManyUsers__',
+        dwDomainId: '__domainId__'
+      }, DwDomainItem, 5, 10, function (err, result) {
+        cb(err, result);
+      });
+    }
+
+    function createTestDomainEntityTypes(cb) {
+      createCollectionEntry({
+        name: 'DomainEntityType___search-moniker__',
+        description: 'The __moniker__ DomainEntityType',
+        users: '__hasAndBelongsToManyUsers__',
+        dwDomainId: '__domainId__'
+      }, DwDomainEntityType, 5, 10, function (err, results) {
+        createdTestDomainEntityTypes = results;
+        cb(err, results);
+      });
+    }
+
+    function createTestTrails(cb) {
+      createCollectionEntry({
+        name: 'Trail___search-moniker__',
+        description: 'The __moniker__ Trail',
+        users: '__hasAndBelongsToManyUsers__',
+        dwTeamId: '__teamId__',
+        dwDomainId: '__domainId__'
+      }, DwTrail, 5, 10, function (err, results) {
+        createdTestTrails = results;
+        cb(err, results);
+      });
+    }
+
+    function createTestUrlExtractions(cb) {
       var cheerio = require('cheerio');
       var numberOfTrailUrlExtractions = randomInt(25, 75);
       var functionArray = [];
       for (var i = 0; i < numberOfTrailUrlExtractions; ++i) {
-        var trailUrl = trailUrls[randomInt(0, trailUrls.length)];
+        var trailUrl = shuffle(createdTestTrailUrls)[0];
         var trailUrlId = trailUrl.id.toString();
-        var domainEntityTypeId = domainEntityTypes[randomInt(0, domainEntityTypes.length)].id.toString();
+        var domainEntityType = shuffle(createdTestDomainEntityTypes)[0];
+        var domainEntityTypeId = domainEntityType.id.toString();
         var numberOfExtractionTerms = randomInt(25, 75);
         var scrapedContent = trailUrl.scrapedContent;
         var $ = cheerio.load(scrapedContent);
@@ -90,7 +176,7 @@ module.exports = function (app) {
             {
               value: value,
               dwDomainEntityTypeId: domainEntityTypeId,
-              dwTrailUrlId: trailUrlId.toString()
+              dwTrailUrlId: trailUrlId
             }));
         }
       }
@@ -99,40 +185,80 @@ module.exports = function (app) {
       });
     }
 
-    function createTestTrailUrls(testTrails, cb) {
-      var numberOfTrailUrls = 100;
-      var words = getWords(numberOfTrailUrls);
+    function createCollectionEntry(objectTemplate, collection, minCount, maxCount, cb) {
+      var numberOfEntries = randomInt(minCount, maxCount);
+      var words = getWords(numberOfEntries);
+      var users = [];
+      var teamId = '';
+      var domainId = '';
       var functionArray = [];
-      for (var i = 0; i < numberOfTrailUrls; ++i) {
-        var trailUrl = 'http://www.' + words[i] + '.net';
-        var trailId = testTrails[randomInt(0, testTrails.length)].id.toString();
-        functionArray.push(async.apply(findOrCreateObj, DwTrailUrl, {where: {url: trailUrl}},
-          {
-            url: trailUrl,
-            scrapedContent: generateHtml(),
-            comments: getSentence(50),
-            dwTrailId: trailId.toString()
-          }));
+      for (var i = 0; i < words.length; ++i) {
+        var moniker = words[i];
+        var searchProperty = '';
+        var searchPropertyValue = '';
+        var objectToInsert = {};
+        deepExtend(objectToInsert, objectTemplate);
+        for (var property in objectToInsert) {
+          if (typeof objectToInsert[property] == 'string') {
+            if (objectToInsert[property].indexOf('__search-moniker__') != -1) {
+              objectToInsert[property] = objectToInsert[property].replace('__search-moniker__', moniker);
+              searchProperty = property;
+              searchPropertyValue = objectToInsert[property];
+            } else if (objectToInsert[property].indexOf('__teamId__') != -1) {
+              objectToInsert[property] = teamId;
+            } else if (objectToInsert[property].indexOf('__domainEntityTypeId__') != -1) {
+              var domainEntityTypeId = shuffle(createdTestDomainEntityTypes)[0].id.toString();
+              objectToInsert[property] = domainEntityTypeId;
+            } else if (objectToInsert[property].indexOf('__trailId__') != -1) {
+              var trailId = shuffle(createdTestTrails)[0].id.toString();
+              objectToInsert[property] = trailId;
+            } else if (objectToInsert[property].indexOf('__domainId__') != -1) {
+              objectToInsert[property] = domainId;
+            } else if (objectToInsert[property].indexOf('__htmlContent__') != -1) {
+              objectToInsert[property] = generateHtml();
+            } else if (objectToInsert[property].indexOf('__commentsContent__') != -1) {
+              objectToInsert[property] = getSentence(40);
+            } else if (objectToInsert[property].indexOf('__hasAndBelongsToManyUsers__') != -1) {
+              users = shuffle(createdTestUsers).slice(1, 3);
+              var team = shuffle(users[0].deepTeams)[0];
+              teamId = team.id.toString();
+              var domain = shuffle(team.deepDomains)[0];
+              domainId = domain.id.toString();
+            } else {
+              objectToInsert[property] = objectToInsert[property].replace('__moniker__', moniker);
+            }
+          }
+        }
+        var filter = {};
+        filter['where'] = {};
+        filter['where'][searchProperty] = searchPropertyValue;
+        functionArray.push(async.apply(findOrCreateObj, collection, filter, objectToInsert));
       }
-      async.series(functionArray, function (err, trailUrls) {
-        cb(err, trailUrls);
+      async.series(functionArray, function (err, results) {
+        var retVal = [];
+        results.forEach(function (result) {
+          if (result) {
+            retVal.push(result);
+          }
+        });
+        cb(err, retVal);
       });
     }
 
     function linkSomeHasAndBelongsToMany(firstArray, firstProperty, secondArray, cb) {
+      var functionArray = [];
       firstArray.forEach(function (firstArrayElement) {
         //Get random half of the second array
         var randomHalfSecondArray = shuffle(secondArray).slice(0, secondArray.length / 2);
         //Add each second array element to firstArray[firstProperty]
-        var functionArray = [];
         randomHalfSecondArray.forEach(function (randomHalfSecondArrayElement) {
           functionArray.push(async.apply(addObjectToEmbeddedList,
             firstArrayElement[firstProperty],
             randomHalfSecondArrayElement));
         });
-        async.series(functionArray, function (err, results) {
-          cb(err, results);
-        });
+      });
+      async.series(functionArray, function (err, results) {
+        cb(err, results);
       });
     }
 
@@ -158,165 +284,11 @@ module.exports = function (app) {
       return array;
     }
 
-    function createTestDomainItems(testDomains, cb) {
-      var testDomainItemNames = [];
-      alphabet.forEach(function (letter) {
-        testDomainItemNames.push(letter);
-      });
-      var functionArray = [];
-      testDomainItemNames.forEach(function () {
-        var domain = testDomains[randomInt(1, testDomains.length)];
-        functionArray.push(async.apply(findOrCreateObj, DwDomain, {
-          where: {name: domain.name},
-          include: ['domainEntityTypes']
-        }, {}));
-      });
-      async.series(functionArray, function (err, domains) {
-        if (err) {
-          log(err);
-          return;
-        }
-        var functionArray = [];
-        domains.forEach(function (domain) {
-          functionArray.push(async.apply(domain.domainEntityTypes));
-        });
-        //Do this to load domain collections
-        async.series(functionArray, function (err, domainEntityTypes) {
-          if (err) {
-            log(err);
-            return;
-          }
-          //-->
-          var functionArray = [];
-          var arrayLength = testDomainItemNames.length;
-          for (var i = 0; i < arrayLength; ++i) {
-            var domainItemName = testDomainItemNames[i];
-            var entityTypes = domainEntityTypes[i];
-            var domain = domains[i];
-            var domainEntityType = entityTypes[randomInt(0, entityTypes.length)];
-            if (domainEntityType) {
-              var domainEntityTypeId = domainEntityType.id.toString();
-              var domainId = domain.id.toString();
-              var domainItemMoniker = 'DomainItem' + domainItemName;
-              functionArray.push(async.apply(findOrCreateObj, DwDomainItem, {where: {name: domainItemMoniker}},
-                {
-                  name: domainItemMoniker,
-                  coreItem: (randomInt(0, 2) === 0),
-                  itemValue: 'The ' + domainItemName + ' Item Value',
-                  dwDomainId: domainId,
-                  dwDomainEntityTypeId: domainEntityTypeId
-                }));
-            }
-          }
-          async.series(functionArray, function (err, entities) {
-            cb(err, entities);
-          });
-          //-->
-        });
-      });
-    }
-
-    function createTestDomainEntityTypes(testDomains, cb) {
-      var testDomainEntityTypeNames = [];
-      alphabet.forEach(function (letter) {
-        testDomainEntityTypeNames.push(letter);
-      });
-      var functionArray = [];
-      testDomainEntityTypeNames.forEach(function (domainEntityTypeName) {
-        var domain = testDomains[randomInt(1, testDomains.length)];
-        var domainId = domain.id.toString();
-        var domainEntityTypeMoniker = 'DomainEntityType' + domainEntityTypeName;
-        functionArray.push(async.apply(findOrCreateObj, DwDomainEntityType, {where: {name: domainEntityTypeMoniker}},
-          {
-            name: domainEntityTypeMoniker,
-            description: 'The ' + domainEntityTypeName + ' DomainEntityType',
-            dwDomainId: domainId
-          }));
-      });
-      async.series(functionArray, function (err, result) {
-        createdTestDomainEntityTypes = result;
-        cb(err, result);
-      });
-    }
-
-    function createTestTrails(testDomains, cb) {
-      var testTrailNames = [];
-      alphabet.forEach(function (letter) {
-        testTrailNames.push(letter);
-      });
-      AminoUser.find({include: ['teams']}, function (err, myAminoUsers) {
-        if (err) {
-          log(err);
-          return;
-        }
-        var functionArray = [];
-        testTrailNames.forEach(function (trailName) {
-          var myAminoUser = myAminoUsers[randomInt(0, myAminoUsers.length)];
-          var teams = myAminoUser.teams();
-          if (!teams || !teams.length) {
-            return;
-          }
-          var team = teams[randomInt(0, teams.length)];
-          var domain = testDomains[randomInt(0, testDomains.length)];
-          var trailMoniker = 'Trail' + trailName;
-          functionArray.push(async.apply(findOrCreateObj, DwTrail, {where: {name: trailMoniker}},
-            {
-              name: trailMoniker,
-              description: 'The ' + trailName + ' Trail',
-              //dwUserId: myAminoUser.id.toString(),
-              dwTeamId: team.id.toString(),
-              dwDomainId: domain.id.toString()
-            }));
-        });
-        async.series(functionArray, function (err, result) {
-          createdTestTrails = result;
-          cb(err, result);
-        });
-      });
-    }
-
-    function createCollectionEntry(objectTemplate, collection, minCount, maxCount, cb) {
-      var numberOfEntries = randomInt(minCount, maxCount);
-      var words = getWords(numberOfEntries);
-      var functionArray = [];
-      for (var i = 0; i < words.length; ++i) {
-        //var moniker = 'fripper';
-        var moniker = words[i];
-        var searchProperty = '';
-        var searchPropertyValue = '';
-        var objectToInsert = {};
-        deepExtend(objectToInsert, objectTemplate);
-        for (var property in objectToInsert) {
-          if (objectToInsert[property].indexOf('__search-moniker__') != -1) {
-            objectToInsert[property] = objectToInsert[property].replace('__search-moniker__', moniker);
-            searchProperty = property;
-            searchPropertyValue = objectToInsert[property];
-          }
-          else {
-            objectToInsert[property] = objectToInsert[property].replace('__moniker__', moniker);
-          }
-        }
-        var filter = {};
-        filter['where'] = {};
-        filter['where'][searchProperty] = searchPropertyValue;
-        functionArray.push(async.apply(findOrCreateObj, collection, filter, objectToInsert));
-      }
-      async.series(functionArray, function (err, results) {
-        var retVal = [];
-        results.forEach(function (result) {
-          if (result) {
-            retVal.push(result);
-          }
-        });
-        cb(err, retVal);
-      });
-    }
-
     function createTestTeams(cb) {
       createCollectionEntry({
         name: 'Team___search-moniker__',
         description: 'The __moniker__ Team'
-      }, DwTeam, 10, 30, function (err, result) {
+      }, DwTeam, 5, 10, function (err, result) {
         cb(err, result);
       });
     }
@@ -325,7 +297,7 @@ module.exports = function (app) {
       createCollectionEntry({
         name: 'Domain___search-moniker__',
         description: 'The __moniker__ Domain'
-      }, DwDomain, 10, 30, function (err, result) {
+      }, DwDomain, 5, 10, function (err, result) {
         cb(err, result);
       });
     }
@@ -337,7 +309,7 @@ module.exports = function (app) {
         email: '__moniker__@user.com',
         username: '__moniker__@user.com',
         password: 'password'
-      }, AminoUser, 10, 30, function (err, result) {
+      }, AminoUser, 5, 10, function (err, result) {
         cb(err, result);
       });
     }
@@ -366,7 +338,6 @@ function getWords(numberOfWords, minWordLength, maxWordLength) {
   numberOfWords = numberOfWords || 250;
   minWordLength = minWordLength || 5;
   maxWordLength = maxWordLength || 7;
-  var wordList = require('word-list-json');
   var wordListCursor = 0;
   while (wordList[++wordListCursor].length < minWordLength);
   var startWordIdx = wordListCursor;

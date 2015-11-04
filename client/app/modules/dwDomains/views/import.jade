@@ -1,16 +1,26 @@
 div(ng-controller="DomainsCtrl" data-ng-init="load()")
     div.box
         div.box-body.no-padding
+            span.box-title
+                .input-group
+                    a.btn.btn-default(translate, href='', ui-sref='^.list', style='float: left;')
+                        i.fa.fa-arrow-left &nbsp;Back to Domains
+            .box-tools.pull-right
+                span.pull-right.btn-toolbar
+                    button.btn.btn-primary.btn-sm(translate, ng-click='upload()')
+                        i.fa.fa-upload &nbsp;Upload File
+            .box-body
                 table.table.table-striped
                     tbody
                         tr(ng-repeat="file in files")
                             td
                                 a(href="{{apiUrl}}/containers/files/download/{{file.name}}" target="new") {{file.name }}
-                            td(width="10px")
-                                a.btn.btn-default.btn-xs(href="" ng-click="delete($index, file.name)" title="Delete the file")
+                            td(width="100px")
+                                a.btn.btn-default.btn-xs(href="" ng-click="importFile($index, file)" title="Import this Domain")
+                                    span.fa.fa-upload
+                                a.btn.btn-default.btn-xs(href="" ng-click="deleteFile($index, file.name)" title="Delete this file")
                                     span.fa.fa-trash-o
                         tr(ng-show="!files.length")
                             td(colspan="2")
-                                h4.list-group-item-heading(translate) There are no files
-                                p.list-group-item-text(translate) Click
-                                    a(href="" ui-sref="^.upload" translate) here to upload some!
+                                h4.list-group-item-heading(translate) There are no Domain files
+

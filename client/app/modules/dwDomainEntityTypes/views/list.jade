@@ -29,7 +29,7 @@
             .btn-toolbar
                 button.btn.btn-sm.btn-default(ui-sref='app.dwDomainEntityTypes.edit({id:entityType.id})')
                     i.fa.fa-pencil
-                button.btn.btn-sm.btn-danger(ng-click='delete({id:entityType.id})',ng-disabled='!currentUser.isAdmin')
+                button.btn.btn-sm.btn-danger(ng-click='delete({id:entityType})',ng-disabled='!currentUser.isAdmin')
                     i.fa.fa-trash-o
   .overlay(ng-if='loading')
   .loading-img(ng-if='loading')

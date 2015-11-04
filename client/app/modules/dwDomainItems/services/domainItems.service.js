@@ -4,7 +4,8 @@ var app = angular.module('com.module.dwDomainItems');
 app.service('DomainItemsService', ['$state', 'CoreService', 'DwDomainItem', 'gettextCatalog', function($state, CoreService, DwDomainItem, gettextCatalog) {
 
   this.getDomainItems = function() {
-    return DwDomainItem.find();
+    return DwDomainItem.find({filter: {include: ['domain','domainEntityType']}});
+
   };
 
   this.getDomainItem = function(id) {

@@ -61,6 +61,48 @@ app.controller('DomainsCtrl', function($scope, $state, $http, $stateParams, DwFe
         });
     };
 
+    $scope.deleteFile = function(index, id) {
+        CoreService.confirm(gettextCatalog.getString('Are you sure?'),
+            gettextCatalog.getString('Deleting this cannot be undone'),
+            function() {
+                $http.delete(CoreService.env.apiUrl +
+                    '/containers/files/files/' + encodeURIComponent(id)).success(
+                    function(data, status, headers) {
+                        console.log(data);
+                        console.log(status);
+                        console.log(headers);
+                        $scope.files.splice(index, 1);
+                        CoreService.toastSuccess(gettextCatalog.getString(
+                            'File deleted'), gettextCatalog.getString(
+                            'Your file is deleted!'));
+                    });
+            },
+            function() {
+                return false;
+            });
+    };
+
+    $scope.importFile = function(index, file){
+        //{{apiUrl}}/containers/files/download/{{file.name}}
+        var url =  CoreService.env.apiUrl + 'containers/files/download/' + encodeURIComponent(file.name);
+        $http.get(url).
+            success(function(response) {
+                // this callback will be called asynchronously
+                // when the response is available
+
+               //Iterate over domain to create domain, domain entityTypes, domainItems
+                DomainsService.upsertDomain(response, function() {
+                    $scope.safeDisplayedDomains = DomainsService.getDomains();
+                    $state.go('^.list');
+                });
+            }).
+            error(function(data, status, headers, config) {
+                // called asynchronously if an error occurs
+                // or server returns response with an error status.
+                alert("error");
+            });
+    };
+
     $scope.onSubmit = function() {
         DomainsService.upsertDomain($scope.domain, function() {
             $scope.safeDisplayedDomains = DomainsService.getDomains();
@@ -109,14 +151,6 @@ app.controller('DomainsCtrl', function($scope, $state, $http, $stateParams, DwFe
             .then(function () {
                 $scope.loading = false;
             });
-
-        if ($stateParams.id) {
-            DomainsService.getDomain($stateParams.id).$promise.then(function(result){
-                $scope.domain = result;
-            })
-        } else {
-            $scope.domain = {};
-        }
     }else{
         if($scope.currentUser.teams){
             $scope.userDomains = [];
@@ -198,7 +232,6 @@ app.controller('DomainsCtrl', function($scope, $state, $http, $stateParams, DwFe
         $scope.loading = false;
     } else {
         $scope.domain = {};
-
     }
 
     $scope.files = [];
@@ -208,27 +241,6 @@ app.controller('DomainsCtrl', function($scope, $state, $http, $stateParams, DwFe
             function(data) {
                 console.log(data);
                 $scope.files = data;
-            });
-    };
-
-    $scope.delete = function(index, id) {
-        CoreService.confirm(gettextCatalog.getString('Are you sure?'),
-            gettextCatalog.getString('Deleting this cannot be undone'),
-            function() {
-                $http.delete(CoreService.env.apiUrl +
-                    '/containers/files/files/' + encodeURIComponent(id)).success(
-                    function(data, status, headers) {
-                        console.log(data);
-                        console.log(status);
-                        console.log(headers);
-                        $scope.files.splice(index, 1);
-                        CoreService.toastSuccess(gettextCatalog.getString(
-                            'File deleted'), gettextCatalog.getString(
-                            'Your file is deleted!'));
-                    });
-            },
-            function() {
-                return false;
             });
     };
 

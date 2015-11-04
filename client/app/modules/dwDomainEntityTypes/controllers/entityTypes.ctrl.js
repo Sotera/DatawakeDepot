@@ -89,10 +89,21 @@ app.controller('EntityTypesCtrl', function($scope, $state, $stateParams, DwDomai
   );
 
   if ($stateParams.id) {
-    EntityTypesService.getEntityType($stateParams.id).$promise.then(function(result){
-      $scope.entityType = result;})
+      $scope.loading = true;
+      DwDomainEntityType.findOne({
+          filter: {
+              where: {
+                  id: $stateParams.id
+              },
+              include: ['domain','domainItems']
+          }
+      }).$promise
+          .then(function (domain) {
+              $scope.entityType = domain;
+          });
+      $scope.loading = false;
   } else {
-    $scope.entityType = {};
+      $scope.entityType = {};
   }
 
   $scope.getDomains = function () {

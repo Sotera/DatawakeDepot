@@ -48,7 +48,7 @@ app.controller('TrailsCtrl', function($scope, $state, $stateParams, DwDomain, Dw
           valueProp: 'id',
           labelProp: 'name',
           required: true,
-          disabled: true
+          disabled: false
       }
   },{
       key: 'name',

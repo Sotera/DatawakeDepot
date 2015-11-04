@@ -73,10 +73,6 @@ app.controller('DomainItemsCtrl', function($scope, $state, $stateParams, DwDomai
         .then(function (allDomainItems) {
             $scope.safeDisplayeddomainItems = allDomainItems;
             $scope.displayedDomainItems = [].concat($scope.safeDisplayeddomainItems);
-
-            //if in edit mode, add handler to load picklist option here
-            if ($stateParams.id) {
-            }
         })
         .catch(function (err) {
             console.log(err);
@@ -120,8 +116,19 @@ app.controller('DomainItemsCtrl', function($scope, $state, $stateParams, DwDomai
     );
 
     if ($stateParams.id) {
-        DomainItemsService.getDomainItem($stateParams.id).$promise.then(function(result){
-            $scope.domainItem = result;})
+        $scope.loading = true;
+        DwDomainItem.findOne({
+            filter: {
+                where: {
+                    id: $stateParams.id
+                },
+                include: ['domain','domainEntityType']
+            }
+        }).$promise
+            .then(function (domain) {
+                $scope.domainItem = domain;
+            });
+        $scope.loading = false;
     } else {
         $scope.domainItem = {};
     }

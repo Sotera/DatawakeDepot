@@ -66,13 +66,6 @@ angular.module('loopbackApp', [
   'com.module.dwTrailUrls',
   'com.module.dwUrlExtractions'
 
-
-
-
-
-
-
-
 ])
   .run(function ($rootScope, $cookies, gettextCatalog) {
     $rootScope.locales = {

@@ -1,5 +1,17 @@
 'use strict';
 var app = angular.module('com.module.dwForensic');
+app.directive('ngDropdownMultiselectDisabled', function() {
+    return {
+        restrict: 'A',
+        controller: function($scope, $element, $attrs) {
+            var $btn;
+            $btn = $element.find('button');
+            return $scope.$watch($attrs.ngDropdownMultiselectDisabled, function(newVal) {
+                return $btn.attr('disabled', newVal);
+            });
+        }
+    };
+});
 
 app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser, DwTrail, DwDomainEntityType, ForensicService, gettextCatalog, AppAuth) {
 

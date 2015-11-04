@@ -1,0 +1,16 @@
+div(ng-controller="DomainsCtrl" data-ng-init="load()")
+    div.box
+        div.box-body.no-padding
+                table.table.table-striped
+                    tbody
+                        tr(ng-repeat="file in files")
+                            td
+                                a(href="{{apiUrl}}/containers/files/download/{{file.name}}" target="new") {{file.name }}
+                            td(width="10px")
+                                a.btn.btn-default.btn-xs(href="" ng-click="delete($index, file.name)" title="Delete the file")
+                                    span.fa.fa-trash-o
+                        tr(ng-show="!files.length")
+                            td(colspan="2")
+                                h4.list-group-item-heading(translate) There are no files
+                                p.list-group-item-text(translate) Click
+                                    a(href="" ui-sref="^.upload" translate) here to upload some!

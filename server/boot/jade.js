@@ -53,6 +53,12 @@ module.exports = function (app) {
   app.get('/modules/dwDomains/views/view', function (req, res) {
     res.render('dwDomains/views/view', {title: 'Datawake Domains'});
   });
+  app.get('/modules/dwDomains/views/upload', function (req, res) {
+    res.render('dwDomains/views/upload', {title: 'Datawake Domains'});
+  });
+  app.get('/modules/dwDomains/views/import', function (req, res) {
+    res.render('dwDomains/views/import', {title: 'Datawake Domains'});
+  });
 
   /* dwDomainEntityTypes */
   app.get('/modules/dwDomainEntityTypes/views/main', function (req, res) {

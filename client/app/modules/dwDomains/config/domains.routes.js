@@ -6,6 +6,14 @@ app.config(function($stateProvider) {
         abstract: true,
         url: '/dwDomains',
         templateUrl: 'modules/dwDomains/views/main'
+    }).state('app.dwDomains.upload', {
+        url: '/upload',
+        templateUrl: 'modules/dwDomains/views/upload',
+        controller: 'DomainsCtrl'
+    }).state('app.dwDomains.import', {
+        url: '/import',
+        templateUrl: 'modules/dwDomains/views/import',
+        controller: 'DomainsCtrl'
     }).state('app.dwDomains.list', {
         url: '',
         templateUrl: 'modules/dwDomains/views/list',

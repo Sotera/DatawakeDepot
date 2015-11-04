@@ -15,7 +15,7 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser
     $scope.selectedViews = [];
 
     //Setup the view dropdown menu
-    $scope.views = ForensicService.getDomainEntityTypes();
+    $scope.views = [];
     $scope.viewSettings = {buttonClasses: 'btn btn-primary btn-sm', displayProp: 'name'};
     $scope.viewCustomText = {buttonDefaultText: 'Select Views'};
 
@@ -41,7 +41,7 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser
 
     $scope.trailChanged = function (trail) {
         $scope.selectedTrail = trail;
-        $scope.views = ForensicService.getDomainEntityTypes();
+        $scope.views = ForensicService.getDomainEntityTypes(trail.dwDomainId);
     };
 
     $scope.drawGraph = function () {

@@ -3,17 +3,20 @@ var app = angular.module('com.module.dwForensic');
 
 app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEntityType', 'gettextCatalog', function ($state, CoreService, DwTrail, DwDomainEntityType, gettextCatalog) {
 
-    this.getDomainEntityTypes = function () {
-        return DwDomainEntityType.find();
-    }
+    this.getDomainEntityTypes = function (domainId) {
+        var filter = {"filter": {"where": {"dwDomainId": domainId}}};
+        console.log("entityTypeFilter");
+        console.log(JSON.stringify(filter));
+        return DwDomainEntityType.find(filter);
+    };
 
     this.processEdges = function (rawEdges, rawNodes) {
-        var nodes = []
-        var edges = []
-        var curr_node = 0
-        var node_map = {}
-        var groups = {}
-        var curr_group = 0
+        var nodes = [];
+        var edges = [];
+        var curr_node = 0;
+        var node_map = {};
+        var groups = {};
+        var curr_group = 0;
 
 
         //process add nodes

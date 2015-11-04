@@ -14,7 +14,7 @@
     </div>
     <!-- Domain Select-->
     <div class="btn-group">
-        <button type="button" data-toggle="dropdown" class="btn btn-primary btn-sm dropdown-toggle">Domain:
+        <button ng-disabled="!selectedTeam" type="button" data-toggle="dropdown" class="btn btn-primary btn-sm dropdown-toggle">Domain:
             {{selectedDomain.name}}
             <span class="caret"></span>
         </button>
@@ -27,7 +27,7 @@
     </div>
     <!--Trail Selection Button-->
     <div class="btn-group">
-        <button type="button" data-toggle="dropdown" class="btn btn-primary btn-sm dropdown-toggle">Trail:
+        <button ng-disabled="!selectedTeam || !selectedDomain" type="button" data-toggle="dropdown" class="btn btn-primary btn-sm dropdown-toggle">Trail:
             {{selectedTrail.name}}
             <span class="caret"></span>
         </button>

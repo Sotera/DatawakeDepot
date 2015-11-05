@@ -44,6 +44,13 @@ app.controller('UrlExtractionsCtrl', function($scope, $state, $stateParams, DwDo
       label: gettextCatalog.getString('Value'),
       required: true
     }
+  },{
+      key: 'occurrences',
+      type: 'input',
+      templateOptions: {
+          label: gettextCatalog.getString('Occurrences'),
+          required: true
+      }
   }];
 
 
@@ -60,6 +67,10 @@ app.controller('UrlExtractionsCtrl', function($scope, $state, $stateParams, DwDo
       $state.go('^.list');
     });
   };
+
+  $scope.makeDomainItem = function(id){
+      alert('Create Domain Item:');
+  }
 
   $scope.loading = true;
   DwUrlExtraction.find({filter: {include: [{relation:'trailUrl',scope:{include: ['trail']}},'domainEntityType']}}).$promise

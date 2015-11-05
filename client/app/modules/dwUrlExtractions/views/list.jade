@@ -12,6 +12,7 @@
           th.sortable.col-sm-2.col-md-2.col-lg-3(st-sort='value') Value
           th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='trail.name') Trail
           th.sortable.col-sm-2.col-md-2.col-lg-3(st-sort='trailUrl.url') URL
+          th.sortable.col-sm-2.col-md-2.col-lg-3(st-sort='trailUrl.occurrences') Occurrences
           th.col-sm-2.col-md-2.col-lg-2.td-center
               a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
                 &nbsp; Add UrlExtraction
@@ -25,11 +26,14 @@
             span.label.label-ltgray {{urlExtraction.trailUrl.trail.name}}
           td
             span.text-muted {{urlExtraction.trailUrl.url}}
+          td
+            span.text-muted {{urlExtraction.occurrences}}
           td.td-center(style='width: 120px')
             .btn-toolbar
-                button.btn.btn-sm.btn-default(ui-sref='app.dwUrlExtractions.edit({id:urlExtraction.id})',ng-disabled='!currentUser.isAdmin')
+                button.btn.btn-sm.btn-warning.glyphicon.glyphicon-save(ng-click='makeDomainItem({id:urlExtraction.id})', ng-disabled='!currentUser.isAdmin', title='Add as Domain Item')
+                button.btn.btn-sm.btn-default(ui-sref='app.dwUrlExtractions.edit({id:urlExtraction.id})',ng-disabled='!currentUser.isAdmin', title='Edit Extraction')
                     i.fa.fa-pencil
-                button.btn.btn-sm.btn-danger(ng-click='delete({id:urlExtraction.id})',ng-disabled='!currentUser.isAdmin')
+                button.btn.btn-sm.btn-danger(ng-click='delete({id:urlExtraction.id})',ng-disabled='!currentUser.isAdmin', title='Delete Extraction')
                     i.fa.fa-trash-o
   .overlay(ng-if='loading')
   .loading-img(ng-if='loading')

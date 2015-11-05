@@ -44,9 +44,9 @@
             span.text-muted {{trail.timestamp}}
           td.td-center(style='width: 120px')
             .btn-toolbar
-                button.btn.btn-sm.btn-default(ui-sref='app.dwTrails.edit({id:trail.id})',ng-disabled='!currentUser.isAdmin')
+                button.btn.btn-sm.btn-default(ui-sref='app.dwTrails.edit({id:trail.id})',ng-disabled='!currentUser.isAdmin', title='Edit Trail')
                     i.fa.fa-pencil
-                button.btn.btn-sm.btn-danger(ng-click='delete({id:trail})',ng-disabled='!currentUser.isAdmin')
+                button.btn.btn-sm.btn-danger(ng-click='delete({id:trail})',ng-disabled='!currentUser.isAdmin', title='Delete Trail')
                     i.fa.fa-trash-o
   .overlay(ng-if='loading')
   .loading-img(ng-if='loading')

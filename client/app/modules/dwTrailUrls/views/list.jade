@@ -16,7 +16,7 @@
           th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='timestamp') Timestamp
           th.col-sm-2.col-md-2.col-lg-2.td-center
               a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
-                &nbsp;Add Trail URL
+                &nbsp; Add Trail URL
       tbody
         tr(ng-repeat='trailUrl in displayedTrailUrls')
           td(style='width: 120px')
@@ -33,9 +33,11 @@
             span.text-muted {{trailUrl.timestamp}}
           td.td-center(style='width: 120px')
             .btn-toolbar
-                button.btn.btn-sm.btn-default(ui-sref='app.dwTrailUrls.edit({id:trailUrl.id})',ng-disabled='!currentUser.isAdmin')
+                button.btn.btn-sm.btn-default.glyphicon.glyphicon-eye-open(onclick='window.open({{trailUrl.url}}, "_blank");', title='Browse Url')
+                //button.btn.btn-sm.btn-warning.glyphicon.glyphicon-eye-open(ng-click='makeDomainItem({id:urlExtraction.id})', ng-disabled='!currentUser.isAdmin', title='Add as Domain Item')
+                button.btn.btn-sm.btn-default(ui-sref='app.dwTrailUrls.edit({id:trailUrl.id})',ng-disabled='!currentUser.isAdmin',title='Edit Url')
                     i.fa.fa-pencil
-                button.btn.btn-sm.btn-danger(ng-click='delete({id:trailUrl.id})',ng-disabled='!currentUser.isAdmin')
+                button.btn.btn-sm.btn-danger(ng-click='delete({id:trailUrl.id})',ng-disabled='!currentUser.isAdmin',title='Delete Url')
                     i.fa.fa-trash-o
   .overlay(ng-if='loading')
   .loading-img(ng-if='loading')

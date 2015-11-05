@@ -9,6 +9,9 @@
   "properties": {
     "value": {
       "type": "string"
+    },
+    "occurrences": {
+      "type": "number"
     }
   },
   "validations": [],

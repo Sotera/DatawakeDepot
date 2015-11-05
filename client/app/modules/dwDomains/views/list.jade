@@ -31,8 +31,8 @@
             span.label.label-ltgray(ng-repeat="team in domain.teams") {{team.name}}
           td
             span.label.label-ltgray(ng-repeat="trail in domain.trails") {{trail.name}}
-          td
-            span.label.label-ltgray(ng-repeat="domainEntType in domain.domainEntityTypes") {{domainEntType.name}}
+          td.td-center
+            a(ui-sref='app.dwDomainEntityTypes.list({id:null, domainId:domain.id})') {{domain.domainEntityTypes.length}}
           td.td-center
             a(ui-sref='app.dwFeeds.list({id:null, domainId:domain.id})') {{domain.feeds.length}}
           td.td-center

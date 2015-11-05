@@ -161,3 +161,7 @@ body {
 .bg-blue13 {
   background-color: #0074a2 !important;
 }
+
+.pointer {
+  cursor: default;
+}

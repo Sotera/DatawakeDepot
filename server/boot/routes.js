@@ -120,10 +120,10 @@ module.exports = function (app) {
         coreItem: randomInt(0, 2),
         dwDomainEntityTypeId: '__domainEntityTypeId__',
         description: 'The __moniker__ DomainItem',
-        itemValue: 'The __moniker__ Item Value',
+        itemValue: '__aWord__',
         users: '__hasAndBelongsToManyUsers__',
         dwDomainId: '__domainId__'
-      }, DwDomainItem, 5, 10, function (err, result) {
+      }, DwDomainItem, 100, 200, function (err, result) {
         cb(err, result);
       });
     }
@@ -212,6 +212,8 @@ module.exports = function (app) {
             } else if (objectToInsert[property].indexOf('__trailId__') != -1) {
               var trailId = shuffle(createdTestTrails)[0].id.toString();
               objectToInsert[property] = trailId;
+            } else if (objectToInsert[property].indexOf('__aWord__') != -1) {
+              objectToInsert[property] = getWords(10)[5];
             } else if (objectToInsert[property].indexOf('__domainId__') != -1) {
               objectToInsert[property] = domainId;
             } else if (objectToInsert[property].indexOf('__htmlContent__') != -1) {
@@ -268,22 +270,6 @@ module.exports = function (app) {
       });
     }
 
-    function shuffle(array) {
-      var currentIndex = array.length, temporaryValue, randomIndex;
-      // While there remain elements to shuffle...
-      while (0 !== currentIndex) {
-
-        // Pick a remaining element...
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex -= 1;
-        // And swap it with the current element.
-        temporaryValue = array[currentIndex];
-        array[currentIndex] = array[randomIndex];
-        array[randomIndex] = temporaryValue;
-      }
-      return array;
-    }
-
     function createTestTeams(cb) {
       createCollectionEntry({
         name: 'Team___search-moniker__',
@@ -334,8 +320,19 @@ module.exports = function (app) {
 function getSentence(numberOfWords, minWordLength, maxWordLength) {
   return getWords(numberOfWords, minWordLength, maxWordLength).join(' ') + '.';
 }
+var thousandSixLetterWords = [];
 function getWords(numberOfWords, minWordLength, maxWordLength) {
-  numberOfWords = numberOfWords || 250;
+  if(!thousandSixLetterWords.length){
+    var wordListCursor = 0;
+    while (wordList[++wordListCursor].length < 6);
+    var startWordIdx = wordListCursor;
+    while (wordList[++wordListCursor].length <= 6);
+    var endWordIdx = wordListCursor;
+    thousandSixLetterWords = shuffle(wordList.slice(startWordIdx, endWordIdx)).slice(0, 1000);
+  }
+  return shuffle(thousandSixLetterWords).slice(0, numberOfWords);
+  //Use them all
+/*  numberOfWords = numberOfWords || 250;
   minWordLength = minWordLength || 5;
   maxWordLength = maxWordLength || 7;
   var wordListCursor = 0;
@@ -347,7 +344,7 @@ function getWords(numberOfWords, minWordLength, maxWordLength) {
   for (var i = 0; i < numberOfWords; ++i) {
     words.push(wordList[randomInt(startWordIdx, endWordIdx)]);
   }
-  return words;
+  return words;*/
 }
 function sometimes(howOftenOneToFifty) {
   howOftenOneToFifty = howOftenOneToFifty || 100;
@@ -362,7 +359,7 @@ function randomInt(low, high) {
   return Math.floor(Math.random() * (high - low) + low);
 }
 function generateHtml(wordCount) {
-  wordCount = wordCount || 1000;
+  wordCount = wordCount || 900;
   var words = getWords(wordCount);
   var html = '<html><head><h1>'
   html += getSentence(randomInt(4, 8));
@@ -378,3 +375,19 @@ function generateHtml(wordCount) {
   html += '</body></html>';
   return html;
 }
+function shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+  return array;
+}
+

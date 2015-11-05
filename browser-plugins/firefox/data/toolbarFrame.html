@@ -7,77 +7,78 @@
         rel="stylesheet"/>
   <link href="toolbarFrame.css"
         rel="stylesheet"/>
-<!--  <script type="text/javascript"
-          src="vendor/superagent/superagent.js"></script>-->
+  <!--  <script type="text/javascript"
+            src="vendor/superagent/superagent.js"></script>-->
   <script type="text/javascript"
           src="vendor/jquery/jquery-2.1.4.min.js"></script>
   <script type="text/javascript"
           src="toolbarFrame.js"></script>
+  <style>
+  </style>
 </head>
 <body onload="onLoad()">
-<div style="vertical-align: middle"
-     class="container-fluid">
-  <div class="row no-gutter">
-    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
-      <img src="./images/waveicon24.png"
-           id="waveImg"
-           style="margin-left: 6px;"
-           height="24"
-           width="24">
+<div>
+  <!--<div style="vertical-align: middle"
+       class="container-fluid">-->
+  <img src="./images/waveicon24.png"
+       id="waveImg"
+       style="margin-left: 6px;position: absolute;"
+       height="24"
+       width="24">
 
-<!--      <div class="datawakeText">
-        Datawake
-      </div>-->
-    </div>
-    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
-      <div class="datawakeText pull-right">
-        Team:
+  <form class="form-horizontal">
+    <div class="form-group">
+      <label for="teamList"
+             style="padding-left:0;padding-right:4px;"
+             class="control-label col-lg-1 col-md-1 col-sm-1 col-xs-1">Team:</label>
+
+      <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"
+           style="padding-left:0;padding-right:0;">
+        <select id="teamList"
+                disabled="disabled"
+                onchange="teamSelectionChanged()"
+                class="form-control btn-info input-sm"></select>
+      </div>
+      <label for="domainList"
+             style="padding-left:0;padding-right:4px;"
+             class="control-label col-lg-1 col-md-1 col-sm-1 col-xs-1">Domain:</label>
+
+      <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"
+           style="padding-left:0;padding-right:0;">
+        <select id="domainList"
+                disabled="disabled"
+                onchange="domainSelectionChanged()"
+                class="form-control btn-info input-sm">
+        </select>
+      </div>
+      <label for="trailList"
+             style="padding-left:0;padding-right:4px;"
+             class="control-label col-lg-1 col-md-1 col-sm-1 col-xs-1">Trail:</label>
+
+      <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"
+           style="padding-left:0;padding-right:0;">
+        <select id="trailList"
+                disabled="disabled"
+                onchange="trailSelectionChanged()"
+                class="form-control btn-info input-sm">
+        </select>
+      </div>
+      <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"
+           style="padding-left:4px;padding-right:2px;">
+        <a id="toggleTrailButton"
+           role="button"
+           class="btn btn-sm btn-success btn-block disabled"
+           onclick="toggleTrailing()">Start</a>
+      </div>
+      <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"
+           style="padding-left:2px;padding-right:4px;">
+        <a id="loginButton"
+           role="button"
+           class="btn btn-sm btn-success btn-block"
+           onclick="toggleLogin()">Login</a>
       </div>
     </div>
-    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-      <select id="teamList"
-              disabled="disabled"
-              onchange="teamSelectionChanged()"
-              class="form-control btn-info input-sm">
-      </select>
-    </div>
-    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
-      <div class="datawakeText pull-right">
-        Domain:
-      </div>
-    </div>
-    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-      <select id="domainList"
-              disabled="disabled"
-              onchange="domainSelectionChanged()"
-              class="form-control btn-info input-sm">
-      </select>
-    </div>
-    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
-      <div class="datawakeText pull-right">
-        Trail:
-      </div>
-    </div>
-    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-      <select id="trailList"
-              disabled="disabled"
-              onchange="trailSelectionChanged()"
-              class="form-control btn-info input-sm">
-      </select>
-    </div>
-    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
-      <a id="toggleTrailButton"
-         role="button"
-         class="btn btn-sm btn-success btn-block disabled"
-         onclick="toggleTrailing()">Start</a>
-    </div>
-    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
-      <a id="loginButton"
-         role="button"
-         class="btn btn-sm btn-success btn-block"
-         onclick="toggleLogin()">Login</a>
-    </div>
-  </div>
+  </form>
 </div>
 </body>
 </html>

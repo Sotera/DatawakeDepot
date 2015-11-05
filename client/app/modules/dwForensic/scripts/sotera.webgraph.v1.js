@@ -124,15 +124,19 @@ var SWG = (function() {
         //var bilinks = []
 
         // iterate over nodes to collect type information
-        pubs.node_types = {}
+        pubs.node_types = {};
         for (var i in nodes){
-            var node = nodes[i]
+            var node = nodes[i];
             if (node.name){
                 var nodetext = node.name.toLowerCase()
-                var type = node.groupName;
-                if (type.length > 0) {
-                    if (type in pubs.node_types) pubs.node_types[type]['count'] += 1
-                    else pubs.node_types[type] = {'count':1 ,'group':node.group}
+                if (node.hasOwnProperty('groupName')){
+                    var type = node.groupName;
+
+                    if (type.length > 0) {
+                        if (type in pubs.node_types) pubs.node_types[type]['count'] += 1
+                        else pubs.node_types[type] = {'count':1 ,'group':node.group}
+
+                    }
                 }
             }
         }

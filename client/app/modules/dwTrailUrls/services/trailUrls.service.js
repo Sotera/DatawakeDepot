@@ -4,7 +4,7 @@ var app = angular.module('com.module.dwTrailUrls');
 app.service('TrailUrlsService', ['$state', 'CoreService', 'DwTrailUrl', 'gettextCatalog', function($state, CoreService, DwTrailUrl, gettextCatalog) {
 
   this.getTrailUrls = function() {
-    return DwTrailUrl.find();
+    return DwTrailUrl.find({filter: {include: ['trail','crawlType','urlExtractions']}});
   };
 
   this.getTrailUrl = function(id) {

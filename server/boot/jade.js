@@ -185,6 +185,12 @@ module.exports = function (app) {
   app.get('/modules/dwTrails/views/view', function (req, res) {
     res.render('dwTrails/views/view', {title: 'Datawake Trails'});
   });
+  app.get('/modules/dwTrails/views/upload', function (req, res) {
+    res.render('dwTrails/views/upload', {title: 'Datawake Trails'});
+  });
+  app.get('/modules/dwTrails/views/import', function (req, res) {
+    res.render('dwTrails/views/import', {title: 'Datawake Trails'});
+  });
 
   /* dwTrailUrls */
   app.get('/modules/dwTrailUrls/views/main', function (req, res) {

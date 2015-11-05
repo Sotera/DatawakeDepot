@@ -4,7 +4,7 @@ var app = angular.module('com.module.dwExtractors');
 app.service('ExtractorsService', ['$state', 'CoreService', 'DwExtractor', 'gettextCatalog', function($state, CoreService, DwExtractor, gettextCatalog) {
 
   this.getExtractors = function() {
-    return DwExtractor.find();
+    return DwExtractor.find({filter: {include: ['serviceType','domains']}});
   };
 
   this.getExtractor = function(id) {

@@ -1,7 +1,7 @@
 'use strict';
 var app = angular.module('com.module.dwTrails');
 
-app.controller('TrailsCtrl', function($scope, $state, $stateParams, DwDomain, DwTeam, DwFeed, AminoUser, DwTrail, TrailsService, gettextCatalog, AppAuth) {
+app.controller('TrailsCtrl', function($scope, $state, $http, $stateParams, DwDomain, DwTeam, DwFeed, AminoUser, DwTrail, TrailsService, gettextCatalog, AppAuth, FileUploader, CoreService) {
 
   //Put the currentUser in $scope for convenience
   $scope.currentUser = AppAuth.currentUser;
@@ -139,20 +139,21 @@ app.controller('TrailsCtrl', function($scope, $state, $stateParams, DwDomain, Dw
   };
 
   $scope.loading = true;
-  DwTrail.find({filter: {include: ['domain','team','users','trailUrls','feeds']}}).$promise
+    DwTrail.find({filter: {include: ['domain','team','users','feeds',{relation:'trailUrls',scope:{include:['urlExtractions']}}]}}).$promise
       .then(function (allTrails) {
           $scope.safeDisplayedtrails = allTrails;
           $scope.displayedTrails = [].concat($scope.safeDisplayedtrails);
 
           //Admins get all teams
           if($scope.currentUser.isAdmin){
-              DwTeam.find({filter: {include: []}}).$promise
+              DwTeam.find({filter: {include: ['domains']}}).$promise
                   .then(function (allTeams) {
                       for (var i = 0; i < allTeams.length; ++i) {
                           $scope.plTeams.push({
                               value: allTeams[i].id,
                               name: allTeams[i].name,
-                              id: allTeams[i].id
+                              id: allTeams[i].id,
+                              domains: allTeams[i].domains
                           });
                       }
                   })
@@ -241,7 +242,7 @@ app.controller('TrailsCtrl', function($scope, $state, $stateParams, DwDomain, Dw
                               "name",
                               "description"
                           ],
-                          include:['domainEntityTypes']
+                          include:['domainEntityTypes','domainItems']
                       }
                   }
               ]
@@ -254,5 +255,89 @@ app.controller('TrailsCtrl', function($scope, $state, $stateParams, DwDomain, Dw
   } else {
       $scope.trail = {};
   }
+
+  // create a uploader with options
+  var uploader = $scope.uploader = new FileUploader({
+      scope: $scope, // to automatically update the html. Default: $rootScope
+      url: CoreService.env.apiUrl + '/containers/files/upload',
+      formData: [{
+          key: 'value'
+      }]
+  });
+
+  $scope.upload = function() {
+      $state.go('^.upload');
+  };
+
+  $scope.uploadAllTrails = function(uploader){
+      uploader.uploadAll();
+     //After uploading go to the Import page so that they can actually be imported
+      $state.go('^.import');
+  };
+
+  $scope.uploadTrail = function(item){
+      item.upload();
+      //After uploading go to the Import page so that they can actually be imported
+      $state.go('^.import');
+  };
+
+  $scope.$on('uploadCompleted', function(event) {
+      console.log('uploadCompleted event received');
+      console.log(event);
+      $scope.load();
+  });
+
+  $scope.files = [];
+
+  $scope.load = function() {
+      $http.get(CoreService.env.apiUrl + '/containers/files/files').success(
+          function(data) {
+              console.log(data);
+              $scope.files = data;
+          }
+      );
+  };
+
+  $scope.deleteFile = function(index, id) {
+      CoreService.confirm(gettextCatalog.getString('Are you sure?'),
+          gettextCatalog.getString('Deleting this cannot be undone'),
+          function() {
+              $http.delete(CoreService.env.apiUrl +
+                  '/containers/files/files/' + encodeURIComponent(id)).success(
+                  function(data, status, headers) {
+                      console.log(data);
+                      console.log(status);
+                      console.log(headers);
+                      $scope.files.splice(index, 1);
+                      CoreService.toastSuccess(gettextCatalog.getString(
+                          'File deleted'), gettextCatalog.getString(
+                          'Your file is deleted!'));
+                  });
+          },
+          function() {
+              return false;
+          });
+  };
+
+  $scope.importFile = function(index, file){
+      var url =  CoreService.env.apiUrl + 'containers/files/download/' + encodeURIComponent(file.name);
+      $http.get(url).
+          success(function(response) {
+              // this callback will be called asynchronously
+              // when the response is available
+               //Iterate over domain to create domain, domain entityTypes, domainItems
+              TrailsService.upsertTrail(response, function() {
+                  $scope.safeDisplayedTrails = TrailsService.getTrails();
+                  $state.go('^.list');
+              });
+          }).
+          error(function(data, status, headers, config) {
+              // called asynchronously if an error occurs
+              // or server returns response with an error status.
+              alert("error");
+          });
+  };
+
+
 });
 

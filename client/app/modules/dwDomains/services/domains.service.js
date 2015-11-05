@@ -43,7 +43,7 @@ app.service('DomainsService', ['$state', 'CoreService', 'DwDomain','gettextCatal
                     });
                 });
             };
-
+            //For other relationships you MUST manually add the items
             if(domain.domainEntityTypes) {
                 domain.domainEntityTypes.forEach(function (det) {
                     DwDomainEntityType.upsert(det, function() {
@@ -76,26 +76,37 @@ app.service('DomainsService', ['$state', 'CoreService', 'DwDomain','gettextCatal
         CoreService.confirm(gettextCatalog.getString('Are you sure?'),
             gettextCatalog.getString('Deleting this cannot be undone'),
             function() {
+                //For Many-To-Many relationships you MUST manually unlink the entities before deleting the domain
+                if(domain.id.dwTeams) {
+                    domain.id.dwTeams.forEach(function (team) {
+                        DwDomain.teams.unlink({id: domain.id, fk: team}, null, function (value, header) {
+                            //success
+                        });
+                    });
+                };
+
+                if(domain.id.dwFeeds) {
+                    domain.id.dwFeeds.forEach(function (feed) {
+                        DwDomain.feeds.unlink({id: domain.id, fk: feed}, null, function (value, header) {
+                            //success
+                        });
+                    });
+                };
+
+                if(domain.id.dwExtractors) {
+                    domain.id.dwExtractors.forEach(function (extractor) {
+                        DwDomain.extractors.unlink({id: domain.id, fk: extractor}, null, function (value, header) {
+                            //success
+                        });
+                    });
+                };
+
+                //Now delete the domain
                 DwDomain.deleteById(domain.id, function() {
                     CoreService.toastSuccess(gettextCatalog.getString('Domain deleted'), gettextCatalog.getString('Your domain is deleted!'));
 
-                    //For Many-To-Many relationships you MUST manually unlink the two models for INCLUDE to work in relationships
-                    if(domain.id.dwTeams) {
-                        domain.id.dwTeams.forEach(function (team) {
-                            DwDomain.teams.unlink({id: domain.id, fk: team}, null, function (value, header) {
-                                //success
-                            });
-                        });
-                    };
-
-                    if(domain.id.dwFeeds) {
-                        domain.id.dwFeeds.forEach(function (feed) {
-                            DwDomain.feeds.unlink({id: domain.id, fk: feed}, null, function (value, header) {
-                                //success
-                            });
-                        });
-                    };
-if(domain.id.domainItems) {
+                    //For other relationships you MUST manually remove the child items
+                    if(domain.id.domainItems) {
                         domain.id.domainItems.forEach(function (di) {
                             DwDomainItem.delete(di, function() {
                                 //success
@@ -103,15 +114,7 @@ if(domain.id.domainItems) {
                             });
                         });
                     };
-                    if(domain.id.dwExtractors) {
-                        domain.id.dwExtractors.forEach(function (extractor) {
-                            DwDomain.extractors.unlink({id: domain.id, fk: extractor}, null, function (value, header) {
-                                //success
-                            });
-                        });
-                    };
 
-                    //For other relationships you MUST manually remove the child items
                     if(domain.id.domainEntityTypes) {
                         domain.id.domainEntityTypes.forEach(function (det) {
                             DwDomainEntityType.delete(det, function() {
@@ -121,14 +124,6 @@ if(domain.id.domainItems) {
                         });
                     };
 
-                    if(domain.id.domainItems) {
-                        domain.id.domainItems.forEach(function (di) {
-                            DwDomainItem.delete(di, function() {
-                                //success
-                            }, function(err) {
-                            });
-                        });
-                    };
                     cb();
                 }, function(err) {
                     CoreService.toastError(gettextCatalog.getString(

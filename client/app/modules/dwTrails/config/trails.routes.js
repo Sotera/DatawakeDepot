@@ -6,6 +6,14 @@ app.config(function($stateProvider) {
     abstract: true,
     url: '/dwTrails',
     templateUrl: 'modules/dwTrails/views/main'
+  }).state('app.dwTrails.upload', {
+    url: '/upload',
+    templateUrl: 'modules/dwTrails/views/upload',
+    controller: 'TrailsCtrl'
+  }).state('app.dwTrails.import', {
+    url: '/import',
+    templateUrl: 'modules/dwTrails/views/import',
+    controller: 'TrailsCtrl'
   }).state('app.dwTrails.list', {
     url: '',
     templateUrl: 'modules/dwTrails/views/list',

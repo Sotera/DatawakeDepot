@@ -150,30 +150,6 @@ function change_graph(graph) {
     });
 }
 
-
-/*
- Override the SWG.node_text_func to change
- the node text that is displayed.
-
- Default behavior is to display the node name the same as here.
- We override here for example purposes only
- */
-SWG.node_text_func = function(d) {
-  //return d.name;
-
-  if (d.type == 'selection') {
-    return d.type + ' ' + d.data
-  } else if (d.type == 'domain search') {
-    return 'domain search-' + d.jindex + ': ' + d.search_term
-  }
-  else if (d.type != 'browse path' && d.type != 'website') {
-    return d.type + ' ' + d.id
-  } else {
-    return d.type + ' ' + d.groupName
-  }
-};
-
-
 /*
  When the highlight selection changes,
  re-color the graph and show
@@ -266,41 +242,7 @@ function refreshForensicView() {
  Load the UI controls
  */
 window.onload = function() {
-  // Create control panel.
-  $("#control-panel").controlPanel();
 
-  // Enable the popover help items.
-  //
-  // First create a config object with the common options present.
-  var popover_cfg;
-  popover_cfg = {
-    html: true,
-    container: "body",
-    placement: "top",
-    trigger: "hover",
-    title: null,
-    content: null,
-    delay: {
-      show: 100,
-      hide: 100
-    }
-  };
-  $.get("/datawake/version/number", function(response) {
-    var resp = JSON.parse(response);
-    $("#forensic_version").html(resp.version);
-  });
-
-  // Dataset pulldown help.
-  popover_cfg.content = "<b>Select a Graph:</b><br><br>" +
-    "Choose a graph form the list.";
-  $("#search_help").popover(popover_cfg);
-
-  popover_cfg.content = "<b>Select a Graph:</b><br><br>" +
-    "Filter the graph by selecting a combination of:<Br>" +
-    "1. Zero or one Trails<br>" +
-    "2. Zero or more users<br>" +
-    "3. A time range<br><br>"
-  $("#filter_help").popover(popover_cfg);
 
 
 };

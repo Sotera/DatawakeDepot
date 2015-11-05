@@ -14,7 +14,6 @@ angular.module('loopbackApp', [
   'angular.filter',
   'angularBootstrapNavTree',
   'angularFileUpload',
-  'angularjs-dropdown-multiselect',
   'btford.markdown',
   'oitozero.ngSweetAlert',
   'config',

@@ -56,6 +56,8 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
     };
 
     this.buildGraphViews = function (selectedViews) {
+        console.log("selected views");
+        console.log(JSON.stringify(selectedViews));
         var graphViews = [];
         for (var i in selectedViews) {
             graphViews.push(selectedViews[i].id);

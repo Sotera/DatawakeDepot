@@ -40,8 +40,17 @@
     </div>
     <!-- Views selection -->
     <div class="btn-group">
-        <div ng-dropdown-multiselect="" options="views" selected-model="selectedViews"
-             extra-settings="viewSettings" translation-texts="viewCustomText" ng-dropdown-multiselect-disabled="!selectedTrail"></div>
+        <!--<div ng-dropdown-multiselect="" options="views" selected-model="selectedViews"-->
+             <!--extra-settings="viewSettings" translation-texts="viewCustomText" ng-dropdown-multiselect-disabled="!selectedTrail"></div>-->
+        <div
+                isteven-multi-select
+                input-model="views"
+                output-model="selectedViews"
+                button-label="'Select Entity Types:' name"
+                item-label="name"
+                tick-property="selected"
+                >
+        </div>
     </div>
     <!-- Draw Graph -->
     <div class="btn-group">

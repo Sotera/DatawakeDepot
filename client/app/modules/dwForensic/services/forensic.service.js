@@ -5,8 +5,6 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
 
     this.getDomainEntityTypes = function (domainId) {
         var filter = {"filter": {"where": {"dwDomainId": domainId}}};
-        console.log("entityTypeFilter");
-        console.log(JSON.stringify(filter));
         return DwDomainEntityType.find(filter);
     };
 

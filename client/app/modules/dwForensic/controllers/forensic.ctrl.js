@@ -57,7 +57,6 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser
     };
 
     $scope.drawGraph = function () {
-        console.log(JSON.stringify($scope.selectedViews));
         var graphViews = ForensicService.buildGraphViews($scope.selectedViews);
         var filter = {
             filter: {

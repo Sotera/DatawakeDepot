@@ -9,6 +9,7 @@
     "port": 27017,
     "database": "datawake",
     "name": "db",
+    "connectionTimeout": 10000,
     "connector": "mongodb"
   }
 }

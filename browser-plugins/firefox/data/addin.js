@@ -30,19 +30,19 @@ exports.init = function () {
           pluginState.trailingActive = msg.data;
           break;
         case 'set-current-team-target-addin':
-          pluginState.currentTeam = pluginState.currentTeamList.filter(function(el){
+          pluginState.currentTeam = pluginState.currentTeamList.filter(function (el) {
             return el.name == msg.value;
           })[0];
           pluginState.postEventToAddInModule('get-domains-for-current-team');
           break;
         case 'set-current-domain-target-addin':
-          pluginState.currentDomain = pluginState.currentDomainList.filter(function(el){
+          pluginState.currentDomain = pluginState.currentDomainList.filter(function (el) {
             return el.name == msg.value;
           })[0];
           pluginState.postEventToAddInModule('get-trails-for-current-team-and-domain');
           break;
         case 'set-current-trail-target-addin':
-          pluginState.currentTrail = pluginState.currentTrailList.filter(function(el){
+          pluginState.currentTrail = pluginState.currentTrailList.filter(function (el) {
             return el.name == msg.value;
           })[0];
           break;
@@ -57,29 +57,32 @@ exports.init = function () {
     if (!pluginState.trailingActive) {
       return;
     }
-    pluginState.restPost(pluginState.trailsUrlsUrl,
-      {
-        dwTrailId: pluginState.currentTrail.id,
-        url: tab.url
-      }, function (res) {
-        console.log(res.text);
-      }
-    );
   });
-  //Here we listen for when the Scraper content script is fired up and ready.
-  pluginState.onAddInModuleEvent('page-scraper-content-script-attached-target-addin', function (data) {
-    pluginState.addScraperContentScriptEventHandler(data.contentScriptKey, 'send-css-urls-target-addin', function (scriptData) {
-      pluginState.postEventToScraperContentScript(scriptData.contentScriptKey, 'load-css-urls-target-content-script',
-        {cssUrls: [
-          self.data.url('injectedPageCSS/textHighlights.css')
-        ]});
+  //Here we listen for when the content scripts is fired up and ready.
+  pluginState.onAddInModuleEvent('page-content-script-attached-target-addin', function (data) {
+    pluginState.addContentScriptEventHandler(data.contentScriptKey, 'send-css-urls-target-addin', function (scriptData) {
+      pluginState.postEventToContentScript(scriptData.contentScriptKey, 'load-css-urls-target-content-script',
+        {
+          cssUrls: [
+            self.data.url('injectedPageCSS/datawake-analysis.css')
+          ]
+        });
     });
-    pluginState.addScraperContentScriptEventHandler(data.contentScriptKey, 'zipped-html-body', function (pageContents) {
+    pluginState.addContentScriptEventHandler(data.contentScriptKey, 'zipped-html-body-target-addin', function (pageContents) {
       //TODO: Work out some scraper eventing so we don't do the DOM operation if we're not trailing.
       //This will work for now though.
       if (!pluginState.trailingActive) {
         return;
       }
+      pluginState.restPost(pluginState.trailsUrlsUrl,
+        {
+          dwTrailId: pluginState.currentTrail.id
+          , url: pageContents.url
+          , scrapedContent: pageContents.zippedHtmlBody
+        }, function (res) {
+          console.log(res.text);
+        }
+      );
       //HowTo: decode (unzip) in addin
       /*      var JSZip = require('./vendor/jszip/jszip.min.js');
        var zip = new JSZip();
@@ -107,7 +110,7 @@ exports.init = function () {
         pluginState.currentTrailList = [];
         pluginState.currentTrail = null;
         pluginState.postEventToAddInModule('post-plugin-state-to-toolbar');
-      }else{
+      } else {
         pluginState.currentTeamList = teams;
         pluginState.currentTeam = teams[0];
         pluginState.postEventToAddInModule('get-domains-for-current-team');
@@ -122,7 +125,7 @@ exports.init = function () {
         pluginState.currentTrailList = [];
         pluginState.currentTrail = null;
         pluginState.postEventToAddInModule('post-plugin-state-to-toolbar');
-      }else{
+      } else {
         pluginState.currentDomainList = domains;
         pluginState.currentDomain = domains[0];
         pluginState.postEventToAddInModule('get-trails-for-current-team-and-domain');
@@ -134,7 +137,7 @@ exports.init = function () {
       if (!trails || !trails.length) {
         pluginState.currentTrailList = [];
         pluginState.currentTrail = null;
-      }else{
+      } else {
         pluginState.currentTrailList = trails;
         pluginState.currentTrail = trails[0];
       }

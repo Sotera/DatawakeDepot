@@ -4,39 +4,9 @@
 //scripts.
 var myContentScriptKey = null;
 $(document).ready(function () {
-  return;
-  try {
-    var urls = [data.url('injectedPageCSS/textHighlights.css')];
-    for (var index in urls) {
-      var cssId = 'myCss' + index;  // you could encode the css path itself to generate id..
-      if (!document.getElementById(cssId)) {
-        var head = document.getElementsByTagName('head')[0];
-        var link = document.createElement('link');
-        link.id = cssId;
-        link.rel = 'stylesheet';
-        link.type = 'text/css';
-        link.href = urls[index];
-        link.media = 'all';
-        head.appendChild(link);
-      }
-    }
-  }
-  catch (e) {
-    console.error("Do not have access to the document.");
-  }
-});
-function muffinIt() {
-  //$('.highlight').css({backgroundColor: '#88ff88'});
-  var p = $('p');
-  p.highlight('upload');
-}
-self.on('click', function (node, action) {
-  /*  var selectedText = window.getSelection().toString();
-   self.postMessage({action, selectedText});*/
-  muffinIt();
 });
 self.port.on('load-css-urls-target-content-script', function (data) {
-  data.cssUrls.forEach(function(cssUrl){
+  data.cssUrls.forEach(function (cssUrl) {
     var cssId = encodeURI(cssUrl);
     if (!document.getElementById(cssId)) {
       var head = document.getElementsByTagName('head')[0];
@@ -49,7 +19,18 @@ self.port.on('load-css-urls-target-content-script', function (data) {
       head.appendChild(link);
     }
   });
-  $('body').highlight('upload');
+});
+self.port.on('toggle-showing-domain-items', function (data) {
+  if(!data.domainItems.length){
+    $('body').unhighlight();
+  }else{
+/*    $('body').wrapInner('<div id="datawake-site" />');
+    var datawakePanel = '<div id="datawake-right-panel"></div>';
+    $('body').append(datawakePanel);*/
+    data.domainItems.forEach(function(domainItem){
+      $('body').highlight(domainItem);
+    });
+  }
 });
 self.port.on('page-attached-target-content-script', function (data) {
   myContentScriptKey = data.contentScriptKey;

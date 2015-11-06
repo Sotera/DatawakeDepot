@@ -30,19 +30,19 @@ exports.init = function () {
           pluginState.trailingActive = msg.data;
           break;
         case 'set-current-team-target-addin':
-          pluginState.currentTeam = pluginState.currentTeamList.filter(function(el){
+          pluginState.currentTeam = pluginState.currentTeamList.filter(function (el) {
             return el.name == msg.value;
           })[0];
           pluginState.postEventToAddInModule('get-domains-for-current-team');
           break;
         case 'set-current-domain-target-addin':
-          pluginState.currentDomain = pluginState.currentDomainList.filter(function(el){
+          pluginState.currentDomain = pluginState.currentDomainList.filter(function (el) {
             return el.name == msg.value;
           })[0];
           pluginState.postEventToAddInModule('get-trails-for-current-team-and-domain');
           break;
         case 'set-current-trail-target-addin':
-          pluginState.currentTrail = pluginState.currentTrailList.filter(function(el){
+          pluginState.currentTrail = pluginState.currentTrailList.filter(function (el) {
             return el.name == msg.value;
           })[0];
           break;
@@ -62,9 +62,11 @@ exports.init = function () {
   pluginState.onAddInModuleEvent('page-content-script-attached-target-addin', function (data) {
     pluginState.addContentScriptEventHandler(data.contentScriptKey, 'send-css-urls-target-addin', function (scriptData) {
       pluginState.postEventToContentScript(scriptData.contentScriptKey, 'load-css-urls-target-content-script',
-        {cssUrls: [
-          self.data.url('injectedPageCSS/textHighlights.css')
-        ]});
+        {
+          cssUrls: [
+            self.data.url('injectedPageCSS/textHighlights.css')
+          ]
+        });
     });
     pluginState.addContentScriptEventHandler(data.contentScriptKey, 'zipped-html-body-target-addin', function (pageContents) {
       //TODO: Work out some scraper eventing so we don't do the DOM operation if we're not trailing.
@@ -75,8 +77,8 @@ exports.init = function () {
       pluginState.restPost(pluginState.trailsUrlsUrl,
         {
           dwTrailId: pluginState.currentTrail.id
-          ,url: pageContents.url
-          ,scrapedContent: pageContents.zippedHtmlBody
+          , url: pageContents.url
+          , scrapedContent: pageContents.zippedHtmlBody
         }, function (res) {
           console.log(res.text);
         }
@@ -108,7 +110,7 @@ exports.init = function () {
         pluginState.currentTrailList = [];
         pluginState.currentTrail = null;
         pluginState.postEventToAddInModule('post-plugin-state-to-toolbar');
-      }else{
+      } else {
         pluginState.currentTeamList = teams;
         pluginState.currentTeam = teams[0];
         pluginState.postEventToAddInModule('get-domains-for-current-team');
@@ -123,7 +125,7 @@ exports.init = function () {
         pluginState.currentTrailList = [];
         pluginState.currentTrail = null;
         pluginState.postEventToAddInModule('post-plugin-state-to-toolbar');
-      }else{
+      } else {
         pluginState.currentDomainList = domains;
         pluginState.currentDomain = domains[0];
         pluginState.postEventToAddInModule('get-trails-for-current-team-and-domain');
@@ -135,7 +137,7 @@ exports.init = function () {
       if (!trails || !trails.length) {
         pluginState.currentTrailList = [];
         pluginState.currentTrail = null;
-      }else{
+      } else {
         pluginState.currentTrailList = trails;
         pluginState.currentTrail = trails[0];
       }

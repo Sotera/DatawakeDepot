@@ -13,28 +13,28 @@ module.exports = function (app) {
 
 
         changes.on('data', function (change) {
-            if(!initialized){
-                initialized = true;
-
-                setInterval(function () {
-                    console.log('hi');
-                    request({
-                        url: requestUrl
-                    }, function (error, response, body) {
-                        if (response) {
-                            if (response.statusCode == 200) {
-                                JSON.parse(body).forEach(function (extraction) {
-                                    dwUrlExtraction.findOrCreate(extraction);
-                                    //success
-                                })
-                            }
-                        }
-                        else if (error) {
-                            res.status(500).send(error.message);
-                        }
-                    });
-                }, 5000)
-            }
+            //if(!initialized){
+            //    initialized = true;
+            //
+            //    setInterval(function () {
+            //        console.log('hi');
+            //        request({
+            //            url: requestUrl
+            //        }, function (error, response, body) {
+            //            if (response) {
+            //                if (response.statusCode == 200) {
+            //                    JSON.parse(body).forEach(function (extraction) {
+            //                        dwUrlExtraction.findOrCreate(extraction);
+            //                        //success
+            //                    })
+            //                }
+            //            }
+            //            else if (error) {
+            //                res.status(500).send(error.message);
+            //            }
+            //        });
+            //    }, 5000)
+            //}
 
             console.log(change);
             switch (change.type) {

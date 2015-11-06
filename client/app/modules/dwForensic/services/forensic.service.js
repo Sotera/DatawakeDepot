@@ -5,8 +5,6 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
 
     this.getDomainEntityTypes = function (domainId) {
         var filter = {"filter": {"where": {"dwDomainId": domainId}}};
-        console.log("entityTypeFilter");
-        console.log(JSON.stringify(filter));
         return DwDomainEntityType.find(filter);
     };
 
@@ -56,6 +54,8 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
     };
 
     this.buildGraphViews = function (selectedViews) {
+        console.log("selected views");
+        console.log(JSON.stringify(selectedViews));
         var graphViews = [];
         for (var i in selectedViews) {
             graphViews.push(selectedViews[i].id);

@@ -95,7 +95,7 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser
                 console.log(JSON.stringify($scope.visitedGrid));
             })
             .catch(function (err) {
-                console.log("Error getting trail: " + trailId);
+                console.log("Error getting trail: " + trail.id);
                 console.log(err);
             });
     };

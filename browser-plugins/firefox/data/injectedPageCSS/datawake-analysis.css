@@ -1,0 +1,17 @@
+.highlight {
+    color: #dddddd;
+    background-color: #004400;
+}
+
+div#datawake-right-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 300px;
+    background: green;
+}
+
+div#datawake-site {
+    margin-right: 300px;
+}

@@ -6,10 +6,10 @@ module.exports = function(app) {
   var loopback = require('loopback');
 
   // to support JSON-encoded bodies
-  app.use(bodyParser.json());
+  app.use(bodyParser.json({limit: '5mb'}));
   // to support URL-encoded bodies
   app.use(bodyParser.urlencoded({
-    extended: true
+    extended: true, limit:'5mb'
   }));
 
   //// The access token is only available after boot

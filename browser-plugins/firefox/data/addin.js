@@ -64,7 +64,7 @@ exports.init = function () {
       pluginState.postEventToContentScript(scriptData.contentScriptKey, 'load-css-urls-target-content-script',
         {
           cssUrls: [
-            self.data.url('injectedPageCSS/textHighlights.css')
+            self.data.url('injectedPageCSS/datawake-analysis.css')
           ]
         });
     });

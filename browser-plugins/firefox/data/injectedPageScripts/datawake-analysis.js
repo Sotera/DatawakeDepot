@@ -24,6 +24,9 @@ self.port.on('toggle-showing-domain-items', function (data) {
   if(!data.domainItems.length){
     $('body').unhighlight();
   }else{
+/*    $('body').wrapInner('<div id="datawake-site" />');
+    var datawakePanel = '<div id="datawake-right-panel"></div>';
+    $('body').append(datawakePanel);*/
     data.domainItems.forEach(function(domainItem){
       $('body').highlight(domainItem);
     });

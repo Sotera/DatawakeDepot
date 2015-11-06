@@ -106,6 +106,7 @@ app.controller('TrailsCtrl', function($scope, $state, $http, $stateParams, DwDom
   }];
 
   $scope.loadDomains = function(teamId){
+      $scope.plDomains.length =0;
       //Populate plDomains from the domains for the given teamId in plTeams
       $scope.plTeams.forEach(function (team){
           if (team.id == teamId){
@@ -250,6 +251,12 @@ app.controller('TrailsCtrl', function($scope, $state, $http, $stateParams, DwDom
       }).$promise
       .then(function (trail) {
           $scope.trail = trail;
+
+          $scope.plDomains.push({
+              value: trail.domain.name,
+              name: trail.domain.name,
+              id: trail.domain.id
+          });
       });
       $scope.loading = false;
   } else {

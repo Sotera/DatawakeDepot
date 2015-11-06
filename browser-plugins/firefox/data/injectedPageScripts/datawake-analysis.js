@@ -5,11 +5,6 @@
 var myContentScriptKey = null;
 $(document).ready(function () {
 });
-/*self.on('click', function (node, data) {
-  var selectedText = window.getSelection().toString();
-  self.postMessage({data, selectedText});
-  window.alert('hello');
-});*/
 self.port.on('load-css-urls-target-content-script', function (data) {
   data.cssUrls.forEach(function (cssUrl) {
     var cssId = encodeURI(cssUrl);

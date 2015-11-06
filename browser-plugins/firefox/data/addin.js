@@ -57,14 +57,6 @@ exports.init = function () {
     if (!pluginState.trailingActive) {
       return;
     }
-    pluginState.restPost(pluginState.trailsUrlsUrl,
-      {
-        dwTrailId: pluginState.currentTrail.id,
-        url: tab.url
-      }, function (res) {
-        console.log(res.text);
-      }
-    );
   });
   //Here we listen for when the content scripts is fired up and ready.
   pluginState.onAddInModuleEvent('page-content-script-attached-target-addin', function (data) {
@@ -74,12 +66,21 @@ exports.init = function () {
           self.data.url('injectedPageCSS/textHighlights.css')
         ]});
     });
-    pluginState.addContentScriptEventHandler(data.contentScriptKey, 'zipped-html-body', function (pageContents) {
+    pluginState.addContentScriptEventHandler(data.contentScriptKey, 'zipped-html-body-target-addin', function (pageContents) {
       //TODO: Work out some scraper eventing so we don't do the DOM operation if we're not trailing.
       //This will work for now though.
       if (!pluginState.trailingActive) {
         return;
       }
+      pluginState.restPost(pluginState.trailsUrlsUrl,
+        {
+          dwTrailId: pluginState.currentTrail.id
+          ,url: pageContents.url
+          ,scrapedContent: pageContents.zippedHtmlBody
+        }, function (res) {
+          console.log(res.text);
+        }
+      );
       //HowTo: decode (unzip) in addin
       /*      var JSZip = require('./vendor/jszip/jszip.min.js');
        var zip = new JSZip();

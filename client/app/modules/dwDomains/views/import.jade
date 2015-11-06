@@ -18,7 +18,7 @@ div(ng-controller="DomainsCtrl" data-ng-init="load()")
                         tr(ng-repeat="file in files")
                             td
                                 a(href="{{apiUrl}}/containers/files/download/{{file.name}}" target="new") {{file.name }}
-                            td(width="100px")
+                            td.td-center(width="100px")
                                 a.btn.btn-success.btn-sm(href="" ng-click="importFile($index, file)" title="Import this Domain")
                                     span.ion.ion-log-in
                                 a.btn.btn-danger.btn-sm(href="" ng-click="deleteFile($index, file.name)" title="Delete this file")

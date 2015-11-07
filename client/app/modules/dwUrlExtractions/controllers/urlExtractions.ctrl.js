@@ -34,7 +34,7 @@ app.controller('UrlExtractionsCtrl', function($scope, $state, $stateParams, DwDo
       options: $scope.domainEntityTypes,
       valueProp: 'id',
       labelProp: 'name',
-      required: true,
+      required: false,
       disabled: false
     }
   },{

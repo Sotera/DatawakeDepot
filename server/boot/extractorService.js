@@ -64,30 +64,30 @@ module.exports = function (app) {
                                 results.forEach(function (extractor) {
                                     var extractorUrl = extractor.protocol + "://" + extractor.extractorUrl + ":" + extractor.port;
 
-                                    request.post({
-                                        url: extractorUrl,
-                                        headers: headers,
-                                        form: {
-                                            dwTrailUrlId: change.data.id.toString(),
-                                            scrapedContent: change.data.scrapedContent.indexOf(" ") == -1 ? me.unzipContent(change.data.scrapedContent) : change.data.scrapedContent
-                                        }
-                                    }, function (error, response) {
-                                        if (error) {
-                                            //res.status(500).send(error.message);
-                                            return;
-                                        }
-                                        if (response) {
-                                            if (response.statusCode == 200) {
-                                                if (intervalExtractorUrls.indexOf(extractorUrl) < 0) {
-                                                    intervalExtractorUrls.push(extractorUrl);
-                                                    if (!initialized) {
-                                                        me.startIntervalExtractors();
-                                                    }
-                                                }
-                                            }
-
-                                        }
-                                    });
+                                    //request.post({
+                                    //    url: extractorUrl,
+                                    //    headers: headers,
+                                    //    form: {
+                                    //        dwTrailUrlId: change.data.id.toString(),
+                                    //        scrapedContent: change.data.scrapedContent.indexOf(" ") == -1 ? me.unzipContent(change.data.scrapedContent) : change.data.scrapedContent
+                                    //    }
+                                    //}, function (error, response) {
+                                    //    if (error) {
+                                    //        //res.status(500).send(error.message);
+                                    //        return;
+                                    //    }
+                                    //    if (response) {
+                                    //        if (response.statusCode == 200) {
+                                    //            if (intervalExtractorUrls.indexOf(extractorUrl) < 0) {
+                                    //                intervalExtractorUrls.push(extractorUrl);
+                                    //                if (!initialized) {
+                                    //                    me.startIntervalExtractors();
+                                    //                }
+                                    //            }
+                                    //        }
+                                    //
+                                    //    }
+                                    //});
 
                                 });
                             });

@@ -35,7 +35,7 @@
             .btn-toolbar
                 button.btn.btn-sm.btn-default(ui-sref='app.dwTrailUrls.edit({id:trailUrl.id})',ng-disabled='!currentUser.isAdmin')
                     i.fa.fa-pencil
-                button.btn.btn-sm.btn-danger(ng-click='delete({id:trailUrl.id})',ng-disabled='!currentUser.isAdmin')
+                button.btn.btn-sm.btn-danger(ng-click='delete({id:trailUrl})',ng-disabled='!currentUser.isAdmin')
                     i.fa.fa-trash-o
   .overlay(ng-if='loading')
   .loading-img(ng-if='loading')

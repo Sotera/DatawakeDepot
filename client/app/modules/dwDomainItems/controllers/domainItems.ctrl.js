@@ -25,13 +25,22 @@ app.controller('DomainItemsCtrl', function($scope, $state, $stateParams, DwDomai
             valueProp: 'id',
             labelProp: 'name',
             required: true,
-            disabled: false
+            disabled: false,
+            onChange: function($viewValue){
+                $scope.loadEntityTypes($viewValue);
+            }
         }
     }, {
         key: 'dwDomainEntityTypeId',
         type: 'select',
+        expressionProperties: {
+            // This watches for form changes and enables/disables the entity type dropdown as necessary
+            'templateOptions.disabled': function () {
+                return $scope.entityTypes.length<=0;
+            }
+        },
         templateOptions: {
-            label: gettextCatalog.getString('Domain Entity Type'),
+            label: gettextCatalog.getString('Domain Entity TYpe'),
             options: $scope.entityTypes,
             valueProp: 'id',
             labelProp: 'name',
@@ -53,6 +62,26 @@ app.controller('DomainItemsCtrl', function($scope, $state, $stateParams, DwDomai
             required: false
         }
     }];
+
+    $scope.loadEntityTypes = function(domainId){
+        //Populate entityTypes from the domains for the given domain
+        $scope.entityTypes.length=0;
+        $scope.domains.forEach(function (domain){
+            if (domain.id == domainId){
+                if( domain.domainEntityTypes) {
+                    for (var i = 0; i < domain.domainEntityTypes.length; ++i) {
+                        $scope.entityTypes.push({
+                            value: domain.domainEntityTypes[i].name,
+                            name: domain.domainEntityTypes[i].name,
+                            id: domain.domainEntityTypes[i].id
+                        });
+                    }
+                } else {
+                    $scope.entityTypes.length =0;
+                }
+            }
+        });
+    };
 
     $scope.delete = function(id) {
         DomainItemsService.deleteDomainItem(id, function() {
@@ -81,30 +110,15 @@ app.controller('DomainItemsCtrl', function($scope, $state, $stateParams, DwDomai
             $scope.loading = false;
         });
 
-    DwDomain.find({filter: {include: []}}).$promise
+    DwDomain.find({filter: {include: ['domainEntityTypes']}}).$promise
         .then(function (allDomains) {
+            $scope.domains.length=0;
             for (var i = 0; i < allDomains.length; ++i) {
                 $scope.domains.push({
                     value: allDomains[i].name,
                     name: allDomains[i].name + " - " + allDomains[i].description,
-                    id: allDomains[i].id
-                });
-            }
-        })
-        .catch(function (err) {
-            console.log(err);
-        })
-        .then(function () {
-        }
-    );
-
-    DwDomainEntityType.find({filter: {include: []}}).$promise
-        .then(function (allEntityTypes) {
-            for (var i = 0; i < allEntityTypes.length; ++i) {
-                $scope.entityTypes.push({
-                    value: allEntityTypes[i].name,
-                    name: allEntityTypes[i].name + " - " + allEntityTypes[i].description,
-                    id: allEntityTypes[i].id
+                    id: allDomains[i].id,
+                    domainEntityTypes: allDomains[i].domainEntityTypes
                 });
             }
         })
@@ -127,6 +141,12 @@ app.controller('DomainItemsCtrl', function($scope, $state, $stateParams, DwDomai
         }).$promise
             .then(function (domain) {
                 $scope.domainItem = domain;
+
+                $scope.entityTypes.push({
+                    value: domain.domainEntityType.name,
+                    name: domain.domainEntityType.name,
+                    id: domain.domainEntityType.id
+                });
             });
         $scope.loading = false;
     } else {

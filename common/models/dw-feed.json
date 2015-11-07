@@ -23,6 +23,9 @@
     "protocol": {
       "type": "string"
     },
+    "port": {
+      "type": "number"
+    },
     "transmissions": {
       "type": [
         "string"

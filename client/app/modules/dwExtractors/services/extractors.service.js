@@ -31,7 +31,7 @@ app.service('ExtractorsService', ['$state', 'CoreService', 'DwExtractor', 'gette
     }, function(err) {
       CoreService.toastSuccess(gettextCatalog.getString(
           'Error saving extractor '), gettextCatalog.getString(
-              'This extractor could no be saved: ') + err);
+              'This extractor could not be saved: ') + err);
     });
   };
 

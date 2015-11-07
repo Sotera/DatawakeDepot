@@ -9,12 +9,13 @@
       thead
         tr
           th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='name' st-sort-default="true") Name
-          th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='feedUrl') URL
           th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='serviceTypeId') ServiceType
-          th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='index') Index
-          th.col-sm-2.col-md-2.col-lg-2 Subscriptions
-          th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='credentials') Credentials
           th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='protocol') Protocol
+          th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='feedUrl') URL
+          th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='port') Port
+          th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='index') Index
+          th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='credentials') Credentials
+          th.col-sm-2.col-md-2.col-lg-2 Subscriptions
           th.sortable.col-sm-1.col-md-1.col-lg-1.td-center(st-sort='') Transmissions
           th.col-sm-2.col-md-2.col-lg-2.td-center
             a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add')
@@ -24,19 +25,21 @@
           td(style='width: 120px')
             a(href='', ui-sref='app.dwFeeds.view({id: feed.id})') {{feed.name}}
           td
-            span.text-muted {{feed.feedUrl}}
-          td
             span.text-muted {{feed.serviceType.name}}
           td
+            span.text-muted {{feed.protocol}}
+          td
+            span.text-muted {{feed.feedUrl}}
+          td
+            span.text-muted {{feed.port}}
+          td
             span.text-muted {{feed.index}}
+          td
+            span.text-muted {{feed.credentials}}
           td
             span.label.label-ltgray(ng-repeat="domain in feed.domains") {{domain.name}}
             span.label.label-ltgray(ng-repeat="trail in feed.trails") {{trail.name}}
             span.label.label-ltgray(ng-repeat="team in feed.teams") {{team.name}}
-          td
-            span.text-muted {{feed.credentials}}
-          td
-            span.text-muted {{feed.protocol}}
           td.td-center
             a(ui-sref='app.dwTransmissions.list({id:null, feedId:feed.id})') {{feed.transmissions.length}}
           td.td-center(style='width: 120px')

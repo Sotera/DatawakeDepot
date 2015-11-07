@@ -11,8 +11,7 @@
       "type": "string"
     },
     "occurrences": {
-      "type": "number"
-      "type": "string",
+      "type": "number",
       "required": true
     },
     "extractorTypes": {

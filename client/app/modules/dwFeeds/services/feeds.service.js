@@ -4,7 +4,7 @@ var app = angular.module('com.module.dwFeeds');
 app.service('FeedsService', ['$state', 'CoreService', 'DwFeed', 'gettextCatalog', function($state, CoreService, DwFeed, gettextCatalog) {
 
   this.getFeeds = function() {
-    return DwFeed.find();
+    return DwFeed.find({filter: {include: ['transmissions','teams','trails','domains','serviceType']}});
   };
 
   this.getFeed = function(id) {

@@ -4,7 +4,7 @@ var app = angular.module('com.module.dwTransmissions');
 app.service('TransmissionsService', ['$state', 'CoreService', 'DwTransmission', 'gettextCatalog', function($state, CoreService, DwTransmission, gettextCatalog) {
 
   this.getTransmissions = function() {
-    return DwTransmission.find();
+    return DwTransmission.find({filter: {include: ['feeds']}});
   };
 
   this.getTransmission = function(id) {

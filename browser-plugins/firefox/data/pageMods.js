@@ -13,7 +13,7 @@ exports.init = function () {
         './injectedPageScripts/datawake-analysis.js',
         './injectedPageScripts/scraper.js'],
       attachTo: ['existing', 'top', 'frame'],
-      onAttach: pluginState.onScraperContentScriptAttach
+      onAttach: pluginState.onContentScriptAttach
     });
   }
   catch (err) {
@@ -22,6 +22,7 @@ exports.init = function () {
   try {
     pageMod.PageMod({
       include: pluginState.pageModDatawakeDepotIncludeFilter,
+      //exclude: '*',
       contentScriptFile: './injectedPageScripts/datawake-depot.js',
       attachTo: ['existing', 'top', 'frame'],
       onAttach: pluginState.onDatawakeDepotContentScriptAttach

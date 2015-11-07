@@ -6,8 +6,8 @@ app.controller('ExtractorsCtrl', function($scope, $state, $stateParams, DwDomain
     //Put the currentUser in $scope for convenience
     $scope.currentUser = AppAuth.currentUser;
     $scope.plProtocols = [
-        {"name": "HTTP","description": "HTTP://"},
-        {"name": "HTTPS","description": "HTTPS://" }
+        {"name": "http","description": "http://"},
+        {"name": "https","description": "https://" }
     ];
     $scope.plServiceTypes = [];
     $scope.plDomains = [];
@@ -27,25 +27,15 @@ app.controller('ExtractorsCtrl', function($scope, $state, $stateParams, DwDomain
             required: true
         }
     }, {
-        key: 'index',
-        type: 'input',
+        key: 'dwServiceTypeId',
+        type: 'select',
         templateOptions: {
-            label: gettextCatalog.getString('Index'),
-            required: false
-        }
-    }, {
-        key: 'extractorUrl',
-        type: 'input',
-        templateOptions: {
-            label: gettextCatalog.getString('Url'),
-            required: true
-        }
-    }, {
-        key: 'credentials',
-        type: 'input',
-        templateOptions: {
-            label: gettextCatalog.getString('Credentials'),
-            required: false
+            label: gettextCatalog.getString('ServiceType'),
+            options: $scope.plServiceTypes,
+            valueProp: 'id',
+            labelProp: 'name',
+            required: true,
+            disabled: false
         }
     }, {
         key: 'protocol',
@@ -59,17 +49,33 @@ app.controller('ExtractorsCtrl', function($scope, $state, $stateParams, DwDomain
             disabled: false
         }
     }, {
-        key: 'dwServiceTypeId',
-        type: 'select',
+        key: 'extractorUrl',
+        type: 'input',
         templateOptions: {
-            label: gettextCatalog.getString('ServiceType'),
-            options: $scope.plServiceTypes,
-            valueProp: 'id',
-            labelProp: 'name',
-            required: true,
-            disabled: false
+            label: gettextCatalog.getString('Url'),
+            required: true
         }
-
+    }, {
+        key: 'port',
+        type: 'input',
+        templateOptions: {
+            label: gettextCatalog.getString('Port'),
+            required: true
+        }
+    }, {
+        key: 'index',
+        type: 'input',
+        templateOptions: {
+            label: gettextCatalog.getString('Index'),
+            required: false
+        }
+    }, {
+        key: 'credentials',
+        type: 'input',
+        templateOptions: {
+            label: gettextCatalog.getString('Credentials'),
+            required: false
+        }
     }, {
         key: 'dwDomains',
         type: 'multiCheckbox',
@@ -81,7 +87,6 @@ app.controller('ExtractorsCtrl', function($scope, $state, $stateParams, DwDomain
             disabled: false
         }
     }];
-
 
     $scope.delete = function(extractor) {
         ExtractorsService.deleteExtractor(extractor, function() {

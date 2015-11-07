@@ -7,8 +7,8 @@ app.controller('FeedsCtrl', function($scope, $state, $stateParams, DwDomain, DwT
     $scope.currentUser = AppAuth.currentUser;
     $scope.feed = {};
     $scope.plProtocols = [
-        {"name": "HTTP","description": "HTTP://"},
-        {"name": "HTTPS","description": "HTTPS://" }
+        {"name": "http","description": "http://"},
+        {"name": "https","description": "https://" }
     ];
     $scope.plServiceTypes = [];
     $scope.plDomains = [];
@@ -30,25 +30,15 @@ app.controller('FeedsCtrl', function($scope, $state, $stateParams, DwDomain, DwT
             required: true
         }
     }, {
-        key: 'index',
-        type: 'input',
+        key: 'dwServiceTypeId',
+        type: 'select',
         templateOptions: {
-            label: gettextCatalog.getString('Index'),
-            required: false
-        }
-    }, {
-        key: 'feedUrl',
-        type: 'input',
-        templateOptions: {
-            label: gettextCatalog.getString('Url'),
-            required: true
-        }
-    }, {
-        key: 'credentials',
-        type: 'input',
-        templateOptions: {
-            label: gettextCatalog.getString('Credentials'),
-            required: false
+            label: gettextCatalog.getString('ServiceType'),
+            options: $scope.plServiceTypes,
+            valueProp: 'id',
+            labelProp: 'name',
+            required: true,
+            disabled: false
         }
     }, {
         key: 'protocol',
@@ -62,15 +52,32 @@ app.controller('FeedsCtrl', function($scope, $state, $stateParams, DwDomain, DwT
             disabled: false
         }
     }, {
-        key: 'dwServiceTypeId',
-        type: 'select',
+        key: 'feedUrl',
+        type: 'input',
         templateOptions: {
-            label: gettextCatalog.getString('ServiceType'),
-            options: $scope.plServiceTypes,
-            valueProp: 'id',
-            labelProp: 'name',
-            required: true,
-            disabled: false
+            label: gettextCatalog.getString('Url'),
+            required: true
+        }
+    }, {
+        key: 'port',
+        type: 'input',
+        templateOptions: {
+            label: gettextCatalog.getString('Port'),
+            required: false
+        }
+    }, {
+        key: 'index',
+        type: 'input',
+        templateOptions: {
+            label: gettextCatalog.getString('Index'),
+            required: false
+        }
+    }, {
+        key: 'credentials',
+        type: 'input',
+        templateOptions: {
+            label: gettextCatalog.getString('Credentials'),
+            required: false
         }
     }, {
         key: 'dwTeams',

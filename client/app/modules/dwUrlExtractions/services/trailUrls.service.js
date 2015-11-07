@@ -4,7 +4,7 @@ var app = angular.module('com.module.dwUrlExtractions');
 app.service('UrlExtractionsService', ['$state', 'CoreService', 'DwUrlExtraction', 'gettextCatalog', function($state, CoreService, DwUrlExtraction, gettextCatalog) {
 
   this.getUrlExtractions = function() {
-    return DwUrlExtraction.find();
+    return DwUrlExtraction.find({filter: {include: [{relation:'trailUrl',scope:{include: ['trail']}},'domainEntityType']}});
   };
 
   this.getUrlExtraction = function(id) {

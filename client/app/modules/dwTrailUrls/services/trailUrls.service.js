@@ -1,10 +1,10 @@
 'use strict';
 var app = angular.module('com.module.dwTrailUrls');
 
-app.service('TrailUrlsService', ['$state', 'CoreService', 'DwTrailUrl', 'gettextCatalog', function($state, CoreService, DwTrailUrl, gettextCatalog) {
+app.service('TrailUrlsService', ['$state', 'CoreService', 'DwTrail','DwTrailUrl','DwUrlExtraction', 'gettextCatalog', function($state, CoreService, DwTrail, DwTrailUrl,DwUrlExtraction, gettextCatalog) {
 
   this.getTrailUrls = function() {
-    return DwTrailUrl.find();
+    return DwTrailUrl.find({filter: {include: ['trail','crawlType','urlExtractions']}});
   };
 
   this.getTrailUrl = function(id) {
@@ -26,15 +26,19 @@ app.service('TrailUrlsService', ['$state', 'CoreService', 'DwTrailUrl', 'gettext
     });
   };
 
-  this.deleteTrailUrl = function(id, cb) {
-    CoreService.confirm(gettextCatalog.getString('Are you sure?'),
-      gettextCatalog.getString('Deleting this cannot be undone'),
+  this.deleteTrailUrl = function(url, cb) {
+    CoreService.confirm(gettextCatalog.getString('Are you sure?'),gettextCatalog.getString('Deleting this cannot be undone'),
       function() {
-        DwTrailUrl.deleteById(id, function() {
-          CoreService.toastSuccess(gettextCatalog.getString(
-            'TrailUrl deleted'), gettextCatalog.getString(
-            'Your trailUrl is deleted!'));
-          cb();
+        DwTrailUrl.deleteById(url.id, function() {CoreService.toastSuccess(gettextCatalog.getString('TrailUrl deleted'), gettextCatalog.getString('Your trailUrl is deleted!'));
+            if(url.urlExtractions) {
+                url.urlExtractions.forEach(function (ex) {
+                    DwUrlExtraction.delete(ex, function () {
+                        //success
+                    }, function (err) {
+                    });
+                });
+            }
+            cb();
         }, function(err) {
           CoreService.toastError(gettextCatalog.getString(
             'Error deleting trailUrl'), gettextCatalog.getString(

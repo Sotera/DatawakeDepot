@@ -4,7 +4,7 @@ var app = angular.module('com.module.dwTeams');
 app.service('TeamsService', ['$state', 'CoreService', 'DwTeam', 'gettextCatalog', function($state, CoreService, DwTeam, gettextCatalog) {
 
   this.getTeams = function() {
-    return DwTeam.find();
+    return DwTeam.find({filter: {include: ['trails','domains','users']}});
   };
 
   this.getTeam = function(id) {

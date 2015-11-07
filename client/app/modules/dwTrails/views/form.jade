@@ -10,6 +10,8 @@
           i.fa.fa-save &nbsp;Save
         button.btn.btn-primary.btn-danger.btn-sm(translate, ng-click='delete({id: trail.id})')
           i.fa.fa-trash-o &nbsp;Delete
+        button.btn.btn-primary.btn-sm(translate, ng-click='upload()')
+          i.fa.fa-upload &nbsp;Upload File
   .box-body
     .alert.alert-danger(translate, ng-if='addError') Could not add Trail!
     form(ng-submit='onSubmit()' novalidate)

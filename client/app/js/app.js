@@ -14,6 +14,7 @@ angular.module('loopbackApp', [
   'angular.filter',
   'angularBootstrapNavTree',
   'angularFileUpload',
+  'isteven-multi-select',
   'btford.markdown',
   'oitozero.ngSweetAlert',
   'config',
@@ -65,13 +66,6 @@ angular.module('loopbackApp', [
   'com.module.dwTrails',
   'com.module.dwTrailUrls',
   'com.module.dwUrlExtractions'
-
-
-
-
-
-
-
 
 ])
   .run(function ($rootScope, $cookies, gettextCatalog) {

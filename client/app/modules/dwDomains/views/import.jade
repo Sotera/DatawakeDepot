@@ -1,0 +1,29 @@
+div(ng-controller="DomainsCtrl" data-ng-init="load()")
+    div.box
+        div.box-body.no-padding
+            span.box-title
+                .input-group
+                    a.btn.btn-default(translate, href='', ui-sref='^.list', style='float: left;')
+                        i.fa.fa-arrow-left &nbsp;Back to Domains
+
+            .box-body
+                table.table.table-striped
+                    thead
+                      tr
+                        th.col-sm-10.col-md-10.col-lg-10 Name
+                        th
+                          a.btn.btn-sm.btn-primary.glyphicon.glyphicon-open.custom.col-sm-2.col-md-2.col-lg-2(translate, ng-click='upload()')
+                            &nbsp; Upload File
+                    tbody
+                        tr(ng-repeat="file in files")
+                            td
+                                a(href="{{apiUrl}}/containers/files/download/{{file.name}}" target="new") {{file.name }}
+                            td.td-center(width="100px")
+                                a.btn.btn-success.btn-sm(href="" ng-click="importFile($index, file)" title="Import this Domain")
+                                    span.ion.ion-log-in
+                                a.btn.btn-danger.btn-sm(href="" ng-click="deleteFile($index, file.name)" title="Delete this file")
+                                    span.fa.fa-trash-o
+                        tr(ng-show="!files.length")
+                            td(colspan="2")
+                                h4.list-group-item-heading(translate) There are no Domain files
+

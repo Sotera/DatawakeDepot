@@ -12,6 +12,13 @@
     },
     "occurrences": {
       "type": "number"
+      "type": "string",
+      "required": true
+    },
+    "extractorTypes": {
+      "type": [
+        "string"
+      ]
     }
   },
   "validations": [],

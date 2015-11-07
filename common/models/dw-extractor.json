@@ -21,6 +21,10 @@
     "credentials": {
       "type": "string"
     },
+    "port": {
+      "type": "number",
+      "required": true
+    },
     "protocol": {
       "type": "string",
       "required": true

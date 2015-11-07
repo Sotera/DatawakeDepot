@@ -74,6 +74,10 @@ body {
   letter-spacing:.01px;
 }
 
+.pointer {
+  cursor: default;
+}
+
 .td-center {
   text-align: center;
 }
@@ -88,6 +92,7 @@ body {
   margin-left: 2px;
 }
 
+/* Dashboard related css */
 @media screen and (min-width: 992px) {
   .left-side {
     top: 50px;
@@ -137,27 +142,40 @@ body {
 .bg-blue13 {
   color: #f9f9f9 !important;
 }
-
 .bg-blue8 {
   background-color: #74b6ce !important;
 }
-
 .bg-blue9 {
   background-color: #52accc !important;
 }
-
 .bg-blue10 {
   background-color: #4796b3 !important;
 }
-
 .bg-blue11 {
   background-color: #096484 !important;
 }
-
 .bg-blue12 {
   background-color: #04a4cc !important;
 }
-
 .bg-blue13 {
   background-color: #0074a2 !important;
+}
+
+/* isteven multiselect overrides */
+.multiSelect > button {
+  border: none;
+  font-size: 12px;
+  min-height : 30px !important;
+  color: #fff;
+  background-color: #3C8DBC;
+  background-image: none;
+}
+
+.multiSelect > button:hover {
+  background-color: #367FA9;
+  background-image: none;
+}
+
+.multiSelect .caret {
+  border-top: 4px solid #fff;
 }

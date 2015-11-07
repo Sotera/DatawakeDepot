@@ -1,0 +1,60 @@
+div
+    div.box
+        div.box-header
+            h3.box-title
+                a.btn.btn-default( href="" ui-sref="^.list")
+                    i.fa.fa-arrow-left &nbsp;{{'Back to Trails'| translate}}
+            div.box-tools
+                div.input-group.pull-right(style="margin-top: 5px;")
+                    span.file-input.btn.btn-block.btn-default.btn-file {{ 'Browse Files' | translate }}&hellip;
+                        input(nv-file-select type="file" uploader="uploader" multiple accept=".json")
+        div.box-footer
+            div.progress(style="margin-bottom: 10px;")
+                div.progress-bar(ng-if="uploader.progress" role="progressbar" ng-style="{ 'width': uploader.progress + '%' }") {{uploader.progress}}%
+
+    div.box
+        div.box-header
+            h3.box-title {{'Upload queue' | translate }}
+                small &nbsp;({{ uploader.queue.length }} {{ 'files awaiting upload' | translate }})
+        td
+        div.box-tools
+            div.pull-right.btn-group.btn-group-xs
+                button.btn.btn-success.btn-xs(type="button" ng-click="uploadAllTrails(uploader)" ng-disabled="!uploader.getNotUploadedItems().length")
+                    span.glyphicon.glyphicon-upload &nbsp;{{ 'Upload Trails' | translate }}
+                button.btn.btn-warning.btn-xs(type="button" ng-click="uploader.cancelAll()" ng-disabled="!uploader.isUploading")
+                    span.glyphicon.glyphicon-ban-circle &nbsp;{{ 'Cancel all' | translate }}
+                button.btn.btn-danger.btn-xs(type="button" ng-click="uploader.clearQueue()" ng-disabled="!uploader.queue.length")
+                    span.glyphicon.glyphicon-trash &nbsp;{{ 'Remove all' | translate }}
+
+        div.box-body.no-padding
+            table.table
+                thead
+                tr
+                    th(width="50%" translate) Name
+                    th(ng-show="uploader.isHTML5" translate) Size
+                    th(ng-show="uploader.isHTML5" translate) Progress
+                    th(translate) Status
+                    th(translate) Actions
+                tbody
+                tr(ng-repeat="item in uploader.queue")
+                    td
+                        strong {{ item.file.name }}
+                    td(ng-show="uploader.isHTML5" nowrap) {{ item.file.size/1024/1024|number:2 }} MB
+                    td(ng-show="uploader.isHTML5")
+                        div.progress
+                            div.progress-bar(role="progressbar" ng-style="{ 'width': item.progress + '%' }")
+                    td.text-center
+                        span(ng-show="item.isSuccess")
+                            i.glyphicon.glyphicon-ok
+                        span(ng-show="item.isCancel")
+                            i.glyphicon.glyphicon-ban-circle
+                        span(ng-show="item.isError")
+                            i.glyphicon.glyphicon-remove
+                    td(nowrap)
+                        div.input-group.pull-right.btn-group.btn-group-xs
+                            button.btn.btn-success.btn-xs(type="button" ng-click="uploadTrail(item)" ng-disabled="item.isReady || item.isUploading || item.isSuccess")
+                                span.glyphicon.glyphicon-upload
+                            button.btn.btn-warning.btn-xs(type="button" ng-click="item.cancel()" ng-disabled="!item.isUploading")
+                                span.glyphicon.glyphicon-ban-circle
+                            button.btn.btn-danger.btn-xs(type="button" ng-click="item.remove()")
+                                span.glyphicon.glyphicon-trash

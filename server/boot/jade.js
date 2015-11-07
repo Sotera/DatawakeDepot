@@ -53,6 +53,12 @@ module.exports = function (app) {
   app.get('/modules/dwDomains/views/view', function (req, res) {
     res.render('dwDomains/views/view', {title: 'Datawake Domains'});
   });
+  app.get('/modules/dwDomains/views/upload', function (req, res) {
+    res.render('dwDomains/views/upload', {title: 'Datawake Domains'});
+  });
+  app.get('/modules/dwDomains/views/import', function (req, res) {
+    res.render('dwDomains/views/import', {title: 'Datawake Domains'});
+  });
 
   /* dwDomainEntityTypes */
   app.get('/modules/dwDomainEntityTypes/views/main', function (req, res) {
@@ -178,6 +184,12 @@ module.exports = function (app) {
   });
   app.get('/modules/dwTrails/views/view', function (req, res) {
     res.render('dwTrails/views/view', {title: 'Datawake Trails'});
+  });
+  app.get('/modules/dwTrails/views/upload', function (req, res) {
+    res.render('dwTrails/views/upload', {title: 'Datawake Trails'});
+  });
+  app.get('/modules/dwTrails/views/import', function (req, res) {
+    res.render('dwTrails/views/import', {title: 'Datawake Trails'});
   });
 
   /* dwTrailUrls */

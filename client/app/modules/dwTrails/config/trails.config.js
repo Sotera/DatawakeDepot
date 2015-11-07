@@ -2,7 +2,7 @@
 var app = angular.module('com.module.dwTrails');
 
 app.run(function($rootScope, DwTrail, gettextCatalog) {
-  //$rootScope.addMenu(gettextCatalog.getString('Trails'), 'app.dwTrails.list', 'fa-share-alt');
+  $rootScope.addMenu(gettextCatalog.getString('Trail Import'), 'app.dwTrails.import', 'ion-pull-request');
 
   DwTrail.find(function(data) {
     $rootScope.addDashboardBox(gettextCatalog.getString('Trails'), 'bg-blue10', 'ion-android-share-alt', data.length, 'app.dwTrails.list');

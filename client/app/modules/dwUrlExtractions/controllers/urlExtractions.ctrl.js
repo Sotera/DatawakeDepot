@@ -1,7 +1,7 @@
 'use strict';
 var app = angular.module('com.module.dwUrlExtractions');
 
-app.controller('UrlExtractionsCtrl', function($scope, $state, $stateParams, DwDomainEntityType, DwTrailUrl, DwUrlExtraction, UrlExtractionsService, gettextCatalog, AppAuth) {
+app.controller('UrlExtractionsCtrl', function($scope, $state, $stateParams, DwDomainItem, DwDomainEntityType, DwTrailUrl, DwUrlExtraction, UrlExtractionsService, gettextCatalog, AppAuth) {
 
   //Put the currentUser in $scope for convenience
   $scope.currentUser = AppAuth.currentUser;
@@ -34,7 +34,7 @@ app.controller('UrlExtractionsCtrl', function($scope, $state, $stateParams, DwDo
       options: $scope.domainEntityTypes,
       valueProp: 'id',
       labelProp: 'name',
-      required: true,
+      required: false,
       disabled: false
     }
   },{
@@ -68,8 +68,8 @@ app.controller('UrlExtractionsCtrl', function($scope, $state, $stateParams, DwDo
     });
   };
 
-  $scope.makeDomainItem = function(id){
-      alert('Create Domain Item:');
+  $scope.makeDomainItem = function(extractedItem){
+      alert('Create Domain Item:' + extractedItem.id.value);
   }
 
   $scope.loading = true;

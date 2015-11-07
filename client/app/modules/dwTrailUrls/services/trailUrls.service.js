@@ -30,8 +30,8 @@ app.service('TrailUrlsService', ['$state', 'CoreService', 'DwTrail','DwTrailUrl'
     CoreService.confirm(gettextCatalog.getString('Are you sure?'),gettextCatalog.getString('Deleting this cannot be undone'),
       function() {
         DwTrailUrl.deleteById(url.id, function() {CoreService.toastSuccess(gettextCatalog.getString('TrailUrl deleted'), gettextCatalog.getString('Your trailUrl is deleted!'));
-            if(url.urlExtractions) {
-                url.urlExtractions.forEach(function (ex) {
+            if(url.id.urlExtractions) {
+                url.id.urlExtractions.forEach(function (ex) {
                     DwUrlExtraction.delete(ex, function () {
                         //success
                     }, function (err) {

@@ -1,7 +1,7 @@
 'use strict';
 var app = angular.module('com.module.dwTrailUrls');
 
-app.controller('TrailUrlsCtrl', function($scope, $state, $stateParams, DwCrawlType, DwTrail, DwTrailUrl, TrailUrlsService, gettextCatalog, AppAuth) {
+app.controller('TrailUrlsCtrl', function($scope, $state, $stateParams, $window, DwCrawlType, DwTrail, DwTrailUrl, TrailUrlsService, gettextCatalog, AppAuth) {
 
   //Put the currentUser in $scope for convenience
   $scope.currentUser = AppAuth.currentUser;
@@ -82,6 +82,10 @@ app.controller('TrailUrlsCtrl', function($scope, $state, $stateParams, DwCrawlTy
       $state.go('^.list');
     });
   };
+
+  $scope.openUrl = function(trailUrl){
+      $window.open(trailUrl.url);
+  }
 
   $scope.loading = true;
   DwTrailUrl.find({filter: {include: ['trail','crawlType','urlExtractions']}}).$promise

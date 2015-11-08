@@ -18,7 +18,7 @@
           th.sortable.col-sm-1.col-md-1.col-lg-1.td-center(st-sort='') Extractors
           th
             a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom.col-sm-2.col-md-2.col-lg-2(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
-                &nbsp; Add Domain
+                | Add Domain
       tbody
         tr(ng-repeat='domain in displayedDomains')
           td.hidden

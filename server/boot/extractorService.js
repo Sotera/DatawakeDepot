@@ -7,12 +7,10 @@ module.exports = function (app) {
     var dwUrlExtraction = app.models.DwUrlExtraction;
     var dwTrail = app.models.DwTrail;
     var headers = {};
-    var dwSettingsTimeout;
-    var intervalExtractorUrls= [];
+    var dwSettingsTimeout= 5000;
     var initialized = false;
-
-    //Get the dwSettingsTimeout
-    dwSettingsTimeout = 5000;
+    var dwExtractor = app.models.DwExtractor;
+    var dwExtractorMap = {};
 
     me.unzipContent = function(content){
         //HowTo: decode (unzip)
@@ -22,72 +20,134 @@ module.exports = function (app) {
         return zip.file('zipped-html-body.zip').asText();
     };
 
-    me.startIntervalExtractors = function(){
-        intervalExtractorUrls.forEach(function (extractorUrl){
-            setInterval(function () {
+    me.getExtractorContainer = function(extractor){
+        var extractorContainer =  dwExtractorMap[extractor.id.toString()] || {
+                "failureCount":0,
+                "failureLimit":10,
+                "extractor":extractor,
+                "extractorUrl": extractor.protocol + "://" + extractor.extractorHost + ":" + extractor.port   + extractor.extractorUrl
+            };
+        dwExtractorMap[extractor.id.toString()] = extractorContainer;
+        return extractorContainer;
+    };
+
+    me.startIntervalExtractor = function(extractorContainer){
+        extractorContainer.intervalId = setInterval(function () {
+            try {
                 request({
-                    url: extractorUrl
+                    url: extractorContainer.extractorUrl
                 }, function (error, response, body) {
-                    if (response) {
-                        if (response.statusCode == 200) {
+                    if (response && response.statusCode == 200) {
+                        extractorContainer.failureCount = 0;
+                        try {
                             JSON.parse(body).forEach(function (extraction) {
-                                dwUrlExtraction.findOrCreate(extraction);
-                                //success
+                                dwUrlExtraction.create(extraction, function (err, obj) {
+                                    if (err) {
+                                        console.log(err);
+                                    }
+                                });
                             })
+                        }
+                        catch(err){
+                            console.log("extractor sent back mal-formed data. " + body);
                         }
                     }
                     else if (error) {
-                        res.status(500).send(error.message);
+                        console.log("extractor " + extractorContainer.extractor.id + " failed.  We will retry for a bit.");
+                        extractorContainer.failureCount++;
+                        if(extractorContainer.failureCount > extractorContainer.failureLimit) {
+                            console.log("extractor " + extractorContainer.extractor.id + " has failed this app.  Stopping extractor.");
+                            me.stopIntervalExtractor(extractorContainer);
+                        }
                     }
                 });
-            }, dwSettingsTimeout);
-            initialized = true;
+            }
+            catch(err){
+                console.log(err.toString());
+            }
+        }, dwSettingsTimeout);
+    };
+
+    me.stopIntervalExtractor = function(extractorContainer){
+        clearInterval(extractorContainer.intervalId);
+    };
+
+    me.startCurrentExtractors = function(){
+        if(initialized){
+            return;
+        }
+        initialized = true;
+        dwExtractor.find(function(err,extractors){
+            extractors.forEach(function(extractor){
+                me.startIntervalExtractor(me.getExtractorContainer(extractor));
+            })
         });
     };
 
+    dwExtractor.createChangeStream(function(err, changes){
+        changes.on('data', function (change) {
+            if(change.type === "create"){
+                var extractorContainer = me.getExtractorContainer(change.data);
+                me.startIntervalExtractor(extractorContainer);
+                return;
+            }
+
+            if(change.type === "remove"){
+                dwExtractor.findOne({where: {id: change.target.toString()}}, function(err, obj){
+                    if(err || !obj){
+                        return;
+                    }
+                    me.stopIntervalExtractor(me.getExtractorContainer(obj));
+                });
+                return;
+            }
+
+            if(change.type === "update"){
+                dwExtractor.findOne({where: {id: change.target.toString()}}, function(err, obj){
+                    if(err || !obj){
+                        return;
+                    }
+                    var ec = me.getExtractorContainer(obj);
+                    ec.extractor = obj;
+                    ec.extractorUrl= ec.extractor.protocol + "://" + ec.extractor.extractorHost + ":" + ec.extractor.port + ec.extractor.extractorUrl;
+                    me.stopIntervalExtractor(ec);
+                    me.startIntervalExtractor(ec);
+
+                });
+
+            }
+
+        });
+    });
+
     dwTrailUrl.createChangeStream(function (err, changes) {
         changes.on('data', function (change) {
-            console.log(change);
-
             switch (change.type) {
                 case 'create': //If 'create', post to each of the extractors
-                    //Get extractors for the trail domains
+                    //start current extractors if not started
+                    me.startCurrentExtractors();
+
                     dwTrail.findOne({
                             include:[{relation: 'domain',scope: {include:['extractors']}}],
                             where: {id: change.data.dwTrailId.toString()}
                     }, function (err, trail) {
-                        var trailName = trail.name;
                         trail.domain(function (err, domain) {
-                            var domainName = domain.name;
-
                             domain.extractors(function (err, results) {
                                 results.forEach(function (extractor) {
-                                    var extractorUrl = extractor.protocol + "://" + extractor.extractorUrl + ":" + extractor.port;
+                                    var extractorUrl = extractor.protocol + "://" + extractor.extractorHost + ":" + extractor.port   + extractor.extractorUrl;
 
-                                    //request.post({
-                                    //    url: extractorUrl,
-                                    //    headers: headers,
-                                    //    form: {
-                                    //        dwTrailUrlId: change.data.id.toString(),
-                                    //        scrapedContent: change.data.scrapedContent.indexOf(" ") == -1 ? me.unzipContent(change.data.scrapedContent) : change.data.scrapedContent
-                                    //    }
-                                    //}, function (error, response) {
-                                    //    if (error) {
-                                    //        //res.status(500).send(error.message);
-                                    //        return;
-                                    //    }
-                                    //    if (response) {
-                                    //        if (response.statusCode == 200) {
-                                    //            if (intervalExtractorUrls.indexOf(extractorUrl) < 0) {
-                                    //                intervalExtractorUrls.push(extractorUrl);
-                                    //                if (!initialized) {
-                                    //                    me.startIntervalExtractors();
-                                    //                }
-                                    //            }
-                                    //        }
-                                    //
-                                    //    }
-                                    //});
+                                    request.post({
+                                        url: extractorUrl,
+                                        headers: headers,
+                                        form: {
+                                            dwTrailUrlId: change.data.id.toString(),
+                                            scrapedContent: change.data.scrapedContent.indexOf(" ") == -1 ? me.unzipContent(change.data.scrapedContent) : change.data.scrapedContent
+                                        }
+                                    }, function (error) {
+                                        if (error) {
+                                            console.log(error.message);
+                                        }
+                                    });
 
                                 });
                             });

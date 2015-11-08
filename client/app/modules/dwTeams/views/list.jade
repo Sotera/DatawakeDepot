@@ -15,7 +15,7 @@
           th.sortable.col-sm-1.col-md-1.col-lg-1.td-center(st-sort='') Trails
           th.col-sm-2.col-md-2.col-lg-2.td-center
               a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
-                &nbsp; Add Team
+                | Add Team
       tbody
         tr(ng-repeat='team in displayedTeams')
           td(style='width: 120px')

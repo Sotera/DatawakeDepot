@@ -18,7 +18,7 @@
           th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='') Teams
           th.col-sm-2.col-md-2.col-lg-2.td-center
             a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
-              &nbsp; Add User
+              | Add User
 
       tbody
         tr(ng-repeat='user in displayedUsers')

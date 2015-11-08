@@ -15,7 +15,7 @@
           th.sortable.col-sm-2.col-md-2.col-lg-3(st-sort='trailUrl.occurrences') Occurrences
           th.col-sm-2.col-md-2.col-lg-2.td-center
               a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
-                &nbsp; Add UrlExtraction
+                | Add UrlExtraction
       tbody
         tr(ng-repeat='urlExtraction in displayedUrlExtractions')
           td(style='width: 120px')

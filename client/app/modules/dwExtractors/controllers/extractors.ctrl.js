@@ -49,6 +49,13 @@ app.controller('ExtractorsCtrl', function($scope, $state, $stateParams, DwDomain
             disabled: false
         }
     }, {
+        key: 'extractorHost',
+        type: 'input',
+        templateOptions: {
+            label: gettextCatalog.getString('Host Name'),
+            required: true
+        }
+    },{
         key: 'extractorUrl',
         type: 'input',
         templateOptions: {

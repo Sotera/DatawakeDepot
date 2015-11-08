@@ -12,7 +12,7 @@
           th.sortable.col-sm-6.col-md-6.col-lg-6(st-sort='description') Value
           th.col-sm-2.col-md-2.col-lg-2.td-center
               a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
-                &nbsp; Add Setting
+                | Add Setting
       tbody
         tr(ng-repeat='setting in displayedSettings')
           td(style='width: 120px')

@@ -11,6 +11,7 @@
           th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='name' st-sort-default="true") Name
           th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='serviceTypeId') ServiceType
           th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='protocol') Protocol
+          th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='extractorHost') Host
           th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='extractorUrl') URL
           th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='port') Port
           th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='index') Index
@@ -18,7 +19,7 @@
           th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='domains') Domains
           th.col-sm-2.col-md-2.col-lg-2.td-center
             a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
-              &nbsp; Add Extractor
+              | Add Extractor
       tbody
         tr(ng-repeat='extractor in displayedextractors')
           td(style='width: 120px')
@@ -27,6 +28,8 @@
             span.text-muted {{extractor.serviceType.name}}
           td
             span.text-muted {{extractor.protocol}}
+          td
+            span.text-muted {{extractor.extractorHost}}
           td
             span.text-muted {{extractor.extractorUrl}}
           td

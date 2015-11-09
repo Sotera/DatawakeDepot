@@ -107,7 +107,6 @@ app.service('TrailsService', ['$state', 'CoreService', 'DwDomain','DwTrail', 'Dw
             trail.id.AminoUsers.forEach(function (user) {
                 DwTrail.users.unlink({id: trail.id.id, fk: user}, null, function (value, header) {
                     //success
-                    alert("unlinked");
                 });
             });
         };

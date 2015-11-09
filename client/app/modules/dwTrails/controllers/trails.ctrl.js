@@ -229,22 +229,11 @@ app.controller('TrailsCtrl', function($scope, $state, $http, $stateParams, DwDom
                   'name':true,
                   'description':true,
                   'timestamp':true,
-                  'dwDomainId':true,
-                  'dwTeamId':true},
-              //include: ['team','users','trailUrls','feeds','domain']
+                  'dwDomainId':false,
+                  'dwTeamId':false},
               include: [
-                  'team',
                   {relation:'trailUrls',
                       scope:{include:['urlExtractions','crawlType']}
-                  },
-                  {relation:'domain',
-                      scope:{
-                          fields:[
-                              "name",
-                              "description"
-                          ],
-                          include:['domainEntityTypes','domainItems']
-                      }
                   }
               ]
           }
@@ -252,11 +241,13 @@ app.controller('TrailsCtrl', function($scope, $state, $http, $stateParams, DwDom
       .then(function (trail) {
           $scope.trail = trail;
 
-          $scope.plDomains.push({
-              value: trail.domain.name,
-              name: trail.domain.name,
-              id: trail.domain.id
-          });
+          if(trail.domains.length) {
+              $scope.plDomains.push({
+                  value: trail.domain.name,
+                  name: trail.domain.name,
+                  id: trail.domain.id
+              });
+          }
       });
       $scope.loading = false;
   } else {

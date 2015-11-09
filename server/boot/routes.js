@@ -11,10 +11,23 @@ var createdTestTrailUrls = null;
 var createdTestTrailUrlExtractions = null;
 var createdTestDomainEntityTypes = null;
 var wordList = require('word-list-json');
+var htmlToText = require('html-to-text');
 for (var i = 0; i < wordList.length; ++i) {
   wordList[i] = wordList[i].charAt(0).toUpperCase() + wordList[i].slice(1);
 }
 module.exports = function (app) {
+  app.post('/textToHtml', function (req, res) {
+    var scrapedHtml = req.body;
+    res.status(200).end();
+    var textFromHtml = htmlToText.fromString(scrapedHtml.scrapedContent, {
+      tables: true,
+      wordwrap: null,
+      linkHrefBaseUrl: scrapedHtml.url,
+      ignoreHref: true,
+      ignoreImage: true
+    });
+    log(textFromHtml);
+  });
   app.get('/test', function (req, res) {
     res.end(generateHtml());
   });

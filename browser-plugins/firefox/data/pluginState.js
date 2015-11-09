@@ -10,6 +10,7 @@ var PluginState = function () {
   me.currentTrail = null;
   me.currentTrailList = [];
   me.loginUrl = '';
+  me.textToHtmlUrl = '/textToHtml';
   me.usersUrl = '/api/AminoUsers';
   me.domainsUrl = '/api/dwDomains';
   me.teamsUrl = '/api/dwTeams';

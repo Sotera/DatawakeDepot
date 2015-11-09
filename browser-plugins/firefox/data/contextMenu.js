@@ -7,8 +7,8 @@ var showDomainItems = 'Toggle Domain Item Highlighting';
 var hideDomainItems = 'Toggle Domain Item Highlighting';
 exports.init = function () {
   //JReeme: Comment out next two lines for production
-  //addContextMenu();
-  //return;
+  addContextMenu();
+  return;
   pluginState.onAddInModuleEvent('logged-out-target-context-menu', function () {
     if (menu) {
       menu.destroy();
@@ -22,7 +22,15 @@ exports.init = function () {
 function handleContextMenuClick({data, selectedText}) {
   var activeTabId = tabs.activeTab.id;
   var messageToContentScript = {};
-  if (data === 'toggle-showing-domain-items') {
+  if (data === 'toggle-datawake-panel') {
+    if (tabs.activeTab.datawakePanelShowing) {
+      delete tabs.activeTab.datawakePanelShowing;
+    }
+    else {
+      tabs.activeTab.datawakePanelShowing = {dummy: 'dummyValue'};
+      pluginState.postEventToContentScript(activeTabId, data, messageToContentScript);
+    }
+  } else if (data === 'toggle-showing-domain-items') {
     if (tabs.activeTab.domainItemsHighlighted) {
       this.label = showDomainItems;
       messageToContentScript.domainItems = [];
@@ -32,7 +40,7 @@ function handleContextMenuClick({data, selectedText}) {
       this.label = hideDomainItems;
       pluginState.getDomainItemsForCurrentDomain(function (domainItems) {
         var domainItemValues = [];
-        domainItems.forEach(function(domainItemValue){
+        domainItems.forEach(function (domainItemValue) {
           domainItemValues.push(domainItemValue.itemValue);
         });
         tabs.activeTab.domainItemsHighlighted =
@@ -99,7 +107,6 @@ function addContextMenu() {
           data: 'toggle-showing-domain-items',
           context: contextMenu.PredicateContext(anyTextSelected),
           contentScriptFile: contentScriptFile,
-          //contentScriptFile: './injectedPageScripts/datawake-analysis.js',
           onMessage: handleContextMenuClick
         }
       )

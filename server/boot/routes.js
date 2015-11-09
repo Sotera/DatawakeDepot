@@ -12,21 +12,30 @@ var createdTestTrailUrlExtractions = null;
 var createdTestDomainEntityTypes = null;
 var wordList = require('word-list-json');
 var htmlToText = require('html-to-text');
+var JSZip = require('jszip');
 for (var i = 0; i < wordList.length; ++i) {
   wordList[i] = wordList[i].charAt(0).toUpperCase() + wordList[i].slice(1);
 }
 module.exports = function (app) {
   app.post('/textToHtml', function (req, res) {
-    var scrapedHtml = req.body;
-    res.status(200).end();
-    var textFromHtml = htmlToText.fromString(scrapedHtml.scrapedContent, {
-      tables: true,
-      wordwrap: null,
-      linkHrefBaseUrl: scrapedHtml.url,
-      ignoreHref: true,
-      ignoreImage: true
-    });
-    log(textFromHtml);
+    try {
+      var zippedScrapePackage = req.body;
+      res.status(200).end();
+      var zip = new JSZip();
+      zip.load(zippedScrapePackage.scrapedContent);
+      var html = zip.file('zipped-html-body.zip').asText();
+      var textFromHtml = htmlToText.fromString(html, {
+        tables: true,
+        wordwrap: null,
+        linkHrefBaseUrl: zippedScrapePackage.url,
+        ignoreHref: true,
+        ignoreImage: true
+      });
+      log(textFromHtml);
+    }
+    catch (err) {
+      log(err);
+    }
   });
   app.get('/test', function (req, res) {
     res.end(generateHtml());
@@ -335,7 +344,7 @@ function getSentence(numberOfWords, minWordLength, maxWordLength) {
 }
 var thousandSixLetterWords = [];
 function getWords(numberOfWords, minWordLength, maxWordLength) {
-  if(!thousandSixLetterWords.length){
+  if (!thousandSixLetterWords.length) {
     var wordListCursor = 0;
     while (wordList[++wordListCursor].length < 6);
     var startWordIdx = wordListCursor;
@@ -345,19 +354,19 @@ function getWords(numberOfWords, minWordLength, maxWordLength) {
   }
   return shuffle(thousandSixLetterWords).slice(0, numberOfWords);
   //Use them all
-/*  numberOfWords = numberOfWords || 250;
-  minWordLength = minWordLength || 5;
-  maxWordLength = maxWordLength || 7;
-  var wordListCursor = 0;
-  while (wordList[++wordListCursor].length < minWordLength);
-  var startWordIdx = wordListCursor;
-  while (wordList[++wordListCursor].length <= maxWordLength);
-  var endWordIdx = wordListCursor;
-  var words = [];
-  for (var i = 0; i < numberOfWords; ++i) {
-    words.push(wordList[randomInt(startWordIdx, endWordIdx)]);
-  }
-  return words;*/
+  /*  numberOfWords = numberOfWords || 250;
+   minWordLength = minWordLength || 5;
+   maxWordLength = maxWordLength || 7;
+   var wordListCursor = 0;
+   while (wordList[++wordListCursor].length < minWordLength);
+   var startWordIdx = wordListCursor;
+   while (wordList[++wordListCursor].length <= maxWordLength);
+   var endWordIdx = wordListCursor;
+   var words = [];
+   for (var i = 0; i < numberOfWords; ++i) {
+   words.push(wordList[randomInt(startWordIdx, endWordIdx)]);
+   }
+   return words;*/
 }
 function sometimes(howOftenOneToFifty) {
   howOftenOneToFifty = howOftenOneToFifty || 100;

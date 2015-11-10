@@ -124,33 +124,63 @@ module.exports = function (app) {
         changes.on('data', function (change) {
             switch (change.type) {
                 case 'create': //If 'create', post to each of the extractors
+
                     //start current extractors if not started
                     me.startCurrentExtractors();
 
+                    //{"include":[{"relation":"domain","scope":{"include":[{"relation":"extractors","include":["serviceType"]}]}}]}
+
                     dwTrail.findOne({
-                            include:[{relation: 'domain',scope: {include:['extractors']}}],
+                            include:[{relation: 'domain',scope: {include:[{relation:'extractors',include:['serviceType']}]}}],
                             where: {id: change.data.dwTrailId.toString()}
                     }, function (err, trail) {
                         trail.domain(function (err, domain) {
-                            domain.extractors(function (err, results) {
-                                results.forEach(function (extractor) {
-                                    var extractorUrl = extractor.protocol + "://" + extractor.extractorHost + ":" + extractor.port   + extractor.extractorUrl;
+                                //get the domain extractors
+                                domain.extractors(function (err, results) {
+                                    results.forEach(function (extractor) {
+                                        //check extractor service type and handle appropriately
+                                        extractor.serviceType(function(err,servtype){
+                                            switch(servtype.name) {
 
-                                    request.post({
-                                        url: extractorUrl,
-                                        headers: headers,
-                                        form: {
-                                            dwTrailUrlId: change.data.id.toString(),
-                                            scrapedContent: change.data.scrapedContent.indexOf(" ") == -1 ? me.unzipContent(change.data.scrapedContent) : change.data.scrapedContent
-                                        }
-                                    }, function (error) {
-                                        if (error) {
-                                            console.log(error.message);
-                                        }
+                                                case 'ES':
+                                                    var extractorUrl = extractor.protocol + "://" + extractor.extractorHost + ":" + extractor.port + "/" + extractor.extractorUrl;
+                                                    var transformedUrl = change.data.scrapedContent;
+
+                                                    request.post({
+                                                        url: extractorUrl,
+                                                        headers: headers,
+                                                        form: {
+                                                            dwTrailUrlId: change.data.id.toString(),
+                                                            //Code to transform URL goes here
+                                                            scrapedContent: transformedUrl
+                                                        }
+                                                    }, function (error) {
+                                                        if (error) {
+                                                            console.log(error.message);
+                                                        }
+                                                    });
+                                                    break;
+                                                default:
+                                                    var extractorUrl = extractor.protocol + "://" + extractor.extractorHost + ":" + extractor.port + extractor.extractorUrl;
+
+                                                    request.post({
+                                                        url: extractorUrl,
+                                                        headers: headers,
+                                                        form: {
+                                                            dwTrailUrlId: change.data.id.toString(),
+                                                            scrapedContent: change.data.scrapedContent.indexOf(" ") == -1 ? me.unzipContent(change.data.scrapedContent) : change.data.scrapedContent
+                                                        }
+                                                    }, function (error) {
+                                                        if (error) {
+                                                            console.log(error.message);
+                                                        }
+                                                    });
+                                                    break;
+                                            }
+                                        })
                                     });
-
                                 });
-                            });
+
                         });
                     });
                     break;

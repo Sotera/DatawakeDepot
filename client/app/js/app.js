@@ -43,29 +43,30 @@ angular.module('loopbackApp', [
   'com.module.about',
   /*  'com.module.files',
    'com.module.events',
-  'com.module.notes',
   'com.module.pages',
   'com.module.posts',
   'com.module.products',
-
-*/
   'com.module.sandbox',
   'com.module.settings',
+  */
+  //'com.module.notes',
   'com.module.dwForensic',
-  'com.module.users',
-  'com.module.dwTeams',
-  'com.module.dwExtractors',
-  'com.module.dwTransmissions',
+  'com.module.dwTrails',
+  'com.module.dwTrailUrls',
+  'com.module.dwUrlExtractions',
   'com.module.dwDomains',
   'com.module.dwDomainEntityTypes',
   'com.module.dwDomainItems',
+  'com.module.dwTeams',
+  'com.module.users',
   'com.module.dwCrawlTypes',
   'com.module.dwServiceTypes',
-  'com.module.dwSettings',
+  'com.module.dwExtractors',
   'com.module.dwFeeds',
-  'com.module.dwTrails',
-  'com.module.dwTrailUrls',
-  'com.module.dwUrlExtractions'
+  'com.module.dwTransmissions',
+  'com.module.dwSettings'
+
+
 
 ])
   .run(function ($rootScope, $cookies, gettextCatalog) {

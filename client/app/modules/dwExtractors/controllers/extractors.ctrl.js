@@ -60,7 +60,7 @@ app.controller('ExtractorsCtrl', function($scope, $state, $stateParams, DwDomain
         type: 'input',
         templateOptions: {
             label: gettextCatalog.getString('Url'),
-            required: true
+            required: false
         }
     }, {
         key: 'port',

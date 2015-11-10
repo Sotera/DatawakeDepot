@@ -8,21 +8,21 @@
             input.input-sm.form-control(st-search='' type='search' placeholder='Search')
       thead
         tr
-          th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='name' st-sort-default="true") Name
+          th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='name' st-sort-default="true") Name
           th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='serviceTypeId') ServiceType
           th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='protocol') Protocol
-          th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='extractorHost') Host
-          th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='extractorUrl') URL
-          th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='port') Port
-          th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='index') Index
-          th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='credentials') Credentials
+          th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='extractorHost') Host
+          th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='extractorUrl') URL
+          th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='port') Port
+          th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='index') Index
+          th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='credentials') Credentials
           th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='domains') Domains
           th.col-sm-2.col-md-2.col-lg-2.td-center
             a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
               | Add Extractor
       tbody
         tr(ng-repeat='extractor in displayedextractors')
-          td(style='width: 120px')
+          td
             a(href='', ui-sref='app.dwExtractors.view({id: extractor.id})') {{extractor.name}}
           td
             span.text-muted {{extractor.serviceType.name}}

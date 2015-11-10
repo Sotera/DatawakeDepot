@@ -128,8 +128,6 @@ module.exports = function (app) {
                     //start current extractors if not started
                     me.startCurrentExtractors();
 
-                    //{"include":[{"relation":"domain","scope":{"include":[{"relation":"extractors","include":["serviceType"]}]}}]}
-
                     dwTrail.findOne({
                             include:[{relation: 'domain',scope: {include:[{relation:'extractors',include:['serviceType']}]}}],
                             where: {id: change.data.dwTrailId.toString()}

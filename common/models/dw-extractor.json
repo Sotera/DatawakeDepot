@@ -20,7 +20,7 @@
     },
     "extractorUrl": {
       "type": "string",
-      "required": true
+      "required": false
     },
     "credentials": {
       "type": "string"

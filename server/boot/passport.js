@@ -1,15 +1,16 @@
 'use strict';
 
 module.exports = function(app) {
+  //return;
 
   var bodyParser = require('body-parser');
   var loopback = require('loopback');
 
   // to support JSON-encoded bodies
-  app.use(bodyParser.json({limit: '5mb'}));
+  app.use(bodyParser.json({limit: '15mb'}));
   // to support URL-encoded bodies
   app.use(bodyParser.urlencoded({
-    extended: true, limit:'5mb'
+    extended: true, limit:'15mb'
   }));
 
   //// The access token is only available after boot

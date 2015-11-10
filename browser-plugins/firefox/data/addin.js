@@ -74,6 +74,7 @@ exports.init = function () {
       if (!pluginState.trailingActive) {
         return;
       }
+      //pluginState.restPost(pluginState.textToHtmlUrl,
       pluginState.restPost(pluginState.trailsUrlsUrl,
         {
           dwTrailId: pluginState.currentTrail.id

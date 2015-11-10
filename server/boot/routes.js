@@ -31,7 +31,7 @@ module.exports = function (app) {
         ignoreHref: true,
         ignoreImage: true
       });
-      log(textFromHtml);
+      console.log(textFromHtml);
     }
     catch (err) {
       log(err);

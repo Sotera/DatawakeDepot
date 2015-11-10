@@ -11,7 +11,7 @@ var createdTestTrailUrls = null;
 var createdTestTrailUrlExtractions = null;
 var createdTestDomainEntityTypes = null;
 var wordList = require('word-list-json');
-var htmlToText = require('html-to-text');
+var textract = require('textract');
 var JSZip = require('jszip');
 for (var i = 0; i < wordList.length; ++i) {
   wordList[i] = wordList[i].charAt(0).toUpperCase() + wordList[i].slice(1);
@@ -21,17 +21,20 @@ module.exports = function (app) {
     try {
       var zippedScrapePackage = req.body;
       res.status(200).end();
-      var zip = new JSZip();
-      zip.load(zippedScrapePackage.scrapedContent);
-      var html = zip.file('zipped-html-body.zip').asText();
-      var textFromHtml = htmlToText.fromString(html, {
-        tables: true,
-        wordwrap: null,
-        linkHrefBaseUrl: zippedScrapePackage.url,
-        ignoreHref: true,
-        ignoreImage: true
+      var html = zippedScrapePackage.scrapedContent;
+      /*      var zip = new JSZip();
+       zip.load(zippedScrapePackage.scrapedContent);
+       var html = zip.file('zipped-html-body.zip').asText();*/
+      textract.fromBufferWithName('text/html', new Buffer(html), function (err, text) {
+        if(err){
+          log(err);
+          return;
+        }
+        if (text && typeof text === 'string' && text.length > 10) {
+          //console.log('HTML--->' + html);
+          console.log('TEXT--->' + text);
+        }
       });
-      console.log(textFromHtml);
     }
     catch (err) {
       log(err);

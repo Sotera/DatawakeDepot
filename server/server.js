@@ -55,6 +55,10 @@ app.use(loopback.urlNotFound());
 // The ultimate error handler.
 app.use(loopback.errorHandler());
 
+/*var bodyParser = require('body-parser');
+app.use(bodyParser.json({limit: '1mb'}));
+app.use(bodyParser.urlencoded({limit: '1mb', extended: true}));*/
+
 app.start = function() {
   // start the web server
   return app.listen(function() {

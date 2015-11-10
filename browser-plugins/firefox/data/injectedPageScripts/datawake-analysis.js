@@ -20,14 +20,19 @@ self.port.on('load-css-urls-target-content-script', function (data) {
     }
   });
 });
+self.port.on('test-datawake-panel-content', function (data) {
+  $('#datawake-right-panel').html('This is the test text.');
+});
+self.port.on('toggle-datawake-panel', function (data) {
+  $('body').wrapInner('<div id="datawake-site" />');
+  var datawakePanel = '<div id="datawake-right-panel"></div>';
+  $('body').append(datawakePanel);
+});
 self.port.on('toggle-showing-domain-items', function (data) {
-  if(!data.domainItems.length){
+  if (!data.domainItems.length) {
     $('body').unhighlight();
-  }else{
-/*    $('body').wrapInner('<div id="datawake-site" />');
-    var datawakePanel = '<div id="datawake-right-panel"></div>';
-    $('body').append(datawakePanel);*/
-    data.domainItems.forEach(function(domainItem){
+  } else {
+    data.domainItems.forEach(function (domainItem) {
       $('body').highlight(domainItem);
     });
   }

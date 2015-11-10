@@ -146,9 +146,7 @@ module.exports = function (app) {
                                             case 'ES':
                                                 var extractorUrl = extractor.protocol + "://" + extractor.extractorHost + ":" + extractor.port + "/" + extractor.extractorUrl;
                                                 var transformedUrl = change.data.scrapedContent;
-
-                                                //begin create CDR
-                                                console.log(change.data.id.toString());
+                                                
                                                 dwTrailUrl.findOne({
                                                     "where": {"id": change.data.id.toString()},
                                                     "include": "trail"

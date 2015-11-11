@@ -145,38 +145,50 @@ module.exports = function (app) {
 
                                             case 'ES':
                                                 var extractorUrl = extractor.protocol + "://" + extractor.extractorHost + ":" + extractor.port + "/" + extractor.extractorUrl;
-                                                var transformedUrl = change.data.scrapedContent;
-                                                
-                                                dwTrailUrl.findOne({
-                                                    "where": {"id": change.data.id.toString()},
-                                                    "include": "trail"
-                                                }, function (err, trailUrl) {
-                                                    trailUrl.trail(function (err, result) {
-                                                        var cdr = {
-                                                            url: trailUrl.url,
-                                                            timestamp: trailUrl.timestamp,
-                                                            team: "sotera",
-                                                            crawler: "datawake",
-                                                            "content-type": "full-raw-html",
-                                                            raw_content: change.data.scrapedContent.indexOf("PK") == 0 ? me.unzipContent(change.data.scrapedContent) : change.data.scrapedContent,
-                                                            crawl_data: {"domain-name": result.name},
-                                                            images: "",
-                                                            videos: ""
+                                                var trailUrlFilter = {
+                                                    "where": {
+                                                        "id": change.data.id.toString()
+                                                    },
+                                                    "include": {
+                                                        "relation": "trail",
+                                                        "scope": {
+                                                            "include": ["domain"]
                                                         }
-                                                        request.post({
-                                                            url: extractorUrl,
-                                                            headers: headers,
-                                                            form: {
-                                                                dwTrailUrlId: change.data.id.toString(),
-                                                                //Code to transform URL goes here
-                                                                scrapedContent: cdr
-                                                            }
-                                                        }, function (error) {
-                                                            if (error) {
-                                                                console.log(error.message);
-                                                            }
-                                                        });
+                                                    }
+                                                };
 
+                                                dwTrailUrl.findOne(trailUrlFilter, function (err, trailUrl) {
+                                                    trailUrl.trail(function (err, trailUrlTrail) {
+                                                        trailUrlTrail.domain(function (err, trailUrlDomain) {
+                                                            var cdr = {
+                                                                url: trailUrl.url,
+                                                                timestamp: trailUrl.timestamp,
+                                                                team: "sotera",
+                                                                crawler: "datawake",
+                                                                "content-type": "full-raw-html",
+                                                                raw_content: change.data.scrapedContent.indexOf("PK") == 0 ? me.unzipContent(change.data.scrapedContent) : change.data.scrapedContent,
+                                                                crawl_data: {
+                                                                    "trail-id": trailUrlTrail.id.toString(),
+                                                                    "trail-name": trailUrlTrail.name,
+                                                                    "domain-id": trailUrlDomain.id.toString(),
+                                                                    "domain-name": trailUrlDomain.name
+                                                                },
+                                                                images: "",
+                                                                videos: ""
+                                                            };
+                                                            request.post({
+                                                                url: extractorUrl,
+                                                                headers: headers,
+                                                                form: {
+                                                                    dwTrailUrlId: change.data.id.toString(),
+                                                                    scrapedContent: cdr
+                                                                }
+                                                            }, function (error) {
+                                                                if (error) {
+                                                                    console.log(error.message);
+                                                                }
+                                                            });
+                                                        });
                                                     });
                                                 });
                                                 break;

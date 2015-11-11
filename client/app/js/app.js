@@ -50,6 +50,7 @@ angular.module('loopbackApp', [
   'com.module.settings',
   */
   //'com.module.notes',
+  'com.module.settings',
   'com.module.dwForensic',
   'com.module.dwTrails',
   'com.module.dwTrailUrls',

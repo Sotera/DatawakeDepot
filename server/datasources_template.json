@@ -1,13 +1,16 @@
 {
-  "db": {
-    "name": "db",
-    "connector": "memory"
+  "db-mem": {
+    "name": "db-mem",
+    "connector": "memory",
+    "file": "db.json"
   },
-  "MongoDB": {
+  "db": {
     "host": MONGO_HOST_ADDR,
     "port": MONGO_HOST_PORT,
-    "database": "MongoDatabase",
-    "name": "MongoDB",
+    "database": "datawake",
+    "name": "db",
+    "connectionTimeout": 10000,
     "connector": "mongodb"
   }
 }
+

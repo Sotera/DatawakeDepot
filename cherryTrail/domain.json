@@ -1,0 +1,32 @@
+{
+  "name": "memex_ht",
+  "description": "human trafficking domain",
+  "id": "563f48813ef463d12ebe5b3a",
+  "domainEntityTypes": [
+    {
+      "name": "phone",
+      "description": "phone numbers",
+      "id": "563f4f6f3ef463d12ebe5b5f",
+      "dwDomainId": "563f48813ef463d12ebe5b3a"
+    },
+    {
+      "name": "email",
+      "description": "email addresses",
+      "id": "563f4f7a3ef463d12ebe5b60",
+      "dwDomainId": "563f48813ef463d12ebe5b3a"
+    },
+    {
+      "name": "person",
+      "description": "names of people",
+      "id": "563f4f8b3ef463d12ebe5b61",
+      "dwDomainId": "563f48813ef463d12ebe5b3a"
+    },
+    {
+      "name": "location",
+      "description": "places",
+      "id": "563f50363ef463d12ebe5b62",
+      "dwDomainId": "563f48813ef463d12ebe5b3a"
+    }
+  ],
+  "domainItems": []
+}

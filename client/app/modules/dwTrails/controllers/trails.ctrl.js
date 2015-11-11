@@ -123,7 +123,19 @@ app.controller('TrailsCtrl', function($scope, $state, $http, $stateParams, DwDom
               }
           }
       });
-  }
+  };
+
+  $scope.downloadTrail = function (){
+      //alert('x');
+      var elHtml = document.getElementById('preElement').innerHTML;
+      var link = document.createElement('a');
+      var mimeType = 'application/json';
+      var filename = 'test.json'
+
+      link.setAttribute('download', filename);
+      link.setAttribute('href', 'data:' + mimeType + ';charset=utf-8,' + encodeURIComponent(elHtml));
+      link.click();
+  };
 
   $scope.delete = function(trail) {
     TrailsService.deleteTrail(trail, function() {
@@ -232,6 +244,7 @@ app.controller('TrailsCtrl', function($scope, $state, $http, $stateParams, DwDom
                   'dwDomainId':false,
                   'dwTeamId':false},
               include: [
+                  'domain',
                   {relation:'trailUrls',
                       scope:{include:['urlExtractions','crawlType']}
                   }

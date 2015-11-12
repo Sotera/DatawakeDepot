@@ -14,6 +14,19 @@ exports.init = function () {
           pluginState.toolbarFrameSource = e.source;
           pluginState.toolbarFrameOrigin = e.origin;
           break;
+        case 'crack-login-target-addin':
+          var activeTabId = tabs.activeTab.id;
+          var messageToContentScript = {};
+          if (!tabs.activeTab.datawakePanelShowing) {
+            tabs.activeTab.datawakePanelShowing = {dummy: 'dummyValue'};
+            pluginState.postEventToContentScript(activeTabId, 'show-side-panel-target-content-script', messageToContentScript);
+          }else{
+            pluginState.postEventToContentScript(activeTabId, 'inject-datawake-panel-content-target-content-script', messageToContentScript);
+          }
+          break;
+        case 'send-plugin-state-target-addin':
+          postPluginStateToToolBar();
+          break;
         case 'login':
           //Aim a browser tab at our login screen
           tabs.open({

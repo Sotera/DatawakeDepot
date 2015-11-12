@@ -6,13 +6,16 @@ function addInMessageHandler(event) {
   try {
     var msg = JSON.parse(event.data);
     if (msg.type == 'login-success-target-toolbar-frame') {
-      setUIStateToLoggedIn(msg.pluginState);
+      postMessageToAddin({action: 'crack-login-target-addin'});
+      //setUIStateToLoggedIn(msg.pluginState);
     } else if (msg.type == 'logout-success-target-toolbar-frame') {
-      setUIStateToLoggedOut();
+      //setUIStateToLoggedOut();
     }
   } catch (ex) {
     console.log('Error decoding message to toolbar frame: ' + ex);
   }
+}
+function crackLoginForReal() {
 }
 function onLoad() {
   window.addEventListener('message', addInMessageHandler);
@@ -24,11 +27,12 @@ function syncSelectElementsWithPluginState() {
   addItemsToSelectElement(ps.currentTeamList, ps.currentTeam, '#teamList');
   addItemsToSelectElement(ps.currentDomainList, ps.currentDomain, '#domainList');
   addItemsToSelectElement(ps.currentTrailList, ps.currentTrail, '#trailList');
-  if(ps.currentTrail){
+  if (ps.currentTrail) {
     $('#trailList')[0].onchange();
   }
 }
 function clearSelectElements() {
+  return;
   $('#domainList').children().remove().end();
   $('#trailList').children().remove().end();
   $('#teamList').children().remove().end();
@@ -45,6 +49,7 @@ function addItemsToSelectElement(items, currentItem, idSelector) {
   }
 }
 function toggleTrailing() {
+  return;
   if (window.trailingActive) {
     $('#loginButton').removeClass('disabled');
     $('#domainList').removeAttr('disabled');
@@ -71,6 +76,7 @@ function toggleTrailing() {
   });
 }
 function setUIStateToLoggedIn(pluginState) {
+  return;
   window.pluginState = pluginState;
   $('#loginButton')
     .html('Logout: ' + pluginState.loggedInUser.username)
@@ -83,6 +89,7 @@ function setUIStateToLoggedIn(pluginState) {
   syncSelectElementsWithPluginState();
 }
 function setUIStateToLoggedOut() {
+  return;
   //Do this check in case we're logged out via toolbar *and* a browser tab is
   //logged in to the server. The server callback would cause this to be executed
   //again unnecessarily.
@@ -99,6 +106,9 @@ function setUIStateToLoggedOut() {
   $('#trailList').attr('disabled', 'disabled');
   $('#toggleTrailButton').addClass('disabled');
   clearSelectElements();
+}
+function crackLogin() {
+  postMessageToAddin({action: 'send-plugin-state-target-addin'});
 }
 function toggleLogin() {
   if (window.pluginState) {

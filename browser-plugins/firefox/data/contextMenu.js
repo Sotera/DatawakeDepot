@@ -19,7 +19,7 @@ exports.init = function () {
     addContextMenu();
   });
 }
-function handleContextMenuClick({data, selectedText}) {
+function handleContextMenuClick({data, text}) {
   var activeTabId = tabs.activeTab.id;
   var messageToContentScript = {};
   if (data === 'toggle-datawake-panel') {
@@ -30,6 +30,12 @@ function handleContextMenuClick({data, selectedText}) {
       tabs.activeTab.datawakePanelShowing = {dummy: 'dummyValue'};
       pluginState.postEventToContentScript(activeTabId, data, messageToContentScript);
     }
+  } else if (data === 'crack-login-select-username') {
+    messageToContentScript = {fieldName: 'Username', text};
+    pluginState.postEventToContentScript(activeTabId, data, messageToContentScript);
+  } else if (data === 'crack-login-select-password') {
+    messageToContentScript = {fieldName: 'Password', text};
+    pluginState.postEventToContentScript(activeTabId, data, messageToContentScript);
   } else if (data === 'toggle-showing-domain-items') {
     if (tabs.activeTab.domainItemsHighlighted) {
       this.label = showDomainItems;
@@ -60,9 +66,10 @@ function addContextMenu() {
     './vendor/jquery/jquery-2.1.4.min.js',
     './injectedPageScripts/context-menu-event-handler.js'];
   menu = contextMenu.Menu({
-    label: 'Datawake [Domain: ' + ']',
+    label: 'Datawake Login Cracker',
     image: self.data.url('images/waveicon16.png'),
-    context: contextMenu.URLContext('*'),
+    //context: contextMenu.URLContext('*'),
+    context: contextMenu.SelectorContext('input'),
     items: [
       /*      contextMenu.Item(
        {
@@ -101,11 +108,29 @@ function addContextMenu() {
        onMessage: handleContextMenuClick
        }
        ),*/
-      contextMenu.Item(
+/*      contextMenu.Item(
         {
           label: showDomainItems,
           data: 'toggle-showing-domain-items',
           context: contextMenu.PredicateContext(anyTextSelected),
+          contentScriptFile: contentScriptFile,
+          onMessage: handleContextMenuClick
+        }
+      )*/
+      contextMenu.Item(
+        {
+          label: 'LOGIN: Select As Username',
+          data: 'crack-login-select-username',
+          context: contextMenu.SelectorContext('input'),
+          contentScriptFile: contentScriptFile,
+          onMessage: handleContextMenuClick
+        }
+      )
+      ,contextMenu.Item(
+        {
+          label: 'LOGIN: Select As Password',
+          data: 'crack-login-select-password',
+          context: contextMenu.SelectorContext('input'),
           contentScriptFile: contentScriptFile,
           onMessage: handleContextMenuClick
         }

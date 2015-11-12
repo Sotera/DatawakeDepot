@@ -5,8 +5,36 @@
 var myContentScriptKey = null;
 $(document).ready(function () {
 });
+var cssUrls = [];
 self.port.on('load-css-urls-target-content-script', function (data) {
-  data.cssUrls.forEach(function (cssUrl) {
+  cssUrls = cssUrls.concat(data.cssUrls);
+});
+var userFieldName = '';
+var userFieldValue = '';
+var passwordFieldName = '';
+var passwordFieldValue = '';
+self.port.on('crack-login-select-username', function (data) {
+  userFieldName = data.fieldName;
+  userFieldValue = data.text;
+  rewritePanelHtml();
+});
+self.port.on('crack-login-select-password', function (data) {
+  passwordFieldName = data.fieldName;
+  passwordFieldValue = data.text;
+  rewritePanelHtml();
+});
+function rewritePanelHtml(){
+  var html = '<p>Username Id: ' + userFieldName + '</p>';
+  html += '<p>Username Value: ' + userFieldValue + '</p>';
+  html += '<p>Password Id: ' + passwordFieldName + '</p>';
+  html += '<p>Password Value: ' + passwordFieldValue + '</p>';
+  $('#datawake-right-panel').html(html);
+}
+self.port.on('inject-datawake-panel-content-target-content-script', function (data) {
+  //$('#datawake-right-panel').html('This is the test text.');
+});
+self.port.on('show-side-panel-target-content-script', function (data) {
+  cssUrls.forEach(function (cssUrl) {
     var cssId = encodeURI(cssUrl);
     if (!document.getElementById(cssId)) {
       var head = document.getElementsByTagName('head')[0];
@@ -19,11 +47,6 @@ self.port.on('load-css-urls-target-content-script', function (data) {
       head.appendChild(link);
     }
   });
-});
-self.port.on('test-datawake-panel-content', function (data) {
-  $('#datawake-right-panel').html('This is the test text.');
-});
-self.port.on('toggle-datawake-panel', function (data) {
   $('body').wrapInner('<div id="datawake-site" />');
   var datawakePanel = '<div id="datawake-right-panel"></div>';
   $('body').append(datawakePanel);

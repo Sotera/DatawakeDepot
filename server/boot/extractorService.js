@@ -181,7 +181,7 @@ module.exports = function (app) {
                                                 });
                                                 break;
                                             default:
-                                                var extractorUrl = extractor.protocol + "://" + extractor.extractorHost + ":" + extractor.port + extractor.extractorUrl;
+                                                var extractorUrl = extractor.protocol + "://" + extractor.extractorHost + ":" + extractor.port + "/" + extractor.extractorUrl;
 
                                                 request.post({
                                                     url: extractorUrl,

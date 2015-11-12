@@ -101,6 +101,7 @@
     "connect-livereload": "0.5.3",
     "jasmine-core": "2.3.4",
     "run-sequence": "1.1.4",
+    "simplesets": "^1.2.0",
     "tiny-lr": "0.2.1"
   }
 }

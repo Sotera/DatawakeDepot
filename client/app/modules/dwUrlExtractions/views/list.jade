@@ -8,8 +8,9 @@
             input.input-sm.form-control(st-search='' type='search' placeholder='Search')
       thead
         tr
-          th.sortable.col-sm-2.col-md-2.col-lg-2.text-nowrap(st-sort='domainEntityType.name' st-sort-default="true") Entity Type
+          //th.sortable.col-sm-2.col-md-2.col-lg-2.text-nowrap(st-sort='domainEntityType.name' st-sort-default="true") Entity Type
           th.sortable.col-sm-2.col-md-2.col-lg-3(st-sort='value') Value
+          th.sortable.col-sm-2.col-md-2.col-lg-3(st-sort='types') Types
           th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='trail.name') Trail
           th.sortable.col-sm-2.col-md-2.col-lg-3(st-sort='trailUrl.url') URL
           th.sortable.col-sm-2.col-md-2.col-lg-3(st-sort='trailUrl.occurrences') Occurrences
@@ -18,10 +19,12 @@
                 | Add UrlExtraction
       tbody
         tr(ng-repeat='urlExtraction in displayedUrlExtractions')
-          td(style='width: 120px')
-            a(href='', ui-sref='app.dwUrlExtractions.view({id:urlExtraction.id})') {{urlExtraction.domainEntityType.name}}
+          //td(style='width: 120px')
+          //  a(href='', ui-sref='app.dwUrlExtractions.view({id:urlExtraction.id})') {{urlExtraction.domainEntityType.name}}
           td
             span.text-muted {{urlExtraction.value}}
+          td
+            span.label.label-ltgray(ng-repeat="type in urlExtraction.extractorTypes") {{type}}
           td
             span.label.label-ltgray {{urlExtraction.trailUrl.trail.name}}
           td

@@ -53,7 +53,49 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser
 
     $scope.trailChanged = function (trail) {
         $scope.selectedTrail = trail;
-        $scope.views = ForensicService.getDomainEntityTypes(trail.dwDomainId);
+        $scope.views = [];
+        $scope.getEntityTypes(trail.id);
+    };
+
+    $scope.getEntityTypes = function (trailId) {
+
+
+        var filter = {
+            filter: {
+                "where": {
+                    "id": "563d15747b55347712f33039"
+                },
+                "include": [{
+                    "relation": "trailUrls",
+                    "scope": {
+                        "include": [{
+                            "relation": "urlExtractions","scope":{ "where": {"extractorTypes": {"inq": ["Agent"]}}}
+                        }]
+                    }
+                }]
+            }
+        };
+        var entityTypes = [];
+        var entityObjects = [];
+
+        DwTrail.findOne(filter).$promise.then(function (trail) {
+            trail.trailUrls.forEach(function(trailUrl) {
+                if (trailUrl.urlExtractions.length){
+                    trailUrl.urlExtractions.forEach(function(urlExtraction){
+                        urlExtraction.extractorTypes.forEach(function(type) {
+                            if(entityTypes.indexOf(type) === -1) {
+                                entityTypes.push(type);
+                            }
+                        });
+                    })
+                }
+            });
+            entityTypes.forEach(function(entity) {
+                entityObjects.push({name: entity});
+            });
+
+            $scope.views = entityObjects;
+        });
     };
 
     $scope.drawGraph = function () {

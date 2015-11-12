@@ -3,9 +3,65 @@ var app = angular.module('com.module.dwForensic');
 
 app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEntityType', 'gettextCatalog', function ($state, CoreService, DwTrail, DwDomainEntityType, gettextCatalog) {
 
-    this.getDomainEntityTypes = function (domainId) {
+    this.getEntityTypes = function (trailId) {
+
+
+        var filter = {
+            filter: {
+                "where": {
+                    "id": "563d15747b55347712f33039"
+                },
+                "include": [{
+                    "relation": "trailUrls",
+                    "scope": {
+                        "include": [{
+                            "relation": "urlExtractions","scope":{ "where": {"extractorTypes": {"inq": ["Agent"]}}}
+                        }]
+                    }
+                }]
+            }
+        };
+        var entityTypes = [];
+        var entityObjs = [];
+        var obj = {};
+
+
+        DwTrail.findOne(filter).$promise.then(function (trail) {
+            trail.trailUrls.forEach(function(trailUrl) {
+                if (trailUrl.urlExtractions.length){
+                    trailUrl.urlExtractions.forEach(function(urlExtraction){
+                        urlExtraction.extractorTypes.forEach(function(type) {
+                            if(entityTypes.indexOf(type) === -1) {
+                                entityTypes.push(type);
+                            }
+                        });
+                    })
+                }
+            });
+            return entityTypes;
+        });
+
+
+        //DwTrail.findOne(filter, function(trail) {
+        //    trail.trailUrls.forEach(function(trailUrl) {
+        //        if (trailUrl.urlExtractions.length){
+        //            trailUrl.urlExtractions.forEach(function(urlExtraction){
+        //                urlExtraction.extractorTypes.forEach(function(type) {
+        //                    if(entityTypes.indexOf(type) === -1) {
+        //                        entityTypes.push(type);
+        //                    }
+        //                });
+        //            })
+        //        }
+        //    });
+        //    return entityTypes;
+        //});
+    };
+
+
+    this.getDomaintEntityTypes = function(domainId) {
         var filter = {"filter": {"where": {"dwDomainId": domainId}}};
-        return DwDomainEntityType.find(filter);
+        return  DwDomainEntityType.find(filter);
     };
 
     this.processEdges = function (rawEdges, rawNodes) {
@@ -125,9 +181,9 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
                 var extraction = trailUrl.urlExtractions[extractionIndex];
                 var key = extraction.value + "-" + extraction.domainEntityType.name;
                 var entity = null;
-                if (entities.hasOwnProperty(key)){
+                if (entities.hasOwnProperty(key)) {
                     entity = entities[key];
-                    entity.count = entity.count+1;
+                    entity.count = entity.count + 1;
 
                 } else {
                     entity = {name: extraction.value, type: extraction.domainEntityType.name, count: 1}
@@ -138,5 +194,3 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
         return entities;
     };
 }]);
-
-

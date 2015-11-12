@@ -3,43 +3,41 @@ var app = angular.module('com.module.dwForensic');
 
 app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEntityType', 'gettextCatalog', function ($state, CoreService, DwTrail, DwDomainEntityType, gettextCatalog) {
 
-    this.getEntityTypes = function (trailId) {
-
-
-        var filter = {
-            filter: {
-                "where": {
-                    "id": "563d15747b55347712f33039"
-                },
-                "include": [{
-                    "relation": "trailUrls",
-                    "scope": {
-                        "include": [{
-                            "relation": "urlExtractions","scope":{ "where": {"extractorTypes": {"inq": ["Agent"]}}}
-                        }]
-                    }
-                }]
-            }
-        };
-        var entityTypes = [];
-        var entityObjs = [];
-        var obj = {};
-
-
-        DwTrail.findOne(filter).$promise.then(function (trail) {
-            trail.trailUrls.forEach(function(trailUrl) {
-                if (trailUrl.urlExtractions.length){
-                    trailUrl.urlExtractions.forEach(function(urlExtraction){
-                        urlExtraction.extractorTypes.forEach(function(type) {
-                            if(entityTypes.indexOf(type) === -1) {
-                                entityTypes.push(type);
-                            }
-                        });
-                    })
-                }
-            });
-            return entityTypes;
-        });
+    //this.getEntityTypes = function (trailId) {
+    //
+    //
+    //    var filter = {
+    //        filter: {
+    //            "where": {
+    //                "id": trailId
+    //            },
+    //            "include": [{
+    //                "relation": "trailUrls",
+    //                "scope": {
+    //                    "include": [{
+    //                        "relation": "urlExtractions","scope":{ "where": {"extractorTypes": {"inq": ["Agent"]}}}
+    //                    }]
+    //                }
+    //            }]
+    //        }
+    //    };
+    //    var entityTypes = [];
+    //
+    //
+    //    DwTrail.findOne(filter).$promise.then(function (trail) {
+    //        trail.trailUrls.forEach(function(trailUrl) {
+    //            if (trailUrl.urlExtractions.length){
+    //                trailUrl.urlExtractions.forEach(function(urlExtraction){
+    //                    urlExtraction.extractorTypes.forEach(function(type) {
+    //                        if(entityTypes.indexOf(type) === -1) {
+    //                            entityTypes.push(type);
+    //                        }
+    //                    });
+    //                })
+    //            }
+    //        });
+    //        return entityTypes;
+    //    });
 
 
         //DwTrail.findOne(filter, function(trail) {
@@ -56,13 +54,13 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
         //    });
         //    return entityTypes;
         //});
-    };
+    //};
 
 
-    this.getDomaintEntityTypes = function(domainId) {
-        var filter = {"filter": {"where": {"dwDomainId": domainId}}};
-        return  DwDomainEntityType.find(filter);
-    };
+    //this.getDomaintEntityTypes = function(domainId) {
+    //    var filter = {"filter": {"where": {"dwDomainId": domainId}}};
+    //    return  DwDomainEntityType.find(filter);
+    //};
 
     this.processEdges = function (rawEdges, rawNodes) {
         var nodes = [];
@@ -114,7 +112,7 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
         console.log(JSON.stringify(selectedViews));
         var graphViews = [];
         for (var i in selectedViews) {
-            graphViews.push(selectedViews[i].id);
+            graphViews.push(selectedViews[i].name);
         }
         return graphViews;
     };
@@ -160,7 +158,7 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
             for (var entities in trail.trailUrls[trailUrl].urlExtractions) {
                 var entity = trail.trailUrls[trailUrl].urlExtractions[entities];
                 var name = entity.value;
-                var type = entity.domainEntityType.name;
+                var type = entity.extractorTypes;
                 var group = type;
                 var node = {"id": name, "type": type, "size": 5, "groupName": group, "name": type + "->" + name};
                 if (!(name in nodes)) {

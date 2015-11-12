@@ -3,65 +3,6 @@ var app = angular.module('com.module.dwForensic');
 
 app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEntityType', 'gettextCatalog', function ($state, CoreService, DwTrail, DwDomainEntityType, gettextCatalog) {
 
-    //this.getEntityTypes = function (trailId) {
-    //
-    //
-    //    var filter = {
-    //        filter: {
-    //            "where": {
-    //                "id": trailId
-    //            },
-    //            "include": [{
-    //                "relation": "trailUrls",
-    //                "scope": {
-    //                    "include": [{
-    //                        "relation": "urlExtractions","scope":{ "where": {"extractorTypes": {"inq": ["Agent"]}}}
-    //                    }]
-    //                }
-    //            }]
-    //        }
-    //    };
-    //    var entityTypes = [];
-    //
-    //
-    //    DwTrail.findOne(filter).$promise.then(function (trail) {
-    //        trail.trailUrls.forEach(function(trailUrl) {
-    //            if (trailUrl.urlExtractions.length){
-    //                trailUrl.urlExtractions.forEach(function(urlExtraction){
-    //                    urlExtraction.extractorTypes.forEach(function(type) {
-    //                        if(entityTypes.indexOf(type) === -1) {
-    //                            entityTypes.push(type);
-    //                        }
-    //                    });
-    //                })
-    //            }
-    //        });
-    //        return entityTypes;
-    //    });
-
-
-        //DwTrail.findOne(filter, function(trail) {
-        //    trail.trailUrls.forEach(function(trailUrl) {
-        //        if (trailUrl.urlExtractions.length){
-        //            trailUrl.urlExtractions.forEach(function(urlExtraction){
-        //                urlExtraction.extractorTypes.forEach(function(type) {
-        //                    if(entityTypes.indexOf(type) === -1) {
-        //                        entityTypes.push(type);
-        //                    }
-        //                });
-        //            })
-        //        }
-        //    });
-        //    return entityTypes;
-        //});
-    //};
-
-
-    //this.getDomaintEntityTypes = function(domainId) {
-    //    var filter = {"filter": {"where": {"dwDomainId": domainId}}};
-    //    return  DwDomainEntityType.find(filter);
-    //};
-
     this.processEdges = function (rawEdges, rawNodes) {
         var nodes = [];
         var edges = [];
@@ -147,7 +88,7 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
         return {edges: edges, nodes: nodes}
     };
 
-    this.getBrowsePathEdgesWithInfo = function (trail) {
+    this.getBrowsePathEdgesWithInfo = function (trail, views) {
         var browsePathGraph = this.getBrowsePath(trail);
 
         var nodes = browsePathGraph['nodes'];
@@ -158,7 +99,12 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
             for (var entities in trail.trailUrls[trailUrl].urlExtractions) {
                 var entity = trail.trailUrls[trailUrl].urlExtractions[entities];
                 var name = entity.value;
-                var type = entity.extractorTypes;
+                var type = "";
+                views.forEach(function(view){
+                    if (entity.extractorTypes.indexOf(view.name) > -1) {
+                        type = type + ", " + view.name;
+                    }
+                });
                 var group = type;
                 var node = {"id": name, "type": type, "size": 5, "groupName": group, "name": type + "->" + name};
                 if (!(name in nodes)) {

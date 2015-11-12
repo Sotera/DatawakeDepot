@@ -120,7 +120,7 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser
                 console.log("Getting trail");
                 console.log(JSON.stringify(trail));
 
-                var graph = ForensicService.getBrowsePathEdgesWithInfo(trail);
+                var graph = ForensicService.getBrowsePathEdgesWithInfo(trail, $scope.selectedViews);
                 change_graph(graph)
                 $scope.visitedGrid = trail.trailUrls;
                 $scope.entitiesGrid = ForensicService.getEntities(trail);

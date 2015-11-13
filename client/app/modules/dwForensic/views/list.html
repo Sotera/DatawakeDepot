@@ -109,7 +109,7 @@
                     <tbody>
                     <tr ng-repeat="page in visitedGrid | orderBy:sortType:sortReverse ">
                         <td>{{ page.searchTerms}}</td>
-                        <td>{{ page.url }}</td>
+                        <td><a href="{{page.url}}" target="_blank">{{ page.url.substring(0,100) }}</a></td>
                         <td>{{ page.timestamp }}</td>
                         <td>{{ page.dwDomainEntityTypeId }}</td>
                     </tr>

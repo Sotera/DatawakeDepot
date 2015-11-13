@@ -100,7 +100,7 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
                 var entity = trail.trailUrls[trailUrl].urlExtractions[entities];
                 var name = entity.value;
                 var type = "";
-                views.forEach(function(view){
+                views.forEach(function (view) {
                     if (entity.extractorTypes.indexOf(view.name) > -1) {
                         type = type + ", " + view.name;
                     }
@@ -124,7 +124,7 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
             for (var extractionIndex in trailUrl.urlExtractions) {
                 var extraction = trailUrl.urlExtractions[extractionIndex];
                 var types = [];
-                views.forEach(function(view){
+                views.forEach(function (view) {
                     if (extraction.extractorTypes.indexOf(view.name) > -1) {
                         types.push(view.name);
                     }
@@ -144,9 +144,55 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
         return entities;
     };
 
-    this.getSearchTerms = function(urls) {
-        var parser = $document.createElement('a');
-        parser.href = "https://www.google.com/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=stuff%20we%20like";
-        console.log(parser.search);
+    /**
+    todo: BTW- This i ugly, getting the url attributes in another function was becoming a async issue so I made it ugly.
+     **/
+    this.getSearchTerms = function (trailUrls) {
+
+        trailUrls.forEach(function (trailUrl) {
+            var parser = document.createElement('a');
+            parser.href = trailUrl.url;
+            var decodedUrl = decodeURI(trailUrl.url);
+            var searchTerm = "";
+            if (parser.hostname.indexOf("google.com") > -1) {
+                var results = new RegExp('[\?&#]' + "q" + '=([^&#]*)').exec(decodedUrl);
+                if (results != null) {
+                    searchTerm = results[1] || 0;
+                }
+
+            } else if (parser.hostname.indexOf("yahoo.com") > -1) {
+                var results = new RegExp('[\?&#]' + "p" + '=([^&#]*)').exec(decodedUrl);
+                if (results != null) {
+                    searchTerm = results[1] || 0;
+                }
+
+            } else if (parser.hostname.indexOf("bing.com") > -1) {
+                var results = new RegExp('[\?&#]' + "pq" + '=([^&#]*)').exec(decodedUrl);
+                if (results != null) {
+                    searchTerm = results[1] || 0;
+                }
+            } else  {
+                var results = new RegExp('[\?&#](keyword|query|search|p|q|pq)=([^&#]*)').exec(decodedUrl);
+                if (results != null) {
+                    searchTerm = results[2] || 0;
+                }
+
+            }
+
+            trailUrl['searchTerms'] = searchTerm;
+
+        });
+        return trailUrls;
+
+    };
+
+    this.urlParam = function (search, attrib) {
+
+        if (results == null) {
+            return null;
+        }
+        else {
+            return results[1] || 0;
+        }
     }
 }]);

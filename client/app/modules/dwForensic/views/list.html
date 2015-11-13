@@ -14,7 +14,8 @@
     </div>
     <!-- Domain Select-->
     <div class="btn-group">
-        <button ng-disabled="!selectedTeam" type="button" data-toggle="dropdown" class="btn btn-primary btn-sm dropdown-toggle">Domain:
+        <button ng-disabled="!selectedTeam" type="button" data-toggle="dropdown"
+                class="btn btn-primary btn-sm dropdown-toggle">Domain:
             {{selectedDomain.name}}
             <span class="caret"></span>
         </button>
@@ -27,7 +28,8 @@
     </div>
     <!--Trail Selection Button-->
     <div class="btn-group">
-        <button ng-disabled="!selectedTeam || !selectedDomain" type="button" data-toggle="dropdown" class="btn btn-primary btn-sm dropdown-toggle">Trail:
+        <button ng-disabled="!selectedTeam || !selectedDomain" type="button" data-toggle="dropdown"
+                class="btn btn-primary btn-sm dropdown-toggle">Trail:
             {{selectedTrail.name}}
             <span class="caret"></span>
         </button>
@@ -48,7 +50,7 @@
                 item-label="name"
                 tick-property="selected"
                 max-labels="3"
-                >
+        >
         </div>
     </div>
     <!-- Draw Graph -->
@@ -82,6 +84,12 @@
                     <thead>
                     <tr>
                         <td>
+                            <a href="#" ng-click="sortType = 'searchTerms'; sortReverse = !sortReverse">
+                                Search Terms
+                                <span ng-show="sortType == 'searchTerms' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'searchTerms' && sortReverse" class="fa fa-caret-up"></span>
+                            </a></td>
+                        <td>
                             <a href="#" ng-click="sortType = 'name'; sortReverse = !sortReverse">
                                 URL
                                 <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
@@ -100,6 +108,7 @@
 
                     <tbody>
                     <tr ng-repeat="page in visitedGrid | orderBy:sortType:sortReverse ">
+                        <td>{{ page.searchTerms}}</td>
                         <td>{{ page.url }}</td>
                         <td>{{ page.timestamp }}</td>
                         <td>{{ page.dwDomainEntityTypeId }}</td>
@@ -138,7 +147,7 @@
                     <tbody>
                     <tr ng-repeat="entity in entitiesGrid | orderBy:sortType:sortReverse ">
                         <td>{{ entity.name }}</td>
-                        <td><span class="span label label-ltgray"ng-repeat="type in entity.type">{{type}}</span> </td>
+                        <td><span class="span label label-ltgray" ng-repeat="type in entity.type">{{type}}</span></td>
                         <td>{{ entity.count }}</td>
                     </tr>
                     </tbody>

@@ -117,24 +117,36 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
         return this.processEdges(edges, nodes);
     };
 
-    this.getEntities = function (trail) {
+    this.getEntities = function (trail, views) {
         var entities = {};
         for (var trailUrlIndex in trail.trailUrls) {
             var trailUrl = trail.trailUrls[trailUrlIndex];
             for (var extractionIndex in trailUrl.urlExtractions) {
                 var extraction = trailUrl.urlExtractions[extractionIndex];
-                var key = extraction.value + "-" + extraction.domainEntityType.name;
+                var types = [];
+                views.forEach(function(view){
+                    if (extraction.extractorTypes.indexOf(view.name) > -1) {
+                        types.push(view.name);
+                    }
+                });
+                var key = extraction.value + "-" + types;
                 var entity = null;
                 if (entities.hasOwnProperty(key)) {
                     entity = entities[key];
                     entity.count = entity.count + 1;
 
                 } else {
-                    entity = {name: extraction.value, type: extraction.domainEntityType.name, count: 1}
+                    entity = {name: extraction.value, type: types, count: 1}
                 }
                 entities[key] = entity;
             }
         }
         return entities;
     };
+
+    this.getSearchTerms = function(urls) {
+        var parser = $document.createElement('a');
+        parser.href = "https://www.google.com/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=stuff%20we%20like";
+        console.log(parser.search);
+    }
 }]);

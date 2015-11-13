@@ -123,7 +123,8 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser
                 var graph = ForensicService.getBrowsePathEdgesWithInfo(trail, $scope.selectedViews);
                 change_graph(graph)
                 $scope.visitedGrid = trail.trailUrls;
-                $scope.entitiesGrid = ForensicService.getEntities(trail);
+                $scope.entitiesGrid = ForensicService.getEntities(trail, $scope.selectedViews);
+                ForensicService.getSearchTerms('www.test.com');
                 console.log(JSON.stringify($scope.visitedGrid));
             })
             .catch(function (err) {

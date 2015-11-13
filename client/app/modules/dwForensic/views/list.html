@@ -133,7 +133,7 @@
                     <tbody>
                     <tr ng-repeat="entity in entitiesGrid | orderBy:sortType:sortReverse ">
                         <td>{{ entity.name }}</td>
-                        <td>{{ entity.type }}</td>
+                        <td><span class="span label label-ltgray"ng-repeat="type in entity.type">{{type}}</span> </td>
                         <td>{{ entity.count }}</td>
                     </tr>
                     </tbody>

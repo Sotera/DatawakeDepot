@@ -155,16 +155,3 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser
             console.log(err);
         });
 });
-
-var tmp = {
-    "where": {"id": "563d15747b55347712f33039"},
-    "include": [{
-        "relation": "trailUrls",
-        "scope": {
-            "include": [{
-                "relation": "urlExtractions",
-                "scope": {"where": {"extractorTypes": {"inq": ["Agent"]}}}
-            }]
-        }
-    }]
-}

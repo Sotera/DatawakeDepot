@@ -14,7 +14,8 @@
     </div>
     <!-- Domain Select-->
     <div class="btn-group">
-        <button ng-disabled="!selectedTeam" type="button" data-toggle="dropdown" class="btn btn-primary btn-sm dropdown-toggle">Domain:
+        <button ng-disabled="!selectedTeam" type="button" data-toggle="dropdown"
+                class="btn btn-primary btn-sm dropdown-toggle">Domain:
             {{selectedDomain.name}}
             <span class="caret"></span>
         </button>
@@ -27,7 +28,8 @@
     </div>
     <!--Trail Selection Button-->
     <div class="btn-group">
-        <button ng-disabled="!selectedTeam || !selectedDomain" type="button" data-toggle="dropdown" class="btn btn-primary btn-sm dropdown-toggle">Trail:
+        <button ng-disabled="!selectedTeam || !selectedDomain" type="button" data-toggle="dropdown"
+                class="btn btn-primary btn-sm dropdown-toggle">Trail:
             {{selectedTrail.name}}
             <span class="caret"></span>
         </button>
@@ -47,7 +49,8 @@
                 button-label="'Select Entity Types:' name"
                 item-label="name"
                 tick-property="selected"
-                >
+                max-labels="3"
+        >
         </div>
     </div>
     <!-- Draw Graph -->
@@ -65,10 +68,14 @@
         <tabset class="nav-tabs-custom">
             <tab heading="Graph">
                 <div class="row">
-                    <svg id=legend height=100% style="position:relative; float: right; pointer-events:none;"></svg>
-                    <div id="link-dialog" title="Vertex Details"></div>
-                    <div id=node_graph></div>
-                    <div id="dialog" title="Highlighted Vertices"></div>
+                    <div class="col-sm-10">
+                        <div id="link-dialog" title="Vertex Details"></div>
+                        <div id=node_graph></div>
+                        <div id="dialog" title="Highlighted Vertices"></div>
+                    </div>
+                    <div class="col-sm-2">
+                        <svg id=legend height=600px style="position:relative; float: right; pointer-events:none;"></svg>
+                    </div>
 
                 </div>
             </tab>
@@ -76,6 +83,12 @@
                 <table class="table table-bordered table-striped">
                     <thead>
                     <tr>
+                        <td>
+                            <a href="#" ng-click="sortType = 'searchTerms'; sortReverse = !sortReverse">
+                                Search Terms
+                                <span ng-show="sortType == 'searchTerms' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'searchTerms' && sortReverse" class="fa fa-caret-up"></span>
+                            </a></td>
                         <td>
                             <a href="#" ng-click="sortType = 'name'; sortReverse = !sortReverse">
                                 URL
@@ -95,7 +108,8 @@
 
                     <tbody>
                     <tr ng-repeat="page in visitedGrid | orderBy:sortType:sortReverse ">
-                        <td>{{ page.url }}</td>
+                        <td>{{ page.searchTerms}}</td>
+                        <td><a href="{{page.url}}" target="_blank">{{ page.url.substring(0,100) }}</a></td>
                         <td>{{ page.timestamp }}</td>
                         <td>{{ page.dwDomainEntityTypeId }}</td>
                     </tr>
@@ -133,7 +147,7 @@
                     <tbody>
                     <tr ng-repeat="entity in entitiesGrid | orderBy:sortType:sortReverse ">
                         <td>{{ entity.name }}</td>
-                        <td>{{ entity.type }}</td>
+                        <td><span class="span label label-ltgray" ng-repeat="type in entity.type">{{type}}</span></td>
                         <td>{{ entity.count }}</td>
                     </tr>
                     </tbody>

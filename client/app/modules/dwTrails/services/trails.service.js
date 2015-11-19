@@ -8,10 +8,6 @@ app.service('TrailsService', ['$state', 'CoreService', 'DwDomain','DwTrail', 'Dw
   };
 
 
-    this.getTrailsForUser = function(filter) {
-
-    };
-
   this.getTrail = function(id) {
     return DwTrail.findById({
       id: id

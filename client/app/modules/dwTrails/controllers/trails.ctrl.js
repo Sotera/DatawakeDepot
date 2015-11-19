@@ -140,8 +140,6 @@ app.controller('TrailsCtrl', function ($scope, $state, $http, $stateParams, DwDo
     };
 
 
-
-
     $scope.getTrails = function (filter) {
         DwTrail.find(filter).$promise
             .then(function (allTrails) {

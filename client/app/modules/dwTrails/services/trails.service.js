@@ -7,6 +7,7 @@ app.service('TrailsService', ['$state', 'CoreService', 'DwDomain','DwTrail', 'Dw
     return DwTrail.find({filter: {include: ['domain','team','users','trailUrls','feeds']}});
   };
 
+
   this.getTrail = function(id) {
     return DwTrail.findById({
       id: id

@@ -135,6 +135,13 @@
                             </a>
                         </td>
                         <td>
+                            <a href="#" ng-click="sortType = 'url'; sortReverse = !sortReverse">
+                                URL
+                                <span ng-show="sortType == 'url' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'url' && sortReverse" class="fa fa-caret-up"></span>
+                            </a>
+                        </td>
+                        <td>
                             <a href="#" ng-click="sortType = 'count'; sortReverse = !sortReverse">
                                 Count
                                 <span ng-show="sortType == 'count' && !sortReverse" class="fa fa-caret-down"></span>
@@ -148,6 +155,7 @@
                     <tr ng-repeat="entity in entitiesGrid | orderBy:sortType:sortReverse ">
                         <td>{{ entity.name }}</td>
                         <td><span class="span label label-ltgray" ng-repeat="type in entity.type">{{type}}</span></td>
+                        <td><a href="{{entity.url}}" target="_blank">{{ entity.url.substring(0,100) }}</a></td>
                         <td>{{ entity.count }}</td>
                     </tr>
                     </tbody>

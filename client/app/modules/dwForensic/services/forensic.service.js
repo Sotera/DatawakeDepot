@@ -136,7 +136,7 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
                     entity.count = entity.count + 1;
 
                 } else {
-                    entity = {name: extraction.value, type: types, count: 1}
+                    entity = {name: extraction.value, type: types, count: 1, url: trailUrl.url}
                 }
                 entities[key] = entity;
             }
@@ -171,7 +171,11 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
                 if (results != null) {
                     searchTerm = results[1] || 0;
                 }
-            } else  {
+            } else if ((parser.hostname.indexOf('doubleclick') > -1) || ( parser.hostname.indexOf('ads') > -1)) {
+                // skip common ads
+                return;
+            }
+            else  {
                 var results = new RegExp('[\?&#](keyword|query|search|p|q|pq)=([^&#]*)').exec(decodedUrl);
                 if (results != null) {
                     searchTerm = results[2] || 0;

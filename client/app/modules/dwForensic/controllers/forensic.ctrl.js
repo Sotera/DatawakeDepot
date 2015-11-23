@@ -10,9 +10,11 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser
     $scope.domains = [];
     $scope.trails = [];
     $scope.selectedTeam = null;
+
     $scope.selectedDomain = null;
     $scope.selectedTrail = null;
     $scope.selectedViews = [];
+    $scope.entitiesGrid = [{"text": "word1", "weight": 5},{"text": "word2", "weight": 1}];
 
     //Setup the view dropdown menu
     $scope.views = [];
@@ -109,6 +111,8 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser
                 change_graph(graph);
                 $scope.visitedGrid = ForensicService.getSearchTerms(trail.trailUrls);
                 $scope.entitiesGrid = ForensicService.getEntities(trail, $scope.selectedViews);
+                $scope.words = ForensicService.getWords($scope.entitiesGrid);
+                console.log($scope.words);
             })
             .catch(function (err) {
                 console.log("Error getting trail: " + $scope.selectedTrail.id);

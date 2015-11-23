@@ -1,7 +1,7 @@
 'use strict';
 var app = angular.module('com.module.dwForensic');
 
-app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEntityType', 'gettextCatalog', function ($state, CoreService, DwTrail, DwDomainEntityType, gettextCatalog) {
+app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEntityType', 'gettextCatalog' , function ($state, CoreService, DwTrail, DwDomainEntityType, gettextCatalog) {
 
     this.processEdges = function (rawEdges, rawNodes) {
         var nodes = [];
@@ -141,15 +141,25 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
                 var entity = null;
                 if (entities.hasOwnProperty(key)) {
                     entity = entities[key];
-                    entity.count = entity.count + 1;
+                    entity.weight = entity.weight + 1;
 
                 } else {
-                    entity = {name: extraction.value, type: types, count: 1, url: trailUrl.url}
+                    entity = {text: extraction.value, type: types, weight: 1, url: trailUrl.url}
                 }
                 entities[key] = entity;
             }
         }
         return entities;
+    };
+
+    this.getWords = function (entityGrid) {
+        var words = [];
+        for (var entity in entityGrid) {
+            var word = {text: entityGrid[entity].text, weight: entityGrid[entity].weight};
+            console.log(word);
+            words.push(word);
+        }
+        return words;
     };
 
     /**

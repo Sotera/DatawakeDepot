@@ -153,16 +153,19 @@
 
                     <tbody>
                     <tr ng-repeat="entity in entitiesGrid | orderBy:sortType:sortReverse ">
-                        <td>{{ entity.name }}</td>
+                        <td>{{ entity.text }}</td>
                         <td><span class="span label label-ltgray" ng-repeat="type in entity.type">{{type}}</span></td>
                         <td><a href="{{entity.url}}" target="_blank">{{ entity.url.substring(0,100) }}</a></td>
-                        <td>{{ entity.count }}</td>
+                        <td>{{ entity.weight }}</td>
                     </tr>
                     </tbody>
                 </table>
             </tab>
             <tab heading="Word Cloud">
-                <jqcloud words="words" width="500" height="350" steps="7"></jqcloud>
+                <div class="row">
+                    <jqcloud words="words" width="500" height="350" steps="7"></jqcloud>
+                </div>
+
             </tab>
         </tabset>
     </div>

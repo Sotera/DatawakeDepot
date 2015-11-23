@@ -112,7 +112,6 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser
                 $scope.visitedGrid = ForensicService.getSearchTerms(trail.trailUrls);
                 $scope.entitiesGrid = ForensicService.getEntities(trail, $scope.selectedViews);
                 $scope.words = ForensicService.getWords($scope.entitiesGrid);
-                console.log($scope.words);
             })
             .catch(function (err) {
                 console.log("Error getting trail: " + $scope.selectedTrail.id);

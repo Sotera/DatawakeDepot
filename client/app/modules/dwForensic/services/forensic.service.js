@@ -156,7 +156,6 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
         var words = [];
         for (var entity in entityGrid) {
             var word = {text: entityGrid[entity].text, weight: entityGrid[entity].weight};
-            console.log(word);
             words.push(word);
         }
         return words;

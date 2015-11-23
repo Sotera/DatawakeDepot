@@ -17,6 +17,7 @@
     "angular-formly-templates-bootstrap": "~6.0.0",
     "angular-gettext": "2.0.0",
     "angular-gravatar": "0.2.2",
+    "angular-jqcloud": "~1.0.2",
     "angular-loading-bar": "0.6.0",
     "angular-markdown-directive": "0.3.0",
     "angular-mocks": "1.3.12",

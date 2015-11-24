@@ -8,3 +8,4 @@ db.json
 node_modules/
 dist/
 providers.json
+*.xpi

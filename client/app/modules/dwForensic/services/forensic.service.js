@@ -132,17 +132,9 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
                 var types = [];
                 views.forEach(function (view) {
                     if (extraction.extractorTypes.indexOf(view.name) > -1) {
-                        if (view.name.indexOf('text') > -1) {
-                            // ignore text, we are using it for other analytics.
-                            return;
-                        }
                         types.push(view.name);
                     }
                 });
-                if (types.length < 1) {
-                    // ignoring text.
-                    continue;
-                }
                 var key = extraction.value + "-" + types;
                 var entity = null;
                 if (entities.hasOwnProperty(key)) {

@@ -70,7 +70,7 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser
                 if (trailUrl.urlExtractions.length) {
                     trailUrl.urlExtractions.forEach(function (urlExtraction) {
                         urlExtraction.extractorTypes.forEach(function (type) {
-                            if (entityTypes.indexOf(type) === -1) {
+                            if (entityTypes.indexOf(type) === -1  && type != "_Feature" && type != "owl#Thing" && type !="text") {
                                 entityTypes.push(type);
                             }
                         });

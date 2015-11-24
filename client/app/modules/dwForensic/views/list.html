@@ -155,7 +155,7 @@
                     <tr ng-repeat="entity in entitiesGrid | orderBy:sortType:sortReverse ">
                         <td>{{ entity.text }}</td>
                         <td><span class="span label label-ltgray" ng-repeat="type in entity.type">{{type}}</span></td>
-                        <td><a href="{{entity.url}}" target="_blank">{{ entity.url.substring(0,100) }}</a></td>
+                        <td><span class="span label" ng-repeat="url in entity.urls"><a href="{{url}}" target="_blank">{{ url.substring(0,100) }}</a></span></td>
                         <td>{{ entity.weight }}</td>
                     </tr>
                     </tbody>

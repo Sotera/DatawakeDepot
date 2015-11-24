@@ -1,7 +1,7 @@
 'use strict';
 var app = angular.module('com.module.dwForensic');
 
-app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEntityType', 'gettextCatalog' , function ($state, CoreService, DwTrail, DwDomainEntityType, gettextCatalog) {
+app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEntityType', 'gettextCatalog', function ($state, CoreService, DwTrail, DwDomainEntityType, gettextCatalog) {
 
     this.processEdges = function (rawEdges, rawNodes) {
         var nodes = [];
@@ -117,6 +117,12 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
         return this.processEdges(edges, nodes);
     };
 
+    /**
+     * Given a trail and entity type(s) returns a list of [{text: entityName, type: entityType, weight: entityCount, url: urls}]
+     * @param trail
+     * @param views
+     * @returns {{}}
+     */
     this.getEntities = function (trail, views) {
         var entities = {};
         for (var trailUrlIndex in trail.trailUrls) {
@@ -142,9 +148,12 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
                 if (entities.hasOwnProperty(key)) {
                     entity = entities[key];
                     entity.weight = entity.weight + 1;
+                    if (entity.urls.indexOf(trailUrl.url) == -1) {
+                        entity.urls.push(trailUrl.url);
+                    }
 
                 } else {
-                    entity = {text: extraction.value, type: types, weight: 1, url: trailUrl.url}
+                    entity = {text: extraction.value, type: types, weight: 1, urls: [trailUrl.url]}
                 }
                 entities[key] = entity;
             }
@@ -162,7 +171,7 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
     };
 
     /**
-    todo: BTW- This i ugly, getting the url attributes in another function was becoming a async issue so I made it ugly.
+     todo: BTW- This i ugly, getting the url attributes in another function was becoming a async issue so I made it ugly.
      **/
     this.getSearchTerms = function (trailUrls) {
 
@@ -192,7 +201,7 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
                 // skip common ads
                 return;
             }
-            else  {
+            else {
                 var results = new RegExp('[\?&#](keyword|query|search|p|q|pq)=([^&#]*)').exec(decodedUrl);
                 if (results != null) {
                     searchTerm = results[2] || 0;

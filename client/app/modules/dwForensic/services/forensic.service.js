@@ -117,6 +117,12 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
         return this.processEdges(edges, nodes);
     };
 
+    /**
+     * Given a trail and entity type(s) returns a list of [{text: entityName, type: entityType, weight: entityCount, url: urls}]
+     * @param trail
+     * @param views
+     * @returns {{}}
+     */
     this.getEntities = function (trail, views) {
         var entities = {};
         for (var trailUrlIndex in trail.trailUrls) {
@@ -126,25 +132,20 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
                 var types = [];
                 views.forEach(function (view) {
                     if (extraction.extractorTypes.indexOf(view.name) > -1) {
-                        if (view.name.indexOf('text') > -1) {
-                            // ignore text, we are using it for other analytics.
-                            return;
-                        }
                         types.push(view.name);
                     }
                 });
-                if (types.length < 1) {
-                    // ignoring text.
-                    continue;
-                }
                 var key = extraction.value + "-" + types;
                 var entity = null;
                 if (entities.hasOwnProperty(key)) {
                     entity = entities[key];
-                    entity.count = entity.count + 1;
+                    entity.weight = entity.weight + 1;
+                    if (entity.urls.indexOf(trailUrl.url) == -1) {
+                        entity.urls.push(trailUrl.url);
+                    }
 
                 } else {
-                    entity = {name: extraction.value, type: types, count: 1, url: trailUrl.url}
+                    entity = {text: extraction.value, type: types, weight: 1, urls: [trailUrl.url]}
                 }
                 entities[key] = entity;
             }
@@ -152,8 +153,17 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
         return entities;
     };
 
+    this.getWords = function (entityGrid) {
+        var words = [];
+        for (var entity in entityGrid) {
+            var word = {text: entityGrid[entity].text, weight: entityGrid[entity].weight};
+            words.push(word);
+        }
+        return words;
+    };
+
     /**
-    todo: BTW- This i ugly, getting the url attributes in another function was becoming a async issue so I made it ugly.
+     todo: BTW- This i ugly, getting the url attributes in another function was becoming a async issue so I made it ugly.
      **/
     this.getSearchTerms = function (trailUrls) {
 
@@ -183,7 +193,7 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
                 // skip common ads
                 return;
             }
-            else  {
+            else {
                 var results = new RegExp('[\?&#](keyword|query|search|p|q|pq)=([^&#]*)').exec(decodedUrl);
                 if (results != null) {
                     searchTerm = results[2] || 0;

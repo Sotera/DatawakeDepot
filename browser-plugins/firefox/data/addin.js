@@ -74,16 +74,19 @@ exports.init = function () {
       if (!pluginState.trailingActive) {
         return;
       }
+      console.log("Active tab URL: " + tabs.activeTab.url);
       //pluginState.restPost(pluginState.textToHtmlUrl,
-      pluginState.restPost(pluginState.trailsUrlsUrl,
-        {
-          dwTrailId: pluginState.currentTrail.id
-          , url: pageContents.url
-          , scrapedContent: pageContents.zippedHtmlBody
-        }, function (res) {
-          console.log(res.text);
-        }
-      );
+      if (pageContents.url === tabs.activeTab.url && tabs.activeTab.readyState === 'complete') {
+        pluginState.restPost(pluginState.trailsUrlsUrl,
+            {
+              dwTrailId: pluginState.currentTrail.id
+              , url: pageContents.url
+              , scrapedContent: pageContents.zippedHtmlBody
+            }, function (res) {
+              //console.log(res.text);
+            }
+        );
+      }
       //HowTo: decode (unzip) in addin
       /*      var JSZip = require('./vendor/jszip/jszip.min.js');
        var zip = new JSZip();

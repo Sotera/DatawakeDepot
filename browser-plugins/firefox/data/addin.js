@@ -26,6 +26,10 @@ exports.init = function () {
           //login tabs. Not today.
           pluginState.postEventToDatawakeDepotContentScript('logout-target-content-script');
           break;
+        case 'toggle-panel':
+          var activeTabId = tabs.activeTab.id;
+          pluginState.postEventToContentScript(activeTabId, 'send-toggle-datawake-panel');
+          break;
         case 'set-trailing-active':
           pluginState.trailingActive = msg.data;
           break;
@@ -158,7 +162,7 @@ function logoutSuccessfulHandler(tellToolBar) {
   }
   var msg = {
     type: 'logout-success-target-toolbar-frame'
-  }
+  };
   pluginState.postMessageToToolBar(msg);
 }
 function loginSuccessfulHandler(user) {

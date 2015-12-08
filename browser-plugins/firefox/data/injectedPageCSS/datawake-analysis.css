@@ -1,6 +1,6 @@
 .highlight {
     color: #dddddd;
-    background-color: #004400;
+    background-color: #252644;
 }
 
 div#datawake-right-panel {
@@ -9,7 +9,9 @@ div#datawake-right-panel {
     right: 0;
     bottom: 0;
     width: 300px;
-    background: green;
+    color: #dddddd;
+    background-color: #252644;
+    background: #252644;
 }
 
 div#datawake-site {

@@ -60,7 +60,7 @@ self.port.on('send-toggle-datawake-panel', function () {
         myVar = setInterval(myTimer, 5000);
     }else{
         $("#datawake-right-panel").remove();
-        myVar = null;
+        clearInterval(myVar);
     }
 });
 

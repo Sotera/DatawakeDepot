@@ -64,6 +64,12 @@ exports.init = function () {
   });
   //Here we listen for when the content scripts is fired up and ready.
   pluginState.onAddInModuleEvent('page-content-script-attached-target-addin', function (data) {
+    pluginState.addContentScriptEventHandler(data.contentScriptKey,'requestPanelHtml-target-addin', function () {
+      var messageToContentScript = {};
+      messageToContentScript.panelHtml = getPanelHtml();
+      pluginState.postEventToContentScript(data.contentScriptKey, 'send-panel', messageToContentScript);
+    });
+
     pluginState.addContentScriptEventHandler(data.contentScriptKey, 'send-css-urls-target-addin', function (scriptData) {
       pluginState.postEventToContentScript(scriptData.contentScriptKey, 'load-css-urls-target-content-script',
         {
@@ -72,6 +78,7 @@ exports.init = function () {
           ]
         });
     });
+
     pluginState.addContentScriptEventHandler(data.contentScriptKey, 'zipped-html-body-target-addin', function (pageContents) {
       //TODO: Work out some scraper eventing so we don't do the DOM operation if we're not trailing.
       //This will work for now though.
@@ -95,6 +102,7 @@ exports.init = function () {
        var html = zip.file('zipped-html-body.zip').asText();*/
     });
   });
+
   //Here we listen for when the DD content script is fired up and ready.
   pluginState.onAddInModuleEvent('page-datawake-depot-content-script-attached-target-addin', function (data) {
     pluginState.addDatawakeDepotContentScriptEventHandler('logout-success-target-plugin', function (user) {
@@ -153,6 +161,13 @@ exports.init = function () {
     postPluginStateToToolBar();
   });
 };
+
+function getPanelHtml(){
+    var d = new Date();
+    var panelHtml = '<div id="timer">' + d.toLocaleTimeString() + '</div>';
+    return panelHtml;
+}
+
 function logoutSuccessfulHandler(tellToolBar) {
   pluginState.reset();
   pluginState.postEventToAddInModule('logged-out-target-context-menu');

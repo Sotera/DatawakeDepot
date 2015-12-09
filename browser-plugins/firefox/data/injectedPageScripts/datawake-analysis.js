@@ -9,9 +9,9 @@ var myVar = null;
 $(document).ready(function () {
     showPanel();
     //Now populate it
-    rewritePanelHtml('<body><h1>Hey it works</h1><div id="timer">initialized</div></body>');
+    rewritePanel('<body><h1>Panel Activated</h1><div id="timer">initializing</div></body>');
     //Now start a poller to keep repopulating it as long as they're on this page
-    myVar = setInterval(myTimer, 5000);
+    myVar = setInterval(panelTimer, 10000);
 });
 
 //Load all CSS urls
@@ -33,23 +33,31 @@ self.port.on('load-css-urls-target-content-script', function (data) {
 
 function showPanel(){
     if ($('#datawake-right-panel').length === 0){
-        var datawakePanel = '<div id="datawake-right-panel"></div>';
+        var datawakePanel = '<div id="datawake-right-panel"><div id="initialDiv"></div></div>';
         $('body').append(datawakePanel);
     }
 }
 
-function rewritePanelHtml(html){
+function rewritePanel(html){
   $('#datawake-right-panel').html(html);
 }
 
-function myTimer(){
-    var d = new Date();
-    rewritePanelHtml('<body><h1>updated</h1><div id="timer">' + d.toLocaleTimeString() + '</div></body>');
+function rewritePanelDiv(div,html){
+    $('#datawake-right-panel').append(html);
 }
+
+function panelTimer(){
+    self.port.emit('requestPanelHtml-target-addin', {contentScriptKey: myContentScriptKey});
+}
+
+//Populate panel
+self.port.on('send-panel', function (data) {
+    rewritePanelDiv("#widgetOne",data.panelHtml);
+});
 
 //Test panel populate
 self.port.on('test-datawake-panel-content', function (data) {
-  rewritePanelHtml('This is the test text.');
+  rewritePanel('This is the test text.');
 });
 
 //Toggle side panel
@@ -57,10 +65,17 @@ self.port.on('send-toggle-datawake-panel', function () {
     if ($('#datawake-right-panel').length === 0) {
         var datawakePanel = '<div id="datawake-right-panel"></div>';
         $('body').append(datawakePanel);
-        myVar = setInterval(myTimer, 5000);
+        myVar = setInterval(panelTimer, 5000);
     }else{
         $("#datawake-right-panel").remove();
         clearInterval(myVar);
+    }
+});
+
+//Populate side panel
+self.port.on('send-panel', function (data) {
+    if ($('#datawake-right-panel').length === 0) {
+        rewritePanel(data.panelHtml);
     }
 });
 

@@ -63,7 +63,7 @@ self.port.on('test-datawake-panel-content', function (data) {
 //Toggle side panel
 self.port.on('send-toggle-datawake-panel', function () {
     if ($('#datawake-right-panel').length === 0) {
-        var datawakePanel = '<div id="datawake-right-panel"></div>';
+        var datawakePanel = '<div class="datawake-right-panel" id="datawake-right-panel"></div>';
         $('body').append(datawakePanel);
         myVar = setInterval(panelTimer, 5000);
     }else{

@@ -12,6 +12,7 @@ div#datawake-right-panel {
     color: #dddddd;
     background-color: #252644;
     background: #252644;
+    z-index:10000;
 }
 
 div#datawake-site {

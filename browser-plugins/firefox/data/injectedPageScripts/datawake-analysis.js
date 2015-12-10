@@ -9,9 +9,9 @@ var myVar = null;
 $(document).ready(function () {
     showPanel();
     //Now populate it
-    rewritePanel('<body><h1>Panel Activated</h1><div id="timer">initializing</div></body>');
+    rewritePanel('<body><div id="timer">initializing</div></body>');
     //Now start a poller to keep repopulating it as long as they're on this page
-    myVar = setInterval(panelTimer, 10000);
+    myVar = setInterval(panelTimer, 5000);
 });
 
 //Load all CSS urls
@@ -33,7 +33,7 @@ self.port.on('load-css-urls-target-content-script', function (data) {
 
 function showPanel(){
     if ($('#datawake-right-panel').length === 0){
-        var datawakePanel = '<div id="datawake-right-panel"><div id="initialDiv"></div></div>';
+        var datawakePanel = '<div id="datawake-right-panel"><div id="widgetOne"></div></div>';
         $('body').append(datawakePanel);
     }
 }
@@ -43,16 +43,23 @@ function rewritePanel(html){
 }
 
 function rewritePanelDiv(div,html){
-    $('#datawake-right-panel').append(html);
+    $(div).remove();
+    $("#datawake-right-panel").append(html);
 }
 
 function panelTimer(){
     self.port.emit('requestPanelHtml-target-addin', {contentScriptKey: myContentScriptKey});
 }
 
+function buildPanelContents(data){
+    var panelHtml = data.panelHtml;
+    $('#timer').remove();
+    rewritePanelDiv("#widgetOne", panelHtml);
+}
+
 //Populate panel
 self.port.on('send-panel', function (data) {
-    rewritePanelDiv("#widgetOne",data.panelHtml);
+    buildPanelContents(data);
 });
 
 //Test panel populate

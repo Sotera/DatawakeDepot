@@ -17,6 +17,7 @@ var PluginState = function () {
   me.trailsUrl = '/api/dwTrails';
   me.trailsUrlsUrl = '/api/dwTrailUrls';
   me.domainItemsUrl = '/api/dwDomainItems';
+  me.domainList = '/widget/get-domain-list';
   me.trailingActive = false;
   me.toolbarFrameSource = null;
   me.toolbarFrameOrigin = null;
@@ -42,6 +43,22 @@ var PluginState = function () {
       onComplete: callback
     }).get();
   };
+
+  me.restSimpleGet = function (url, callback) {
+      url = me.loginUrl + url;
+      Request({
+          url: url,
+          onComplete: callback
+      }).get();
+  };
+
+  me.getDomainList = function (cb) {
+      var url = me.domainList;
+      me.restSimpleGet(url, function (res) {
+          cb(res.json);
+      });
+  };
+
   me.getDomainItemsForCurrentDomain = function (cb) {
     var url = me.domainItemsUrl;
     var filter = {

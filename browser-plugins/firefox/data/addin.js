@@ -64,6 +64,7 @@ exports.init = function () {
   });
   //Here we listen for when the content scripts is fired up and ready.
   pluginState.onAddInModuleEvent('page-content-script-attached-target-addin', function (data) {
+    //Listen for panelHTML requests from the injected page
     pluginState.addContentScriptEventHandler(data.contentScriptKey,'requestPanelHtml-target-addin', function () {
       var messageToContentScript = {};
       messageToContentScript.panelHtml = getPanelHtml();
@@ -163,8 +164,9 @@ exports.init = function () {
 };
 
 function getPanelHtml(){
-    var d = new Date();
-    var panelHtml = '<div id="timer">' + d.toLocaleTimeString() + '</div>';
+    //var d = new Date();
+    //var panelHtml = '<div id="timer">' + d.toLocaleTimeString() + '</div>';
+    pluginState.getDomainList();
     return panelHtml;
 }
 

@@ -1,11 +1,11 @@
 div.DWD_widget(id='widgetOne')
-     table.DWD_table(border='1')
-         thead
-             tr
-                 th Name
-                 th Desc
-         tbody
-             each domain, i in domainList
-                 tr
-                     td #{domain.name}
-                     td #{domain.description}
+    table.DWD_table(border='1')
+        thead.DWD_th
+            tr.DWD_tr
+                th.DWD_th Name
+                th.DWD_th Desc
+        tbody
+            each domain, i in domainList
+                tr.DWD_tr
+                    td.DWD_td #{domain.name}
+                    td.DWD_td #{domain.description}

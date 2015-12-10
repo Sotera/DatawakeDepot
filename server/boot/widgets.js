@@ -14,20 +14,6 @@ module.exports = function (app) {
 
         var dwDomain = app.models.DwDomain;
 
-        //dwDomain.find()
-        //    .then(function(domains){
-        //        // Called if the operation succeeds.
-        //        var x = domains;
-        //        var renderPath = serverPath.concat('/domainWidget/main');
-        //        res.render(renderPath, {
-        //            "pageTitle": 'Domain Listing',
-        //            "domainList": domains
-        //        });
-        //    })
-        //    .catch(function(err){
-        //        // Called if the operation encounters an error.
-        //    });
-
         dwDomain.find(function (err, domains) {
             var domainItems = [];
             domains.forEach(function (domain) {
@@ -37,6 +23,26 @@ module.exports = function (app) {
             res.render(renderPath, {
                 "pageTitle": 'Domain Listing',
                 "domainList": domainItems
+            });
+        });
+    });
+
+    app.get('/widget/get-url-entities', function (req, res) {
+        log('Retrieving Url Entities');
+        //JReeme sez: setMaxListeners so we don't have to see that ridiculous memory leak warning
+        app.models.DwUrlExtraction.getDataSource().setMaxListeners(0);
+
+        var dwExtraction = app.models.DwUrlExtraction;
+
+        dwExtraction.find(function (err, extractions) {
+            var extractionItems = [];
+            extractions.forEach(function (extraction) {
+                extractionItems.push({name:extraction.name, value: extraction.value, extractorTypes: extraction.extractorTypes});
+            });
+            var renderPath = serverPath.concat('/extractedEntityWidget/main');
+            res.render(renderPath, {
+                "pageTitle": 'Extracted Entities',
+                "extractedEntities": extractionItems
             });
         });
     });

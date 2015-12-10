@@ -66,7 +66,7 @@ exports.init = function () {
   pluginState.onAddInModuleEvent('page-content-script-attached-target-addin', function (data) {
     //Listen for panelHTML requests from the injected page
     pluginState.addContentScriptEventHandler(data.contentScriptKey,'requestPanelHtml-target-addin', function () {
-        pluginState.getDomainList(function (divHtml){
+        pluginState.getExtractedEntities(pluginState.trailsUrlsUrl, function (divHtml){
             if (divHtml) {
                 var messageToContentScript = {};
                 messageToContentScript.panelHtml = divHtml;

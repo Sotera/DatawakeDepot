@@ -7,7 +7,6 @@ div#datawake-right-panel {
     position: absolute;
     top: 0;
     right: 0;
-    bottom: 0;
     width: 300px;
     color: #dddddd;
     background-color: #252644;
@@ -19,9 +18,25 @@ div#datawake-right-panel {
     width: 100%;
 }
 
-.DWD_table{
-    width:100%;
+.DWD_table {
+    border-collapse: collapse;
+    width: 100%;
 }
+
+.DWD_td {
+    text-align: left;
+    padding: 8px;
+}
+
+.DWD_tr:nth-child(even){background-color: #f2f2f2}
+
+.DWD_th {
+    background-color: #3176af;
+    color: white;
+    text-align: left;
+    padding: 8px;
+}
+
 
 div#datawake-site {
     margin-right: 300px;

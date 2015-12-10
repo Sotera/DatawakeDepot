@@ -18,6 +18,7 @@ var PluginState = function () {
   me.trailsUrlsUrl = '/api/dwTrailUrls';
   me.domainItemsUrl = '/api/dwDomainItems';
   me.domainList = '/widget/get-domain-list';
+  me.trailExtractedEntities = '/widget/get-url-entities'
   me.trailingActive = false;
   me.toolbarFrameSource = null;
   me.toolbarFrameOrigin = null;
@@ -34,7 +35,9 @@ var PluginState = function () {
   };
   me.restGet = function (url, queryStringObj, callback) {
     queryStringObj = queryStringObj || {};
-    queryStringObj.access_token = me.loggedInUser.accessToken;
+    if(me.loggedInUser) {
+        queryStringObj.access_token = me.loggedInUser.accessToken;
+    }
     var queryStringJson = me.convertObjToQueryString(queryStringObj);
     url = me.loginUrl + url;
     url += '?' + queryStringJson;
@@ -57,6 +60,20 @@ var PluginState = function () {
       me.restSimpleGet(url, function (res) {
           cb(res.text);
       });
+  };
+
+  me.getExtractedEntities = function (trailUrl, cb) {
+    var url = me.trailExtractedEntities;
+    var filter = {
+      //where: {
+      //  //dwTrailUrlId: '5668f428df91e9e370d0921e'
+      //  //replace this with
+      //  //dwTrailUrl: url
+      //}
+    };
+    me.restGet(url, filter, function (res) {
+      cb(res.text);
+    });
   };
 
   me.getDomainItemsForCurrentDomain = function (cb) {
@@ -160,7 +177,7 @@ var PluginState = function () {
     me.currentDomainList = [];
     me.currentTrail = null;
     me.currentTrailList = [];
-  }
+  };
   me.generateUUID = function () {
     var d = new Date().getTime();
     var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {

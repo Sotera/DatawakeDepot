@@ -4,7 +4,7 @@
 }
 
 div#datawake-right-panel {
-    position: fixed;
+    position: absolute;
     top: 0;
     right: 0;
     bottom: 0;
@@ -13,6 +13,14 @@ div#datawake-right-panel {
     background-color: #252644;
     background: #252644;
     z-index:10000;
+}
+
+.DWD_widget{
+    width: 100%;
+}
+
+.DWD_table{
+    width:100%;
 }
 
 div#datawake-site {

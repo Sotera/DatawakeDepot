@@ -55,7 +55,7 @@ var PluginState = function () {
   me.getDomainList = function (cb) {
       var url = me.domainList;
       me.restSimpleGet(url, function (res) {
-          cb(res.json);
+          cb(res.text);
       });
   };
 

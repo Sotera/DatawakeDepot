@@ -66,9 +66,13 @@ exports.init = function () {
   pluginState.onAddInModuleEvent('page-content-script-attached-target-addin', function (data) {
     //Listen for panelHTML requests from the injected page
     pluginState.addContentScriptEventHandler(data.contentScriptKey,'requestPanelHtml-target-addin', function () {
-      var messageToContentScript = {};
-      messageToContentScript.panelHtml = getPanelHtml();
-      pluginState.postEventToContentScript(data.contentScriptKey, 'send-panel', messageToContentScript);
+        pluginState.getDomainList(function (divHtml){
+            if (divHtml) {
+                var messageToContentScript = {};
+                messageToContentScript.panelHtml = divHtml;
+                pluginState.postEventToContentScript(data.contentScriptKey, 'send-panel', messageToContentScript);
+            }
+        });
     });
 
     pluginState.addContentScriptEventHandler(data.contentScriptKey, 'send-css-urls-target-addin', function (scriptData) {
@@ -162,13 +166,6 @@ exports.init = function () {
     postPluginStateToToolBar();
   });
 };
-
-function getPanelHtml(){
-    //var d = new Date();
-    //var panelHtml = '<div id="timer">' + d.toLocaleTimeString() + '</div>';
-    pluginState.getDomainList();
-    return panelHtml;
-}
 
 function logoutSuccessfulHandler(tellToolBar) {
   pluginState.reset();

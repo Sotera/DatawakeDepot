@@ -1,17 +1,11 @@
-doctype html
-html
-   head
-    h1
-        #{pageTitle}
-   body
-    div(id='domains' class="container")
-        table(border='1')
-            thead
-                tr
-                    th Name
-                    th Desc
-            tbody
-                each domain, i in domainList
-                    tr
-                        td #{domain.name}
-                        td #{domain.description}
+div(id='domains' class="container")
+     table(border='1')
+         thead
+             tr
+                 th Name
+                 th Desc
+         tbody
+             each domain, i in domainList
+                 tr
+                     td #{domain.name}
+                     td #{domain.description}

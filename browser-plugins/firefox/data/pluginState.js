@@ -65,11 +65,7 @@ var PluginState = function () {
   me.getExtractedEntities = function (trailUrl, cb) {
     var url = me.trailExtractedEntities;
     var filter = {
-      //where: {
-      //  //dwTrailUrlId: '5668f428df91e9e370d0921e'
-      //  //replace this with
-      //  //dwTrailUrl: url
-      //}
+        "trailUrl":trailUrl
     };
     me.restGet(url, filter, function (res) {
       cb(res.text);
@@ -152,7 +148,7 @@ var PluginState = function () {
     var newContentScriptKey = worker.tab.id;
     me.contentScriptHandles[newContentScriptKey] = worker;
     me.postEventToAddInModule('page-content-script-attached-target-addin',
-      {contentScriptKey: newContentScriptKey});
+      {contentScriptKey: newContentScriptKey,pageUrl: worker.tab.url});
     me.postEventToContentScript(newContentScriptKey, 'page-attached-target-content-script',
       {contentScriptKey: newContentScriptKey});
   }

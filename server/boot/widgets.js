@@ -34,10 +34,22 @@ module.exports = function (app) {
 
         var dwExtraction = app.models.DwUrlExtraction;
 
-        dwExtraction.find(function (err, extractions) {
+        var whereClause= { "include": [{"relation":"trailUrl","scope":{"where":{"url":req.query.trailUrl}}}]};
+
+        dwExtraction.find(whereClause,function (err, extractions) {
+
             var extractionItems = [];
             extractions.forEach(function (extraction) {
-                extractionItems.push({name:extraction.name, value: extraction.value, extractorTypes: extraction.extractorTypes});
+                extraction.trailUrl(function(err,turl){
+                    if(turl) {
+                        extractionItems.push({
+                            occurrences: extraction.occurrences,
+                            value: extraction.value,
+                            extractorTypes: extraction.extractorTypes
+                        });
+                    }
+                });
+
             });
             var renderPath = serverPath.concat('/extractedEntityWidget/main');
             res.render(renderPath, {

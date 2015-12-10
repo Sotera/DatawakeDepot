@@ -8,9 +8,9 @@ div#datawake-right-panel {
     top: 0;
     right: 0;
     width: 300px;
-    color: #dddddd;
-    background-color: #252644;
-    background: #252644;
+    color: black;
+    background-color: white;
+    background: white;
     z-index:10000;
 }
 
@@ -37,6 +37,10 @@ div#datawake-right-panel {
     padding: 8px;
 }
 
+.DWD_table_container{
+    max-height: 500px;
+    overflow: scroll;
+}
 
 div#datawake-site {
     margin-right: 300px;

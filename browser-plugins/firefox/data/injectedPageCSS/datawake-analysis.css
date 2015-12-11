@@ -54,3 +54,8 @@ div#datawake-right-panel {
 div#datawake-site {
     margin-right: 300px;
 }
+
+.DWD_h1{
+    background-color: dodgerblue;
+    text-align: center
+}

@@ -8,11 +8,11 @@ var iInterval = 2500;
 
 //Show panel after each page load
 $(document).ready(function () {
-    showPanel();
+    //showPanel();
     //Now populate it
-    rewritePanel('<body><div class="DWD_widget" id="timer">&nbsp;&nbsp;initializing...</div></body>');
+    //rewritePanel('<body><div class="DWD_widget" id="timer">&nbsp;&nbsp;initializing...</div></body>');
     //Now start a poller to keep repopulating it as long as they're on this page
-    myVar = setInterval(panelTimer, iInterval);
+    //myVar = setInterval(panelTimer, iInterval);
 });
 
 //Load all CSS urls
@@ -32,12 +32,12 @@ self.port.on('load-css-urls-target-content-script', function (data) {
   });
 });
 
-function showPanel(){
-    if ($('#datawake-right-panel').length === 0){
-        var datawakePanel = '<div class="DWD_widget" id="datawake-right-panel"><div id="widgetOne"></div></divDWD_widget>';
-        $('body').append(datawakePanel);
-    }
-}
+//function showPanel(){
+//    if ($('#datawake-right-panel').length === 0){
+//        var datawakePanel = '<div class="DWD_widget" id="datawake-right-panel"><div id="widgetOne">&nbsp;&nbsp;initializing...</div></divDWD_widget>';
+//        $('body').append(datawakePanel);
+//    }
+//}
 
 function rewritePanel(html){
   $('#datawake-right-panel').html(html);
@@ -71,7 +71,7 @@ self.port.on('test-datawake-panel-content', function (data) {
 //Toggle side panel
 self.port.on('send-toggle-datawake-panel', function () {
     if ($('#datawake-right-panel').length === 0) {
-        var datawakePanel = '<div class="datawake-right-panel" id="datawake-right-panel"></div>';
+        var datawakePanel = '<div class="DWD_widget" id="datawake-right-panel"><div id="widgetOne">&nbsp;&nbsp;initializing...</div></divDWD_widget>';
         $('body').append(datawakePanel);
         myVar = setInterval(panelTimer, iInterval);
     }else{

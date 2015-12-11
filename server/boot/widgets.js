@@ -34,7 +34,16 @@ module.exports = function (app) {
 
         var dwExtraction = app.models.DwUrlExtraction;
 
-        var whereClause= { "include": [{"relation":"trailUrl","scope":{"where":{"url":req.query.trailUrl}}}]};
+        var whereClause= {
+            "order": "occurrences DESC",
+            "include": [{
+                "relation":"trailUrl","scope":{
+                    "where":{
+                        "url":req.query.trailUrl
+                    }
+                }
+            }]
+        };
 
         dwExtraction.find(whereClause,function (err, extractions) {
 

@@ -4,14 +4,15 @@
 //scripts.
 var myContentScriptKey = null;
 var myVar = null;
+var iInterval = 2500;
 
 //Show panel after each page load
 $(document).ready(function () {
     showPanel();
     //Now populate it
-    rewritePanel('<body><div id="timer">initializing</div></body>');
+    rewritePanel('<body><div class="DWD_widget" id="timer">&nbsp;&nbsp;initializing...</div></body>');
     //Now start a poller to keep repopulating it as long as they're on this page
-    myVar = setInterval(panelTimer, 5000);
+    myVar = setInterval(panelTimer, iInterval);
 });
 
 //Load all CSS urls
@@ -33,7 +34,7 @@ self.port.on('load-css-urls-target-content-script', function (data) {
 
 function showPanel(){
     if ($('#datawake-right-panel').length === 0){
-        var datawakePanel = '<div id="datawake-right-panel"><div id="widgetOne"></div></div>';
+        var datawakePanel = '<div class="DWD_widget" id="datawake-right-panel"><div id="widgetOne"></div></divDWD_widget>';
         $('body').append(datawakePanel);
     }
 }
@@ -72,7 +73,7 @@ self.port.on('send-toggle-datawake-panel', function () {
     if ($('#datawake-right-panel').length === 0) {
         var datawakePanel = '<div class="datawake-right-panel" id="datawake-right-panel"></div>';
         $('body').append(datawakePanel);
-        myVar = setInterval(panelTimer, 5000);
+        myVar = setInterval(panelTimer, iInterval);
     }else{
         $("#datawake-right-panel").remove();
         clearInterval(myVar);

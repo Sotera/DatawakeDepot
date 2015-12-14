@@ -76,7 +76,8 @@ exports.init = function () {
       }
       //pluginState.restPost(pluginState.textToHtmlUrl,
       // TODO: This still renders some pages multiple times but at least cleans up the ads.
-      if (pageContents.url === tabs.activeTab.url && tabs.activeTab.readyState === 'complete') {
+      //if (pageContents.url === tabs.activeTab.url && tabs.activeTab.readyState === 'complete') {
+      if (pageContents.url === tabs.activeTab.url) {
         pluginState.restPost(pluginState.trailsUrlsUrl,
             {
               dwTrailId: pluginState.currentTrail.id

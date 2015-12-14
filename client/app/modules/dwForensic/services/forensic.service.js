@@ -100,9 +100,12 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
                 var entity = trail.trailUrls[trailUrl].urlExtractions[entities];
                 var name = entity.value;
                 var type = "";
+                //Todo This is not a reliable way to do this but for the graph legend, we only want the top level entity type.
                 views.forEach(function (view) {
                     if (entity.extractorTypes.indexOf(view.name) > -1) {
-                        type = type + ", " + view.name;
+                        if (!type) {
+                            type = view.name;
+                        }
                     }
                 });
                 var group = type;

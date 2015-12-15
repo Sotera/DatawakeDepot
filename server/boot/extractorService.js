@@ -194,17 +194,22 @@ module.exports = function (app) {
                                                 break;
                                             default:
                                                 var extractorUrl = extractor.protocol + "://" + extractor.extractorHost + ":" + extractor.port + "/" + extractor.extractorUrl;
+                                                console.log("Posting extract to: " + extractorUrl);
+
+
+                                                var form = {
+                                                    dwTrailUrlId: change.data.id.toString(),
+                                                    scrapedContent: change.data.scrapedContent.indexOf("PK") == 0 ? me.unzipContent(change.data.scrapedContent) : change.data.scrapedContent
+                                                }
 
                                                 request.post({
                                                     url: extractorUrl,
-                                                    headers: headers,
-                                                    form: {
-                                                        dwTrailUrlId: change.data.id.toString(),
-                                                        scrapedContent: change.data.scrapedContent.indexOf("PK") == 0 ? me.unzipContent(change.data.scrapedContent) : change.data.scrapedContent
-                                                    }
-                                                }, function (error) {
-                                                    if (error) {
-                                                        console.log(error.message);
+                                                    form: form
+                                                }, function (err, httpResponse, body) {
+                                                    if (err) {
+                                                        console.log(err);
+                                                    } else {
+                                                        console.log(httpResponse.statusCode + " " + httpResponse.body);
                                                     }
                                                 });
                                                 break;

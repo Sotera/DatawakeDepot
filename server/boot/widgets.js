@@ -30,41 +30,26 @@ module.exports = function (app) {
     app.get('/widget/get-url-entities', function (req, res) {
         log('Retrieving Url Entities');
         //JReeme sez: setMaxListeners so we don't have to see that ridiculous memory leak warning
-        app.models.DwUrlExtraction.getDataSource().setMaxListeners(0);
+        app.models.DwTrailUrl.getDataSource().setMaxListeners(0);
 
-        var dwExtraction = app.models.DwUrlExtraction;
+        var dwTrailUrl = app.models.DwTrailUrl;
 
-        var whereClause= {
-            "order": "occurrences DESC",
-            "include": [{
-                "relation":"trailUrl","scope":{
-                    "where":{
-                        "url":req.query.trailUrl
-                    }
-                }
-            }]
+        var whereClause={
+            "order":"timestamp DESC",
+            "where":{"url":req.query.trailUrl},
+            "include":[{"relation":"urlExtractions","scope":{"order":"occurrences DESC"}}]
         };
 
-        dwExtraction.find(whereClause,function (err, extractions) {
 
-            var extractionItems = [];
-            extractions.forEach(function (extraction) {
-                extraction.trailUrl(function(err,turl){
-                    if(turl) {
-                        extractionItems.push({
-                            occurrences: extraction.occurrences,
-                            value: extraction.value,
-                            extractorTypes: extraction.extractorTypes
-                        });
-                    }
+        dwTrailUrl.findOne(whereClause,function (err, trailUrl) {
+            trailUrl.urlExtractions(function(err,urlExt){
+                var renderPath = serverPath.concat('/extractedEntityWidget/main');
+                res.render(renderPath, {
+                    "pageTitle": 'Extracted Entities',
+                    "extractedEntities": urlExt
                 });
+            })
 
-            });
-            var renderPath = serverPath.concat('/extractedEntityWidget/main');
-            res.render(renderPath, {
-                "pageTitle": 'Extracted Entities',
-                "extractedEntities": extractionItems
-            });
         });
     });
 };

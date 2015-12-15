@@ -200,7 +200,8 @@ module.exports = function (app) {
                                                     headers: headers,
                                                     form: {
                                                         dwTrailUrlId: change.data.id.toString(),
-                                                        scrapedContent: change.data.scrapedContent.indexOf("PK") == 0 ? me.unzipContent(change.data.scrapedContent) : change.data.scrapedContent
+                                                        //scrapedContent: change.data.scrapedContent.indexOf("PK") == 0 ? me.unzipContent(change.data.scrapedContent) : change.data.scrapedContent
+                                                        scrapedContent:change.data.scrapedContent
                                                     }
                                                 }, function (error) {
                                                     if (error) {

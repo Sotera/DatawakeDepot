@@ -111,6 +111,10 @@ function toggleLogin() {
     postMessageToAddin({action: 'login'});
   }
 }
+function togglePanel(){
+    postMessageToAddin({action: 'toggle-panel'});
+}
+
 //
 //ComboBox selection changed handlers
 //

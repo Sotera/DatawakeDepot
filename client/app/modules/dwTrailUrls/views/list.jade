@@ -9,7 +9,7 @@
       thead
         tr
           th.sortable.col-sm-3.col-md-3.col-lg-3(st-sort='url' st-sort-default="true") URL
-          th.col-sm-1.col-md-1.col-lg-1.td-center.text-nowrap # Extractions
+          th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='urlExtractions.length') # Extractions
           th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='trail.name') Trail
           th.sortable.col-sm-1.col-md-1.col-lg-1.text-nowrap(st-sort='dwCrawlTypeId') Crawl Type
           th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='comments') Comments

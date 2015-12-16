@@ -40,16 +40,18 @@ module.exports = function (app) {
             "include":[{"relation":"urlExtractions","scope":{"where": {"extractorTypes": {"nin":["text"]}}, "order":"occurrences DESC"}}]
         };
 
-
         dwTrailUrl.findOne(whereClause,function (err, trailUrl) {
+            if(err || !trailUrl || !trailUrl.urlExtractions){
+                return;
+            }
             trailUrl.urlExtractions(function(err,urlExt){
                 var renderPath = serverPath.concat('/extractedEntityWidget/main');
-                res.render(renderPath, {
-                    "pageTitle": 'Extracted Entities',
-                    "extractedEntities": urlExt
-                });
-            })
-
+                    res.render(renderPath, {
+                        "pageTitle": 'Extracted Entities',
+                        "extractedEntities": urlExt
+                    });
+                }
+            )
         });
     });
 };

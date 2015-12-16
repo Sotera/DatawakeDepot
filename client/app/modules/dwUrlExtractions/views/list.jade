@@ -23,7 +23,7 @@
           //td(style='width: 120px')
           //  a(href='', ui-sref='app.dwUrlExtractions.view({id:urlExtraction.id})') {{urlExtraction.domainEntityType.name}}
           td
-            span.text-muted {{urlExtraction.value}}
+            span.text-muted {{urlExtraction.value.substring(0,140)}}
           td
             span.label.label-ltgray(ng-repeat="type in urlExtraction.extractorTypes") {{type}}
           td

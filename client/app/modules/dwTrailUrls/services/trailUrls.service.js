@@ -13,6 +13,23 @@ app.service('TrailUrlsService', ['$state', 'CoreService', 'DwTrail','DwTrailUrl'
     });
   };
 
+  this.getFilteredTrailUrls = function(trailId) {
+    var whereClause={
+        filter:{
+            order:"timestamp DESC",
+            where:{
+                dwTrailId:trailId
+            },
+            include:[
+                'trail',
+                'crawlType',
+                'urlExtractions'
+            ]
+        }
+      };
+    return (DwTrailUrl.find(whereClause));
+  };
+
   this.upsertTrailUrl = function(trailUrl, cb) {
     DwTrailUrl.upsert(trailUrl, function() {
       CoreService.toastSuccess(gettextCatalog.getString(

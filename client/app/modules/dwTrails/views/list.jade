@@ -37,7 +37,7 @@
           td.td-center
             span.label.label-ltgray(ng-repeat="user in trail.users") {{user.username}}
           td.td-center
-            a(ui-sref='app.dwTrailUrls.list({id:null, domainId:domain.id})') {{trail.trailUrls.length}}
+            a(ui-sref='app.dwTrailUrls.list({id:null, trailId:trail.id})') {{trail.trailUrls.length}}
           td.td-center
             span.label.label-ltgray(ng-repeat="feed in trail.feeds") {{feed.name}}
           td

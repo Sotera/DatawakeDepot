@@ -42,6 +42,11 @@ module.exports = function (app) {
 
         dwTrailUrl.findOne(whereClause,function (err, trailUrl) {
             if(err || !trailUrl || !trailUrl.urlExtractions){
+                res.render(renderPath,
+                    {
+                        "pageTitle": 'Extracted Entities',
+                        "extractedEntities": {}
+                    });
                 return;
             }
             trailUrl.urlExtractions(function(err,urlExt){

@@ -1,17 +1,61 @@
 .highlight {
     color: #dddddd;
-    background-color: #004400;
+    background-color: #252644;
 }
 
 div#datawake-right-panel {
-    position: fixed;
+    position: absolute;
+    border-radius:5px;
+    border: 2px solid black;
     top: 0;
-    right: 0;
     bottom: 0;
+    right: 0;
     width: 300px;
-    background: green;
+    color: white;
+    background-color: skyblue;
+    background: steelblue;
+    z-index:10000;
+}
+
+.DWD_widget{
+    width: 100%;
+}
+
+.DWD_table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.DWD_td {
+    text-align: left;
+    padding: 8px;
+    font-size: .65em;
+}
+
+
+.DWD_tr:nth-child(odd){
+    background-color: white;
+    color: black
+}
+
+.DWD_th {
+    background-color: lightslategray;
+    color: white;
+    text-align: left;
+    padding: 8px;
+    font-size: .8em;
+}
+
+.DWD_table_container{
+    max-height: 500px;
+    overflow: scroll;
 }
 
 div#datawake-site {
     margin-right: 300px;
+}
+
+.DWD_h1{
+    background-color: dodgerblue;
+    text-align: center
 }

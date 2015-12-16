@@ -4,13 +4,40 @@ var app = angular.module('com.module.dwTrailUrls');
 app.service('TrailUrlsService', ['$state', 'CoreService', 'DwTrail','DwTrailUrl','DwUrlExtraction', 'gettextCatalog', function($state, CoreService, DwTrail, DwTrailUrl,DwUrlExtraction, gettextCatalog) {
 
   this.getTrailUrls = function() {
-    return DwTrailUrl.find({filter: {include: ['trail','crawlType','urlExtractions']}});
+    var whereClause={
+        filter:{
+            order:"url DESC",
+            include:[
+                'trail',
+                'crawlType',
+                {relation:'urlExtractions',scope:{fields: ['id']}}
+            ]
+        }
+    };
+    return (DwTrailUrl.find(whereClause));
   };
 
   this.getTrailUrl = function(id) {
     return DwTrailUrl.findById({
       id: id
     });
+  };
+
+  this.getFilteredTrailUrls = function(trailId) {
+    var whereClause={
+        filter:{
+            order:"url DESC",
+            where:{
+                dwTrailId:trailId
+            },
+            include:[
+                'trail',
+                'crawlType',
+                {relation:'urlExtractions',scope:{fields: ['id']}}
+            ]
+        }
+    };
+    return (DwTrailUrl.find(whereClause));
   };
 
   this.upsertTrailUrl = function(trailUrl, cb) {

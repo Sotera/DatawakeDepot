@@ -26,6 +26,10 @@ exports.init = function () {
           //login tabs. Not today.
           pluginState.postEventToDatawakeDepotContentScript('logout-target-content-script');
           break;
+        case 'toggle-panel':
+          var activeTabId = tabs.activeTab.id;
+          pluginState.postEventToContentScript(activeTabId, 'send-toggle-datawake-panel');
+          break;
         case 'set-trailing-active':
           pluginState.trailingActive = msg.data;
           break;
@@ -60,6 +64,17 @@ exports.init = function () {
   });
   //Here we listen for when the content scripts is fired up and ready.
   pluginState.onAddInModuleEvent('page-content-script-attached-target-addin', function (data) {
+    //Listen for panelHTML requests from the injected page
+    pluginState.addContentScriptEventHandler(data.contentScriptKey,'requestPanelHtml-target-addin', function () {
+        pluginState.getExtractedEntities(data.pageUrl, function (divHtml){
+            if (divHtml) {
+                var messageToContentScript = {};
+                messageToContentScript.panelHtml = divHtml;
+                pluginState.postEventToContentScript(data.contentScriptKey, 'send-panel', messageToContentScript);
+            }
+        });
+    });
+
     pluginState.addContentScriptEventHandler(data.contentScriptKey, 'send-css-urls-target-addin', function (scriptData) {
       pluginState.postEventToContentScript(scriptData.contentScriptKey, 'load-css-urls-target-content-script',
         {
@@ -68,6 +83,7 @@ exports.init = function () {
           ]
         });
     });
+
     pluginState.addContentScriptEventHandler(data.contentScriptKey, 'zipped-html-body-target-addin', function (pageContents) {
       //TODO: Work out some scraper eventing so we don't do the DOM operation if we're not trailing.
       //This will work for now though.
@@ -95,6 +111,7 @@ exports.init = function () {
        var html = zip.file('zipped-html-body.zip').asText();*/
     });
   });
+
   //Here we listen for when the DD content script is fired up and ready.
   pluginState.onAddInModuleEvent('page-datawake-depot-content-script-attached-target-addin', function (data) {
     pluginState.addDatawakeDepotContentScriptEventHandler('logout-success-target-plugin', function (user) {
@@ -153,6 +170,7 @@ exports.init = function () {
     postPluginStateToToolBar();
   });
 };
+
 function logoutSuccessfulHandler(tellToolBar) {
   pluginState.reset();
   pluginState.postEventToAddInModule('logged-out-target-context-menu');
@@ -162,7 +180,7 @@ function logoutSuccessfulHandler(tellToolBar) {
   }
   var msg = {
     type: 'logout-success-target-toolbar-frame'
-  }
+  };
   pluginState.postMessageToToolBar(msg);
 }
 function loginSuccessfulHandler(user) {

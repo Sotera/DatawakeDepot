@@ -91,15 +91,19 @@ exports.init = function () {
         return;
       }
       //pluginState.restPost(pluginState.textToHtmlUrl,
-      pluginState.restPost(pluginState.trailsUrlsUrl,
-        {
-          dwTrailId: pluginState.currentTrail.id
-          , url: pageContents.url
-          , scrapedContent: pageContents.zippedHtmlBody
-        }, function (res) {
-          console.log(res.text);
-        }
-      );
+      // TODO: This still renders some pages multiple times but at least cleans up the ads.
+      //if (pageContents.url === tabs.activeTab.url && tabs.activeTab.readyState === 'complete') {
+      if (pageContents.url === tabs.activeTab.url) {
+        pluginState.restPost(pluginState.trailsUrlsUrl,
+            {
+              dwTrailId: pluginState.currentTrail.id
+              , url: pageContents.url
+              , scrapedContent: pageContents.zippedHtmlBody
+            }, function (res) {
+              //console.log(res.text);
+            }
+        );
+      }
       //HowTo: decode (unzip) in addin
       /*      var JSZip = require('./vendor/jszip/jszip.min.js');
        var zip = new JSZip();

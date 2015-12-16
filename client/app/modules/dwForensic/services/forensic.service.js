@@ -102,10 +102,15 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
                 var type = "";
                 views.forEach(function (view) {
                     if (entity.extractorTypes.indexOf(view.name) > -1) {
-                        type = type + ", " + view.name;
+                        if (!type) {
+                            type = view.name;
+                        } else {
+                            type = type + ',' + view.name;
+                        }
                     }
                 });
-                var group = type;
+                // Group is the top level entity used for the legend while type is used for the node label.
+                var group = type.split(',')[0];
                 var node = {"id": name, "type": type, "size": 5, "groupName": group, "name": type + "->" + name};
                 if (!(name in nodes)) {
                     nodes[name] = node;
@@ -117,6 +122,12 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
         return this.processEdges(edges, nodes);
     };
 
+    /**
+     * Given a trail and entity type(s) returns a list of [{text: entityName, type: entityType, weight: entityCount, url: urls}]
+     * @param trail
+     * @param views
+     * @returns {{}}
+     */
     this.getEntities = function (trail, views) {
         var entities = {};
         for (var trailUrlIndex in trail.trailUrls) {
@@ -133,10 +144,13 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
                 var entity = null;
                 if (entities.hasOwnProperty(key)) {
                     entity = entities[key];
-                    entity.count = entity.count + 1;
+                    entity.weight = entity.weight + 1;
+                    if (entity.urls.indexOf(trailUrl.url) == -1) {
+                        entity.urls.push(trailUrl.url);
+                    }
 
                 } else {
-                    entity = {name: extraction.value, type: types, count: 1}
+                    entity = {text: extraction.value, type: types, weight: 1, urls: [trailUrl.url]}
                 }
                 entities[key] = entity;
             }
@@ -144,8 +158,17 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
         return entities;
     };
 
+    this.getWords = function (entityGrid) {
+        var words = [];
+        for (var entity in entityGrid) {
+            var word = {text: entityGrid[entity].text, weight: entityGrid[entity].weight};
+            words.push(word);
+        }
+        return words;
+    };
+
     /**
-    todo: BTW- This i ugly, getting the url attributes in another function was becoming a async issue so I made it ugly.
+     todo: BTW- This i ugly, getting the url attributes in another function was becoming a async issue so I made it ugly.
      **/
     this.getSearchTerms = function (trailUrls) {
 
@@ -171,7 +194,11 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
                 if (results != null) {
                     searchTerm = results[1] || 0;
                 }
-            } else  {
+            } else if ((parser.hostname.indexOf('doubleclick') > -1) || ( parser.hostname.indexOf('ads') > -1)) {
+                // skip common ads
+                return;
+            }
+            else {
                 var results = new RegExp('[\?&#](keyword|query|search|p|q|pq)=([^&#]*)').exec(decodedUrl);
                 if (results != null) {
                     searchTerm = results[2] || 0;

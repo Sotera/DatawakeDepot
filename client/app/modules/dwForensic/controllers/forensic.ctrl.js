@@ -1,17 +1,5 @@
 'use strict';
 var app = angular.module('com.module.dwForensic');
-app.directive('ngDropdownMultiselectDisabled', function () {
-    return {
-        restrict: 'A',
-        controller: function ($scope, $element, $attrs) {
-            var $btn;
-            $btn = $element.find('button');
-            return $scope.$watch($attrs.ngDropdownMultiselectDisabled, function (newVal) {
-                return $btn.attr('disabled', newVal);
-            });
-        }
-    };
-});
 
 app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser, DwTrail, DwDomainEntityType, ForensicService, gettextCatalog, AppAuth) {
 
@@ -22,9 +10,11 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser
     $scope.domains = [];
     $scope.trails = [];
     $scope.selectedTeam = null;
+
     $scope.selectedDomain = null;
     $scope.selectedTrail = null;
     $scope.selectedViews = [];
+    $scope.entitiesGrid = [{"text": "word1", "weight": 5}, {"text": "word2", "weight": 1}];
 
     //Setup the view dropdown menu
     $scope.views = [];
@@ -80,7 +70,7 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser
                 if (trailUrl.urlExtractions.length) {
                     trailUrl.urlExtractions.forEach(function (urlExtraction) {
                         urlExtraction.extractorTypes.forEach(function (type) {
-                            if (entityTypes.indexOf(type) === -1) {
+                            if (entityTypes.indexOf(type) === -1 && type != "_Feature" && type != "owl#Thing" && type != "text") {
                                 entityTypes.push(type);
                             }
                         });
@@ -96,36 +86,44 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser
     };
 
     $scope.drawGraph = function () {
-        var graphViews = ForensicService.buildGraphViews($scope.selectedViews);
-        var filter = {
-            filter: {
-                "where": {
-                    "id": $scope.selectedTrail.id
-                },
-                "include": ["domain", "team", {
-                    "relation": "trailUrls",
-                    "scope": {
-                        "include": [{
-                            "relation": "urlExtractions",
-                            "scope": {"where": {"extractorTypes": {"inq": graphViews}}}
-                        }]
+        if ($scope.selectedTrail) {
+
+            var graphViews = ForensicService.buildGraphViews($scope.selectedViews);
+            var filter = {
+                filter: {
+                    "where": {
+                        "id": $scope.selectedTrail.id
+                    },
+                    "include": ["domain", "team", {
+                        "relation": "trailUrls",
+                        "scope": {
+                            "include": [{
+                                "relation": "urlExtractions",
+                                "scope": {"where": {"extractorTypes": {"inq": graphViews}}}
+                            }]
+                        }
+                    }]
+                }
+            };
+            console.log("Trail Filter");
+            console.log(JSON.stringify(filter));
+            DwTrail.findOne(filter).$promise
+                .then(function (trail) {
+                    var graph = ForensicService.getBrowsePathEdgesWithInfo(trail, $scope.selectedViews);
+                    try {
+                        change_graph(graph);
+                    } catch (e){
+                        console.log(e);
                     }
-                }]
-            }
-        };
-        console.log("Trail Filter");
-        console.log(JSON.stringify(filter));
-        DwTrail.findOne(filter).$promise
-            .then(function (trail) {
-                var graph = ForensicService.getBrowsePathEdgesWithInfo(trail, $scope.selectedViews);
-                change_graph(graph);
-                $scope.visitedGrid = ForensicService.getSearchTerms(trail.trailUrls);
-                $scope.entitiesGrid = ForensicService.getEntities(trail, $scope.selectedViews);
-            })
-            .catch(function (err) {
-                console.log("Error getting trail: " + $scope.selectedTrail.id);
-                console.log(err);
-            });
+                    $scope.visitedGrid = ForensicService.getSearchTerms(trail.trailUrls);
+                    $scope.entitiesGrid = ForensicService.getEntities(trail, $scope.selectedViews);
+                    $scope.words = ForensicService.getWords($scope.entitiesGrid);
+                })
+                .catch(function (err) {
+                    console.log("Error getting trail: " + $scope.selectedTrail.id);
+                    console.log(err);
+                });
+        }
     };
 
     var userFilter = {

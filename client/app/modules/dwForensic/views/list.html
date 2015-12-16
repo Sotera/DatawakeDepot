@@ -66,7 +66,7 @@
 
         <div class="row"></div>
         <tabset class="nav-tabs-custom">
-            <tab heading="Graph">
+            <tab heading="Graph" select="drawGraph()">
                 <div class="row">
                     <div class="col-sm-10">
                         <div id="link-dialog" title="Vertex Details"></div>
@@ -135,6 +135,13 @@
                             </a>
                         </td>
                         <td>
+                            <a href="#" ng-click="sortType = 'url'; sortReverse = !sortReverse">
+                                URL
+                                <span ng-show="sortType == 'url' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'url' && sortReverse" class="fa fa-caret-up"></span>
+                            </a>
+                        </td>
+                        <td>
                             <a href="#" ng-click="sortType = 'count'; sortReverse = !sortReverse">
                                 Count
                                 <span ng-show="sortType == 'count' && !sortReverse" class="fa fa-caret-down"></span>
@@ -146,12 +153,19 @@
 
                     <tbody>
                     <tr ng-repeat="entity in entitiesGrid | orderBy:sortType:sortReverse ">
-                        <td>{{ entity.name }}</td>
+                        <td>{{ entity.text }}</td>
                         <td><span class="span label label-ltgray" ng-repeat="type in entity.type">{{type}}</span></td>
-                        <td>{{ entity.count }}</td>
+                        <td><span class="span label" ng-repeat="url in entity.urls"><a href="{{url}}" target="_blank">{{ url.substring(0,100) }}</a></span></td>
+                        <td>{{ entity.weight }}</td>
                     </tr>
                     </tbody>
                 </table>
+            </tab>
+            <tab heading="Word Cloud" select="drawGraph()">
+                <div class="row">
+                    <jqcloud words="words" width="500" height="500" steps="7"></jqcloud>
+                </div>
+
             </tab>
         </tabset>
     </div>

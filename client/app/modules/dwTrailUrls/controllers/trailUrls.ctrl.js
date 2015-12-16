@@ -87,6 +87,8 @@ app.controller('TrailUrlsCtrl', function($scope, $state, $stateParams, $window, 
         $window.open(trailUrl.url);
     };
 
+    $scope.loading = true;
+
     DwCrawlType.find({filter: {include: []}}).$promise
         .then(function (allCrawlTypes) {
             for (var i = 0; i < allCrawlTypes.length; ++i) {
@@ -127,6 +129,7 @@ app.controller('TrailUrlsCtrl', function($scope, $state, $stateParams, $window, 
             $scope.trailUrl = result;
             $scope.safeDisplayedTrails = {};
             $scope.displayedTrailUrls = {};
+            $scope.loading = false;
         })
     } else if ($stateParams.trailId){
         TrailUrlsService.getFilteredTrailUrls($stateParams.trailId).$promise.then(function(result){
@@ -134,6 +137,7 @@ app.controller('TrailUrlsCtrl', function($scope, $state, $stateParams, $window, 
             $scope.trailUrl = {};
             $scope.safeDisplayedtrailUrls = result;
             $scope.displayedTrailUrls = [].concat($scope.safeDisplayedtrailUrls);
+            $scope.loading = false;
         })
     } else {
         TrailUrlsService.getTrailUrls().$promise.then(function(result){
@@ -141,6 +145,7 @@ app.controller('TrailUrlsCtrl', function($scope, $state, $stateParams, $window, 
             $scope.trailUrl = {};
             $scope.safeDisplayedtrailUrls = result;
             $scope.displayedTrailUrls = [].concat($scope.safeDisplayedtrailUrls);
+            $scope.loading = false;
         });
     }
 });

@@ -6,20 +6,20 @@ app.config(function($stateProvider) {
         abstract: true,
         url: '/dwUrlExtractions',
         templateUrl: 'modules/dwUrlExtractions/views/main'
-    }).state('app.dwUrlExtractions.list', {
-        url: '',
-        templateUrl: 'modules/dwUrlExtractions/views/list',
-        controller: 'UrlExtractionsCtrl'
     }).state('app.dwUrlExtractions.add', {
-        url: '/add',
+        url: '/add/:trailUrlId',
         templateUrl: 'modules/dwUrlExtractions/views/form',
         controller: 'UrlExtractionsCtrl'
+    }).state('app.dwUrlExtractions.list', {
+        url: '/list/:trailUrlId',
+        templateUrl: 'modules/dwUrlExtractions/views/list',
+        controller: 'UrlExtractionsCtrl'
     }).state('app.dwUrlExtractions.edit', {
-        url: '/:id/edit',
+        url: '/edit/:id/:trailUrlId',
         templateUrl: 'modules/dwUrlExtractions/views/form',
         controller: 'UrlExtractionsCtrl'
     }).state('app.dwUrlExtractions.view', {
-        url: '/:id',
+        url: '/view/:id',
         templateUrl: 'modules/dwUrlExtractions/views/view',
         controller: 'UrlExtractionsCtrl'
     });

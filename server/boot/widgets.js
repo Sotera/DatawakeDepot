@@ -37,7 +37,7 @@ module.exports = function (app) {
         var whereClause={
             "order":"timestamp DESC",
             "where":{"url":req.query.trailUrl},
-            "include":[{"relation":"urlExtractions","scope":{"order":"occurrences DESC"}}]
+            "include":[{"relation":"urlExtractions","scope":{"where": {"extractorTypes": {"nin":["text"]}}, "order":"occurrences DESC"}}]
         };
 
 

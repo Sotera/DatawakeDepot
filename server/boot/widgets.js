@@ -41,22 +41,21 @@ module.exports = function (app) {
         };
 
         dwTrailUrl.findOne(whereClause,function (err, trailUrl) {
+            var renderPath = serverPath.concat('/extractedEntityWidget/main');
+
             if(err || !trailUrl || !trailUrl.urlExtractions){
-                res.render(renderPath,
-                    {
-                        "pageTitle": 'Extracted Entities',
-                        "extractedEntities": {}
-                    });
+                res.render(renderPath,{
+                    "pageTitle": 'Extracted Entities',
+                    "extractedEntities": {}
+                });
                 return;
             }
             trailUrl.urlExtractions(function(err,urlExt){
-                var renderPath = serverPath.concat('/extractedEntityWidget/main');
-                    res.render(renderPath, {
-                        "pageTitle": 'Extracted Entities',
-                        "extractedEntities": urlExt
-                    });
-                }
-            )
+                res.render(renderPath, {
+                    "pageTitle": 'Extracted Entities',
+                    "extractedEntities": urlExt
+                });
+            })
         });
     });
 };

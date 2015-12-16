@@ -1,0 +1,16 @@
+div.DWD_widget(id='widgetOne')
+    div.DWD_table_container
+        h3.DWD_h1 Extracted Entities
+        table.DWD_table(border='1')
+            thead.DWD_th
+                tr.DWD_tr
+                     th.DWD_th Value
+                     th.DWD_th #
+                     th.DWD_th Types
+            tbody
+                each entity, i in extractedEntities
+                     tr.DWD_tr
+                         td.DWD_td #{entity.value}
+                         td.DWD_td #{entity.occurrences}
+                         td.DWD_td #{entity.extractorTypes}
+

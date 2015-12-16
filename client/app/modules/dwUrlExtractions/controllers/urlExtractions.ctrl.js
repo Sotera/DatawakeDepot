@@ -51,7 +51,14 @@ app.controller('UrlExtractionsCtrl', function($scope, $state, $stateParams, DwDo
           label: gettextCatalog.getString('Occurrences'),
           required: true
       }
-  }];
+  },{
+      key: 'extractor',
+      type: 'input',
+      templateOptions: {
+         label: gettextCatalog.getString('Extractor'),
+        required: true
+      }
+}];
 
 
   $scope.delete = function(id) {

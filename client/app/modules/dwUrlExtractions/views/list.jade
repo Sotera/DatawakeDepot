@@ -9,11 +9,12 @@
       thead
         tr
           //th.sortable.col-sm-2.col-md-2.col-lg-2.text-nowrap(st-sort='domainEntityType.name' st-sort-default="true") Entity Type
-          th.sortable.col-sm-2.col-md-2.col-lg-3(st-sort='value') Value
-          th.sortable.col-sm-2.col-md-2.col-lg-3(st-sort='types') Types
+          th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='value') Value
+          th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='types') Types
           th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='trail.name') Trail
-          th.sortable.col-sm-2.col-md-2.col-lg-3(st-sort='trailUrl.url') URL
-          th.sortable.col-sm-2.col-md-2.col-lg-3(st-sort='trailUrl.occurrences') Occurrences
+          th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='trailUrl.url') URL
+          th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='trailUrl.occurrences') Occurrences
+          th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='extractor') Extractor
           th.col-sm-2.col-md-2.col-lg-2.td-center
               a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
                 | Add UrlExtraction
@@ -31,6 +32,8 @@
             span.text-muted {{urlExtraction.trailUrl.url}}
           td
             span.text-muted {{urlExtraction.occurrences}}
+          td
+            span.text-muted {{urlExtraction.extractor}}
           td.td-center(style='width: 120px')
             .btn-toolbar
                 button.btn.btn-sm.btn-warning.glyphicon.glyphicon-save(ng-click='makeDomainItem({id:urlExtraction})', ng-disabled='!currentUser.isAdmin', title='Add as Domain Item')

@@ -11,15 +11,14 @@
           th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='name' st-sort-default="true") Name
           th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='description') Description
           th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='team') Team
-          th.sortable.col-sm-1.col-md-1.col-lg-1.td-center.text-nowrap(st-sort='domainId') Domain
+          th.sortable.col-sm-1.col-md-1.col-lg-1.td-center.text-nowrap(st-sort='domain.name') Domain
           th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='scrape') Scrape
-          th.sortable.col-sm-1.col-md-1.col-lg-1.td-center.text-nowrap(st-sort='userId') # Users
-          th.sortable.col-sm-1.col-md-1.col-lg-1.td-center.text-nowrap(st-sort='') # URLs
+          th.sortable.col-sm-1.col-md-1.col-lg-1.td-center.text-nowrap(st-sort='') # Users
+          th.sortable.col-sm-1.col-md-1.col-lg-1.td-center.text-nowrap(st-sort='trailUrls.length') # URLs
           th.sortable.col-sm-1.col-md-1.col-lg-1.td-center(st-sort='') Feeds
           th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='timestamp') Timestamp
           th.col-sm-2.col-md-2.col-lg-2.td-center
-              a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add')
-                | Add Trail
+              a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add') &nbsp;Add Trail
       tbody
         tr(ng-repeat='trail in displayedTrails')
           td.hidden
@@ -37,7 +36,7 @@
           td.td-center
             span.label.label-ltgray(ng-repeat="user in trail.users") {{user.username}}
           td.td-center
-            a(ui-sref='app.dwTrailUrls.list({id:null, domainId:domain.id})') {{trail.trailUrls.length}}
+            a(ui-sref='app.dwTrailUrls.list({id:null, trailId:trail.id})') {{trail.trailUrls.length}}
           td.td-center
             span.label.label-ltgray(ng-repeat="feed in trail.feeds") {{feed.name}}
           td

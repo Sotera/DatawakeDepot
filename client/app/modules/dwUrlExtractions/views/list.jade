@@ -7,13 +7,13 @@
           th(colspan="5")
             input.input-sm.form-control(st-search='' type='search' placeholder='Search')
       thead
-        tr
-          //th.sortable.col-sm-2.col-md-2.col-lg-2.text-nowrap(st-sort='domainEntityType.name' st-sort-default="true") Entity Type
+        tr          
           th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='value') Value
           th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='types') Types
           th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='trail.name') Trail
           th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='trailUrl.url') URL
           th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='trailUrl.occurrences') Occurrences
+          th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='extractor') Extractor
           th.col-sm-2.col-md-2.col-lg-2.td-
             .btn-toolbar
               button.btn.btn-sm.btn-default(ui-sref='app.dwTrailUrls.list',title='To Urls')
@@ -25,7 +25,7 @@
           //td(style='width: 120px')
           //  a(href='', ui-sref='app.dwUrlExtractions.view({id:urlExtraction.id})') {{urlExtraction.domainEntityType.name}}
           td
-            span.text-muted {{urlExtraction.value}}
+            span.text-muted {{urlExtraction.value.substring(0,140)}}
           td
             span.label.label-ltgray(ng-repeat="type in urlExtraction.extractorTypes") {{type}}
           td
@@ -34,6 +34,8 @@
             span.text-muted {{urlExtraction.trailUrl.url}}
           td
             span.text-muted {{urlExtraction.occurrences}}
+          td
+            span.text-muted {{urlExtraction.extractor}}
           td.td-center(style='width: 120px')
             .btn-toolbar
                 button.btn.btn-sm.btn-warning.glyphicon.glyphicon-save(ng-click='makeDomainItem({id:urlExtraction})', ng-disabled='!currentUser.isAdmin', title='Add as Domain Item')

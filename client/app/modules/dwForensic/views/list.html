@@ -148,6 +148,13 @@
                                 <span ng-show="sortType == 'count' && sortReverse" class="fa fa-caret-up"></span>
                             </a>
                         </td>
+                        <td>
+                            <a href="#" ng-click="sortType = 'extractor'; sortReverse = !sortReverse">
+                                Extractor
+                                <span ng-show="sortType == 'extractor' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'extractor' && sortReverse" class="fa fa-caret-up"></span>
+                            </a>
+                        </td>
                     </tr>
                     </thead>
 
@@ -157,6 +164,7 @@
                         <td><span class="span label label-ltgray" ng-repeat="type in entity.type">{{type}}</span></td>
                         <td><span class="span label" ng-repeat="url in entity.urls"><a href="{{url}}" target="_blank">{{ url.substring(0,100) }}</a></span></td>
                         <td>{{ entity.weight }}</td>
+                        <td>{{ entity.extractor }}</td>
                     </tr>
                     </tbody>
                 </table>

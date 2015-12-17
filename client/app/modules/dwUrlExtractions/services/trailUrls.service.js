@@ -4,7 +4,19 @@ var app = angular.module('com.module.dwUrlExtractions');
 app.service('UrlExtractionsService', ['$state', 'CoreService', 'DwUrlExtraction', 'gettextCatalog', function($state, CoreService, DwUrlExtraction, gettextCatalog) {
 
   this.getUrlExtractions = function() {
-    return DwUrlExtraction.find({filter: {include: [{relation:'trailUrl',scope:{include: ['trail']}},'domainEntityType']}});
+    var whereClause={
+      filter:{
+        order:"occurrences DESC",
+        //where:{
+        //  dwTrailUrlId:trailUrlId
+        //},
+        include:[
+          {relation:'trailUrl',scope:{include: ['trail']}}
+        ]
+      }
+    };
+    return (DwUrlExtraction.find(whereClause));
+    //return DwUrlExtraction.find({filter: {include: [{relation:'trailUrl',scope:{include: ['trail']}},'domainEntityType']}});
   };
 
   this.getUrlExtraction = function(id) {
@@ -21,14 +33,13 @@ app.service('UrlExtractionsService', ['$state', 'CoreService', 'DwUrlExtraction'
                 dwTrailUrlId:trailUrlId
             },
             include:[
-                {relation:'trailUrl',scope:{include: ['trail']}},
-                'domainEntityType'
+                {relation:'trailUrl',scope:{include: ['trail']}}
+                //,
+                //'domainEntityType'
             ]
         }
     };
     return (DwUrlExtraction.find(whereClause));
-
-    //return DwUrlExtraction.find({filter: {include: [{relation:'trailUrl',scope:{include: ['trail']}},'domainEntityType']}});
   };
 
 

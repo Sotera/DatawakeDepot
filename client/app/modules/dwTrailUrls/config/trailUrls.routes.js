@@ -19,7 +19,7 @@ app.config(function($stateProvider) {
         templateUrl: 'modules/dwTrailUrls/views/form',
         controller: 'TrailUrlsCtrl'
     }).state('app.dwTrailUrls.view', {
-        url: '/view/:id',
+        url: '/view/:id/:trailId',
         templateUrl: 'modules/dwTrailUrls/views/view',
         controller: 'TrailUrlsCtrl'
     });

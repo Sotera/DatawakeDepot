@@ -7,19 +7,19 @@ app.config(function($stateProvider) {
         url: '/dwUrlExtractions',
         templateUrl: 'modules/dwUrlExtractions/views/main'
     }).state('app.dwUrlExtractions.add', {
-        url: '/add/:trailUrlId',
+        url: '/add/:trailId/:trailUrlId',
         templateUrl: 'modules/dwUrlExtractions/views/form',
         controller: 'UrlExtractionsCtrl'
     }).state('app.dwUrlExtractions.list', {
-        url: '/list/:trailUrlId',
+        url: '/list/:trailId/:trailUrlId',
         templateUrl: 'modules/dwUrlExtractions/views/list',
         controller: 'UrlExtractionsCtrl'
     }).state('app.dwUrlExtractions.edit', {
-        url: '/edit/:id/:trailUrlId',
+        url: '/edit/:id/:trailId/:trailUrlId',
         templateUrl: 'modules/dwUrlExtractions/views/form',
         controller: 'UrlExtractionsCtrl'
     }).state('app.dwUrlExtractions.view', {
-        url: '/view/:id',
+        url: '/view/:id/:trailId',
         templateUrl: 'modules/dwUrlExtractions/views/view',
         controller: 'UrlExtractionsCtrl'
     });

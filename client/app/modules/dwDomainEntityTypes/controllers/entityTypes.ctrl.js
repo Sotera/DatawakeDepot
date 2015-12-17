@@ -6,6 +6,7 @@ app.controller('EntityTypesCtrl', function($scope, $state, $stateParams, DwDomai
   //Put the currentUser in $scope for convenience
   $scope.currentUser = AppAuth.currentUser;
   $scope.domains = [];
+  $scope.extractors = [];
 
   $scope.entityType = {};
   $scope.formFields = [{
@@ -40,6 +41,17 @@ app.controller('EntityTypesCtrl', function($scope, $state, $stateParams, DwDomai
           required: true,
           disabled: false
       }
+  }, {
+      key: 'dwExtractorId',
+      type: 'select',
+      templateOptions: {
+          label: gettextCatalog.getString('Extractor'),
+          options: $scope.extractors,
+          valueProp: 'id',
+          labelProp: 'name',
+          required: true,
+          disabled: false
+      }
   }];
 
   $scope.delete = function(id) {
@@ -59,7 +71,7 @@ app.controller('EntityTypesCtrl', function($scope, $state, $stateParams, DwDomai
   $scope.entityTypes = EntityTypesService.getEntityTypes();
 
   $scope.loading = true;
-  DwDomainEntityType.find({filter: {include: ['domain','domainItems']}}).$promise
+  DwDomainEntityType.find({filter: {include: ['domain']}}).$promise
       .then(function (allEntityTypes) {
           $scope.safeDisplayedentityTypes = allEntityTypes;
           $scope.displayedEntityTypes = [].concat($scope.safeDisplayedentityTypes);
@@ -95,7 +107,7 @@ app.controller('EntityTypesCtrl', function($scope, $state, $stateParams, DwDomai
               where: {
                   id: $stateParams.id
               },
-              include: ['domain','domainItems']
+              include: ['domain']
           }
       }).$promise
           .then(function (domain) {

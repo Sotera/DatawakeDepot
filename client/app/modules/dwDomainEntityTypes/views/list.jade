@@ -11,10 +11,9 @@
           th.sortable.col-sm-3.col-md-3.col-lg-3(st-sort='name' st-sort-default="true") Entity Type
           th.sortable.col-sm-3.col-md-3.col-lg-3(st-sort='description') Description
           th.sortable.col-sm-2.col-md-2.col-lg-2 Domains
-          th.sortable.col-sm-2.col-md-2.col-lg-2.td-center Occurrences
+          th.sortable.col-sm-2.col-md-2.col-lg-2 Source
           th.col-sm-2.col-md-2.col-lg-2.td-center
-              a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add')
-                  | Add Entity Type
+              a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add') &nbsp;Add Entity Type
       tbody
         tr(ng-repeat='entityType in displayedEntityTypes')
           td(style='width: 120px')
@@ -23,8 +22,8 @@
             span.text-muted {{entityType.description}}
           td
             span.label.label-ltgray {{entityType.domain.name}}
-          td.td-center
-            span.label.label-ltgray {{entityType.domainItems.length}}
+          td
+            span.label.label-ltgray {{entityType.source}}
           td.td-center(style='width: 120px')
             .btn-toolbar
                 button.btn.btn-sm.btn-default(ui-sref='app.dwDomainEntityTypes.edit({id:entityType.id})')

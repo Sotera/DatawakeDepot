@@ -20,11 +20,6 @@
       "type": "belongsTo",
       "model": "DwDomain",
       "foreignKey": "dwDomainId"
-    },
-    "domainEntityType": {
-      "type": "belongsTo",
-      "model": "DwDomainEntityType",
-      "foreignKey": "dwDomainEntityTypeId"
     }
   },
   "acls": [],

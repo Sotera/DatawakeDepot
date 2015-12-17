@@ -8,7 +8,6 @@
             input.input-sm.form-control(st-search='' type='search' placeholder='Search')
       thead
         tr
-          //th.sortable.col-sm-2.col-md-2.col-lg-2.text-nowrap(st-sort='domainEntityType.name' st-sort-default="true") Entity Type
           th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='value') Value
           th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='types') Types
           th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='trail.name') Trail
@@ -16,14 +15,12 @@
           th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='trailUrl.occurrences') Occurrences
           th.col-sm-2.col-md-2.col-lg-2.td-
             .btn-toolbar
-              button.btn.btn-sm.btn-default(ui-sref='app.dwTrailUrls.list',title='To Urls')
+              button.btn.btn-sm.btn-default(ui-sref='app.dwTrailUrls.list({trailId:currentTrailId})',title='To Urls')
                 i.fa.fa-arrow-up &nbsp;to Urls
-              a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add({trailUrlId:currentTrailUrlId})', ng-disabled='!currentUser.isAdmin')
+              a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add({trailId: currentTrailId,trailUrlId:currentTrailUrlId})', ng-disabled='!currentUser.isAdmin')
                 | &nbsp;Add Extraction
       tbody
         tr(ng-repeat='urlExtraction in displayedUrlExtractions')
-          //td(style='width: 120px')
-          //  a(href='', ui-sref='app.dwUrlExtractions.view({id:urlExtraction.id})') {{urlExtraction.domainEntityType.name}}
           td
             span.text-muted {{urlExtraction.value}}
           td
@@ -37,7 +34,7 @@
           td.td-center(style='width: 120px')
             .btn-toolbar
                 button.btn.btn-sm.btn-warning.glyphicon.glyphicon-save(ng-click='makeDomainItem({id:urlExtraction})', ng-disabled='!currentUser.isAdmin', title='Add as Domain Item')
-                button.btn.btn-sm.btn-default(ui-sref='app.dwUrlExtractions.edit({id:urlExtraction.id,trailUrlId:currentTrailUrlId})',ng-disabled='!currentUser.isAdmin', title='Edit Extraction')
+                button.btn.btn-sm.btn-default(ui-sref='app.dwUrlExtractions.edit({id:urlExtraction.id,trailId: currentTrailId,trailUrlId:currentTrailUrlId})',ng-disabled='!currentUser.isAdmin', title='Edit Extraction')
                     i.fa.fa-pencil
                 button.btn.btn-sm.btn-danger(ng-click='delete({id:urlExtraction.id})',ng-disabled='!currentUser.isAdmin', title='Delete Extraction')
                     i.fa.fa-trash-o

@@ -13,6 +13,7 @@
     "description": {
       "type": "string"
     }
+
   },
   "validations": [],
   "relations": {
@@ -21,15 +22,10 @@
       "model": "DwDomain",
       "foreignKey": "dwDomainId"
     },
-    "domainItems": {
-      "type": "hasMany",
-      "model": "DwDomainItem",
-      "foreignKey": "dwDomainEntityTypeId"
-    },
-    "urlExtractions": {
-      "type": "hasMany",
-      "model": "DwUrlExtraction",
-      "foreignKey": "dwDomainEntityTypeId"
+    "extractor": {
+      "type": "belongsTo",
+      "model": "DwExtractor",
+      "foreignKey": "dwExtractorId"
     }
   },
   "acls": [],

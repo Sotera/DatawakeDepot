@@ -1,10 +1,10 @@
 'use strict';
 var app = angular.module('com.module.dwDomainEntityTypes');
 
-app.service('EntityTypesService', ['$state', 'CoreService', 'DwDomainEntityType', 'gettextCatalog','DwDomainItem', function($state, CoreService, DwDomainEntityType, gettextCatalog, DwDomainItem) {
+app.service('EntityTypesService', ['$state', 'CoreService', 'DwDomainEntityType', 'gettextCatalog', function($state, CoreService, DwDomainEntityType, gettextCatalog) {
 
   this.getEntityTypes = function() {
-    return DwDomainEntityType.find({filter: {include: ['domain','domainItems']}});
+    return DwDomainEntityType.find({filter: {include: ['domain']}});
   };
 
   this.getEntityType = function(id) {
@@ -34,14 +34,6 @@ app.service('EntityTypesService', ['$state', 'CoreService', 'DwDomainEntityType'
           CoreService.toastSuccess(gettextCatalog.getString(
             'EntityType deleted'), gettextCatalog.getString(
             'Your entityType is deleted!'));
-          if(entityType.id.domainItems) {
-            entityType.id.domainItems.forEach(function (di) {
-              DwDomainItem.delete(di, function() {
-                //success
-              }, function(err) {
-              });
-            });
-          };
           cb();
         }, function(err) {
           CoreService.toastError(gettextCatalog.getString(

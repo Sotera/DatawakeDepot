@@ -4,14 +4,36 @@ var app = angular.module('com.module.dwDomainItems');
 app.service('DomainItemsService', ['$state', 'CoreService', 'DwDomainItem', 'gettextCatalog', function($state, CoreService, DwDomainItem, gettextCatalog) {
 
   this.getDomainItems = function() {
-    return DwDomainItem.find({filter: {include: ['domain','domainEntityType']}});
-
+    var whereClause={
+        filter:{
+            order:"name DESC",
+            include:[
+                'domain'
+            ]
+        }
+    };
+    return (DwDomainItem.find(whereClause));
   };
 
   this.getDomainItem = function(id) {
     return DwDomainItem.findById({
       id: id
     });
+  };
+
+  this.getFilteredDomainItems = function(domainId) {
+      var whereClause={
+          filter:{
+              order:"name DESC",
+              where:{
+                  dwDomainId:domainId
+              },
+              include:[
+                  'domain'
+              ]
+          }
+      };
+      return (DwDomainItem.find(whereClause));
   };
 
   this.upsertDomainItem = function(domainItem, cb) {

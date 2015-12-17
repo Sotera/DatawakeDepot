@@ -44,6 +44,11 @@
       "type": "belongsTo",
       "model": "DwServiceType",
       "foreignKey": "dwServiceTypeId"
+    },
+    "domainEntityTypes": {
+      "type": "hasMany",
+      "model": "DwDomainEntityType",
+      "foreignKey": "wDomainEntityTypeId"
     }
   },
   "acls": [],

@@ -28,7 +28,8 @@
           td
             span.label.label-ltgray {{urlExtraction.trailUrl.trail.name}}
           td
-            span.text-muted {{urlExtraction.trailUrl.url}}
+            span.text-muted
+              a(href='{{urlExtraction.trailUrl.url}}' target = '_blank') {{urlExtraction.trailUrl.url}}
           td
             span.text-muted {{urlExtraction.occurrences}}
           td.td-center(style='width: 120px')

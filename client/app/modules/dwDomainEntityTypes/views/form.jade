@@ -2,7 +2,7 @@
   .box-header
     span.box-title
       .input-group
-        a.btn.btn-default(translate, href='', ui-sref='^.list', style='float: left;')
+        a.btn.btn-default(translate, href='', ui-sref='^.list({domainId:currentDomainId})', style='float: left;')
           i.fa.fa-arrow-left &nbsp;Back to Entity Types
     .box-tools.pull-right
       span.pull-right.btn-toolbar

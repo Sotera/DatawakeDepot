@@ -66,51 +66,20 @@ app.controller('UrlExtractionsCtrl', function($scope, $state, $stateParams, DwDo
   $scope.delete = function(id) {
     UrlExtractionsService.deleteUrlExtraction(id, function() {
       $scope.safeDisplayedurlExtractions = UrlExtractionsService.getUrlExtractions();
-      $state.go('^.list');
+      $state.go('^.list',({trailUrlId: $scope.currentTrailUrlId ,trailId: $scope.currentTrailId}));
     });
   };
 
   $scope.onSubmit = function() {
     UrlExtractionsService.upsertUrlExtraction($scope.urlExtraction, function() {
       $scope.safeDisplayedurlExtractions = UrlExtractionsService.getUrlExtractions();
-      $state.go('^.list');
+        $state.go('^.list',({trailUrlId: $scope.currentTrailUrlId ,trailId: $scope.currentTrailId}));
     });
   };
 
   $scope.makeDomainItem = function(extractedItem){
       alert('Create Domain Item:' + extractedItem.id.value);
   };
-
-  $scope.loading = true;
-  //DwUrlExtraction.find({filter: {include: [{relation:'trailUrl',scope:{include: ['trail']}},'domainEntityType']}}).$promise
-  //    .then(function (allUrlExtractions) {
-  //      $scope.safeDisplayedurlExtractions = allUrlExtractions;
-  //      $scope.displayedUrlExtractions = [].concat($scope.safeDisplayedurlExtractions);
-  //    })
-  //    .catch(function (err) {
-  //      console.log(err);
-  //    })
-  //    .then(function () {
-  //      $scope.loading = false;
-  //    }
-  //);
-
-  //DwDomainEntityType.find({filter: {include: []}}).$promise
-  //    .then(function (allEntTypes) {
-  //      for (var i = 0; i < allEntTypes.length; ++i) {
-  //        $scope.domainEntityTypes.push({
-  //          value: allEntTypes[i].name,
-  //          name: allEntTypes[i].name + " - " + allEntTypes[i].description,
-  //          id: allEntTypes[i].id
-  //        });
-  //      }
-  //    })
-  //    .catch(function (err) {
-  //      console.log(err);
-  //    })
-  //    .then(function () {
-  //    }
-  //);
 
   DwTrailUrl.find({filter: {include: []}}).$promise
       .then(function (allTrailUrls) {
@@ -129,6 +98,7 @@ app.controller('UrlExtractionsCtrl', function($scope, $state, $stateParams, DwDo
       }
   );
 
+  $scope.loading = true;
   if ($stateParams.id && $stateParams.trailId && $stateParams.trailUrlId) {
     UrlExtractionsService.getUrlExtraction($stateParams.id).$promise.then(function(result){
       $scope.currentTrailId = $stateParams.trailId;

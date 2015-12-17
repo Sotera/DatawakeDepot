@@ -72,22 +72,20 @@ app.controller('TrailUrlsCtrl', function($scope, $state, $stateParams, $window, 
     $scope.delete = function(id) {
         TrailUrlsService.deleteTrailUrl(id, function() {
             $scope.safeDisplayedtrailUrls = TrailUrlsService.getTrailUrls();
-            $state.go('^.list');
+            $state.go('^.list',({trailId: $scope.currentTrailId }));
         });
     };
 
     $scope.onSubmit = function() {
         TrailUrlsService.upsertTrailUrl($scope.trailUrl, function() {
             $scope.safeDisplayedtrailUrls = TrailUrlsService.getTrailUrls();
-            $state.go('^.list');
+            $state.go('^.list',({trailId: $scope.currentTrailId }));
         });
     };
 
     $scope.openUrl = function(trailUrl){
         $window.open(trailUrl.url);
     };
-
-    $scope.loading = true;
 
     DwCrawlType.find({filter: {include: []}}).$promise
         .then(function (allCrawlTypes) {
@@ -123,6 +121,7 @@ app.controller('TrailUrlsCtrl', function($scope, $state, $stateParams, $window, 
         }
     );
 
+    $scope.loading = true;
     if ($stateParams.id) {
         TrailUrlsService.getTrailUrl($stateParams.id).$promise.then(function(result) {
             $scope.currentTrailId = $stateParams.trailId;

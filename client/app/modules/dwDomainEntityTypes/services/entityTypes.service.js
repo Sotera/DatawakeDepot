@@ -4,7 +4,15 @@ var app = angular.module('com.module.dwDomainEntityTypes');
 app.service('EntityTypesService', ['$state', 'CoreService', 'DwDomainEntityType', 'gettextCatalog', function($state, CoreService, DwDomainEntityType, gettextCatalog) {
 
   this.getEntityTypes = function() {
-    return DwDomainEntityType.find({filter: {include: ['domain']}});
+    var whereClause={
+      filter:{
+        order:"name DESC",
+        include:[
+          'domain'
+        ]
+      }
+    };
+    return (DwDomainEntityType.find(whereClause));
   };
 
   this.getEntityType = function(id) {
@@ -12,6 +20,22 @@ app.service('EntityTypesService', ['$state', 'CoreService', 'DwDomainEntityType'
       id: id
     });
   };
+
+  this.getFilteredEntityTypes = function(domainId) {
+    var whereClause={
+      filter:{
+        order:"name DESC",
+        where:{
+            dwDomainId:domainId
+        },
+        include:[
+          'domain'
+        ]
+      }
+    };
+    return (DwDomainEntityType.find(whereClause));
+  };
+
 
   this.upsertEntityType = function(entityType, cb) {
     DwDomainEntityType.upsert(entityType, function() {

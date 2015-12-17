@@ -24,8 +24,11 @@ app.controller('DomainItemsCtrl', function($scope, $state, $stateParams, DwDomai
             options: $scope.domains,
             valueProp: 'id',
             labelProp: 'name',
-            required: true,
-            disabled: false
+            required: true
+        }
+        ,
+        expressionProperties:{
+            'templateOptions.disabled': 'model.id'
         }
     },{
         key: 'itemValue',
@@ -45,15 +48,15 @@ app.controller('DomainItemsCtrl', function($scope, $state, $stateParams, DwDomai
 
     $scope.delete = function(id) {
         DomainItemsService.deleteDomainItem(id, function() {
-            $scope.safeDisplayeddomainItems = DomainItemsSe    //$scope.entityTypes = [];rvice.getDomainItems();
-            $state.go('^.list');
+            $scope.safeDisplayeddomainItems = DomainItemsService.getDomainItems();
+            $state.go('^.list',({domainId: $scope.currentDomainId }));
         });
     };
 
     $scope.onSubmit = function() {
         DomainItemsService.upsertDomainItem($scope.domainItem, function() {
             $scope.safeDisplayeddomainItems = DomainItemsService.getDomainItems();
-            $state.go('^.list');
+            $state.go('^.list',({domainId: $scope.currentDomainId }));
         });
     };
 
@@ -75,6 +78,7 @@ app.controller('DomainItemsCtrl', function($scope, $state, $stateParams, DwDomai
         }
     );
 
+    $scope.loading = true;
     if ($stateParams.id && $stateParams.domainId) {
         DomainItemsService.getDomainItem($stateParams.id).$promise.then(function(result) {
             $scope.currentDomainId = $stateParams.domainId;

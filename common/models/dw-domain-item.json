@@ -12,6 +12,12 @@
     },
     "coreItem": {
       "type": "boolean"
+    },
+    "type":{
+      "type": "string"
+    },
+    "source":{
+      "type": "string"
     }
   },
   "validations": [],

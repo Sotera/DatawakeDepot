@@ -76,9 +76,15 @@ exports.init = function () {
     });
 
     //Listen for panel requests to create domain entity type
-    pluginState.addContentScriptEventHandler(data.contentScriptKey,'addEntityType-target-addin', function () {
-        var newEnt = data.entityType;
+    pluginState.addContentScriptEventHandler(data.contentScriptKey,'addEntityType-target-addin', function (domainEntity) {
+        var newEnt = domainEntity;
         addDomainEntityType(newEnt);
+    });
+
+    //Listen for panel requests to create domain item
+    pluginState.addContentScriptEventHandler(data.contentScriptKey,'addDomainItem-target-addin', function (domainItem) {
+        var newItem = domainItem;
+        addDomainItem(newItem);
     });
 
     pluginState.addContentScriptEventHandler(data.contentScriptKey, 'send-css-urls-target-addin', function (scriptData) {
@@ -212,29 +218,19 @@ function postPluginStateToToolBar() {
 }
 
 function addDomainEntityType(entType){
-  var newEntityType = {
-    'name': 'testType', //entType.typeName,
-    'description': 'testDesc', //entType.typeName,
-    'dwDomainId': '5643aa0279e4fe2646f75db9', //entType.domainId,
-    'dwExtractorId': 'testExtractor', //entType.extractorId,
-    'source:': 'Converted'
-  };
-
   pluginState.restPost(pluginState.createEntityType,
-      newEntityType, function (res) {
+      entType, function (res) {
         console.log(res.text);
       }
   );
 }
 
-//function addDomainItem(domItem){
-//  var newDomainItem = {
-//    'id': domItem.id,
-//    'itemValue': domItem.itemValue,
-//    'type': domItem.itemType,
-//    'source': domItem.itemSource,
-//    'dwDomainId': domItem.domainId
-//  };
-//  self.port.emit('addDomainItem-target-addin', {contentScriptKey: myContentScriptKey, domainItem: newDomainItem});
-//}
+function addDomainItem(domItem){
+  var specificDomainInsertUrl =  pluginState.createDomainItem.replace("_domainId_",domItem.dwDomainId);
+  pluginState.restPost(specificDomainInsertUrl,
+      domItem, function (res) {
+          console.log(res.text);
+      }
+  );
+}
 

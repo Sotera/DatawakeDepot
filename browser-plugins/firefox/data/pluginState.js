@@ -20,6 +20,7 @@ var PluginState = function () {
   me.domainList = '/widget/get-domain-list';
   me.trailExtractedEntities = '/widget/get-url-entities';
   me.createEntityType = '/api/DwDomainEntityTypes';
+  me.createDomainItem = '/api/dwDomains/_domainId_/domainItems';
   me.trailingActive = false;
   me.toolbarFrameSource = null;
   me.toolbarFrameOrigin = null;

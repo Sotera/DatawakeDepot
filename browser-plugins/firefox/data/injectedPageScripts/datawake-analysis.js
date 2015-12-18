@@ -61,13 +61,13 @@ self.port.on('send-panel', function (data) {
     clearInterval(myVar);
 });
 
-//Test panel populate
-self.port.on('test-datawake-panel-content', function (data) {
-  rewritePanel('This is the test text.');
-});
+////Test panel populate
+//self.port.on('test-datawake-panel-content', function (data) {
+//  rewritePanel('This is the test text.');
+//});
 
 //Toggle side panel
-self.port.on('send-toggle-datawake-panel', function () {
+self.port.on('send-toggle-datawake-panel', function () {self.port.emit('requestPanelHtml-target-addin', {contentScriptKey: myContentScriptKey});
     if ($('#datawake-right-panel').length === 0) {
         var datawakePanel = '<div class="DWD_widget" id="datawake-right-panel"><div id="widgetOne">&nbsp;&nbsp;initializing...</div></divDWD_widget>';
         $('body').append(datawakePanel);
@@ -78,6 +78,7 @@ self.port.on('send-toggle-datawake-panel', function () {
     }
 });
 
+//TODO: why is this duplicate of line 59?
 //Populate side panel
 self.port.on('send-panel', function (data) {
     if ($('#datawake-right-panel').length === 0) {
@@ -100,3 +101,30 @@ self.port.on('page-attached-target-content-script', function (data) {
   myContentScriptKey = data.contentScriptKey;
   self.port.emit('send-css-urls-target-addin', {contentScriptKey: myContentScriptKey});
 });
+
+window.addEventListener("message",receiveMessage,false);
+
+function receiveMessage(e){
+    if(!e.data.dwDomainItem.value){
+        return;
+    }
+
+    var newDomainItem = {
+        id: e.data.dwDomainItem.id,
+        itemValue: e.data.dwDomainItem.value,
+        type: 'extracted',
+        source: e.data.dwDomainItem.extractorId,
+        dwDomainId: e.data.dwDomainItem.domainId
+    };
+    self.port.emit('addDomainItem-target-addin', newDomainItem);
+    //var newDomainEntity = {
+    //    name: e.data.dwDomainEntity.value,
+    //    description: e.data.dwDomainEntity.value,
+    //    dwDomainId: e.data.dwDomainEntity.domainId,
+    //    dwExtractorId: 'abc', //e.data.dwDomainEntity.value,
+    //    source: 'Converted'
+    //};
+    //alert('newDomainEntity:' + newDomainEntity.name);
+    //Pass to Addin
+    //self.port.emit('addEntityType-target-addin', newDomainEntity);
+}

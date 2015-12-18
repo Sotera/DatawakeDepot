@@ -8,12 +8,14 @@
               input.input-sm.form-control(st-search='' type='search' placeholder='Search')
       thead
         tr
-          th.sortable.col-sm-3.col-md-3.col-lg-3(st-sort='name' st-sort-default="true") Entity Type
+          th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='name' st-sort-default="true") Entity Type
           th.sortable.col-sm-3.col-md-3.col-lg-3(st-sort='description') Description
-          th.sortable.col-sm-2.col-md-2.col-lg-2 Domains
+          th.sortable.col-sm-1.col-md-1.col-lg-1 Domain
           th.sortable.col-sm-2.col-md-2.col-lg-2 Source
           th.col-sm-2.col-md-2.col-lg-2.td-center
             .btn-toolbar
+              button.btn.btn-sm.btn-default(ui-sref='^.list({domainId:currentDomainId})' ui-sref-opts="{reload: true, notify: true}",title='Refresh')
+                  i.fa.fa-refresh
               button.btn.btn-sm.btn-default(ui-sref='app.dwDomains.list',title='To Domains')
                 i.fa.fa-arrow-up &nbsp;to Domains
               a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add({domainId:currentDomainId})', ng-disabled='!currentUser.isAdmin') &nbsp;Add Type

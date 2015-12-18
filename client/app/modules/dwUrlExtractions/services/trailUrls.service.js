@@ -52,7 +52,7 @@ app.service('UrlExtractionsService', ['$state', 'CoreService', 'DwUrlExtraction'
     }, function(err) {
       CoreService.toastSuccess(gettextCatalog.getString(
         'Error saving urlExtraction '), gettextCatalog.getString(
-        'This urlExtraction could no be saved: ') + err);
+        'This urlExtraction could not be saved: ') + err);
     });
   };
 

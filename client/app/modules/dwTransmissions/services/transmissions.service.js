@@ -22,7 +22,7 @@ app.service('TransmissionsService', ['$state', 'CoreService', 'DwTransmission', 
     }, function(err) {
       CoreService.toastSuccess(gettextCatalog.getString(
           'Error saving transmission '), gettextCatalog.getString(
-              'This transmission could no be saved: ') + err);
+              'This transmission could not be saved: ') + err);
     });
   };
 

@@ -27,7 +27,7 @@ app.service('TrailsService', ['$state', 'CoreService', 'DwDomain','DwTrail', 'Dw
                       //success
                   });
               });
-          };
+          }
 
           if (trail.AminoUsers) {
               trail.AminoUsers.forEach(function (user) {
@@ -35,14 +35,14 @@ app.service('TrailsService', ['$state', 'CoreService', 'DwDomain','DwTrail', 'Dw
                       //success
                   });
               });
-          };
+          }
 
           //For other relationships you MUST manually add the items
           if (trail.team) {
               DwTeam.upsert(trail.team, function () {
                   //success
               })
-          };
+          }
 
           if (trail.domain) {
               DwDomain.upsert(trail.domain, function () {
@@ -58,7 +58,7 @@ app.service('TrailsService', ['$state', 'CoreService', 'DwDomain','DwTrail', 'Dw
                           }, function (err) {
                           });
                       });
-                  };
+                  }
                   if (trail.domain.domainItems) {
                       trail.domain.domainItems.forEach(function (di) {
                           DwDomainItem.upsert(di, function () {
@@ -66,9 +66,9 @@ app.service('TrailsService', ['$state', 'CoreService', 'DwDomain','DwTrail', 'Dw
                           }, function (err) {
                           });
                       });
-                  };
+                  }
               })
-          };
+          }
 
           if (trail.trailUrls) {
               trail.trailUrls.forEach(function (tu) {
@@ -81,20 +81,20 @@ app.service('TrailsService', ['$state', 'CoreService', 'DwDomain','DwTrail', 'Dw
                               }, function (err) {
                               });
                           });
-                      };
+                      }
                       if (trail.crawlType) {
                           DwCrawlType.upsert(trail.crawlType, function () {
                               //success
                           });
-                      };
+                      }
                   });
               });
-          };
+          }
           cb();
       }, function (err) {
           CoreService.toastSuccess(gettextCatalog.getString(
               'Error saving trail '), gettextCatalog.getString(
-                  'This trail could no be saved: ') + err);
+                  'This trail could not be saved: ') + err);
       });
   };
 
@@ -109,14 +109,14 @@ app.service('TrailsService', ['$state', 'CoreService', 'DwDomain','DwTrail', 'Dw
                     //success
                 });
             });
-        };
+        }
         if(trail.id.feeds) {
             trail.id.feeds.forEach(function (feed) {
                 DwTrail.feeds.unlink({id: trail.id, fk: feed}, null, function (value, header) {
                     //success
                 });
             });
-        };
+        }
 
         //Now delete the Trail
         DwTrail.deleteById(trail.id, function() {
@@ -132,10 +132,10 @@ app.service('TrailsService', ['$state', 'CoreService', 'DwDomain','DwTrail', 'Dw
                               }, function (err) {
                               });
                           });
-                      };
+                      }
                   });
               });
-          };
+          }
 
           cb();
         }, function(err) {

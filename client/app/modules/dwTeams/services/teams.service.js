@@ -42,12 +42,12 @@ app.service('TeamsService', ['$state', 'CoreService', 'DwTeam', 'gettextCatalog'
                   //success
               });
           });
-      };
+      }
       cb();
     }, function(err) {
       CoreService.toastSuccess(gettextCatalog.getString(
         'Error saving team '), gettextCatalog.getString(
-        'This team could no be saved: ') + err);
+        'This team could not be saved: ') + err);
     });
   };
 

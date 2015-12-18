@@ -22,7 +22,7 @@ app.service('SettingsService', ['$state', 'CoreService', 'DwSetting', 'gettextCa
     }, function(err) {
       CoreService.toastSuccess(gettextCatalog.getString(
         'Error saving setting '), gettextCatalog.getString(
-        'This setting could no be saved: ') + err);
+        'This setting could not be saved: ') + err);
     });
   };
 

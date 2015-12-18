@@ -49,7 +49,7 @@ app.service('TrailUrlsService', ['$state', 'CoreService', 'DwTrail','DwTrailUrl'
     }, function(err) {
       CoreService.toastSuccess(gettextCatalog.getString(
         'Error saving trailUrl '), gettextCatalog.getString(
-        'This trailUrl could no be saved: ') + err);
+        'This trailUrl could not be saved: ') + err);
     });
   };
 

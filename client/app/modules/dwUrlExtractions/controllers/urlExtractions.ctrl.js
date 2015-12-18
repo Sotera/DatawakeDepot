@@ -1,7 +1,7 @@
 'use strict';
 var app = angular.module('com.module.dwUrlExtractions');
 
-app.controller('UrlExtractionsCtrl', function($scope, $state, $stateParams, DwDomainItem, DwDomainEntityType, DwTrailUrl, DwUrlExtraction, UrlExtractionsService, gettextCatalog, AppAuth) {
+app.controller('UrlExtractionsCtrl', function($scope, $state, $stateParams, DwDomainItem, DomainItemsService, EntityTypesService, DwDomainEntityType, DwTrailUrl, DwUrlExtraction, UrlExtractionsService, gettextCatalog, AppAuth) {
 
   //Put the currentUser in $scope for convenience
   $scope.currentUser = AppAuth.currentUser;
@@ -28,7 +28,7 @@ app.controller('UrlExtractionsCtrl', function($scope, $state, $stateParams, DwDo
           labelProp: 'name',
           required: true,
           disabled: false
-      },
+      }
   },{
       key: 'extractorTypes',
       type: 'input',
@@ -36,17 +36,7 @@ app.controller('UrlExtractionsCtrl', function($scope, $state, $stateParams, DwDo
           label: gettextCatalog.getString('Extractor Types'),
           required: true
       }
-  //}, {
-  //  key: 'dwDomainEntityTypeId',
-  //  type: 'select',
-  //  templateOptions: {
-  //    label: gettextCatalog.getString('EntityType'),
-  //    options: $scope.domainEntityTypes,
-  //    valueProp: 'id',
-  //    labelProp: 'name',
-  //    required: false,
-  //    disabled: false
-  //  }
+
   },{
     key: 'value',
     type: 'input',
@@ -77,8 +67,34 @@ app.controller('UrlExtractionsCtrl', function($scope, $state, $stateParams, DwDo
     });
   };
 
-  $scope.makeDomainItem = function(extractedItem){
-      alert('Create Domain Item:' + extractedItem.id.value);
+  $scope.makeDomainEntityType = function(entType) {
+      var newEntityType = {
+          'name': entType.typeName,
+          'description': entType.typeName,
+          'dwDomainId': entType.domainId,
+          'dwExtractorId': entType.extractorId,
+          'source:': 'Converted'
+      };
+
+      EntityTypesService.upsertEntityType(newEntityType, function(){
+        var x = 'success';
+      });
+
+
+  };
+
+  $scope.makeDomainItem = function(domItem){
+      var newDomainItem = {
+          'id': domItem.id,
+          'itemValue': domItem.itemValue,
+          'type': domItem.itemType,
+          'source': domItem.itemSource,
+          'dwDomainId': domItem.domainId
+      };
+
+      DomainItemsService.upsertDomainItem(newDomainItem, function(){
+          var x = 'success';
+      });
   };
 
   DwTrailUrl.find({filter: {include: []}}).$promise

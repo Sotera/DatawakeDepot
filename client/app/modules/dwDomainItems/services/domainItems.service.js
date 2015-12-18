@@ -45,7 +45,7 @@ app.service('DomainItemsService', ['$state', 'CoreService', 'DwDomainItem', 'get
     }, function(err) {
       CoreService.toastSuccess(gettextCatalog.getString(
           'Error saving domainItem '), gettextCatalog.getString(
-              'This domainItem could no be saved: ') + err);
+              'This domainItem could not be saved: ') + err);
     });
   };
 

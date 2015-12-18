@@ -42,12 +42,12 @@ app.service('FeedsService', ['$state', 'CoreService', 'DwFeed', 'gettextCatalog'
                   //success
               });
           });
-      };
+      }
       cb();
     }, function(err) {
       CoreService.toastSuccess(gettextCatalog.getString(
           'Error saving feed '), gettextCatalog.getString(
-              'This feed could no be saved: ') + err);
+              'This feed could not be saved: ') + err);
     });
   };
 

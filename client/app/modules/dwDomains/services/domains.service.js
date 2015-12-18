@@ -61,13 +61,13 @@ app.service('DomainsService', ['$state', 'CoreService', 'DwDomain','gettextCatal
 
                     });
                 });
-            };
+            }
 
             cb();
         }, function(err) {
             CoreService.toastSuccess(gettextCatalog.getString(
                 'Error saving domain '), gettextCatalog.getString(
-                    'This domain could no be saved: ') + err);
+                    'This domain could not be saved: ') + err);
         });
 
     };

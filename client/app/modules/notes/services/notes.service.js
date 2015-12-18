@@ -23,7 +23,7 @@ app.service('NotesService', ['$state', 'CoreService', 'Note', 'gettextCatalog', 
     }, function(err) {
       CoreService.toastSuccess(gettextCatalog.getString(
         'Error saving note '), gettextCatalog.getString(
-        'This note could no be saved: ') + err);
+        'This note could not be saved: ') + err);
     });
   };
 

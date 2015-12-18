@@ -22,7 +22,7 @@ app.service('ServiceTypesService', ['$state', 'CoreService', 'DwServiceType', 'g
     }, function(err) {
       CoreService.toastSuccess(gettextCatalog.getString(
           'Error saving serviceType '), gettextCatalog.getString(
-              'This serviceType could no be saved: ') + err);
+              'This serviceType could not be saved: ') + err);
     });
   };
 

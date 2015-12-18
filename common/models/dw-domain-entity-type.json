@@ -12,6 +12,9 @@
     },
     "description": {
       "type": "string"
+    },
+    "source":{
+      "type": "string"
     }
 
   },
@@ -21,12 +24,8 @@
       "type": "belongsTo",
       "model": "DwDomain",
       "foreignKey": "dwDomainId"
-    },
-    "extractor": {
-      "type": "belongsTo",
-      "model": "DwExtractor",
-      "foreignKey": "dwExtractorId"
     }
+
   },
   "acls": [],
   "methods": {}

@@ -46,7 +46,7 @@ app.service('EntityTypesService', ['$state', 'CoreService', 'DwDomainEntityType'
     }, function(err) {
       CoreService.toastSuccess(gettextCatalog.getString(
         'Error saving entityType '), gettextCatalog.getString(
-        'This entityType could no be saved: ') + err);
+        'This entityType could not be saved: ') + err);
     });
   };
 

@@ -1,4 +1,9 @@
 div.DWD_widget(id='widgetOne')
+    script.
+        function addEntType(entType){
+            self.port.emit('addEntityType-target-addin', {contentScriptKey: myContentScriptKey,entityType:entType});
+        }
+
     div.DWD_table_container
         h3.DWD_h1 Extracted Entities
         table.DWD_table(border='1')
@@ -10,7 +15,11 @@ div.DWD_widget(id='widgetOne')
             tbody
                 each entity, i in extractedEntities
                      tr.DWD_tr
-                         td.DWD_td #{entity.value}
+                         td.DWD_td(onclick='addEntType("#{entity.value}")') xxx
+                            //(onclick='addDomainEntityType({entType: entity.id});') #{entity.value}
+                            //buttton(onclick='addDomainEntityType({entType: entity.id})')
+
+
                          td.DWD_td #{entity.occurrences}
                          td.DWD_td #{entity.extractorTypes}
 

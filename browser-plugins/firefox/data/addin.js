@@ -75,6 +75,12 @@ exports.init = function () {
         });
     });
 
+    //Listen for panel requests to create domain entity type
+    pluginState.addContentScriptEventHandler(data.contentScriptKey,'addEntityType-target-addin', function () {
+        var newEnt = data.entityType;
+        addDomainEntityType(newEnt);
+    });
+
     pluginState.addContentScriptEventHandler(data.contentScriptKey, 'send-css-urls-target-addin', function (scriptData) {
       pluginState.postEventToContentScript(scriptData.contentScriptKey, 'load-css-urls-target-content-script',
         {
@@ -204,4 +210,31 @@ function postPluginStateToToolBar() {
   };
   pluginState.postMessageToToolBar(msg);
 }
+
+function addDomainEntityType(entType){
+  var newEntityType = {
+    'name': 'testType', //entType.typeName,
+    'description': 'testDesc', //entType.typeName,
+    'dwDomainId': '5643aa0279e4fe2646f75db9', //entType.domainId,
+    'dwExtractorId': 'testExtractor', //entType.extractorId,
+    'source:': 'Converted'
+  };
+
+  pluginState.restPost(pluginState.createEntityType,
+      newEntityType, function (res) {
+        console.log(res.text);
+      }
+  );
+}
+
+//function addDomainItem(domItem){
+//  var newDomainItem = {
+//    'id': domItem.id,
+//    'itemValue': domItem.itemValue,
+//    'type': domItem.itemType,
+//    'source': domItem.itemSource,
+//    'dwDomainId': domItem.domainId
+//  };
+//  self.port.emit('addDomainItem-target-addin', {contentScriptKey: myContentScriptKey, domainItem: newDomainItem});
+//}
 

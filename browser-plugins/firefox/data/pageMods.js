@@ -4,7 +4,7 @@ exports.init = function () {
   try {
     pageMod.PageMod({
       include: '*',
-      //exclude: pluginState.pageModDatawakeDepotIncludeFilter, // this prevents Depot urls from being trailed and panel
+      exclude: pluginState.pageModDatawakeDepotIncludeFilter, // this prevents Depot urls from being trailed and paneled
       contentScriptFile: [
         './vendor/jszip/jszip.min.js',
         './vendor/jquery/jquery-2.1.4.min.js',
@@ -22,7 +22,7 @@ exports.init = function () {
   try {
     pageMod.PageMod({
       include: pluginState.pageModDatawakeDepotIncludeFilter,
-      //exclude: '*', // this prevents Depot urls from being trailed and panel
+      //exclude: '*',
       contentScriptFile: './injectedPageScripts/datawake-depot.js',
       attachTo: ['existing', 'top', 'frame'],
       onAttach: pluginState.onDatawakeDepotContentScriptAttach

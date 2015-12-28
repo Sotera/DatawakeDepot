@@ -6,6 +6,12 @@
         tr
           th(colspan="6")
             input.input-sm.form-control(st-search='' type='search' placeholder='Search')
+          th(colspan="1")
+            .btn-toolbar
+                button.btn.btn-sm.btn-default(ui-sref='^.list({id:trailUrl.id, trailId:currentTrailId})' ui-sref-opts="{reload: true, notify: true}",title='Refresh URLs')
+                    i.fa.fa-refresh
+                button.btn.btn-sm.btn-default(ui-sref='app.dwTrails.list({trailId: currentTrailId})',title='To Trails')
+                    i.fa.fa-arrow-up &nbsp;to Trails
       thead
         tr
           th.sortable.col-sm-3.col-md-3.col-lg-3(st-sort='url' st-sort-default="true") URL
@@ -14,10 +20,7 @@
           th.sortable.col-sm-1.col-md-1.col-lg-1.text-nowrap(st-sort='dwCrawlTypeId') Crawl Type
           th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='comments') Comments
           th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='timestamp') Timestamp
-          th.col-sm-2.col-md-2.col-lg-2.td-center
-            .btn-toolbar
-              button.btn.btn-sm.btn-default(ui-sref='app.dwTrails.list({trailId: currentTrailId})',title='To Trails')
-                  i.fa.fa-arrow-up &nbsp;to Trails
+          th.col-sm-1.col-md-1.col-lg-1.td-center
               a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add({trailId:currentTrailId})', ng-disabled='!currentUser.isAdmin') &nbsp;Add URL
       tbody
         tr(ng-repeat='trailUrl in displayedTrailUrls')

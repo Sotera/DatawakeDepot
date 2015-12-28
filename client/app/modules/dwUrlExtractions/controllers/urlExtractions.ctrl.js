@@ -55,15 +55,15 @@ app.controller('UrlExtractionsCtrl', function($scope, $state, $stateParams, DwDo
 
   $scope.delete = function(id) {
     UrlExtractionsService.deleteUrlExtraction(id, function() {
-      $scope.safeDisplayedurlExtractions = UrlExtractionsService.getUrlExtractions();
-      $state.go('^.list',({trailUrlId: $scope.currentTrailUrlId ,trailId: $scope.currentTrailId}));
+      $scope.safeDisplayedurlExtractions = UrlExtractionsService.getFilteredUrlExtractions($scope.currentTrailUrlId);
+      $state.go('^.list');
     });
   };
 
   $scope.onSubmit = function() {
     UrlExtractionsService.upsertUrlExtraction($scope.urlExtraction, function() {
-      $scope.safeDisplayedurlExtractions = UrlExtractionsService.getUrlExtractions();
-        $state.go('^.list',({trailUrlId: $scope.currentTrailUrlId ,trailId: $scope.currentTrailId}));
+      $scope.safeDisplayedurlExtractions = UrlExtractionsService.getFilteredUrlExtractions($scope.currentTrailUrlId);
+        $state.go('^.list');
     });
   };
 

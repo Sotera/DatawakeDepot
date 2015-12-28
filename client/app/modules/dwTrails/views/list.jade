@@ -6,6 +6,9 @@
         tr
           th(colspan="9")
             input.input-sm.form-control(st-search='' type='search' placeholder='Search')
+          th(colspan="1")
+            button.btn.btn-sm.btn-default(ui-sref='^.list' ui-sref-opts="{reload: true, notify: true}",title='Refresh Trails')
+                i.fa.fa-refresh
       thead
         tr
           th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='name' st-sort-default="true") Name
@@ -17,7 +20,7 @@
           th.sortable.col-sm-1.col-md-1.col-lg-1.td-center.text-nowrap(st-sort='trailUrls.length') # URLs
           th.sortable.col-sm-1.col-md-1.col-lg-1.td-center(st-sort='') Feeds
           th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='timestamp') Timestamp
-          th.col-sm-2.col-md-2.col-lg-2.td-center
+          th.col-sm-1.col-md-1.col-lg-1.td-center
               a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add') &nbsp;Add Trail
       tbody
         tr(ng-repeat='trail in displayedTrails')

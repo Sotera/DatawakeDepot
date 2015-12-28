@@ -61,15 +61,15 @@ app.controller('EntityTypesCtrl', function($scope, $state, $stateParams, DwDomai
 
   $scope.delete = function(id) {
     EntityTypesService.deleteEntityType(id, function() {
-      $scope.safeDisplayedentityTypes = EntityTypesService.getEntityTypes();
-      $state.go('^.list',({domainId: $scope.currentDomainId }));
+      $scope.safeDisplayedentityTypes = EntityTypesService.getFilteredEntityTypes($scope.currentDomainId);
+      $state.go('^.list');
     });
   };
 
   $scope.onSubmit = function() {
     EntityTypesService.upsertEntityType($scope.entityType, function() {
-      $scope.safeDisplayedentityTypes = EntityTypesService.getEntityTypes();
-      $state.go('^.list',({domainId: $scope.currentDomainId }));
+      $scope.safeDisplayedentityTypes = EntityTypesService.getFilteredEntityTypes($scope.currentDomainId);
+      $state.go('^.list');
     });
   };
 

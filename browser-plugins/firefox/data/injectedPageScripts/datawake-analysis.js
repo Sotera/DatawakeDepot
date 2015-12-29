@@ -30,8 +30,9 @@ function showPanel(){
         $('body').append(datawakePanel);
     }
 
-    //Now that we've shown it, let's give it 10 seconds to get some data
-    setTimeout(getPanelData, 10000);
+    //Now that we've shown it, let's give it a few seconds to get some data
+    //TODO: Really we should refresh until we have a few rows of data
+    setTimeout(getPanelData, 2000);
 }
 
 function getPanelData(){
@@ -145,6 +146,9 @@ function receiveMessage(e){
             };
             //Pass to Addin
             self.port.emit('addEntityType-target-addin', newDomainType);
+            break;
+        case 'refreshRequest':
+            getPanelData();
             break;
         default:
             return;

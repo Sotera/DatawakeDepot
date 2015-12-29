@@ -1,6 +1,10 @@
 div.DWD_widget(id='widgetOne')
+    link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css")
     div.DWD_table_container
-        h3.DWD_h1 Extracted Entities
+        h3.DWD_h1
+            button(onclick='window.postMessage({"dwItem":{"type":"refreshRequest"}},"*");')
+                i.fa.fa-refresh
+            span Extracted Entities
         table.DWD_table(border='1')
             thead.DWD_th
                 tr.DWD_tr

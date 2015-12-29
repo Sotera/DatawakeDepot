@@ -96,6 +96,11 @@ exports.init = function () {
         });
     });
 
+    //Listens for requests to get user trailing status
+    pluginState.addContentScriptEventHandler(data.contentScriptKey, 'requestTrailingActive-target-addin', function (scriptData) {
+        pluginState.postEventToContentScript(data.contentScriptKey, 'trailingStatus-target-content-script', {trailingActive: pluginState.trailingActive});
+    });
+
     pluginState.addContentScriptEventHandler(data.contentScriptKey, 'zipped-html-body-target-addin', function (pageContents) {
       //TODO: Work out some scraper eventing so we don't do the DOM operation if we're not trailing.
       //This will work for now though.

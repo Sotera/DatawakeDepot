@@ -11,6 +11,9 @@ div.DWD_widget(id='widgetOne')
                 each entity, i in extractedEntities
                      tr.DWD_tr
                          td.DWD_td
-                            a(onclick='window.postMessage({"dwDomainItem":{"id":"#{entity.id}","value":"#{entity.value}","domainId":"567356ad8d5003f312b33132","extractorId":"StanfordNER"}},"*");') #{entity.value}
+                            a(title='add as Domain Item' onclick='window.postMessage({"dwItem":{"type":"domainItem","id":"#{entity.id}","value":"#{entity.value}","domainId":"567356ad8d5003f312b33132","extractorId":"StanfordNER"}},"*");') #{entity.value}
                          td.DWD_td #{entity.occurrences}
-                         td.DWD_td #{entity.extractorTypes}
+                         td.DWD_td
+                             each type in entity.extractorTypes
+                                 a(title='add as Domain Type' onclick='window.postMessage({"dwItem":{"type":"domainType","value":"#{type}","domainId":"567356ad8d5003f312b33132","extractorId":"StanfordNER"}},"*");') #{type}
+

@@ -82,6 +82,31 @@ app.controller('DomainsCtrl', function($scope, $state, $http, $stateParams, DwFe
             });
     };
 
+    $scope.export = function(domain){
+        DomainsService.exportPrettyDomain(domain,function (constructedDomain) {
+            $scope.prettyDomain = constructedDomain;
+        });
+
+
+        //DwDomain.find({
+        //    filter: {
+        //        where:{
+        //            id: domainId.id
+        //        }
+        //        //,
+        //        //include: ['domainEntityTypes','domainItems','extractors','trails','feeds','teams']
+        //    }}).$promise
+        //    .then(function (constructedDomain) {
+        //        $scope.prettyDomain = constructedDomain
+        //    })
+        //    .catch(function (err) {
+        //        console.log(err);
+        //    })
+        //    .then(function () {
+        //        $scope.loading = false;
+        //    });
+    };
+
     $scope.importFile = function(index, file){
         //{{apiUrl}}/containers/files/download/{{file.name}}
         var url =  CoreService.env.apiUrl + 'containers/files/download/' + encodeURIComponent(file.name);

@@ -45,9 +45,11 @@
             span.label.label-ltgray(ng-repeat="extractor in domain.extractors") {{extractor.name}}
           td.td-center
             .btn-toolbar
-              button.btn.btn-sm.btn-default(ui-sref='app.dwDomains.edit({id:domain.id})',, ng-disabled='!currentUser.isAdmin')
+              button.btn.btn-sm.btn-default(ui-sref='app.dwDomains.edit({id:domain.id})', ng-disabled='!currentUser.isAdmin')
                 i.fa.fa-pencil
-              button.btn.btn-sm.btn-danger(ng-click='delete({id:domain})',, ng-disabled='!currentUser.isAdmin')
+              button.btn.btn-sm.btn-warning(ng-click='export({id:domain.id})')
+                i.fa.fa-save
+              button.btn.btn-sm.btn-danger(ng-click='delete({id:domain})', ng-disabled='!currentUser.isAdmin')
                 i.fa.fa-trash-o
   .overlay(ng-if='loading')
   .loading-img(ng-if='loading')

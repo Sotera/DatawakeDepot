@@ -256,7 +256,7 @@ app.controller('TrailsCtrl', function($scope, $state, $http, $stateParams, DwDom
               //    'description':true,
               //    'timestamp':true,
               //    'dwDomainId':false,
-              //    'dwTedomainId:currentDomainIdamId':true},
+              //    'dwTeamId':true},
               include: [
                   {relation:'trailUrls',
                       scope:{include:['urlExtractions','crawlType']}

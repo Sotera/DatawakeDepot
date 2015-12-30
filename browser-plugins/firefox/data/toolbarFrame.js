@@ -44,25 +44,50 @@ function addItemsToSelectElement(items, currentItem, idSelector) {
     $(idSelector).val(currentItem.name);
   }
 }
+
+var dataItemsVisible;
+function toggleDataItems(){
+    if(dataItemsVisible){
+        toggleDataItemButtonOff();
+    }else{
+        toggleDataItemButtonOn();
+    }
+}
+
+function toggleDataItemButtonOn(){
+    $('#toggleDomainItems').attr('src', "./images/OnButton_Green_transparent.png");
+    dataItemsVisible = true;
+}
+
+function toggleDataItemButtonOff(){
+    $('#toggleDomainItems').attr('src', "./images/OffButton_transparent.png");
+    dataItemsVisible = false;
+}
+
 function toggleTrailing() {
   if (window.trailingActive) {
-    $('#loginButton').removeClass('disabled');
+    $('#loginButton').show();
     $('#domainList').removeAttr('disabled');
     $('#trailList').removeAttr('disabled');
     $('#teamList').removeAttr('disabled');
     $('#toggleTrailButton')
       .addClass('btn-success')
-      .removeClass('red-throb')
+      .removeClass('btn-default')
       .html('Start');
+    $('body').removeClass('body-throb');
+    togglePanelButtonOff();
   } else {
-    $('#loginButton').addClass('disabled');
+    $('#loginButton').hide();
     $('#domainList').attr('disabled', 'disabled');
     $('#trailList').attr('disabled', 'disabled');
     $('#teamList').attr('disabled', 'disabled');
     $('#toggleTrailButton')
       .removeClass('btn-success')
-      .addClass('red-throb')
+      .addClass('btn-default')
+      //.addClass('red-throb')
       .html('Stop');
+    $('body').addClass('body-throb');
+    togglePanelButtonOn();
   }
   window.trailingActive = !window.trailingActive;
   postMessageToAddin({
@@ -93,7 +118,8 @@ function setUIStateToLoggedOut() {
   $('#loginButton')
     .html('Login')
     .addClass('btn-success')
-    .removeClass('btn-danger');
+    .removeClass('btn-danger')
+    .show();
   $('#teamList').attr('disabled', 'disabled');
   $('#domainList').attr('disabled', 'disabled');
   $('#trailList').attr('disabled', 'disabled');
@@ -111,8 +137,35 @@ function toggleLogin() {
     postMessageToAddin({action: 'login'});
   }
 }
+
+var panelVisible;
+function togglePanelButton(){
+    if(dataItemsVisible){
+        togglePanelButtonOff();
+    }else{
+        togglePanelButtonOn();
+    }
+}
+
+function togglePanelButtonOn(){
+    $('#toggleDWPanel').attr('src', "./images/OnButton_Green_transparent.png");
+    panelVisible = true;
+}
+
+function togglePanelButtonOff(){
+    $('#toggleDWPanel').attr('src', "./images/OffButton_transparent.png");
+    panelVisible = false;
+}
+
 function togglePanel(){
-    postMessageToAddin({action: 'toggle-panel'});
+    if (window.trailingActive){
+        postMessageToAddin({action: 'toggle-panel'});
+        if(panelVisible){
+            togglePanelButtonOff();
+        }else{
+            togglePanelButtonOn();
+        }
+    }
 }
 
 //

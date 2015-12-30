@@ -21,6 +21,11 @@ body {
     vertical-align: top;
 }
 
+.body-throb{
+    background: #E77471;
+    -moz-animation: color_change2 1s infinite alternate;
+}
+
 .red-throb{
     color: #cccccc;
     -moz-animation: color_change 1s infinite alternate;
@@ -29,6 +34,11 @@ body {
 @-moz-keyframes color_change {
     from { background-color: #ac1b00; }
     to { background-color: #cd3400; }
+}
+
+@-moz-keyframes color_change2 {
+    from { background-color: #C24641; }
+    to { background-color: #F70D1A; }
 }
 
 a,

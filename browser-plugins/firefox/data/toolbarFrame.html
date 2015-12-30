@@ -29,33 +29,55 @@
   <form class="form-horizontal">
     <div class="form-group">
       <label for="teamList"
-             style="padding-left:0;padding-right:4px;"
+             style="padding-left:0;padding-right:4px;visibility: hidden"
              class="control-label col-lg-1 col-md-1 col-sm-1 col-xs-1">Team:</label>
-
-      <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"
-           style="padding-left:0;padding-right:0;">
+      <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3"
+           style="padding-left:0;padding-right:0;visibility: hidden">
         <select id="teamList"
                 disabled="disabled"
                 onchange="teamSelectionChanged()"
                 class="form-control btn-info input-sm"></select>
       </div>
-      <label for="domainList"
-             style="padding-left:0;padding-right:4px;"
-             class="control-label col-lg-1 col-md-1 col-sm-1 col-xs-1">Domain:</label>
 
       <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"
-           style="padding-left:0;padding-right:0;">
-        <select id="domainList"
-                disabled="disabled"
-                onchange="domainSelectionChanged()"
-                class="form-control btn-info input-sm">
-        </select>
+           style="padding-left:4px;padding-right:2px;">
+        <span>
+            <label for="toggleDomainItems" style="font-size:10px;padding-left:0;padding-right:5px;">Show DataItems:</label>
+            <img src="./images/OffButton_transparent.png"
+                 id="toggleDomainItems"
+                 align="bottom"
+                 height="15"
+                 width="45"
+                 onclick="toggleDataItems()">
+        </span>
+
+        <span>
+            <label for="toggleDWPanel" style="font-size:10px;padding-left:0;padding-right:5px;">Show Panel:</label>
+                <img src="./images/OffButton_transparent.png"
+                     id="toggleDWPanel"
+                     align="bottom"
+                     height="15"
+                     width="45"
+                     onclick="togglePanel()">
+        </span>
       </div>
+
+      <label for="domainList"
+               style="padding-left:0;padding-right:4px;visibility: visible"
+               class="control-label col-lg-1 col-md-1 col-sm-1 col-xs-1">Domain:</label>
+      <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"
+           style="padding-left:0;padding-right:0;visibility: visible">
+          <select id="domainList"
+                  disabled="disabled"
+                  onchange="domainSelectionChanged()"
+                  class="form-control btn-info input-sm">
+          </select>
+      </div>
+
       <label for="trailList"
              style="padding-left:0;padding-right:4px;"
              class="control-label col-lg-1 col-md-1 col-sm-1 col-xs-1">Trail:</label>
-
-      <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"
+      <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"
            style="padding-left:0;padding-right:0;">
         <select id="trailList"
                 disabled="disabled"
@@ -63,6 +85,9 @@
                 class="form-control btn-info input-sm">
         </select>
       </div>
+
+
+
       <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"
            style="padding-left:4px;padding-right:2px;">
         <a id="toggleTrailButton"
@@ -74,15 +99,10 @@
            style="padding-left:2px;padding-right:4px;">
         <a id="loginButton"
            role="button"
-           class="btn btn-sm btn-success btn-block"
+           class="btn btn-sm btn-primary btn-block"
            onclick="toggleLogin()">Login</a>
       </div>
-      <div>
-        <a id="toggleButton"
-           role="button"
-           class="btn btn-sm btn-primary"
-           onclick="togglePanel()">Toggle</a>
-      </div>
+
     </div>
   </form>
 </div>

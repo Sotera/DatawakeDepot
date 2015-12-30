@@ -22,6 +22,7 @@ var PluginState = function () {
   me.createEntityType = '/api/DwDomainEntityTypes';
   me.createDomainItem = '/api/dwDomains/_domainId_/domainItems';
   me.trailingActive = false;
+  me.panelActive = false;
   me.toolbarFrameSource = null;
   me.toolbarFrameOrigin = null;
   me.datawakeDepotContentScriptHandle = null;

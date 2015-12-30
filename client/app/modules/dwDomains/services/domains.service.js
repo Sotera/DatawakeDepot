@@ -13,93 +13,55 @@ app.service('DomainsService', ['$state', 'CoreService', 'DwDomain','gettextCatal
         });
     };
 
-    this.exportPrettyDomain = function(domain){
-        DwDomain.findOne({
+    this.getPrettyDomain = function(domainId){
+        var filter = {
+                filter:{
+                    fields: ['id','name','description'],
+                    where:{
+                        id: domainId
+                    },
+                    include: [
+                        {relation:'domainEntityTypes',scope:{fields:['name','description']}},
+                        {relation:'domainItems',
+                            scope:{
+                                fields:{
+                                    'itemValue':true,
+                                    'type':true,
+                                    'source':true,
+                                    'dwDomainId':false
+                                }
+                            }
+                        }
+                    ]
+                }
+        };
+        return DwDomain.findOne(filter);
+    };
+
+    this.getDomainUrls = function(domainId){
+        var filter = {
             filter:{
-                fields: ['id','name','description'],
+                fields: ['id'],
                 where:{
-                    id: domain.id
+                    dwDomainId: domainId
                 },
                 include: [
-                    {relation:'domainEntityTypes',scope:{fields:['name','description']}},
-                    {relation:'domainItems',
+                    {relation:'trailUrls',
                         scope:{
-                            fields:{
-                                'itemValue':true,
-                                'type':true,
-                                'source':true,
-                                'dwDomainId':false
-                            }
+                            //fields: {
+                            //    'url',
+                            //    'searchTerms'
+                            //},
+                            include:['urlExtractions']
                         }
                     }
                 ]
             }
-        }).$promise
-            .then(function (foundDomain) {
-                //Append Domain Urls
-                self.getDomainUrls(domain.id, function(domUrls){
-                    var constructedDomain = {};
-                    constructedDomain['urls'] = domUrls.urls;
-                    constructedDomain['topLevels'] = domUrls.domainTop5;
-                    //TODO: current method in Forensic service needs to be refactored to persist search terms to make retrieval easy
-                    constructedDomain['searchTerms'] = domUrls.searchTerms;
-                    constructedDomain['domainEntities'] = foundDomain.domainItems;
-                    constructedDomain['domainEntityTypes'] = foundDomain.domainEntityTypes;
-                    constructedDomain['commonEntities'] = domUrls.top20Extractions;
-
-                    return constructedDomain;
-                });
-            })
-            .catch(function (err) {
-                console.log(err);
-            })
+        };
+        return DwTrail.find(filter);
     };
 
-    self.getDomainUrls = function(domainId, cb){
-        var domDetails = {};
-        var domainUrls = [];
-        var domainSearchTerms = [];
-        var domainTop5 = [];
-        var domainTop20Extractions = [];
-        DwTrail.find({
-            filter:{
-            fields: ['id'],
-            where:{
-                dwDomainId: domainId
-            },
-            include: [
-                {relation:'trailUrls',
-                    scope:{
-                        fields:['url', 'searchTerms']
-                    }
-                }
-            ]
-        }
-        }).$promise
-        .then(function (trails) {
-            trails.forEach(function(trail){
-                if(trail.trailUrls){
-                    trail.trailUrls.forEach(function (trailUrl){
-                        domainUrls.push(trailUrl.url);
-                        if(trailUrl.searchTerms){
-                            domainSearchTerms.push(trailUrl.searchTerms);
-                        }
-                    });
-                }
-            });
-            domDetails['urls'] = domainUrls;
-            domDetails['searchTerms'] = domainSearchTerms;
-            domDetails['domainTop5'] = getTopLevels(domainUrls,5);
-            domDetails['top20Extractions'] = domainTop20Extractions;
-            cb(domDetails);
-        })
-
-        .catch(function (err) {
-            console.log(err);
-        })
-    };
-
-    function getTopLevels(urlList, urlCount){
+    this.getTopLevels = function(urlList, urlCount){
         //Clean em up
         var strippedUrls = [];
         urlList.forEach(function(url){
@@ -121,23 +83,17 @@ app.service('DomainsService', ['$state', 'CoreService', 'DwDomain','gettextCatal
 
         //Now crop and return them
         return sorted.slice(0,urlCount);
-    }
+    };
 
 
     function sortBy(key, reverse) {
-
-        // Move smaller items towards the front
-        // or back of the array depending on if
-        // we want to sort the array in reverse
-        // order or not.
+        // Move smaller items towards the front or back of the array depending on if
+        // we want to sort the array in reverse order or not.
         var moveSmaller = reverse ? 1 : -1;
 
-        // Move larger items towards the front
-        // or back of the array depending on if
-        // we want to sort the array in reverse
-        // order or not.
+        // Move larger items towards the front or back of the array depending on if
+        // we want to sort the array in reverse order or not.
         var moveLarger = reverse ? -1 : 1;
-
         /**
          * @param  {*} a
          * @param  {*} b

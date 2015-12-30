@@ -83,28 +83,61 @@ app.controller('DomainsCtrl', function($scope, $state, $http, $stateParams, DwFe
     };
 
     $scope.export = function(domain){
-        DomainsService.exportPrettyDomain(domain,function (constructedDomain) {
-            $scope.prettyDomain = constructedDomain;
+        DomainsService.getPrettyDomain(domain.id).$promise.then(function(foundDomain){
+            DomainsService.getDomainUrls(domain.id).$promise.then(function(trails){
+                var constructedDomain = {};
+                var domainUrls = [];
+                var domainSearchTerms = [];
+                var domainExtractions = [];
+
+                trails.forEach(function(trail){
+                    if(trail.trailUrls){
+                        trail.trailUrls.forEach(function (trailUrl){
+                            domainUrls.push(trailUrl.url);
+                            if(trailUrl.searchTerms){
+                                domainSearchTerms.push(trailUrl.searchTerms);
+                            }
+                            //TODO: not sure exactly how many of these we want to return, there will be a LOT
+                            if(trailUrl.urlExtractions){
+                                trailUrl.urlExtractions.forEach(function(extraction){
+                                    domainExtractions.push(extraction.value);
+                                })
+                            }
+                        });
+                    }
+                });
+
+                //TODO: we need to get the top 20, not just the first 20
+                var domainTop20Extractions = domainExtractions.slice(0,20);
+                var domainTop5 = DomainsService.getTopLevels(domainUrls,5);
+
+                constructedDomain['domainName'] = foundDomain.name;
+                constructedDomain['urls'] = domainUrls;
+                constructedDomain['searchTerms'] = domainSearchTerms;
+                constructedDomain['domainTop5'] = domainTop5;
+                constructedDomain['top20Extractions'] = domainTop20Extractions;
+                constructedDomain['domainEntities'] = foundDomain.domainItems;
+                constructedDomain['domainEntityTypes'] = foundDomain.domainEntityTypes;
+
+                $scope.saveFile(foundDomain.name + '.json',JSON.stringify(constructedDomain));
+            });
         });
+    };
 
+    $scope.saveFile = function(filename,strFile){
+        //more complex, specify name
+        var uriContent = 'data:text/csv;charset=utf-8,' + strFile;
 
-        //DwDomain.find({
-        //    filter: {
-        //        where:{
-        //            id: domainId.id
-        //        }
-        //        //,
-        //        //include: ['domainEntityTypes','domainItems','extractors','trails','feeds','teams']
-        //    }}).$promise
-        //    .then(function (constructedDomain) {
-        //        $scope.prettyDomain = constructedDomain
-        //    })
-        //    .catch(function (err) {
-        //        console.log(err);
-        //    })
-        //    .then(function () {
-        //        $scope.loading = false;
-        //    });
+        var link = document.createElement('a');
+        if (typeof link.download === 'string') {
+            document.body.appendChild(link); // Firefox requires the link to be in the body
+            link.download = filename;
+            link.href = uriContent;
+            link.click();
+        }else {
+            location.replace(uri);
+        }
+        document.body.removeChild(link); // remove the link when done
     };
 
     $scope.importFile = function(index, file){

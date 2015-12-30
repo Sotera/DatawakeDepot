@@ -4,7 +4,7 @@
 //scripts.
 var myContentScriptKey = null;
 var myVar = null;
-//var iInterval = 2500;
+var iInterval = 4000;
 
 
 $(document).ready(function () {
@@ -19,7 +19,7 @@ function getTrailingStatus(){
 
 //Listen for the addin's getTrailingStatus response. If active then show the panel
 self.port.on('trailingStatus-target-content-script', function (data) {
-    if(data.trailingActive){
+    if(data.trailingActive && data.panelActive){
         showPanel();
     }
 });
@@ -32,7 +32,7 @@ function showPanel(){
 
     //Now that we've shown it, let's give it a few seconds to get some data
     //TODO: Really we should refresh until we have a few rows of data
-    setTimeout(getPanelData, 2000);
+    setTimeout(getPanelData, iInterval);
 }
 
 function getPanelData(){
@@ -72,18 +72,14 @@ self.port.on('load-css-urls-target-content-script', function (data) {
   });
 });
 
-//function rewritePanel(html){
-//  $('#datawake-right-panel').html(html);
-//}
-
-
 //function panelTimer(){
 //    self.port.emit('requestPanelHtml-target-addin', {contentScriptKey: myContentScriptKey});
 //}
 
 //Toggle panel
-self.port.on('send-toggle-datawake-panel', function () {
-    if ($('#datawake-right-panel').length === 0) {
+self.port.on('send-toggle-datawake-panel', function (data) {
+    if(data.panelActive){
+    //if ($('#datawake-right-panel').length === 0) {
         //Request Panel Data
         getPanelData();
 

@@ -28,7 +28,8 @@ exports.init = function () {
           break;
         case 'toggle-panel':
           var activeTabId = tabs.activeTab.id;
-          pluginState.postEventToContentScript(activeTabId, 'send-toggle-datawake-panel');
+          pluginState.panelActive = msg.data;
+          pluginState.postEventToContentScript(activeTabId, 'send-toggle-datawake-panel',{panelActive:msg.data});
           break;
         case 'set-trailing-active':
           pluginState.trailingActive = msg.data;
@@ -98,7 +99,12 @@ exports.init = function () {
 
     //Listens for requests to get user trailing status
     pluginState.addContentScriptEventHandler(data.contentScriptKey, 'requestTrailingActive-target-addin', function (scriptData) {
-        pluginState.postEventToContentScript(data.contentScriptKey, 'trailingStatus-target-content-script', {trailingActive: pluginState.trailingActive});
+        pluginState.postEventToContentScript(data.contentScriptKey, 'trailingStatus-target-content-script', {trailingActive: pluginState.trailingActive,panelActive:pluginState.panelActive});
+    });
+
+    //Listens for requests to get user trailing status
+    pluginState.addContentScriptEventHandler(data.contentScriptKey, 'requestPanelActive-target-addin', function (scriptData) {
+        pluginState.postEventToContentScript(data.contentScriptKey, 'panelStatus-target-content-script', {panelActive: pluginState.panelActive});
     });
 
     pluginState.addContentScriptEventHandler(data.contentScriptKey, 'zipped-html-body-target-addin', function (pageContents) {

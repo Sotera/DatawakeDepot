@@ -1,4 +1,5 @@
 window.trailingActive = false;
+window.panelActive = true;
 //
 //Handle messages from the AddIn
 //
@@ -84,7 +85,6 @@ function toggleTrailing() {
     $('#toggleTrailButton')
       .removeClass('btn-success')
       .addClass('btn-default')
-      //.addClass('red-throb')
       .html('Stop');
     $('body').addClass('body-throb');
     togglePanelButtonOn();
@@ -99,7 +99,7 @@ function setUIStateToLoggedIn(pluginState) {
   window.pluginState = pluginState;
   $('#loginButton')
     .html('Logout: ' + pluginState.loggedInUser.username)
-    .removeClass('btn-success')
+    .removeClass('btn-primary')
     .addClass('btn-danger');
   $('#teamList').removeAttr('disabled');
   $('#domainList').removeAttr('disabled');
@@ -117,7 +117,7 @@ function setUIStateToLoggedOut() {
   window.pluginState = null;
   $('#loginButton')
     .html('Login')
-    .addClass('btn-success')
+    .addClass('btn-primary')
     .removeClass('btn-danger')
     .show();
   $('#teamList').attr('disabled', 'disabled');
@@ -138,29 +138,27 @@ function toggleLogin() {
   }
 }
 
-var panelVisible;
-function togglePanelButton(){
-    if(dataItemsVisible){
-        togglePanelButtonOff();
-    }else{
-        togglePanelButtonOn();
-    }
-}
-
 function togglePanelButtonOn(){
     $('#toggleDWPanel').attr('src', "./images/OnButton_Green_transparent.png");
-    panelVisible = true;
+    window.panelActive = true;
+    postMessageToAddin({
+        action: 'toggle-panel',
+        data: window.panelActive
+    });
 }
 
 function togglePanelButtonOff(){
     $('#toggleDWPanel').attr('src', "./images/OffButton_transparent.png");
-    panelVisible = false;
+    window.panelActive = false;
+    postMessageToAddin({
+        action: 'toggle-panel',
+        data: window.panelActive
+    });
 }
 
 function togglePanel(){
     if (window.trailingActive){
-        postMessageToAddin({action: 'toggle-panel'});
-        if(panelVisible){
+        if(window.panelActive){
             togglePanelButtonOff();
         }else{
             togglePanelButtonOn();

@@ -182,11 +182,24 @@ function domainSelectionChanged() {
   });
 }
 function trailSelectionChanged() {
-  $('#toggleTrailButton').removeClass('disabled');
-  postMessageToAddin({
-    action: 'set-current-trail-target-addin',
-    value: $('#trailList').val()
-  });
+  //http://jsfiddle.net/nwH8A/ this.nextElementSibling.value=this.value
+  var newOption=false;
+
+  //detect if we're adding a new domain
+  if(!newOption){
+      //this.nextElementSibling.value=this.value;
+      $('#trailInput').attr('value', $('#trailList option:selected').text());
+      $('#toggleTrailButton').removeClass('disabled');
+      postMessageToAddin({
+          action: 'set-current-trail-target-addin',
+          value: $('#trailList').val()
+      });
+  }else{
+      //1. Lock the toolbar until the new Trail is either created or cancelled
+      //2. Submit the new trail
+      //3. refresh the trail dropdown to get the newly created trail and id, set the dropdown to the created trail
+  }
+
 }
 //
 //Communication with AddIn

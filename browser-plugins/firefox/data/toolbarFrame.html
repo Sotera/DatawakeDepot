@@ -77,13 +77,18 @@
       <label for="trailList"
              style="padding-left:0;padding-right:4px;"
              class="control-label col-lg-1 col-md-1 col-sm-1 col-xs-1">Trail:</label>
-      <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"
-           style="padding-left:0;padding-right:0;">
+      <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 select-editable"
+           style="padding-left:0;padding-right:0;visibility: visible">
         <select id="trailList"
                 disabled="disabled"
                 onchange="trailSelectionChanged()"
                 class="form-control btn-info input-sm">
         </select>
+        <input id="trailInput"
+               type="text"
+               name="trailInput"
+               value=""
+               class="form-control btn-info input-sm"/>
       </div>
 
 

@@ -25,13 +25,16 @@ function syncSelectElementsWithPluginState() {
   addItemsToSelectElement(ps.currentTeamList, ps.currentTeam, '#teamList');
   addItemsToSelectElement(ps.currentDomainList, ps.currentDomain, '#domainList');
   addItemsToSelectElement(ps.currentTrailList, ps.currentTrail, '#trailList');
+  addItemsToSelectElement(ps.currentTrailList, ps.currentTrail, '#trailDatalist');
   if(ps.currentTrail){
     $('#trailList')[0].onchange();
+    $('#trailDatalist')[0].onchange();
   }
 }
 function clearSelectElements() {
   $('#domainList').children().remove().end();
   $('#trailList').children().remove().end();
+  $('#trailDatalist').children().remove().end();
   $('#teamList').children().remove().end();
 }
 function addItemsToSelectElement(items, currentItem, idSelector) {
@@ -70,6 +73,7 @@ function toggleTrailing() {
     $('#loginButton').show();
     $('#domainList').removeAttr('disabled');
     $('#trailList').removeAttr('disabled');
+    $('#trailDatalist').removeAttr('disabled');
     $('#teamList').removeAttr('disabled');
     $('#toggleTrailButton')
       .addClass('btn-success')
@@ -81,6 +85,7 @@ function toggleTrailing() {
     $('#loginButton').hide();
     $('#domainList').attr('disabled', 'disabled');
     $('#trailList').attr('disabled', 'disabled');
+    $('#trailDatalist').attr('disabled', 'disabled');
     $('#teamList').attr('disabled', 'disabled');
     $('#toggleTrailButton')
       .removeClass('btn-success')
@@ -104,6 +109,7 @@ function setUIStateToLoggedIn(pluginState) {
   $('#teamList').removeAttr('disabled');
   $('#domainList').removeAttr('disabled');
   $('#trailList').removeAttr('disabled');
+  $('#trailDatalist').removeAttr('disabled');
   $('#toggleTrailButton').addClass('disabled');
   syncSelectElementsWithPluginState();
 }
@@ -123,6 +129,7 @@ function setUIStateToLoggedOut() {
   $('#teamList').attr('disabled', 'disabled');
   $('#domainList').attr('disabled', 'disabled');
   $('#trailList').attr('disabled', 'disabled');
+  $('#trailDatalist').attr('disabled', 'disabled');
   $('#toggleTrailButton').addClass('disabled');
   clearSelectElements();
 }
@@ -186,6 +193,7 @@ function trailSelectionChanged() {
   postMessageToAddin({
     action: 'set-current-trail-target-addin',
     value: $('#trailList').val()
+    //value: $('#trailDatalist').val()
   });
 }
 //

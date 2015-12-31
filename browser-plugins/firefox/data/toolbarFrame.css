@@ -13,6 +13,7 @@ body {
     font-weight: 600;
     /*color: #2770a8;*/
     background: lightblue;
+    /*padding: 4px;*/
 }
 
 #waveImg {
@@ -22,7 +23,8 @@ body {
 }
 
 .body-throb{
-    background: #E77471;
+    border: 2px solid #E77471;
+    /*background: #E77471;*/
     -moz-animation: color_change2 1s infinite alternate;
 }
 
@@ -37,8 +39,8 @@ body {
 }
 
 @-moz-keyframes color_change2 {
-    from { background-color: #C24641; }
-    to { background-color: #F70D1A; }
+    from { border-color: white}
+    to { border-color: red; }
 }
 
 a,
@@ -146,6 +148,14 @@ select {
 .row.no-gutter [class*='col-']:not(:first-child), .row.no-gutter [class*='col-']:not(:last-child) {
     padding-right: 6px;
     padding-left: 0px;
+}
+
+.input-xs {
+    height: 15px;
+    padding: 5px 5px;
+    font-size: 12px;
+    line-height: 1.5;
+    border-radius: 3px;
 }
 
 /* only for column content visible */

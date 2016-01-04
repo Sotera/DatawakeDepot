@@ -78,3 +78,11 @@ app.service('TrailUrlsService', ['$state', 'CoreService', 'DwTrail','DwTrailUrl'
   };
 
 }]);
+
+//{"fields":["id","name","description"],"include":[{"relation":"domainEntityTypes","scope":{"fields":["name","description"]}},{"relation":"domainItems","scope":{"fields":["itemValue","type","source"]}}]}
+//
+//{"fields":["id","name","description"],"include":[
+//    {"relation":"domainEntityTypes","scope":{"fields":["name","description"]}},
+//    {"relation":"domainItems","scope":{"fields":["itemValue","type","source"]}}
+//
+//]}

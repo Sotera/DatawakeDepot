@@ -1,7 +1,7 @@
 'use strict';
 var app = angular.module('com.module.dwDomains');
 
-app.service('DomainsService', ['$state', 'CoreService', 'DwDomain','gettextCatalog','DwDomainEntityType','DwDomainItem', function($state, CoreService, DwDomain, gettextCatalog, DwDomainEntityType, DwDomainItem) {
+app.service('DomainsService', ['$state', 'CoreService', 'DwDomain','gettextCatalog','DwDomainEntityType','DwDomainItem','DwTrail', function($state, CoreService, DwDomain, gettextCatalog, DwDomainEntityType, DwDomainItem, DwTrail) {
 
     this.getDomains = function() {
         return DwDomain.find({filter: {include: ['domainEntityTypes','domainItems','extractors','trails','feeds','teams']}});
@@ -12,6 +12,104 @@ app.service('DomainsService', ['$state', 'CoreService', 'DwDomain','gettextCatal
             id: id
         });
     };
+
+    this.getPrettyDomain = function(domainId){
+        var filter = {
+                filter:{
+                    fields: ['id','name','description'],
+                    where:{
+                        id: domainId
+                    },
+                    include: [
+                        {relation:'domainEntityTypes',scope:{fields:['name','description']}},
+                        {relation:'domainItems',
+                            scope:{
+                                fields:{
+                                    'itemValue':true,
+                                    'type':true,
+                                    'source':true,
+                                    'dwDomainId':false
+                                }
+                            }
+                        }
+                    ]
+                }
+        };
+        return DwDomain.findOne(filter);
+    };
+
+    this.getDomainUrls = function(domainId){
+        var filter = {
+            filter:{
+                fields: ['id'],
+                where:{
+                    dwDomainId: domainId
+                },
+                include: [
+                    {relation:'trailUrls',
+                        scope:{
+                            //fields: {
+                            //    'url',
+                            //    'searchTerms'
+                            //},
+                            include:['urlExtractions']
+                        }
+                    }
+                ]
+            }
+        };
+        return DwTrail.find(filter);
+    };
+
+    this.getTopLevels = function(urlList, urlCount){
+        //Clean em up
+        var strippedUrls = [];
+        urlList.forEach(function(url){
+            var decodedUrl = decodeURI(url);
+            var topLevel = new RegExp('^(?:https?:)?(?:\/\/)?([^\/\?]+)').exec(decodedUrl);
+            strippedUrls.push(topLevel[1]);
+        });
+        //Now count them
+        var urlCounts = { };
+        for (var i = 0, j = strippedUrls.length; i < j; i++) {
+            urlCounts[strippedUrls[i]] = (urlCounts[strippedUrls[i]] || 0) + 1;
+        }
+        //Now sort them
+        var sorted= [];
+        for(var key in urlCounts){
+            sorted.push({url:key,count:urlCounts[key]});
+        }
+        sorted.sort(sortBy('count',true)); //Descending
+
+        //Now crop and return them
+        return sorted.slice(0,urlCount);
+    };
+
+
+    function sortBy(key, reverse) {
+        // Move smaller items towards the front or back of the array depending on if
+        // we want to sort the array in reverse order or not.
+        var moveSmaller = reverse ? 1 : -1;
+
+        // Move larger items towards the front or back of the array depending on if
+        // we want to sort the array in reverse order or not.
+        var moveLarger = reverse ? -1 : 1;
+        /**
+         * @param  {*} a
+         * @param  {*} b
+         * @return {Number}
+         */
+        return function(a, b) {
+            if (a[key] < b[key]) {
+                return moveSmaller;
+            }
+            if (a[key] > b[key]) {
+                return moveLarger;
+            }
+            return 0;
+        };
+
+    }
 
     this.upsertDomain = function(domain, cb) {
         DwDomain.upsert(domain, function(newDomain) {
@@ -26,7 +124,7 @@ app.service('DomainsService', ['$state', 'CoreService', 'DwDomain','gettextCatal
                         //success
                     });
                 });
-            };
+            }
 
             if(domain.dwFeeds) {
                 domain.dwFeeds.forEach(function (feed) {
@@ -34,7 +132,7 @@ app.service('DomainsService', ['$state', 'CoreService', 'DwDomain','gettextCatal
                         //success
                     });
                 });
-            };
+            }
 
             if(domain.dwExtractors) {
                 domain.dwExtractors.forEach(function (extractor) {
@@ -42,7 +140,7 @@ app.service('DomainsService', ['$state', 'CoreService', 'DwDomain','gettextCatal
                         //success
                     });
                 });
-            };
+            }
             //For other relationships you MUST manually add the items
             if(domain.domainEntityTypes) {
                 domain.domainEntityTypes.forEach(function (det) {
@@ -51,7 +149,7 @@ app.service('DomainsService', ['$state', 'CoreService', 'DwDomain','gettextCatal
                     }, function(err) {
                     });
                 });
-            };
+            }
 
             if(domain.domainItems) {
                 domain.domainItems.forEach(function (di) {
@@ -83,7 +181,7 @@ app.service('DomainsService', ['$state', 'CoreService', 'DwDomain','gettextCatal
                             //success
                         });
                     });
-                };
+                }
 
                 if(domain.id.dwFeeds) {
                     domain.id.dwFeeds.forEach(function (feed) {
@@ -91,7 +189,7 @@ app.service('DomainsService', ['$state', 'CoreService', 'DwDomain','gettextCatal
                             //success
                         });
                     });
-                };
+                }
 
                 if(domain.id.dwExtractors) {
                     domain.id.dwExtractors.forEach(function (extractor) {
@@ -99,7 +197,7 @@ app.service('DomainsService', ['$state', 'CoreService', 'DwDomain','gettextCatal
                             //success
                         });
                     });
-                };
+                }
 
                 //Now delete the domain
                 DwDomain.deleteById(domain.id, function() {
@@ -113,7 +211,7 @@ app.service('DomainsService', ['$state', 'CoreService', 'DwDomain','gettextCatal
                             }, function(err) {
                             });
                         });
-                    };
+                    }
 
                     if(domain.id.domainEntityTypes) {
                         domain.id.domainEntityTypes.forEach(function (det) {
@@ -122,7 +220,7 @@ app.service('DomainsService', ['$state', 'CoreService', 'DwDomain','gettextCatal
                             }, function(err) {
                             });
                         });
-                    };
+                    }
 
                     cb();
                 }, function(err) {

@@ -26,6 +26,8 @@
        height="24"
        width="24">
 
+
+
   <form class="form-horizontal">
     <div class="form-group">
       <label for="teamList"
@@ -39,10 +41,11 @@
                 class="form-control btn-info input-sm"></select>
       </div>
 
-      <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"
+      <div id="toggleDiv"
+              class="col-lg-2 col-md-2 col-sm-2 col-xs-2"
            style="padding-left:4px;padding-right:2px;">
         <span>
-            <label for="toggleDomainItems" style="font-size:10px;padding-left:0;padding-right:5px;">Show DataItems:</label>
+            <label for="toggleDomainItems" style="font-size:10px;padding-left:0;padding-right:5px;">Show Domain Items:</label>
             <img src="./images/OffButton_transparent.png"
                  id="toggleDomainItems"
                  align="bottom"
@@ -62,16 +65,18 @@
         </span>
       </div>
 
-      <label for="domainList"
-               style="padding-left:0;padding-right:4px;visibility: visible"
-               class="control-label col-lg-1 col-md-1 col-sm-1 col-xs-1">Domain:</label>
-      <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"
-           style="padding-left:0;padding-right:0;visibility: visible">
-          <select id="domainList"
-                  disabled="disabled"
-                  onchange="domainSelectionChanged()"
-                  class="form-control btn-info input-sm">
-          </select>
+      <div id="domainDiv" style="visibility: visible">
+          <label for="domainList"
+                   style="padding-left:0;padding-right:4px;"
+                   class="control-label col-lg-1 col-md-1 col-sm-1 col-xs-1">Domain:</label>
+          <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"
+               style="padding-left:0;padding-right:0;">
+              <select id="domainList"
+                      disabled="disabled"
+                      onchange="domainSelectionChanged()"
+                      class="form-control btn-info input-sm">
+              </select>
+          </div>
       </div>
 
       <label for="trailList"
@@ -85,27 +90,39 @@
                 class="form-control btn-info input-sm">
         </select>
         <input id="trailInput"
+               disable="disabled"
                type="text"
                name="trailInput"
+               onkeyup="trailSelectionChanged2()"
                value=""
                class="form-control btn-info input-sm"/>
       </div>
 
 
+      <div id="buttonDiv">
+          <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"
+               style="padding-left:4px;padding-right:2px;">
+            <a id="addTrailButton"
+               role="button"
+               class="btn btn-sm btn-success"
+               style="display:none"
+               onclick="createTrail()">Add New Trail</a>
+            <a id="cancelTrailButton"
+               role="button"
+               style="display:none"
+               class="btn btn-sm btn-danger"
+               onclick="cancelTrail()">Cancel</a>
 
-      <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"
-           style="padding-left:4px;padding-right:2px;">
-        <a id="toggleTrailButton"
-           role="button"
-           class="btn btn-sm btn-success btn-block disabled"
-           onclick="toggleTrailing()">Start</a>
-      </div>
-      <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"
-           style="padding-left:2px;padding-right:4px;">
-        <a id="loginButton"
-           role="button"
-           class="btn btn-sm btn-primary btn-block"
-           onclick="toggleLogin()">Login</a>
+            <a id="toggleTrailButton"
+               role="button"
+               class="btn btn-sm btn-success disabled"
+               onclick="toggleTrailing()">Start</a>
+
+            <a id="loginButton"
+               role="button"
+               class="btn btn-sm btn-primary"
+               onclick="toggleLogin()">Login</a>
+          </div>
       </div>
 
     </div>

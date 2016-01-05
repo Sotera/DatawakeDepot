@@ -51,6 +51,10 @@ exports.init = function () {
             return el.name == msg.value;
           })[0];
           break;
+        case 'add-current-trail-to-domain-target-addin':
+          var newTrail = msg.trailName;
+          addTrail(newTrail);
+          break;
       }
     }
   });
@@ -106,6 +110,26 @@ exports.init = function () {
     pluginState.addContentScriptEventHandler(data.contentScriptKey, 'requestPanelActive-target-addin', function (scriptData) {
         pluginState.postEventToContentScript(data.contentScriptKey, 'panelStatus-target-content-script', {panelActive: pluginState.panelActive});
     });
+
+    //pluginState.addContentScriptEventHandler(data.contentScriptKey,'add-current-trail-to-domain-target-addin', function (trail) {
+    //    var newTrail = trail;
+    //    addTrail(newTrail);
+    //});
+
+    ////Listens for requests to create a new trail
+    //  pluginState.addContentScriptEventHandler(data.contentScriptKey, 'add-current-trail-to-domain-target-addin', function (trailInfo) {
+    //      pluginState.restPost(pluginState.trailsUrl,
+    //          {
+    //              dwTeamId: pluginState.currentTeam.id,
+    //              dwDomainId: pluginState.currentDomain.id,
+    //              scrape: 'body',
+    //              name: trailInfo.trailName,
+    //              description: trailInfo.trailName
+    //          }, function (res) {
+    //              //console.log(res.text);
+    //          }
+    //      );
+    //});
 
     pluginState.addContentScriptEventHandler(data.contentScriptKey, 'zipped-html-body-target-addin', function (pageContents) {
       //TODO: Work out some scraper eventing so we don't do the DOM operation if we're not trailing.
@@ -244,4 +268,32 @@ function addDomainItem(domItem){
       }
   );
 }
+
+function addTrail(trailName){
+    //Create the trail
+    var newTrail = {
+      dwTeamId: pluginState.currentTeam.id,
+      dwDomainId: pluginState.currentDomain.id,
+      scrape: 'body',
+      name: trailName,
+      description: trailName
+    };
+
+    pluginState.restPost(pluginState.createTrail,
+        newTrail, function (res) {
+            console.log(res.text);
+        }
+    );
+
+    //Reload the plugins trail list to get the new trail
+    pluginState.postEventToAddInModule('get-trails-for-current-team-and-domain');
+
+    //Tell the toolbar that all is well
+    var msg = {
+        type: 'create-trail-success-target-toolbar-frame',
+        trailName: trailName
+    };
+    pluginState.postMessageToToolBar(msg);
+}
+
 

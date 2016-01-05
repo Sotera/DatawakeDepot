@@ -19,6 +19,7 @@ var PluginState = function () {
   me.domainItemsUrl = '/api/dwDomainItems';
   me.domainList = '/widget/get-domain-list';
   me.trailExtractedEntities = '/widget/get-url-entities';
+  me.createTrail = '/api/dwTrails';
   me.createEntityType = '/api/DwDomainEntityTypes';
   me.createDomainItem = '/api/dwDomains/_domainId_/domainItems';
   me.trailingActive = false;

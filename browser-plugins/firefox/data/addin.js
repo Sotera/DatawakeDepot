@@ -31,6 +31,22 @@ exports.init = function () {
           pluginState.panelActive = msg.data;
           pluginState.postEventToContentScript(activeTabId, 'send-toggle-datawake-panel',{panelActive:msg.data});
           break;
+        case 'toggle-dataitems':
+          var activeTabId = tabs.activeTab.id;
+          pluginState.dataitemsActive = msg.data;
+
+          //TODO: optimize, don't have to get dataitems every time, instead get at login and update when items added
+          pluginState.getDomainItemsForCurrentDomain(function (domainItems) {
+              var domainItemValues = [];
+              domainItems.forEach(function (domainItemValue) {
+                  domainItemValues.push(domainItemValue.itemValue);
+              });
+              pluginState.postEventToContentScript(activeTabId, 'send-toggle-datawake-dataitems', {
+                  dataitemsActive:msg.data,
+                  domainItems:domainItemValues
+              });
+          });
+          break;
         case 'set-trailing-active':
           pluginState.trailingActive = msg.data;
           break;

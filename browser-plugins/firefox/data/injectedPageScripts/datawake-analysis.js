@@ -96,6 +96,17 @@ self.port.on('send-toggle-datawake-panel', function (data) {
     }
 });
 
+//Toggle dataitems highlighting
+self.port.on('send-toggle-datawake-dataitems', function (data) {
+    if(data.dataitemsActive){
+        data.domainItems.forEach(function (domainItem) {
+            $('body').highlight(domainItem);
+        });
+    }else{
+        $('body').unhighlight();
+    }
+});
+
 //Highlight DomainItems in page
 self.port.on('toggle-showing-domain-items', function (data) {
   if (!data.domainItems.length) {

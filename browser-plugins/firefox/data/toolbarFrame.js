@@ -1,5 +1,6 @@
 window.trailingActive = false;
 window.panelActive = true;
+window.dataitemsActive = false;
 window.refreshTrails = false;
 window.createTrailMode = false;
 
@@ -72,25 +73,6 @@ function addItemsToSelectElement(items, currentItem, idSelector) {
   }
 }
 
-var dataItemsVisible;
-function toggleDataItems(){
-    if(dataItemsVisible){
-        toggleDataItemButtonOff();
-    }else{
-        toggleDataItemButtonOn();
-    }
-}
-
-function toggleDataItemButtonOn(){
-    $('#toggleDomainItems').attr('src', './images/OnButton_Green_transparent.png');
-    dataItemsVisible = true;
-}
-
-function toggleDataItemButtonOff(){
-    $('#toggleDomainItems').attr('src', './images/OffButton_transparent.png');
-    dataItemsVisible = false;
-}
-
 function toggleTrailing() {
   if (window.trailingActive) {
     $('#loginButton').show();
@@ -104,6 +86,7 @@ function toggleTrailing() {
       .html('Start');
     $('body').removeClass('body-throb');
     togglePanelButtonOff();
+    toggleDataItemButtonOff();
   } else {
     $('#loginButton').hide();
     $('#domainList').attr('disabled', 'disabled');
@@ -117,6 +100,7 @@ function toggleTrailing() {
       .html('Stop');
     $('body').addClass('body-throb');
     togglePanelButtonOn();
+    toggleDataItemButtonOn
   }
   window.trailingActive = !window.trailingActive;
   postMessageToAddin({
@@ -195,6 +179,34 @@ function togglePanel(){
             togglePanelButtonOn();
         }
     }
+}
+
+function toggleDataItems(){
+    if (window.trailingActive) {
+        if (window.dataitemsActive) {
+            toggleDataItemButtonOff();
+        } else {
+            toggleDataItemButtonOn();
+        }
+    }
+}
+
+function toggleDataItemButtonOn(){
+    $('#toggleDomainItems').attr('src', './images/OnButton_Green_transparent.png');
+    window.dataitemsActive = true;
+    postMessageToAddin({
+        action: 'toggle-dataitems',
+        data: window.dataitemsActive
+    });
+}
+
+function toggleDataItemButtonOff(){
+    $('#toggleDomainItems').attr('src', './images/OffButton_transparent.png');
+    window.dataitemsActive = false;
+    postMessageToAddin({
+        action: 'toggle-dataitems',
+        data: window.dataitemsActive
+    });
 }
 
 //

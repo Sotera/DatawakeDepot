@@ -26,6 +26,7 @@ var PluginState = function () {
   me.dwTrailUrls = '/#/app/dwTrailUrls/list/';
   me.trailingActive = false;
   me.panelActive = true;
+  me.dataitemsActive = true;
   me.toolbarFrameSource = null;
   me.toolbarFrameOrigin = null;
   me.datawakeDepotContentScriptHandle = null;

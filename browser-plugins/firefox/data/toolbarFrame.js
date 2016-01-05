@@ -293,6 +293,13 @@ function cancelTrail(){
     $('#trailList')[0].onchange();
 }
 
+function openTab(tabTarget){
+    postMessageToAddin({
+        action: 'open-new-tab-target-addin',
+        tabTarget: tabTarget
+    });
+}
+
 //
 //Communication with AddIn
 //

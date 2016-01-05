@@ -55,6 +55,25 @@ exports.init = function () {
           var newTrail = msg.trailName;
           addTrail(newTrail);
           break;
+        case 'open-new-tab-target-addin':
+          var target = '';
+
+            switch (msg.tabTarget){
+                case 'dwHome':
+                    target = pluginState.loginUrl;
+                    break;
+                case 'dwForensic':
+                    target = pluginState.dwForensic;
+                    break;
+                case 'dwTrailUrls':
+                    target = pluginState.dwTrailUrls + pluginState.currentTrail.id;
+                    break;
+                default:
+                    target = pluginState.loginUrl;
+                    break;
+            }
+          tabs.open(pluginState.loginUrl + target);
+          break;
       }
     }
   });

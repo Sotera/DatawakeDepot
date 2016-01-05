@@ -20,13 +20,15 @@
 <div>
   <!--<div style="vertical-align: middle"
        class="container-fluid">-->
-  <img src="./images/waveicon24.png"
-       id="waveImg"
-       style="margin-left: 6px;position: absolute;"
-       height="24"
-       width="24">
-
-
+  <a id="openDWHome"
+     role="button"
+          onclick="openTab()">
+      <img src="./images/waveicon24.png"
+           id="waveImg"
+           style="margin-left: 6px;position: absolute;"
+           height="24"
+           width="24">
+  </a>
 
   <form class="form-horizontal">
     <div class="form-group">
@@ -112,7 +114,6 @@
                style="display:none"
                class="btn btn-sm btn-danger"
                onclick="cancelTrail()">Cancel</a>
-
             <a id="toggleTrailButton"
                role="button"
                class="btn btn-sm btn-success disabled"

@@ -18,13 +18,9 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser
 
     //Setup the view dropdown menu
     $scope.views = [];
-    $scope.viewSettings = {buttonClasses: 'btn btn-primary btn-sm', displayProp: 'name'};
-    $scope.viewCustomText = {buttonDefaultText: 'Select Views'};
+    //$scope.viewSettings = {buttonClasses: 'btn btn-primary btn-sm', displayProp: 'name'};
+    //$scope.viewCustomText = {buttonDefaultText: 'Select Views'};
 
-    //Setup the visited pages grid
-    $scope.sortType = 'weight'; // set the default sort type
-    $scope.sortReverse = false;  // set the default sort order
-    $scope.visitedSearch = '';     // set the default search/filter term
 
 
     $scope.teamChanged = function (team) {

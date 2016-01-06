@@ -80,49 +80,24 @@
                 </div>
             </tab>
             <tab heading="Visited Links">
-                <table class="table table-bordered table-striped">
+                <table st-table="visitedGridSafe" st-safe-src="visitedGrid" class="table table-bordered table-striped">
                     <thead>
-                    <tr>
-                        <td>
-                            <a href="#" ng-click="sortType = 'searchTerms'; sortReverse = !sortReverse">
-                                Search Terms
-                                <span ng-show="sortType == 'searchTerms' && !sortReverse"
-                                      class="fa fa-caret-down"></span>
-                                <span ng-show="sortType == 'searchTerms' && sortReverse" class="fa fa-caret-up"></span>
-                            </a></td>
-                        <td>
-                            <a href="#" ng-click="sortType = 'name'; sortReverse = !sortReverse">
-                                URL
-                                <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
-                                <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="#" ng-click="sortType = 'ts'; sortReverse = !sortReverse">
-                                Timestamp
-                                <span ng-show="sortType == 'ts' && !sortReverse" class="fa fa-caret-down"></span>
-                                <span ng-show="sortType == 'ts' && sortReverse" class="fa fa-caret-up"></span>
-                            </a>
-                        </td>
-                    </tr>
+                        <tr>
+                            <th st-sort="searchTerms">Search Terms</th>
+                            <th st-sort="url">URL</th>
+                            <th st-sort="timestamp">Time</th>
+                        </tr>
                     </thead>
-
                     <tbody>
-                    <tr ng-repeat="page in visitedGrid | orderBy:sortType:sortReverse ">
-                        <td>{{ page.searchTerms}}</td>
-                        <td><a href="{{page.url}}" target="_blank">{{ page.url.substring(0,100) }}</a></td>
-                        <td>{{ page.timestamp }}</td>
-                        <td>{{ page.dwDomainEntityTypeId }}</td>
-                    </tr>
+                        <tr ng-repeat="page in visitedGridSafe">
+                            <td>{{ page.searchTerms}}</td>
+                            <td><a href="{{page.url}}" target="_blank">{{ page.url.substring(0,100) }}</a></td>
+                            <td>{{ page.timestamp }}</td>
+                        </tr>
                     </tbody>
                 </table>
             </tab>
             <tab heading="Entities">
-                <div class="alert alert-info">
-                    <p>Sort Type: {{ sortType }}</p>
-                    <p>Sort Reverse: {{ sortReverse }}</p>
-                    <p>Search Query: {{ searchFish }}</p>
-                </div>
                 <table st-table="entitiesGridSafe" st-safe-src="entitiesGrid" class="table table-bordered table-striped">
                     <thead>
                         <tr>

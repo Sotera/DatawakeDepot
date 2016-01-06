@@ -3,6 +3,7 @@ window.panelActive = true;
 window.dataitemsActive = false;
 window.refreshTrails = false;
 window.createTrailMode = false;
+window.newTrailName = '';
 
 //
 //Handle messages from the AddIn
@@ -47,7 +48,8 @@ function syncSelectElementsWithPluginState() {
         //worked around the dropdown trailSelectionChanged event
         window.refreshTrails = false;
         window.createTrailMode = false;
-        $('#trailList').val(window.createTrail);
+
+        $('#trailList').val(window.newTrailName);
         postMessageToAddin({
             action: 'set-current-trail-target-addin',
             value: $('#trailList').val()
@@ -108,6 +110,7 @@ function toggleTrailing() {
     data: window.trailingActive
   });
 }
+
 function setUIStateToLoggedIn(pluginState) {
   window.pluginState = pluginState;
   $('#loginButton')
@@ -288,10 +291,10 @@ function unlockToolbar(){
 
 function createTrail(){
     if($('#trailInput').val()){
-        window.createTrail = $('#trailInput').val();
+        window.newTrailName = $('#trailInput').val();
         postMessageToAddin({
             action: 'add-current-trail-to-domain-target-addin',
-            trailName: window.createTrail
+            trailName: window.newTrailName
         });
         unlockToolbar();
     }

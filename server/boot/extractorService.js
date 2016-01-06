@@ -11,6 +11,23 @@ module.exports = function (app) {
     var initialized = false;
     var dwExtractor = app.models.DwExtractor;
     var dwExtractorMap = {};
+    var requester = generateUid(); //this is our unique requester id for this DW session
+
+    function generateUid (separator){
+        /// <summary>
+        ///    Creates a unique id for identification purposes.
+        /// </summary>
+        /// <param name="separator" type="String" optional="true">
+        /// The optional separator for grouping the generated segmants: default "-".
+        /// </param>
+
+        var delim = separator || "-";
+
+        function S4() {
+            return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+        }
+        return (S4() + S4() + delim + S4() + delim + S4() + delim + S4() + delim + S4() + S4() + S4());
+    }
 
     me.unzipContent = function (content) {
         //HowTo: decode (unzip)
@@ -25,7 +42,8 @@ module.exports = function (app) {
                 "failureCount": 0,
                 "failureLimit": 10,
                 "extractor": extractor,
-                "extractorUrl": extractor.protocol + "://" + extractor.extractorHost + ":" + extractor.port + "/" + extractor.extractorUrl
+                "extractorUrl": extractor.protocol + "://" + extractor.extractorHost + ":" + extractor.port + "/" + extractor.extractorUrl,
+                "requester": requester
             };
         dwExtractorMap[extractor.id.toString()] = extractorContainer;
         return extractorContainer;
@@ -35,7 +53,7 @@ module.exports = function (app) {
         extractorContainer.intervalId = setInterval(function () {
             try {
                 request({
-                    url: extractorContainer.extractorUrl
+                    url: extractorContainer.extractorUrl + '?requester=' + extractorContainer.requester
                 }, function (error, response, body) {
                     if (response && response.statusCode == 200) {
                         extractorContainer.failureCount = 0;
@@ -176,13 +194,17 @@ module.exports = function (app) {
                                                                 images: "",
                                                                 videos: ""
                                                             };
+
+                                                            var form = {
+                                                                dwTrailUrlId: change.data.id.toString(),
+                                                                scrapedContent: change.data.scrapedContent,
+                                                                requester: requester
+                                                            };
+
                                                             request.post({
                                                                 url: extractorUrl,
                                                                 headers: headers,
-                                                                form: {
-                                                                    dwTrailUrlId: change.data.id.toString(),
-                                                                    scrapedContent: cdr
-                                                                }
+                                                                form: form
                                                             }, function (error) {
                                                                 if (error) {
                                                                     console.log(error.message);
@@ -199,8 +221,9 @@ module.exports = function (app) {
 
                                                 var form = {
                                                     dwTrailUrlId: change.data.id.toString(),
-                                                    scrapedContent: change.data.scrapedContent
-                                                }
+                                                    scrapedContent: change.data.scrapedContent,
+                                                    requester: requester
+                                                };
 
                                                 request.post({
                                                     url: extractorUrl,

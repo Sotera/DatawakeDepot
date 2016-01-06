@@ -28,7 +28,24 @@ exports.init = function () {
           break;
         case 'toggle-panel':
           var activeTabId = tabs.activeTab.id;
-          pluginState.postEventToContentScript(activeTabId, 'send-toggle-datawake-panel');
+          pluginState.panelActive = msg.data;
+          pluginState.postEventToContentScript(activeTabId, 'send-toggle-datawake-panel',{panelActive:msg.data});
+          break;
+        case 'toggle-dataitems':
+          var activeTabId = tabs.activeTab.id;
+          pluginState.dataitemsActive = msg.data;
+
+          //TODO: optimize, don't have to get dataitems every time, instead get at login and update when items added
+          pluginState.getDomainItemsForCurrentDomain(function (domainItems) {
+              var domainItemValues = [];
+              domainItems.forEach(function (domainItemValue) {
+                  domainItemValues.push(domainItemValue.itemValue);
+              });
+              pluginState.postEventToContentScript(activeTabId, 'send-toggle-datawake-dataitems', {
+                  dataitemsActive:msg.data,
+                  domainItems:domainItemValues
+              });
+          });
           break;
         case 'set-trailing-active':
           pluginState.trailingActive = msg.data;
@@ -49,6 +66,29 @@ exports.init = function () {
           pluginState.currentTrail = pluginState.currentTrailList.filter(function (el) {
             return el.name == msg.value;
           })[0];
+          break;
+        case 'add-current-trail-to-domain-target-addin':
+          var newTrail = msg.trailName;
+          addTrail(newTrail);
+          break;
+        case 'open-new-tab-target-addin':
+          var target = '';
+
+            switch (msg.tabTarget){
+                case 'dwHome':
+                    target = pluginState.loginUrl;
+                    break;
+                case 'dwForensic':
+                    target = pluginState.dwForensic;
+                    break;
+                case 'dwTrailUrls':
+                    target = pluginState.dwTrailUrls + pluginState.currentTrail.id;
+                    break;
+                default:
+                    target = pluginState.loginUrl;
+                    break;
+            }
+          tabs.open(pluginState.loginUrl + target);
           break;
       }
     }
@@ -98,8 +138,33 @@ exports.init = function () {
 
     //Listens for requests to get user trailing status
     pluginState.addContentScriptEventHandler(data.contentScriptKey, 'requestTrailingActive-target-addin', function (scriptData) {
-        pluginState.postEventToContentScript(data.contentScriptKey, 'trailingStatus-target-content-script', {trailingActive: pluginState.trailingActive});
+        pluginState.postEventToContentScript(data.contentScriptKey, 'trailingStatus-target-content-script', {trailingActive: pluginState.trailingActive,panelActive:pluginState.panelActive});
     });
+
+    //Listens for requests to get user trailing status
+    pluginState.addContentScriptEventHandler(data.contentScriptKey, 'requestPanelActive-target-addin', function (scriptData) {
+        pluginState.postEventToContentScript(data.contentScriptKey, 'panelStatus-target-content-script', {panelActive: pluginState.panelActive});
+    });
+
+    //pluginState.addContentScriptEventHandler(data.contentScriptKey,'add-current-trail-to-domain-target-addin', function (trail) {
+    //    var newTrail = trail;
+    //    addTrail(newTrail);
+    //});
+
+    ////Listens for requests to create a new trail
+    //  pluginState.addContentScriptEventHandler(data.contentScriptKey, 'add-current-trail-to-domain-target-addin', function (trailInfo) {
+    //      pluginState.restPost(pluginState.trailsUrl,
+    //          {
+    //              dwTeamId: pluginState.currentTeam.id,
+    //              dwDomainId: pluginState.currentDomain.id,
+    //              scrape: 'body',
+    //              name: trailInfo.trailName,
+    //              description: trailInfo.trailName
+    //          }, function (res) {
+    //              //console.log(res.text);
+    //          }
+    //      );
+    //});
 
     pluginState.addContentScriptEventHandler(data.contentScriptKey, 'zipped-html-body-target-addin', function (pageContents) {
       //TODO: Work out some scraper eventing so we don't do the DOM operation if we're not trailing.
@@ -238,4 +303,32 @@ function addDomainItem(domItem){
       }
   );
 }
+
+function addTrail(trailName){
+    //Create the trail
+    var newTrail = {
+      dwTeamId: pluginState.currentTeam.id,
+      dwDomainId: pluginState.currentDomain.id,
+      scrape: 'body',
+      name: trailName,
+      description: trailName
+    };
+
+    pluginState.restPost(pluginState.createTrail,
+        newTrail, function (res) {
+            console.log(res.text);
+        }
+    );
+
+    //Reload the plugins trail list to get the new trail
+    pluginState.postEventToAddInModule('get-trails-for-current-team-and-domain');
+
+    //Tell the toolbar that all is well
+    var msg = {
+        type: 'create-trail-success-target-toolbar-frame',
+        trailName: trailName
+    };
+    pluginState.postMessageToToolBar(msg);
+}
+
 

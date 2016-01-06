@@ -14,7 +14,7 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser
     $scope.selectedDomain = null;
     $scope.selectedTrail = null;
     $scope.selectedViews = [];
-    $scope.entitiesGrid = [{"text": "word1", "weight": 5}, {"text": "word2", "weight": 1}];
+    $scope.entitiesGrid = [];
 
     //Setup the view dropdown menu
     $scope.views = [];

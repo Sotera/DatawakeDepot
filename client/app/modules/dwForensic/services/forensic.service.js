@@ -155,7 +155,11 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
                 entities[key] = entity;
             }
         }
-        return entities;
+        var entitiesList = [];
+        for (var key in entities) {
+            entitiesList.push(entities[key]);
+        }
+        return entitiesList;
     };
 
     this.getWords = function (entityGrid) {

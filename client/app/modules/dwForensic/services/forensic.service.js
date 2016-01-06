@@ -150,7 +150,7 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
                     }
 
                 } else {
-                    entity = {text: extraction.value, type: types, weight: 1, urls: [trailUrl.url]}
+                    entity = {text: extraction.value, type: types, weight: 1, urls: [trailUrl.url], extractor: extraction.extractor }
                 }
                 entities[key] = entity;
             }

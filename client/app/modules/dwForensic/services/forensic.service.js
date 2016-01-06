@@ -150,12 +150,16 @@ app.service('ForensicService', ['$state', 'CoreService', 'DwTrail', 'DwDomainEnt
                     }
 
                 } else {
-                    entity = {text: extraction.value, type: types, weight: 1, urls: [trailUrl.url]}
+                    entity = {text: extraction.value, type: types, weight: 1, urls: [trailUrl.url], extractor: extraction.extractor }
                 }
                 entities[key] = entity;
             }
         }
-        return entities;
+        var entitiesList = [];
+        for (var key in entities) {
+            entitiesList.push(entities[key]);
+        }
+        return entitiesList;
     };
 
     this.getWords = function (entityGrid) {

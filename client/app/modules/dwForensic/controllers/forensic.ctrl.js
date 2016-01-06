@@ -2,7 +2,6 @@
 var app = angular.module('com.module.dwForensic');
 
 app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser, DwTrail, DwDomainEntityType, ForensicService, gettextCatalog, AppAuth) {
-
     $scope.trail = {};
     //Put the currentUser in $scope for convenience
     $scope.currentUser = AppAuth.currentUser;
@@ -14,17 +13,14 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser
     $scope.selectedDomain = null;
     $scope.selectedTrail = null;
     $scope.selectedViews = [];
-    $scope.entitiesGrid = [{"text": "word1", "weight": 5}, {"text": "word2", "weight": 1}];
+    $scope.entitiesGrid = [];
+
 
     //Setup the view dropdown menu
     $scope.views = [];
-    $scope.viewSettings = {buttonClasses: 'btn btn-primary btn-sm', displayProp: 'name'};
-    $scope.viewCustomText = {buttonDefaultText: 'Select Views'};
+    //$scope.viewSettings = {buttonClasses: 'btn btn-primary btn-sm', displayProp: 'name'};
+    //$scope.viewCustomText = {buttonDefaultText: 'Select Views'};
 
-    //Setup the visited pages grid
-    $scope.sortType = 'name'; // set the default sort type
-    $scope.sortReverse = false;  // set the default sort order
-    $scope.visitedSearch = '';     // set the default search/filter term
 
 
     $scope.teamChanged = function (team) {

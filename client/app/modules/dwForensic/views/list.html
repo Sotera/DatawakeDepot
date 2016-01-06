@@ -80,84 +80,43 @@
                 </div>
             </tab>
             <tab heading="Visited Links">
-                <table class="table table-bordered table-striped">
+                <table st-table="visitedGridSafe" st-safe-src="visitedGrid" class="table table-bordered table-striped">
                     <thead>
-                    <tr>
-                        <td>
-                            <a href="#" ng-click="sortType = 'searchTerms'; sortReverse = !sortReverse">
-                                Search Terms
-                                <span ng-show="sortType == 'searchTerms' && !sortReverse" class="fa fa-caret-down"></span>
-                                <span ng-show="sortType == 'searchTerms' && sortReverse" class="fa fa-caret-up"></span>
-                            </a></td>
-                        <td>
-                            <a href="#" ng-click="sortType = 'name'; sortReverse = !sortReverse">
-                                URL
-                                <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
-                                <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="#" ng-click="sortType = 'ts'; sortReverse = !sortReverse">
-                                Timestamp
-                                <span ng-show="sortType == 'ts' && !sortReverse" class="fa fa-caret-down"></span>
-                                <span ng-show="sortType == 'ts' && sortReverse" class="fa fa-caret-up"></span>
-                            </a>
-                        </td>
-                    </tr>
+                        <tr>
+                            <th st-sort="searchTerms">Search Terms</th>
+                            <th st-sort="url">URL</th>
+                            <th st-sort="timestamp">Time</th>
+                        </tr>
                     </thead>
-
                     <tbody>
-                    <tr ng-repeat="page in visitedGrid | orderBy:sortType:sortReverse ">
-                        <td>{{ page.searchTerms}}</td>
-                        <td><a href="{{page.url}}" target="_blank">{{ page.url.substring(0,100) }}</a></td>
-                        <td>{{ page.timestamp }}</td>
-                        <td>{{ page.dwDomainEntityTypeId }}</td>
-                    </tr>
+                        <tr ng-repeat="page in visitedGridSafe">
+                            <td>{{ page.searchTerms}}</td>
+                            <td><a href="{{page.url}}" target="_blank">{{ page.url.substring(0,100) }}</a></td>
+                            <td>{{ page.timestamp }}</td>
+                        </tr>
                     </tbody>
                 </table>
             </tab>
             <tab heading="Entities">
-                <table class="table table-bordered table-striped">
+                <table st-table="entitiesGridSafe" st-safe-src="entitiesGrid" class="table table-bordered table-striped">
                     <thead>
-                    <tr>
-                        <td>
-                            <a href="#" ng-click="sortType = 'name'; sortReverse = !sortReverse">
-                                Entity
-                                <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
-                                <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="#" ng-click="sortType = 'type'; sortReverse = !sortReverse">
-                                Type
-                                <span ng-show="sortType == 'type' && !sortReverse" class="fa fa-caret-down"></span>
-                                <span ng-show="sortType == 'type' && sortReverse" class="fa fa-caret-up"></span>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="#" ng-click="sortType = 'url'; sortReverse = !sortReverse">
-                                URL
-                                <span ng-show="sortType == 'url' && !sortReverse" class="fa fa-caret-down"></span>
-                                <span ng-show="sortType == 'url' && sortReverse" class="fa fa-caret-up"></span>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="#" ng-click="sortType = 'count'; sortReverse = !sortReverse">
-                                Count
-                                <span ng-show="sortType == 'count' && !sortReverse" class="fa fa-caret-down"></span>
-                                <span ng-show="sortType == 'count' && sortReverse" class="fa fa-caret-up"></span>
-                            </a>
-                        </td>
-                    </tr>
+                        <tr>
+                            <th st-sort="text">Name</th>
+                            <th st-sort="type">Type</th>
+                            <th st-sort="url">URL</th>
+                            <th st-sort="weight">Count</th>
+                            <th st-sort="extractor">Extractor</th>
+                        </tr>
                     </thead>
-
                     <tbody>
-                    <tr ng-repeat="entity in entitiesGrid | orderBy:sortType:sortReverse ">
-                        <td>{{ entity.text }}</td>
-                        <td><span class="span label label-ltgray" ng-repeat="type in entity.type">{{type}}</span></td>
-                        <td><span class="span label" ng-repeat="url in entity.urls"><a href="{{url}}" target="_blank">{{ url.substring(0,100) }}</a></span></td>
-                        <td>{{ entity.weight }}</td>
-                    </tr>
+                        <tr ng-repeat="entity in entitiesGridSafe">
+                            <td>{{ entity.text }}</td>
+                            <td><span class="span label label-ltgray" ng-repeat="type in entity.type">{{type}}</span></td>
+                            <td><span class="span label" ng-repeat="url in entity.urls"><a href="{{url}}" target="_blank">{{
+                                url.substring(0,100) }}</a></span></td>
+                            <td>{{ entity.weight }}</td>
+                            <td>{{ entity.extractor }}</td>
+                        </tr>
                     </tbody>
                 </table>
             </tab>

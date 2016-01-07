@@ -91,34 +91,43 @@
                     <tbody>
                         <tr ng-repeat="page in visitedGridSafe">
                             <td>{{ page.searchTerms}}</td>
-                            <td><a href="{{page.url}}" target="_blank">{{ page.url.substring(0,100) }}</a></td>
+                            <td><a href="{{page.url}}" target="_blank"><p>{{ page.url.substring(0,100) }}</p></a></td>
                             <td>{{ page.timestamp }}</td>
                         </tr>
                     </tbody>
                 </table>
             </tab>
             <tab heading="Entities">
-                <table st-table="entitiesGridSafe" st-safe-src="entitiesGrid" class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th st-sort="text">Name</th>
-                            <th st-sort="type">Type</th>
-                            <th st-sort="url">URL</th>
-                            <th st-sort="weight">Count</th>
-                            <th st-sort="extractor">Extractor</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="entity in entitiesGridSafe">
-                            <td>{{ entity.text }}</td>
-                            <td><span class="span label label-ltgray" ng-repeat="type in entity.type">{{type}}</span></td>
-                            <td><span class="span label" ng-repeat="url in entity.urls"><a href="{{url}}" target="_blank">{{
-                                url.substring(0,100) }}</a></span></td>
-                            <td>{{ entity.weight }}</td>
-                            <td>{{ entity.extractor }}</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <row>
+                    <table st-table="entitiesGridSafe" st-safe-src="entitiesGrid" class="col-sm-12 table table-bordered table-striped">
+                        <colgroup>
+                            <col class="col-md-2">
+                            <col class="col-md-4">
+                            <col class="col-md-4">
+                            <col class="col-md-1">
+                            <col class="col-md-1">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th st-sort="text" class="col-sm-2">Name</th>
+                                <th st-sort="type" class="col-sm-4">Types</th>
+                                <th st-sort="url" class="col-sm-4">URLs</th>
+                                <th st-sort="weight" class="col-sm-1">Count</th>
+                                <th st-sort="extractor" class="col-sm-1">Extractor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="entity in entitiesGridSafe">
+                                <td>{{ entity.text }}</td>
+                                <td><span class="span label label-ltgray" ng-repeat="type in entity.type">{{type}}</span></td>
+                                <td><span class="span label" ng-repeat="url in entity.urls"><a href="{{url}}" target="_blank"><br>{{
+                                    url.substring(0,100) }} \n</a></span></td>
+                                <td>{{ entity.weight }}</td>
+                                <td>{{ entity.extractor }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </row>
             </tab>
             <tab heading="Word Cloud" select="drawGraph()">
                 <div class="row">

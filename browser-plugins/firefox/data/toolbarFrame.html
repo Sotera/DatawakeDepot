@@ -35,7 +35,7 @@
       <label for="teamList"
              style="padding-left:0;padding-right:4px;visibility: hidden"
              class="control-label col-lg-1 col-md-1 col-sm-1 col-xs-1">Team:</label>
-      <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3"
+      <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"
            style="padding-left:0;padding-right:0;visibility: hidden">
         <select id="teamList"
                 disabled="disabled"
@@ -81,25 +81,28 @@
           </div>
       </div>
 
-      <label for="trailList"
-             style="padding-left:0;padding-right:4px;"
-             class="control-label col-lg-1 col-md-1 col-sm-1 col-xs-1">Trail:</label>
-      <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 select-editable"
-           style="padding-left:0;padding-right:0;visibility: visible">
-        <select id="trailList"
-                disabled="disabled"
-                onchange="trailSelectionChanged()"
-                class="form-control btn-info input-sm">
-        </select>
-        <input id="trailInput"
-               disable="disabled"
-               type="text"
-               name="trailInput"
-               onkeyup="trailSelectionChanged2()"
-               value=""
-               class="form-control btn-info input-sm"/>
+      <div>
+          <label for="trailList"
+                 style="padding-left:0;padding-right:4px;"
+                 class="control-label col-lg-1 col-md-1 col-sm-1 col-xs-1">Trail:</label>
+          <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 select-editable"
+               style="padding-left:0;padding-right:0;visibility: visible">
+            <select id="trailList"
+                    disabled="disabled"
+                    onchange="trailSelectionChanged()"
+                    onfocus="this.selectedIndex = -1;"
+                    class="form-control btn-info input-sm">
+            </select>
+            <input id="trailInput"
+                   disable="disabled"
+                   type="text"
+                   name="trailInput"
+                   onfocus="clearTrailInput()"
+                   onkeyup="trailSelectionChangedManual()"
+                   value=""
+                   class="form-control btn-info input-sm"/>
+          </div>
       </div>
-
 
       <div id="buttonDiv">
           <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"
@@ -125,6 +128,12 @@
                onclick="toggleLogin()">Login</a>
           </div>
       </div>
+
+      <div id='divError'
+           style="display:none;color:red;text-align: left"
+           class="control-label col-lg-2 col-md-2 col-sm-2 col-xs-2">
+          <label id="lblError" style="text-align: right"/> Trail already exists!
+        </div>
 
     </div>
   </form>

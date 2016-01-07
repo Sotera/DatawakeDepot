@@ -3,7 +3,7 @@ window.panelActive = true;
 window.dataitemsActive = false;
 window.refreshTrails = false;
 window.createTrailMode = false;
-window.newTrailName = '';
+window.addTrailText = ' < add Trail >';
 
 //
 //Handle messages from the AddIn
@@ -19,9 +19,6 @@ function addInMessageHandler(event) {
       case 'logout-success-target-toolbar-frame':
           setUIStateToLoggedOut();
           break;
-      //case 'create-trail-success-target-toolbar-frame':
-      //    //final step: set trail dropdown to our value
-      //    break;
       default:
           break;
     }
@@ -43,13 +40,10 @@ function syncSelectElementsWithPluginState() {
     if(!window.refreshTrails) {
         window.refreshTrails = false;
         window.createTrailMode = false;
-        $('#trailList')[0].onchange();
     }else{ //If creating a trail, set the trail to the name created, then notify the addin of the change since we
         //worked around the dropdown trailSelectionChanged event
         window.refreshTrails = false;
         window.createTrailMode = false;
-
-        $('#trailList').val(window.newTrailName);
         postMessageToAddin({
             action: 'set-current-trail-target-addin',
             value: $('#trailList').val()
@@ -93,7 +87,6 @@ function toggleTrailing() {
     $('#loginButton').hide();
     $('#domainList').attr('disabled', 'disabled');
     $('#trailList').attr('disabled', 'disabled');
-    //$('#trailInput').val('');
     $('#trailInput').attr('disabled', 'disabled');
     $('#teamList').attr('disabled', 'disabled');
     $('#toggleTrailButton')
@@ -221,44 +214,46 @@ function teamSelectionChanged() {
     value: $('#teamList').val()
   });
 }
+
 function domainSelectionChanged() {
   postMessageToAddin({
     action: 'set-current-domain-target-addin',
     value: $('#domainList').val()
   });
-  //if(!window.refreshTrails)  {
-    $('#trailInput').attr('value', $('#trailList option:selected').text());
-  //}
+  $('#trailInput').val(window.addTrailText);
 }
 
-function trailSelectionChanged2(){
+function trailSelectionChangedManual(){
     if($('#trailInput').val()){
         window.refreshTrails = true;
         trailSelectionChanged();
     }
 }
 
-function trailSelectionChanged() {
-  //http://jsfiddle.net/nwH8A/ this.nextElementSibling.value=this.value
+function clearTrailInput(){
+    $('#divError').hide();
+    $('#trailInput').val('');
+    $('#toggleTrailButton').addClass('disabled');
+}
 
-  //detect if we're adding a new trail
-  if(!window.createTrailMode){
-      if(window.refreshTrails){
-          $('#trailList option').each(function(){
+function trailSelectionChanged() {
+    //detect if we're adding a new trail
+    if (!window.createTrailMode) {
+      if (window.refreshTrails) {
+          $('#trailList option').each(function () {
               if (this.value == $('#trailInput').val()) {
                   window.createTrailMode = false;
                   return false;
               }
           });
           window.createTrailMode = true;
-      }else{
+      } else {
           window.createTrailMode = false;
       }
 
-      if(window.createTrailMode){
-          //Lock the toolbar until the new Trail is either created or cancelled
+      if (window.createTrailMode) {
           lockToolbar();
-      }else{
+      } else if ($('#trailInput').val() != '< add trail >') {
           $('#trailInput').val($('#trailList option:selected').text());
           $('#toggleTrailButton').removeClass('disabled');
           postMessageToAddin({
@@ -266,11 +261,14 @@ function trailSelectionChanged() {
               value: $('#trailList').val()
           });
       }
-  }
+    }
 }
 
 function lockToolbar(){
     $('#domainList').addClass('disabled');
+    $('#trailInput').removeAttr('.select-editable');
+    $('#trailInput').addClass('.selected-editable');
+    $('#trailList').hide();
     $('#toggleDiv').hide();
     $('#domainDiv').hide();
     $('#toggleTrailButton').hide();
@@ -281,6 +279,9 @@ function lockToolbar(){
 
 function unlockToolbar(){
     $('#domainList').removeAttr('disabled');
+    $('#trailInput').addClass('.select-editable');
+    $('#trailInput').removeAttr('.selected-editable');
+    $('#trailList').show();
     $('#toggleDiv').show();
     $('#domainDiv').show();
     $('#toggleTrailButton').show();
@@ -290,22 +291,38 @@ function unlockToolbar(){
 }
 
 function createTrail(){
+    $('#divError').hide();
     if($('#trailInput').val()){
-        window.newTrailName = $('#trailInput').val();
-        postMessageToAddin({
-            action: 'add-current-trail-to-domain-target-addin',
-            trailName: window.newTrailName
+        //Does this already exist? If so show error
+        var isNewTrail=true;
+
+        $('#trailList option').each(function(){
+            if (this.value == $('#trailInput').val()) {
+                isNewTrail= false;
+            }
         });
-        unlockToolbar();
+
+        if(isNewTrail) {
+            $('#divError').hide();
+            postMessageToAddin({
+                action: 'add-current-trail-to-domain-target-addin',
+                trailName: $('#trailInput').val()
+            });
+            unlockToolbar();
+            $('#trailInput').val(window.addTrailText);
+        }else{
+            //Show error and don't submit
+            $('#divError').show();
+        }
     }
 }
 
 function cancelTrail(){
-    //reset the input box to blank, set trailist to 0
+    //reset the input box
     unlockToolbar();
     window.createTrailMode = true;
     window.refreshTrails = false;
-    $('#trailList')[0].onchange();
+    $('#trailInput').val(window.addTrailText);
 }
 
 function openTab(tabTarget){

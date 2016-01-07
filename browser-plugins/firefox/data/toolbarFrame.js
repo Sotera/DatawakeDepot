@@ -36,7 +36,11 @@ function syncSelectElementsWithPluginState() {
   addItemsToSelectElement(ps.currentTeamList, ps.currentTeam, '#teamList');
   addItemsToSelectElement(ps.currentDomainList, ps.currentDomain, '#domainList');
   addItemsToSelectElement(ps.currentTrailList, ps.currentTrail, '#trailList');
-  if(ps.currentTrail){ //If not creating a trail, set the trail to the first available
+  if(ps.currentTrailList.length==0){
+      $('#trailList').attr('disabled', 'disabled');
+      $('#trailInput').val(window.addTrailText);
+  }
+  if(ps.currentTrail){
     if(!window.refreshTrails) {
         window.refreshTrails = false;
         window.createTrailMode = false;

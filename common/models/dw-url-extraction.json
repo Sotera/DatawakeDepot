@@ -21,6 +21,14 @@
     },
     "extractor": {
       "type": "string"
+    },
+    "requester": {
+      "type": "string",
+      "required": true
+    },
+    "created":{
+      "type": "date",
+      "defaultFn": "now"
     }
   },
   "validations": [],

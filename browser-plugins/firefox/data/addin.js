@@ -75,9 +75,6 @@ exports.init = function () {
           var target = '';
 
             switch (msg.tabTarget){
-                case 'dwHome':
-                    target = pluginState.loginUrl;
-                    break;
                 case 'dwForensic':
                     target = pluginState.dwForensic;
                     break;
@@ -85,7 +82,7 @@ exports.init = function () {
                     target = pluginState.dwTrailUrls + pluginState.currentTrail.id;
                     break;
                 default:
-                    target = pluginState.loginUrl;
+                    target = '';
                     break;
             }
           tabs.open(pluginState.loginUrl + target);

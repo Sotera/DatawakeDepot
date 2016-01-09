@@ -126,7 +126,7 @@ app.controller('DomainsCtrl', function($scope, $state, $http, $stateParams, DwFe
 
     $scope.saveFile = function(filename,strFile){
         //more complex, specify name
-        var uriContent = 'data:text/csv;charset=utf-8,' + strFile;
+        var uriContent = "data:application/json," + encodeURIComponent(strFile);
 
         var link = document.createElement('a');
         if (typeof link.download === 'string') {

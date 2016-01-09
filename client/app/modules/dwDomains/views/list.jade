@@ -33,8 +33,8 @@
             span.text-muted {{domain.description}}
           td
             span.label.label-ltgray(ng-repeat="team in domain.teams") {{team.name}}
-          td
-            span.label.label-ltgray.col-sm-2.col-md-2.col-lg-2(ng-repeat="trail in domain.trails") {{trail.name}}
+          td.col-sm-2.col-md-2.col-lg-2
+            span.label.label-ltgray(ng-repeat="trail in domain.trails") {{trail.name}}
           td
             a(ui-sref='app.dwDomainEntityTypes.list({id:null, domainId:domain.id})')
                 span.label.label-active-entityType(ng-repeat="entType in domain.domainEntityTypes") {{entType.name}}
@@ -48,7 +48,7 @@
             .btn-toolbar
               button.btn.btn-sm.btn-default(ui-sref='app.dwDomains.edit({id:domain.id})', ng-disabled='!currentUser.isAdmin')
                 i.fa.fa-pencil
-              button.btn.btn-sm.btn-warning(ng-click='export({id:domain.id})')
+              button.btn.btn-sm.btn-warning(ng-click='export({id:domain.id})' title='Export Domain Summary')
                 i.fa.fa-save
               button.btn.btn-sm.btn-danger(ng-click='delete({id:domain})', ng-disabled='!currentUser.isAdmin')
                 i.fa.fa-trash-o

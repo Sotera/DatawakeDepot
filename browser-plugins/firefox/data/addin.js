@@ -105,8 +105,7 @@ exports.init = function () {
     pluginState.addContentScriptEventHandler(data.contentScriptKey,'requestPanelHtml-target-addin', function () {
         pluginState.getExtractedEntities(data.pageUrl, function (divHtml){
             if (divHtml) {
-                var messageToContentScript = {};
-                messageToContentScript.panelHtml = divHtml;
+                var messageToContentScript = {panelHtml:divHtml,currentDomainId:pluginState.currentDomain.id};
                 pluginState.postEventToContentScript(data.contentScriptKey, 'send-panel', messageToContentScript);
             }
         });

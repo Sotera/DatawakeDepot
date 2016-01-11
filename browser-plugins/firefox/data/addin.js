@@ -143,26 +143,7 @@ exports.init = function () {
         pluginState.postEventToContentScript(data.contentScriptKey, 'panelStatus-target-content-script', {panelActive: pluginState.panelActive});
     });
 
-    //pluginState.addContentScriptEventHandler(data.contentScriptKey,'add-current-trail-to-domain-target-addin', function (trail) {
-    //    var newTrail = trail;
-    //    addTrail(newTrail);
-    //});
-
-    ////Listens for requests to create a new trail
-    //  pluginState.addContentScriptEventHandler(data.contentScriptKey, 'add-current-trail-to-domain-target-addin', function (trailInfo) {
-    //      pluginState.restPost(pluginState.trailsUrl,
-    //          {
-    //              dwTeamId: pluginState.currentTeam.id,
-    //              dwDomainId: pluginState.currentDomain.id,
-    //              scrape: 'body',
-    //              name: trailInfo.trailName,
-    //              description: trailInfo.trailName
-    //          }, function (res) {
-    //              //console.log(res.text);
-    //          }
-    //      );
-    //});
-
+    //Create trail urls
     pluginState.addContentScriptEventHandler(data.contentScriptKey, 'zipped-html-body-target-addin', function (pageContents) {
       //TODO: Work out some scraper eventing so we don't do the DOM operation if we're not trailing.
       //This will work for now though.
@@ -178,6 +159,7 @@ exports.init = function () {
               dwTrailId: pluginState.currentTrail.id
               , url: pageContents.url
               , scrapedContent: pageContents.zippedHtmlBody
+              , searchTerms: pageContents.searchTerms
             }, function (res) {
               //console.log(res.text);
             }

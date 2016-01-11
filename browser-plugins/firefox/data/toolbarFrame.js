@@ -1,14 +1,29 @@
 window.trailingActive = false;
+window.panelActive = true;
+window.dataitemsActive = false;
+window.refreshTrails = false;
+window.createTrailMode = false;
+window.newTrailName = '';
+
 //
 //Handle messages from the AddIn
 //
 function addInMessageHandler(event) {
   try {
     var msg = JSON.parse(event.data);
-    if (msg.type == 'login-success-target-toolbar-frame') {
-      setUIStateToLoggedIn(msg.pluginState);
-    } else if (msg.type == 'logout-success-target-toolbar-frame') {
-      setUIStateToLoggedOut();
+
+    switch(msg.type) {
+      case 'login-success-target-toolbar-frame':
+          setUIStateToLoggedIn(msg.pluginState);
+          break;
+      case 'logout-success-target-toolbar-frame':
+          setUIStateToLoggedOut();
+          break;
+      //case 'create-trail-success-target-toolbar-frame':
+      //    //final step: set trail dropdown to our value
+      //    break;
+      default:
+          break;
     }
   } catch (ex) {
     console.log('Error decoding message to toolbar frame: ' + ex);
@@ -24,10 +39,25 @@ function syncSelectElementsWithPluginState() {
   addItemsToSelectElement(ps.currentTeamList, ps.currentTeam, '#teamList');
   addItemsToSelectElement(ps.currentDomainList, ps.currentDomain, '#domainList');
   addItemsToSelectElement(ps.currentTrailList, ps.currentTrail, '#trailList');
-  if(ps.currentTrail){
-    $('#trailList')[0].onchange();
+  if(ps.currentTrail){ //If not creating a trail, set the trail to the first available
+    if(!window.refreshTrails) {
+        window.refreshTrails = false;
+        window.createTrailMode = false;
+        $('#trailList')[0].onchange();
+    }else{ //If creating a trail, set the trail to the name created, then notify the addin of the change since we
+        //worked around the dropdown trailSelectionChanged event
+        window.refreshTrails = false;
+        window.createTrailMode = false;
+
+        $('#trailList').val(window.newTrailName);
+        postMessageToAddin({
+            action: 'set-current-trail-target-addin',
+            value: $('#trailList').val()
+        });
+    }
   }
 }
+
 function clearSelectElements() {
   $('#domainList').children().remove().end();
   $('#trailList').children().remove().end();
@@ -44,25 +74,35 @@ function addItemsToSelectElement(items, currentItem, idSelector) {
     $(idSelector).val(currentItem.name);
   }
 }
+
 function toggleTrailing() {
   if (window.trailingActive) {
-    $('#loginButton').removeClass('disabled');
+    $('#loginButton').show();
     $('#domainList').removeAttr('disabled');
     $('#trailList').removeAttr('disabled');
+    $('#trailInput').removeAttr('disabled');
     $('#teamList').removeAttr('disabled');
     $('#toggleTrailButton')
       .addClass('btn-success')
-      .removeClass('red-throb')
+      .removeClass('btn-default')
       .html('Start');
+    $('body').removeClass('body-throb');
+    togglePanelButtonOff();
+    toggleDataItemButtonOff();
   } else {
-    $('#loginButton').addClass('disabled');
+    $('#loginButton').hide();
     $('#domainList').attr('disabled', 'disabled');
     $('#trailList').attr('disabled', 'disabled');
+    //$('#trailInput').val('');
+    $('#trailInput').attr('disabled', 'disabled');
     $('#teamList').attr('disabled', 'disabled');
     $('#toggleTrailButton')
       .removeClass('btn-success')
-      .addClass('red-throb')
+      .addClass('btn-default')
       .html('Stop');
+    $('body').addClass('body-throb');
+    togglePanelButtonOn();
+    toggleDataItemButtonOn
   }
   window.trailingActive = !window.trailingActive;
   postMessageToAddin({
@@ -70,16 +110,17 @@ function toggleTrailing() {
     data: window.trailingActive
   });
 }
+
 function setUIStateToLoggedIn(pluginState) {
   window.pluginState = pluginState;
   $('#loginButton')
     .html('Logout: ' + pluginState.loggedInUser.username)
-    .removeClass('btn-success')
+    .removeClass('btn-primary')
     .addClass('btn-danger');
   $('#teamList').removeAttr('disabled');
   $('#domainList').removeAttr('disabled');
   $('#trailList').removeAttr('disabled');
-  $('#toggleTrailButton').addClass('disabled');
+  $('#trailInput').removeAttr('disabled');
   syncSelectElementsWithPluginState();
 }
 function setUIStateToLoggedOut() {
@@ -92,11 +133,14 @@ function setUIStateToLoggedOut() {
   window.pluginState = null;
   $('#loginButton')
     .html('Login')
-    .addClass('btn-success')
-    .removeClass('btn-danger');
+    .addClass('btn-primary')
+    .removeClass('btn-danger')
+    .show();
   $('#teamList').attr('disabled', 'disabled');
   $('#domainList').attr('disabled', 'disabled');
   $('#trailList').attr('disabled', 'disabled');
+  $('#trailInput').val('');
+  $('#trailInput').attr('disabled', 'disabled');
   $('#toggleTrailButton').addClass('disabled');
   clearSelectElements();
 }
@@ -111,6 +155,63 @@ function toggleLogin() {
     postMessageToAddin({action: 'login'});
   }
 }
+
+function togglePanelButtonOn(){
+    $('#toggleDWPanel').attr('src', './images/OnButton_Green_transparent.png');
+    window.panelActive = true;
+    postMessageToAddin({
+        action: 'toggle-panel',
+        data: window.panelActive
+    });
+}
+
+function togglePanelButtonOff(){
+    $('#toggleDWPanel').attr('src', './images/OffButton_transparent.png');
+    window.panelActive = false;
+    postMessageToAddin({
+        action: 'toggle-panel',
+        data: window.panelActive
+    });
+}
+
+function togglePanel(){
+    if (window.trailingActive){
+        if(window.panelActive){
+            togglePanelButtonOff();
+        }else{
+            togglePanelButtonOn();
+        }
+    }
+}
+
+function toggleDataItems(){
+    if (window.trailingActive) {
+        if (window.dataitemsActive) {
+            toggleDataItemButtonOff();
+        } else {
+            toggleDataItemButtonOn();
+        }
+    }
+}
+
+function toggleDataItemButtonOn(){
+    $('#toggleDomainItems').attr('src', './images/OnButton_Green_transparent.png');
+    window.dataitemsActive = true;
+    postMessageToAddin({
+        action: 'toggle-dataitems',
+        data: window.dataitemsActive
+    });
+}
+
+function toggleDataItemButtonOff(){
+    $('#toggleDomainItems').attr('src', './images/OffButton_transparent.png');
+    window.dataitemsActive = false;
+    postMessageToAddin({
+        action: 'toggle-dataitems',
+        data: window.dataitemsActive
+    });
+}
+
 //
 //ComboBox selection changed handlers
 //
@@ -125,14 +226,95 @@ function domainSelectionChanged() {
     action: 'set-current-domain-target-addin',
     value: $('#domainList').val()
   });
+  //if(!window.refreshTrails)  {
+    $('#trailInput').attr('value', $('#trailList option:selected').text());
+  //}
 }
+
+function trailSelectionChanged2(){
+    if($('#trailInput').val()){
+        window.refreshTrails = true;
+        trailSelectionChanged();
+    }
+}
+
 function trailSelectionChanged() {
-  $('#toggleTrailButton').removeClass('disabled');
-  postMessageToAddin({
-    action: 'set-current-trail-target-addin',
-    value: $('#trailList').val()
-  });
+  //http://jsfiddle.net/nwH8A/ this.nextElementSibling.value=this.value
+
+  //detect if we're adding a new trail
+  if(!window.createTrailMode){
+      if(window.refreshTrails){
+          $('#trailList option').each(function(){
+              if (this.value == $('#trailInput').val()) {
+                  window.createTrailMode = false;
+                  return false;
+              }
+          });
+          window.createTrailMode = true;
+      }else{
+          window.createTrailMode = false;
+      }
+
+      if(window.createTrailMode){
+          //Lock the toolbar until the new Trail is either created or cancelled
+          lockToolbar();
+      }else{
+          $('#trailInput').val($('#trailList option:selected').text());
+          $('#toggleTrailButton').removeClass('disabled');
+          postMessageToAddin({
+              action: 'set-current-trail-target-addin',
+              value: $('#trailList').val()
+          });
+      }
+  }
 }
+
+function lockToolbar(){
+    $('#domainList').addClass('disabled');
+    $('#toggleDiv').hide();
+    $('#domainDiv').hide();
+    $('#toggleTrailButton').hide();
+    $('#loginButton').hide();
+    $('#addTrailButton').show();
+    $('#cancelTrailButton').show();
+}
+
+function unlockToolbar(){
+    $('#domainList').removeAttr('disabled');
+    $('#toggleDiv').show();
+    $('#domainDiv').show();
+    $('#toggleTrailButton').show();
+    $('#loginButton').show();
+    $('#addTrailButton').hide();
+    $('#cancelTrailButton').hide();
+}
+
+function createTrail(){
+    if($('#trailInput').val()){
+        window.newTrailName = $('#trailInput').val();
+        postMessageToAddin({
+            action: 'add-current-trail-to-domain-target-addin',
+            trailName: window.newTrailName
+        });
+        unlockToolbar();
+    }
+}
+
+function cancelTrail(){
+    //reset the input box to blank, set trailist to 0
+    unlockToolbar();
+    window.createTrailMode = true;
+    window.refreshTrails = false;
+    $('#trailList')[0].onchange();
+}
+
+function openTab(tabTarget){
+    postMessageToAddin({
+        action: 'open-new-tab-target-addin',
+        tabTarget: tabTarget
+    });
+}
+
 //
 //Communication with AddIn
 //

@@ -4,7 +4,7 @@ exports.init = function () {
   try {
     pageMod.PageMod({
       include: '*',
-      //exclude: pluginState.pageModDatawakeDepotIncludeFilter,
+      exclude: pluginState.pageModDatawakeDepotIncludeFilter, // this prevents Depot urls from being trailed and paneled
       contentScriptFile: [
         './vendor/jszip/jszip.min.js',
         './vendor/jquery/jquery-2.1.4.min.js',

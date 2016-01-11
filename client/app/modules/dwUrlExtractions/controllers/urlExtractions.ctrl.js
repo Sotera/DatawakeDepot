@@ -1,12 +1,15 @@
 'use strict';
 var app = angular.module('com.module.dwUrlExtractions');
 
-app.controller('UrlExtractionsCtrl', function($scope, $state, $stateParams, DwDomainItem, DwDomainEntityType, DwTrailUrl, DwUrlExtraction, UrlExtractionsService, gettextCatalog, AppAuth) {
+app.controller('UrlExtractionsCtrl', function($scope, $state, $stateParams, DwDomainItem, DomainItemsService, EntityTypesService, DwDomainEntityType, DwTrailUrl, DwUrlExtraction, UrlExtractionsService, gettextCatalog, AppAuth) {
 
   //Put the currentUser in $scope for convenience
   $scope.currentUser = AppAuth.currentUser;
-  $scope.domainEntityTypes = [];
+  //$scope.domainEntityTypes = [];
   $scope.trailUrls = [];
+  $scope.currentTrailId = '';
+  $scope.currentTrailUrlId = '';
+  $scope.urlExtraction = {};
 
   $scope.formFields = [{
     key: 'id',
@@ -26,17 +29,14 @@ app.controller('UrlExtractionsCtrl', function($scope, $state, $stateParams, DwDo
           required: true,
           disabled: false
       }
-  }, {
-    key: 'dwDomainEntityTypeId',
-    type: 'select',
-    templateOptions: {
-      label: gettextCatalog.getString('EntityType'),
-      options: $scope.domainEntityTypes,
-      valueProp: 'id',
-      labelProp: 'name',
-      required: false,
-      disabled: false
-    }
+  },{
+      key: 'extractorTypes',
+      type: 'input',
+      templateOptions: {
+          label: gettextCatalog.getString('Extractor Types'),
+          required: true
+      }
+
   },{
     key: 'value',
     type: 'input',
@@ -53,55 +53,49 @@ app.controller('UrlExtractionsCtrl', function($scope, $state, $stateParams, DwDo
       }
   }];
 
-
   $scope.delete = function(id) {
     UrlExtractionsService.deleteUrlExtraction(id, function() {
-      $scope.safeDisplayedurlExtractions = UrlExtractionsService.getUrlExtractions();
+      $scope.safeDisplayedurlExtractions = UrlExtractionsService.getFilteredUrlExtractions($scope.currentTrailUrlId);
       $state.go('^.list');
     });
   };
 
   $scope.onSubmit = function() {
     UrlExtractionsService.upsertUrlExtraction($scope.urlExtraction, function() {
-      $scope.safeDisplayedurlExtractions = UrlExtractionsService.getUrlExtractions();
-      $state.go('^.list');
+      $scope.safeDisplayedurlExtractions = UrlExtractionsService.getFilteredUrlExtractions($scope.currentTrailUrlId);
+        $state.go('^.list');
     });
   };
 
-  $scope.makeDomainItem = function(extractedItem){
-      alert('Create Domain Item:' + extractedItem.id.value);
-  }
+  $scope.makeDomainEntityType = function(entType) {
+      var newEntityType = {
+          'name': entType.typeName,
+          'description': entType.typeName,
+          'dwDomainId': entType.domainId,
+          'dwExtractorId': entType.extractorId,
+          'source:': 'Converted'
+      };
 
-  $scope.loading = true;
-  DwUrlExtraction.find({filter: {include: [{relation:'trailUrl',scope:{include: ['trail']}},'domainEntityType']}}).$promise
-      .then(function (allUrlExtractions) {
-        $scope.safeDisplayedurlExtractions = allUrlExtractions;
-        $scope.displayedUrlExtractions = [].concat($scope.safeDisplayedurlExtractions);
-      })
-      .catch(function (err) {
-        console.log(err);
-      })
-      .then(function () {
-        $scope.loading = false;
-      }
-  );
+      EntityTypesService.upsertEntityType(newEntityType, function(){
+        var x = 'success';
+      });
 
-  DwDomainEntityType.find({filter: {include: []}}).$promise
-      .then(function (allEntTypes) {
-        for (var i = 0; i < allEntTypes.length; ++i) {
-          $scope.domainEntityTypes.push({
-            value: allEntTypes[i].name,
-            name: allEntTypes[i].name + " - " + allEntTypes[i].description,
-            id: allEntTypes[i].id
-          });
-        }
-      })
-      .catch(function (err) {
-        console.log(err);
-      })
-      .then(function () {
-      }
-  );
+
+  };
+
+  $scope.makeDomainItem = function(domItem){
+      var newDomainItem = {
+          'id': domItem.id,
+          'itemValue': domItem.itemValue,
+          'type': domItem.itemType,
+          'source': domItem.itemSource,
+          'dwDomainId': domItem.domainId
+      };
+
+      DomainItemsService.upsertDomainItem(newDomainItem, function(){
+          var x = 'success';
+      });
+  };
 
   DwTrailUrl.find({filter: {include: []}}).$promise
       .then(function (allTrailUrls) {
@@ -120,11 +114,33 @@ app.controller('UrlExtractionsCtrl', function($scope, $state, $stateParams, DwDo
       }
   );
 
-  if ($stateParams.id) {
+  $scope.loading = true;
+  if ($stateParams.id && $stateParams.trailId && $stateParams.trailUrlId) {
     UrlExtractionsService.getUrlExtraction($stateParams.id).$promise.then(function(result){
-      $scope.urlExtraction = result;})
+      $scope.currentTrailId = $stateParams.trailId;
+      $scope.currentTrailUrlId = $stateParams.trailUrlId;
+      $scope.urlExtraction = result;
+      $scope.safeDisplayedurlExtractions = {};
+      $scope.displayedUrlExtractions = {};
+      $scope.loading = false;
+    })
+  } else if ($stateParams.trailUrlId && $stateParams.trailId){
+    UrlExtractionsService.getFilteredUrlExtractions($stateParams.trailUrlId).$promise.then(function(result){
+      $scope.currentTrailId = $stateParams.trailId;
+      $scope.currentTrailUrlId = $stateParams.trailUrlId;
+      $scope.urlExtraction = {};
+      $scope.safeDisplayedurlExtractions = result;
+      $scope.displayedUrlExtractions = [].concat($scope.safeDisplayedurlExtractions);
+      $scope.loading = false;
+    })
   } else {
-    $scope.urlExtraction = {};
+    UrlExtractionsService.getUrlExtractions().$promise.then(function(result) {
+      $scope.currentTrailId = '';
+      $scope.urlExtraction = {};
+      $scope.safeDisplayedurlExtractions = result;
+      $scope.displayedUrlExtractions = [].concat($scope.safeDisplayedurlExtractions);
+      $scope.loading = false;
+    });
   }
 
 });

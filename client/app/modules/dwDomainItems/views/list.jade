@@ -4,31 +4,36 @@
     table.table.table-striped(st-table='displayedDomainItems', st-safe-src='safeDisplayeddomainItems')
       thead
         tr
-          th(colspan="3")
+          th(colspan="4")
             input.input-sm.form-control(st-search='' type='search' placeholder='Search')
+          th(colspan="1")
+            .btn-toolbar
+                button.btn.btn-sm.btn-default(ui-sref='^.list({domainId:currentDomainId})' ui-sref-opts="{reload: true, notify: true}",title='Refresh')
+                    i.fa.fa-refresh
+                button.btn.btn-sm.btn-default(ui-sref='app.dwDomains.list',title='To Domains')
+                    i.fa.fa-arrow-up &nbsp;to Domains
       thead
         tr
           th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='itemValue' st-sort-default="true") Reference
           th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='itemType') EntityType
-          th.sortable.col-sm-2.col-md-2.col-lg-2.td-center(st-sort='domainId') Domain
-          th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='coreItem') Core?
-          th.col-sm-2.col-md-2.col-lg-2.td-center
-              a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add')
-                  | Add Item
+          th.sortable.col-sm-1.col-md-1.col-lg-1 Source
+          th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='domainId') Domain
+          th.col-sm-1.col-md-1.col-lg-1.td-center
+            a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add({domainId:currentDomainId})', ng-disabled='!currentUser.isAdmin') &nbsp;Add Item
       tbody
         tr(ng-repeat='domainItem in displayedDomainItems')
           td
-            a(href='', ui-sref='app.dwDomainItems.view({id: domainItem.id})') {{domainItem.itemValue}}
+            a(href='', ui-sref='app.dwDomainItems.view({id: domainItem.id, domainId: currentDomainId})') {{domainItem.itemValue}}
           td(style='width: 120px')
-            span.label.label-ltgray {{domainItem.domainEntityType.name}}
-          td.td-center
-            span.label.label-ltgray
-                a(ui-sref='app.dwDomains.list({search:domain.id})') {{domainItem.domain.name}}
+            span.label.label-ltgray {{domainItem.type}}
           td
-            span.label.label-ltgray {{domainItem.coreItem}}
+            span.label.label-ltgray {{domainItem.source}}
+          td
+            span.label.label-ltgray
+                a(ui-sref='app.dwDomains.list({domainId:domain.id})') {{domainItem.domain.name}}
           td.td-center(style='width: 120px')
             .btn-toolbar
-                button.btn.btn-sm.btn-default(ui-sref='app.dwDomainItems.edit({id:domainItem.id})')
+                button.btn.btn-sm.btn-default(ui-sref='app.dwDomainItems.edit({id:domainItem.id,domainId: currentDomainId})')
                     i.fa.fa-pencil
                 button.btn.btn-sm.btn-danger(ng-click='delete({id:domainItem.id})',ng-disabled='!currentUser.isAdmin')
                     i.fa.fa-trash-o

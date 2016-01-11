@@ -88,6 +88,18 @@ body {
   border: 1px solid #ccc;
 }
 
+.label-active-entityType {
+  color: green;
+  background-color: #d4d4d4;
+  border: 1px solid #ccc;
+}
+
+.label-inactive-entityType {
+    color: green;
+    background-color: #d4d4d4;
+    border: 1px solid #ccc;
+}
+
 .label + .label {
   margin-left: 2px;
 }

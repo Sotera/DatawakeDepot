@@ -17,7 +17,16 @@ var PluginState = function () {
   me.trailsUrl = '/api/dwTrails';
   me.trailsUrlsUrl = '/api/dwTrailUrls';
   me.domainItemsUrl = '/api/dwDomainItems';
+  me.domainList = '/widget/get-domain-list';
+  me.trailExtractedEntities = '/widget/get-url-entities';
+  me.createTrail = '/api/dwTrails';
+  me.createEntityType = '/api/DwDomainEntityTypes';
+  me.createDomainItem = '/api/dwDomains/_domainId_/domainItems';
+  me.dwForensic = '/#/app/dwForensic/list/';
+  me.dwTrailUrls = '/#/app/dwTrailUrls/list/';
   me.trailingActive = false;
+  me.panelActive = true;
+  me.dataitemsActive = true;
   me.toolbarFrameSource = null;
   me.toolbarFrameOrigin = null;
   me.datawakeDepotContentScriptHandle = null;
@@ -33,7 +42,9 @@ var PluginState = function () {
   };
   me.restGet = function (url, queryStringObj, callback) {
     queryStringObj = queryStringObj || {};
-    queryStringObj.access_token = me.loggedInUser.accessToken;
+    if(me.loggedInUser) {
+        queryStringObj.access_token = me.loggedInUser.accessToken;
+    }
     var queryStringJson = me.convertObjToQueryString(queryStringObj);
     url = me.loginUrl + url;
     url += '?' + queryStringJson;
@@ -42,6 +53,32 @@ var PluginState = function () {
       onComplete: callback
     }).get();
   };
+
+  me.restSimpleGet = function (url, callback) {
+      url = me.loginUrl + url;
+      Request({
+          url: url,
+          onComplete: callback
+      }).get();
+  };
+
+  me.getDomainList = function (cb) {
+      var url = me.domainList;
+      me.restSimpleGet(url, function (res) {
+          cb(res.text);
+      });
+  };
+
+  me.getExtractedEntities = function (trailUrl, cb) {
+    var url = me.trailExtractedEntities;
+    var filter = {
+        "trailUrl":trailUrl
+    };
+    me.restGet(url, filter, function (res) {
+      cb(res.text);
+    });
+  };
+
   me.getDomainItemsForCurrentDomain = function (cb) {
     var url = me.domainItemsUrl;
     var filter = {
@@ -118,7 +155,7 @@ var PluginState = function () {
     var newContentScriptKey = worker.tab.id;
     me.contentScriptHandles[newContentScriptKey] = worker;
     me.postEventToAddInModule('page-content-script-attached-target-addin',
-      {contentScriptKey: newContentScriptKey});
+      {contentScriptKey: newContentScriptKey,pageUrl: worker.tab.url});
     me.postEventToContentScript(newContentScriptKey, 'page-attached-target-content-script',
       {contentScriptKey: newContentScriptKey});
   }
@@ -143,7 +180,7 @@ var PluginState = function () {
     me.currentDomainList = [];
     me.currentTrail = null;
     me.currentTrailList = [];
-  }
+  };
   me.generateUUID = function () {
     var d = new Date().getTime();
     var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {

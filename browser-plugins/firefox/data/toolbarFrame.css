@@ -12,13 +12,18 @@ body {
     -webkit-font-smoothing: antialiased;
     font-weight: 600;
     /*color: #2770a8;*/
-    background: #8cf4ff;
+    background: lightblue;
 }
 
 #waveImg {
     margin-left: 0px;
     margin-top: 4px;
     vertical-align: top;
+}
+
+.body-throb{
+    background: #E77471;
+    -moz-animation: color_change2 1s infinite alternate;
 }
 
 .red-throb{
@@ -29,6 +34,11 @@ body {
 @-moz-keyframes color_change {
     from { background-color: #ac1b00; }
     to { background-color: #cd3400; }
+}
+
+@-moz-keyframes color_change2 {
+    from { background-color: #C24641; }
+    to { background-color: #F70D1A; }
 }
 
 a,
@@ -136,6 +146,35 @@ select {
 .row.no-gutter [class*='col-']:not(:first-child), .row.no-gutter [class*='col-']:not(:last-child) {
     padding-right: 6px;
     padding-left: 0px;
+}
+
+.select-editable {
+    position:relative;
+    background-color:white;
+    /*border:solid grey 1px;*/
+    width:120px;
+    height:30px;
+}
+.select-editable select {
+    position:absolute;
+    top:0px;
+    left:0px;
+    font-size:14px;
+    border:none;
+    width:120px;
+    margin:0;
+}
+.select-editable input {
+    position:absolute;
+    top:0px;
+    left:0px;
+    width:105px;
+    padding:1px;
+    font-size:12px;
+    border:none;
+}
+.select-editable select:focus, .select-editable input:focus {
+    outline:none;
 }
 
 /* only for column content visible */

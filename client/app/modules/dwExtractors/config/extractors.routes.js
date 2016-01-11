@@ -15,11 +15,11 @@ app.config(function($stateProvider) {
         templateUrl: 'modules/dwExtractors/views/form',
         controller: 'ExtractorsCtrl'
     }).state('app.dwExtractors.edit', {
-        url: '/:id/edit',
+        url: '/edit/:id',
         templateUrl: 'modules/dwExtractors/views/form',
         controller: 'ExtractorsCtrl'
     }).state('app.dwExtractors.view', {
-        url: '/:id',
+        url: '/view/:id',
         templateUrl: 'modules/dwExtractors/views/view',
         controller: 'ExtractorsCtrl'
     });

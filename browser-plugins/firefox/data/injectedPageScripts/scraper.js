@@ -24,7 +24,9 @@ function scrapePage() {
 }
 self.port.on('page-attached-target-content-script', function (data) {
   myContentScriptKey = data.contentScriptKey;
-  $(window).on('hashchange', scrapePage);
-  scrapePage();
+  //Add a very short Pause here to make sure the page finishes rendering before we scrape the body
+  $(window).on('hashchange', window.setTimeout(scrapePage, 1000));
+  window.setTimeout(scrapePage, 1000);
+
   //self.port.emit('send-css-urls-target-addin', {contentScriptKey: myContentScriptKey});
 });

@@ -33,22 +33,16 @@ exports.init = function () {
           break;
         case 'toggle-dataitems':
           var activeTabId = tabs.activeTab.id;
-          pluginState.dataitemsActive = msg.data;
-
-          //TODO: optimize, don't have to get dataitems every time, instead get at login and update when items added
-          pluginState.getDomainItemsForCurrentDomain(function (domainItems) {
-              var domainItemValues = [];
-              domainItems.forEach(function (domainItemValue) {
-                  domainItemValues.push(domainItemValue.itemValue);
-              });
-              pluginState.postEventToContentScript(activeTabId, 'send-toggle-datawake-dataitems', {
-                  dataitemsActive:msg.data,
-                  domainItems:domainItemValues
-              });
+          pluginState.dataItemsActive = msg.data;
+          pluginState.postEventToContentScript(activeTabId, 'send-toggle-datawake-dataitems', {
+            dataItemsActive:msg.data,
+            dataItems:pluginState.currentDomainItems
           });
           break;
         case 'set-trailing-active':
           pluginState.trailingActive = msg.data;
+          //Get the domain items in case they want to see them
+          pluginState.getDomainItemsForCurrentDomain();
           break;
         case 'set-current-team-target-addin':
           pluginState.currentTeam = pluginState.currentTeamList.filter(function (el) {
@@ -135,33 +129,18 @@ exports.init = function () {
 
     //Listens for requests to get user trailing status
     pluginState.addContentScriptEventHandler(data.contentScriptKey, 'requestTrailingActive-target-addin', function (scriptData) {
-        pluginState.postEventToContentScript(data.contentScriptKey, 'trailingStatus-target-content-script', {trailingActive: pluginState.trailingActive,panelActive:pluginState.panelActive});
+        pluginState.postEventToContentScript(data.contentScriptKey, 'trailingStatus-target-content-script', {
+            trailingActive: pluginState.trailingActive,
+            panelActive:pluginState.panelActive,
+            dataItemsActive:pluginState.dataItemsActive,
+            dataItems:pluginState.currentDomainItems
+        });
     });
 
     //Listens for requests to get user trailing status
     pluginState.addContentScriptEventHandler(data.contentScriptKey, 'requestPanelActive-target-addin', function (scriptData) {
         pluginState.postEventToContentScript(data.contentScriptKey, 'panelStatus-target-content-script', {panelActive: pluginState.panelActive});
     });
-
-    //pluginState.addContentScriptEventHandler(data.contentScriptKey,'add-current-trail-to-domain-target-addin', function (trail) {
-    //    var newTrail = trail;
-    //    addTrail(newTrail);
-    //});
-
-    ////Listens for requests to create a new trail
-    //  pluginState.addContentScriptEventHandler(data.contentScriptKey, 'add-current-trail-to-domain-target-addin', function (trailInfo) {
-    //      pluginState.restPost(pluginState.trailsUrl,
-    //          {
-    //              dwTeamId: pluginState.currentTeam.id,
-    //              dwDomainId: pluginState.currentDomain.id,
-    //              scrape: 'body',
-    //              name: trailInfo.trailName,
-    //              description: trailInfo.trailName
-    //          }, function (res) {
-    //              //console.log(res.text);
-    //          }
-    //      );
-    //});
 
     pluginState.addContentScriptEventHandler(data.contentScriptKey, 'zipped-html-body-target-addin', function (pageContents) {
       //TODO: Work out some scraper eventing so we don't do the DOM operation if we're not trailing.
@@ -299,6 +278,8 @@ function addDomainItem(domItem){
           console.log(res.text);
       }
   );
+  //After creating the new item, make the plugin refresh its list
+  pluginState.getDomainItemsForCurrentDomain();
 }
 
 function addTrail(trailName){

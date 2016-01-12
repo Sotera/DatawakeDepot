@@ -1,6 +1,6 @@
 window.trailingActive = false;
 window.panelActive = true;
-window.dataitemsActive = false;
+window.dataItemsActive = false;
 window.refreshTrails = false;
 window.createTrailMode = false;
 window.newTrailName = '';
@@ -19,9 +19,6 @@ function addInMessageHandler(event) {
       case 'logout-success-target-toolbar-frame':
           setUIStateToLoggedOut();
           break;
-      //case 'create-trail-success-target-toolbar-frame':
-      //    //final step: set trail dropdown to our value
-      //    break;
       default:
           break;
     }
@@ -186,7 +183,7 @@ function togglePanel(){
 
 function toggleDataItems(){
     if (window.trailingActive) {
-        if (window.dataitemsActive) {
+        if (window.dataItemsActive) {
             toggleDataItemButtonOff();
         } else {
             toggleDataItemButtonOn();
@@ -196,19 +193,19 @@ function toggleDataItems(){
 
 function toggleDataItemButtonOn(){
     $('#toggleDomainItems').attr('src', './images/OnButton_Green_transparent.png');
-    window.dataitemsActive = true;
+    window.dataItemsActive = true;
     postMessageToAddin({
         action: 'toggle-dataitems',
-        data: window.dataitemsActive
+        data: window.dataItemsActive
     });
 }
 
 function toggleDataItemButtonOff(){
     $('#toggleDomainItems').attr('src', './images/OffButton_transparent.png');
-    window.dataitemsActive = false;
+    window.dataItemsActive = false;
     postMessageToAddin({
         action: 'toggle-dataitems',
-        data: window.dataitemsActive
+        data: window.dataItemsActive
     });
 }
 

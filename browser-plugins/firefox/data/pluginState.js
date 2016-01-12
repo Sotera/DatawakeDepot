@@ -7,6 +7,7 @@ var PluginState = function () {
   me.currentTeamList = [];
   me.currentDomain = null;
   me.currentDomainList = [];
+  me.currentDomainItems = [];
   me.currentTrail = null;
   me.currentTrailList = [];
   me.loginUrl = '';
@@ -26,7 +27,7 @@ var PluginState = function () {
   me.dwTrailUrls = '/#/app/dwTrailUrls/list/';
   me.trailingActive = false;
   me.panelActive = true;
-  me.dataitemsActive = true;
+  me.dataItemsActive = false;
   me.toolbarFrameSource = null;
   me.toolbarFrameOrigin = null;
   me.datawakeDepotContentScriptHandle = null;
@@ -87,6 +88,7 @@ var PluginState = function () {
       }
     };
     me.restGet(url, {filter: JSON.stringify(filter)}, function (res) {
+      me.currentDomainItems = res.json;
       cb(res.json);
     });
   };

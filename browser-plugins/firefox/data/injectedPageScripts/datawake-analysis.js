@@ -18,10 +18,15 @@ function getTrailingStatus(){
     self.port.emit('requestTrailingActive-target-addin', {contentScriptKey: myContentScriptKey});
 }
 
-//Listen for the addin's getTrailingStatus response. If active then show the panel
+//Listen for the addin's getTrailingStatus response. If active then show the panel and dataitems if active
 self.port.on('trailingStatus-target-content-script', function (data) {
-    if(data.trailingActive && data.panelActive){
-        showPanel();
+    if(data.trailingActive){
+        if(data.panelActive){
+            showPanel();
+        }
+        if(data.dataItemsActive){
+            showDataItems(data.dataItems);
+        }
     }
 });
 
@@ -38,6 +43,20 @@ function showPanel(){
 
 function getPanelData(){
     self.port.emit('requestPanelHtml-target-addin', {contentScriptKey: myContentScriptKey});
+}
+
+function showDataItems(dataItems){
+    dataItems.forEach(function (domainItem) {
+        $('body').highlight(domainItem.itemValue);
+    });
+}
+
+function showNewDataItem(dataitem){
+    $('body').highlight(dataitem);
+}
+
+function hideDataItems(){
+    $('body').unhighlight();
 }
 
 //Receive panel data and populate it
@@ -101,12 +120,10 @@ self.port.on('send-toggle-datawake-panel', function (data) {
 
 //Toggle dataitems highlighting
 self.port.on('send-toggle-datawake-dataitems', function (data) {
-    if(data.dataitemsActive){
-        data.domainItems.forEach(function (domainItem) {
-            $('body').highlight(domainItem);
-        });
+    if(data.dataItemsActive){
+        showDataItems(data.dataItems);
     }else{
-        $('body').unhighlight();
+        hideDataItems();
     }
 });
 
@@ -145,6 +162,7 @@ function receiveMessage(e){
             };
             //Pass to Addin
             self.port.emit('addDomainItem-target-addin', newDomainItem);
+            showNewDataItem(e.data.dwItem.value);
             break;
         case 'domainType':
             var newDomainType = {

@@ -5,6 +5,7 @@
 var myContentScriptKey = null;
 var myVar = null;
 var iInterval = 4000;
+var currentDomainId = '';
 
 
 $(document).ready(function () {
@@ -60,12 +61,13 @@ function hideDataItems(){
 
 //Receive panel data and populate it
 self.port.on('send-panel', function (data) {
-    buildPanelContents(data);
+    buildPanelContents(data.panelHtml);
+    currentDomainId = data.currentDomainId;
     //clearInterval(myVar);
 });
 
-function buildPanelContents(data){
-    var panelHtml = data.panelHtml;
+function buildPanelContents(panelHtml){
+    var panelHtml = panelHtml;
     rewritePanelDiv("#widgetOne", panelHtml);
 }
 
@@ -113,6 +115,7 @@ self.port.on('send-toggle-datawake-panel', function (data) {
         $("#datawake-right-panel").remove();
         //clearInterval(myVar);
     }
+
 });
 
 //Toggle dataitems highlighting
@@ -155,7 +158,7 @@ function receiveMessage(e){
                 itemValue: e.data.dwItem.value,
                 type: 'extracted',
                 source: e.data.dwItem.extractorId,
-                dwDomainId: e.data.dwItem.domainId
+                dwDomainId: currentDomainId
             };
             //Pass to Addin
             self.port.emit('addDomainItem-target-addin', newDomainItem);
@@ -165,7 +168,7 @@ function receiveMessage(e){
             var newDomainType = {
                 name: e.data.dwItem.value,
                 description: e.data.dwItem.value,
-                dwDomainId: e.data.dwItem.domainId,
+                dwDomainId: currentDomainId,
                 dwExtractorId: e.data.dwItem.extractorId,
                 source: 'Converted'
             };

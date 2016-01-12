@@ -99,8 +99,7 @@ exports.init = function () {
     pluginState.addContentScriptEventHandler(data.contentScriptKey,'requestPanelHtml-target-addin', function () {
         pluginState.getExtractedEntities(data.pageUrl, function (divHtml){
             if (divHtml) {
-                var messageToContentScript = {};
-                messageToContentScript.panelHtml = divHtml;
+                var messageToContentScript = {panelHtml:divHtml,currentDomainId:pluginState.currentDomain.id};
                 pluginState.postEventToContentScript(data.contentScriptKey, 'send-panel', messageToContentScript);
             }
         });
@@ -142,6 +141,7 @@ exports.init = function () {
         pluginState.postEventToContentScript(data.contentScriptKey, 'panelStatus-target-content-script', {panelActive: pluginState.panelActive});
     });
 
+    //Create trail urls
     pluginState.addContentScriptEventHandler(data.contentScriptKey, 'zipped-html-body-target-addin', function (pageContents) {
       //TODO: Work out some scraper eventing so we don't do the DOM operation if we're not trailing.
       //This will work for now though.
@@ -157,6 +157,7 @@ exports.init = function () {
               dwTrailId: pluginState.currentTrail.id
               , url: pageContents.url
               , scrapedContent: pageContents.zippedHtmlBody
+              , searchTerms: pageContents.searchTerms
             }, function (res) {
               //console.log(res.text);
             }

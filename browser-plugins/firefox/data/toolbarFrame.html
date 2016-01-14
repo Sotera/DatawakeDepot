@@ -32,6 +32,7 @@
 
   <form class="form-horizontal">
     <div class="form-group">
+<!--Not exposing Team picklist now
       <label for="teamList"
              style="padding-left:0;padding-right:4px;visibility: hidden"
              class="control-label col-lg-1 col-md-1 col-sm-1 col-xs-1">Team:</label>
@@ -42,10 +43,12 @@
                 onchange="teamSelectionChanged()"
                 class="form-control btn-info input-sm"></select>
       </div>
-
+-->
+      <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+      </div>
       <div id="toggleDiv"
               class="col-lg-2 col-md-2 col-sm-2 col-xs-2"
-           style="padding-left:4px;padding-right:2px;">
+           style="padding-left:0px;padding-right:2px;min-width: 310px">
         <span>
             <label for="toggleDomainItems" style="font-size:10px;padding-left:0;padding-right:5px;">Show Domain Items:</label>
             <img src="./images/OffButton_transparent.png"
@@ -67,42 +70,43 @@
         </span>
       </div>
 
-      <div id="domainDiv" style="visibility: visible">
-          <label for="domainList"
-                   style="padding-left:0;padding-right:4px;"
-                   class="control-label col-lg-1 col-md-1 col-sm-1 col-xs-1">Domain:</label>
-          <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"
-               style="padding-left:0;padding-right:0;">
-              <select id="domainList"
-                      disabled="disabled"
-                      onchange="domainSelectionChanged()"
-                      class="form-control btn-info input-sm">
-              </select>
+          <div id="domainDiv" style="visibility: visible">
+              <label for="domainList"
+                       style="padding-left:0;padding-right:4px;"
+                       class="control-label col-lg-1 col-md-1 col-sm-1 col-xs-1">Domain:</label>
+              <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"
+                   style="padding-left:0;padding-right:0;">
+                  <select id="domainList"
+                          disabled="disabled"
+                          onchange="domainSelectionChanged()"
+                          class="form-control btn-info input-sm">
+                  </select>
+              </div>
           </div>
-      </div>
 
-      <label for="trailList"
-             style="padding-left:0;padding-right:4px;"
-             class="control-label col-lg-1 col-md-1 col-sm-1 col-xs-1">Trail:</label>
-      <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 select-editable"
-           style="padding-left:0;padding-right:0;visibility: visible">
-        <select id="trailList"
-                disabled="disabled"
-                onchange="trailSelectionChanged()"
-                class="form-control btn-info input-sm">
-        </select>
-        <input id="trailInput"
-               disable="disabled"
-               type="text"
-               name="trailInput"
-               onkeyup="trailSelectionChanged2()"
-               value=""
-               class="form-control btn-info input-sm"/>
-      </div>
+              <label for="trailList"
+                     style="padding-left:0;padding-right:4px;"
+                     class="control-label col-lg-1 col-md-1 col-sm-1 col-xs-1">Trail:</label>
+              <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 select-editable"
+                   style="padding-left:0;padding-right:0;visibility: visible">
+                <select id="trailList"
+                        disabled="disabled"
+                        onchange="trailSelectionChanged()"
+                        class="form-control btn-info input-sm">
+                </select>
+                <input id="trailInput"
+                       disabled="disabled"
+                       type="text"
+                       name="trailInput"
+                       onkeyup="trailSelectionChanged2()"
+                       value=""
+                       class="form-control btn-info input-sm"/>
+              </div>
+
 
 
       <div id="buttonDiv">
-          <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"
+          <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 pull-right"
                style="padding-left:4px;padding-right:2px;">
             <a id="addTrailButton"
                role="button"

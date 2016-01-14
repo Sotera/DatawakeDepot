@@ -268,20 +268,20 @@ function trailSelectionChanged() {
 
 function lockToolbar(){
     $('#domainList').addClass('disabled');
-    $('#toggleDiv').hide();
-    $('#domainDiv').hide();
-    $('#toggleTrailButton').hide();
-    $('#loginButton').hide();
+    $('#toggleDiv').css('visibility','hidden');
+    $('#domainDiv').css('visibility','hidden');
+    $('#toggleTrailButton').css('visibility','hidden');
+    $('#loginButton').css('visibility','hidden');
     $('#addTrailButton').show();
     $('#cancelTrailButton').show();
 }
 
 function unlockToolbar(){
     $('#domainList').removeAttr('disabled');
-    $('#toggleDiv').show();
-    $('#domainDiv').show();
-    $('#toggleTrailButton').show();
-    $('#loginButton').show();
+    $('#toggleDiv').css('visibility','visible');
+    $('#domainDiv').css('visibility','visible');
+    $('#toggleTrailButton').css('visibility','visible');
+    $('#loginButton').css('visibility','visible');
     $('#addTrailButton').hide();
     $('#cancelTrailButton').hide();
 }

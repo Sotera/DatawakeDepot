@@ -22,7 +22,7 @@ body {
 }
 
 .body-throb{
-    background: #E77471;
+    background: ghostwhite;
     -moz-animation: color_change2 1s infinite alternate;
 }
 
@@ -37,8 +37,8 @@ body {
 }
 
 @-moz-keyframes color_change2 {
-    from { background-color: #C24641; }
-    to { background-color: #F70D1A; }
+    from { background-color: lightskyblue; }
+    to { background-color: lightblue; }
 }
 
 a,

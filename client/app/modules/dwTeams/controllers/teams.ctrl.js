@@ -103,7 +103,7 @@ app.controller('TeamsCtrl', function($scope, $state, $stateParams, AminoUser, Dw
       $scope.loadPicklists(currUser);
       if ($stateParams.id) {
           TeamsService.getTeam($stateParams.id).$promise.then(function (result) {
-              $scope.team = result;
+              $scope.team = result[0];
               $scope.safeDisplayedTeams = {};
               $scope.displayedTeams = {};
               $scope.loading = false;

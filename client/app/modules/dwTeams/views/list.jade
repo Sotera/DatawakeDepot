@@ -4,15 +4,18 @@
     table.table.table-striped(st-table='displayedTeams', st-safe-src='safeDisplayedTeams')
       thead
         tr
-          th(colspan="6")
+          th(colspan="5")
             input.input-sm.form-control(st-search='' type='search' placeholder='Search')
+          th(colspan="1")
+            button.btn.btn-sm.btn-default(ui-sref='^.list' ui-sref-opts="{reload: true, notify: true}",title='Refresh Teams')
+              i.fa.fa-refresh
       thead
         tr
           th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='name' st-sort-default="true") Name
-          th.sortable.col-sm-4.col-md-4.col-lg-4(st-sort='description') Description
+          th.sortable.col-sm-3.col-md-3.col-lg-3(st-sort='description') Description
           th.sortable.col-sm-1.col-md-1.col-lg-1.td-center(st-sort='') Members
           th.sortable.col-sm-2.col-md-2.col-lg-2.td-center(st-sort='') Domains
-          th.sortable.col-sm-1.col-md-1.col-lg-1.td-center(st-sort='') Trails x
+          th.sortable.col-sm-2.col-md-2.col-lg-2.td-center(st-sort='') Trails
           th.col-sm-2.col-md-2.col-lg-2.td-center
               a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
                 | Add Team
@@ -27,7 +30,7 @@
           td
             span.label.label-ltgray(ng-repeat="domain in team.domains") {{domain.name}}
           td.td-center
-            span.label.label-ltgray &nbsp;{{team.trails.length}}
+            span.label.label-ltgray(ng-repeat="trail in team.trails") {{trail.name}}
           td.td-center(style='width: 120px')
             .btn-toolbar
                 button.btn.btn-sm.btn-default(ui-sref='app.dwTeams.edit({id:team.id})', , ng-disabled='!currentUser.isAdmin')

@@ -7,7 +7,13 @@ app.service('TeamsService', ['$state', 'CoreService', 'DwTeam', 'gettextCatalog'
     return DwTeam.find({
         filter: {
             include: [
-                'trails',
+                {relation:'trails',
+                    scope:{
+                        fields:[
+                            "name"
+                        ]
+                    }
+                },
                 {relation:'domains',
                     scope:{
                         fields:[
@@ -23,17 +29,45 @@ app.service('TeamsService', ['$state', 'CoreService', 'DwTeam', 'gettextCatalog'
     });
   };
 
-  this.getTeam = function(id) {
-    return DwTeam.findById({
-      id: id
-    });
+  this.getTeam = function(teamId) {
+    var whereClause={
+        filter: {
+            where:{id : teamId},
+            include: [
+                {relation:'trails',
+                    scope:{
+                        fields:[
+                            "name"
+                        ]
+                    }
+                },
+                {relation:'domains',
+                    scope:{
+                        fields:[
+                            "name",
+                            "description",
+                            "id"
+                        ]
+                    }
+                },
+                'users'
+            ]
+        }
+    };
+    return DwTeam.find(whereClause);
   };
 
   this.getUserTeams = function(aminoUser) {
       return DwTeam.find({
           filter: {
               include: [
-                  'trails',
+                  {relation:'trails',
+                    scope:{
+                        fields:[
+                            "name"
+                        ]
+                    }
+                  },
                   {relation:'domains',
                       scope:{
                           fields:[
@@ -67,7 +101,7 @@ app.service('TeamsService', ['$state', 'CoreService', 'DwTeam', 'gettextCatalog'
                   //success
               });
           });
-      };
+      }
 
       if(team.users) {
           team.users.forEach(function (user) {
@@ -75,7 +109,7 @@ app.service('TeamsService', ['$state', 'CoreService', 'DwTeam', 'gettextCatalog'
                   //success
               });
           });
-      };
+      }
 
       if(team.dwFeeds) {
           team.dwFeeds.forEach(function (feed) {
@@ -106,7 +140,7 @@ app.service('TeamsService', ['$state', 'CoreService', 'DwTeam', 'gettextCatalog'
                       //success
                   });
               });
-          };
+          }
 
           if(team.users) {
               team.users.forEach(function (user) {
@@ -114,7 +148,7 @@ app.service('TeamsService', ['$state', 'CoreService', 'DwTeam', 'gettextCatalog'
                       //success
                   });
               });
-          };
+          }
 
           if(team.dwFeeds) {
               team.dwFeeds.forEach(function (feed) {
@@ -122,7 +156,7 @@ app.service('TeamsService', ['$state', 'CoreService', 'DwTeam', 'gettextCatalog'
                       //success
                   });
               });
-          };
+          }
           cb();
         }, function(err) {
           CoreService.toastError(gettextCatalog.getString(

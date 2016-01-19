@@ -4,8 +4,11 @@
     table.table.table-striped(st-table='displayedextractors', st-safe-src='safeDisplayedextractors')
       thead
         tr
-          th(colspan="10")
+          th(colspan="9")
             input.input-sm.form-control(st-search='' type='search' placeholder='Search')
+          th(colspan="1")
+            button.btn.btn-sm.btn-default(ui-sref='^.list' ui-sref-opts="{reload: true, notify: true}",title='Refresh Teams')
+              i.fa.fa-refresh
       thead
         tr
           th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='name' st-sort-default="true") Name

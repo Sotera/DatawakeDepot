@@ -4,12 +4,52 @@ var app = angular.module('com.module.dwDomains');
 app.service('DomainsService', ['$state', 'CoreService', 'DwDomain','gettextCatalog','DwDomainEntityType','DwDomainItem','DwTrail', function($state, CoreService, DwDomain, gettextCatalog, DwDomainEntityType, DwDomainItem, DwTrail) {
 
     this.getDomains = function() {
-        return DwDomain.find({filter: {include: ['domainEntityTypes','domainItems','extractors','trails','feeds','teams']}});
+        return DwDomain.find({
+            filter: {
+                include: [
+                    'domainEntityTypes',
+                    'domainItems',
+                    'extractors',
+                    'trails',
+                    'feeds',
+                    'teams'
+                ]
+            }
+        });
     };
 
-    this.getDomain = function(id) {
-        return DwDomain.findById({
-            id: id
+    this.getDomain = function(domainId) {
+        return DwDomain.find({
+            filter: {
+                where: {id: domainId},
+                fields:{'name':true,'description':true,'id':true},
+                include: ['domainEntityTypes','domainItems']
+            }
+        });
+    };
+
+    this.getUserTeamDomains = function(teamList) {
+        var userTeams = [];
+        teamList.forEach(function (team) {
+            userTeams.push(team.id);
+        });
+        return DwDomain.find({
+            filter:{
+                include: [
+                    'domainEntityTypes',
+                    'domainItems',
+                    'extractors',
+                    'trails',
+                    'feeds',
+                    {relation:'teams',
+                        scope:{
+                            where:{
+                                id:{inq:userTeams}
+                            }
+                        }
+                    }
+                ]
+            }
         });
     };
 

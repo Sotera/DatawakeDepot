@@ -73,7 +73,6 @@ angular.module('com.module.users')
             ,
             getCurrentUser: function () {
                 return new Promise(function (resolve, reject) {
-                    // do a thing, possibly async, then…
                     if (self.currentUser) {
                         resolve(self.currentUser);
                         return;

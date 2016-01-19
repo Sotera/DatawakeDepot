@@ -12,7 +12,7 @@
  **/
 angular.module('com.module.core')
   .controller('MainCtrl', function ($scope, $rootScope, $state, $location, UserLoginOrLogoutMsg,
-                                    CoreService, AminoUser, AppAuth, gettextCatalog) {
+                                    CoreService, AppAuth, gettextCatalog) {
     //This currentUser is for filling out the Login screen and has nothing to do with
     //whether anyone is logged in
     UserLoginOrLogoutMsg.listen(function (_event, msg) {
@@ -30,7 +30,7 @@ angular.module('com.module.core')
       }
     });
 
-    $scope.currentUser = AminoUser.getCurrent();
+    $scope.currentUser = AppAuth.getCurrentUser();
     $scope.menuoptions = $rootScope.menu;
 
     $scope.logout = function () {

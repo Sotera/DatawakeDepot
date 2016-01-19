@@ -111,7 +111,7 @@ function toggleTrailing() {
 function setUIStateToLoggedIn(pluginState) {
   window.pluginState = pluginState;
   $('#loginButton')
-    .html('Logout: ' + pluginState.loggedInUser.username)
+    .html('Logout')
     .removeClass('btn-primary')
     .addClass('btn-danger');
   $('#teamList').removeAttr('disabled');

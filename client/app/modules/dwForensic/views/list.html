@@ -90,7 +90,7 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="page in visitedGridSafe">
-                            <td class="col-sm-2">{{ page.searchTerms}}</td>
+                            <td class="col-sm-2"><span class="span label label-ltgray" ng-repeat="term in page.searchTerms">{{term}}</span></td>
                             <td class="col-sm-8"><a href="{{page.url}}" target="_blank"><p>{{ page.url.substring(0,100) }}</p></a></td>
                             <td class="col-sm-2">{{ page.timestamp }}</td>
                         </tr>

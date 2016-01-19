@@ -111,7 +111,7 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser
                     } catch (e){
                         console.log(e);
                     }
-                    $scope.visitedGrid = ForensicService.getSearchTerms(trail.trailUrls);
+                    $scope.visitedGrid = trail.trailUrls;
                     $scope.entitiesGrid = ForensicService.getEntities(trail, $scope.selectedViews);
                     $scope.words = ForensicService.getWords($scope.entitiesGrid);
                 })

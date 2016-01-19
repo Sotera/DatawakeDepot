@@ -4,13 +4,54 @@ var app = angular.module('com.module.dwTeams');
 app.service('TeamsService', ['$state', 'CoreService', 'DwTeam', 'gettextCatalog', function($state, CoreService, DwTeam, gettextCatalog) {
 
   this.getTeams = function() {
-    return DwTeam.find({filter: {include: ['trails','domains','users']}});
+    return DwTeam.find({
+        filter: {
+            include: [
+                'trails',
+                {relation:'domains',
+                    scope:{
+                        fields:[
+                            "name",
+                            "description",
+                            "id"
+                        ]
+                    }
+                },
+                'users'
+            ]
+        }
+    });
   };
 
   this.getTeam = function(id) {
     return DwTeam.findById({
       id: id
     });
+  };
+
+  this.getUserTeams = function(aminoUser) {
+      return DwTeam.find({
+          filter: {
+              include: [
+                  'trails',
+                  {relation:'domains',
+                      scope:{
+                          fields:[
+                              "name",
+                              "description",
+                              "id"
+                          ]
+                      }
+                  },
+                  {relation:'users',
+                  scope:{
+                      where:{
+                          id: aminoUser.id
+                      }
+                  }}
+              ]
+          }
+      });
   };
 
   this.upsertTeam = function(team, cb) {

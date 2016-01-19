@@ -30,11 +30,7 @@ angular.module('com.module.core')
       }
     });
 
-    AppAuth.ensureHasCurrentUser (function () {
-        //This call also serves to redirect a user to the login screen, via the interceptor in users.auth.js, if they are not authenticated.
-        $scope.currentUser = AminoUser.getCurrent();
-    });
-
+    $scope.currentUser = AminoUser.getCurrent();
     $scope.menuoptions = $rootScope.menu;
 
     $scope.logout = function () {

@@ -3,8 +3,6 @@ var app = angular.module('com.module.dwTrailUrls');
 
 app.controller('TrailUrlsCtrl', function($scope, $state, $stateParams, $window, DwCrawlType, DwTrail, DwTrailUrl, TrailUrlsService, gettextCatalog, AppAuth) {
 
-    //Put the currentUser in $scope for convenience
-    $scope.currentUser = AppAuth.currentUser;
     $scope.trails = [];
     $scope.crawlTypes = [];
     $scope.currentTrailId = '';
@@ -122,30 +120,35 @@ app.controller('TrailUrlsCtrl', function($scope, $state, $stateParams, $window, 
     );
 
     $scope.loading = true;
-    if ($stateParams.id) {
-        TrailUrlsService.getTrailUrl($stateParams.id).$promise.then(function(result) {
-            $scope.currentTrailId = $stateParams.trailId;
-            $scope.trailUrl = result;
-            $scope.safeDisplayedTrails = {};
-            $scope.displayedTrailUrls = {};
-            $scope.loading = false;
-        })
-    } else if ($stateParams.trailId){
-        TrailUrlsService.getFilteredTrailUrls($stateParams.trailId).$promise.then(function(result){
-            $scope.currentTrailId = $stateParams.trailId;
-            $scope.trailUrl = {};
-            $scope.safeDisplayedtrailUrls = result;
-            $scope.displayedTrailUrls = [].concat($scope.safeDisplayedtrailUrls);
-            $scope.loading = false;
-        })
-    } else {
-        TrailUrlsService.getTrailUrls().$promise.then(function(result){
-            $scope.currentTrailId = '';
-            $scope.trailUrl = {};
-            $scope.safeDisplayedtrailUrls = result;
-            $scope.displayedTrailUrls = [].concat($scope.safeDisplayedtrailUrls);
-            $scope.loading = false;
-        });
-    }
+    AppAuth.getCurrentUser().then(function (currUser) {
+        $scope.currentUser = currUser;
+        if ($stateParams.id) {
+            TrailUrlsService.getTrailUrl($stateParams.id).$promise.then(function(result) {
+                $scope.currentTrailId = $stateParams.trailId;
+                $scope.trailUrl = result;
+                $scope.safeDisplayedTrails = {};
+                $scope.displayedTrailUrls = {};
+                $scope.loading = false;
+            })
+        } else if ($stateParams.trailId){
+            TrailUrlsService.getFilteredTrailUrls($stateParams.trailId).$promise.then(function(result){
+                $scope.currentTrailId = $stateParams.trailId;
+                $scope.trailUrl = {};
+                $scope.safeDisplayedtrailUrls = result;
+                $scope.displayedTrailUrls = [].concat($scope.safeDisplayedtrailUrls);
+                $scope.loading = false;
+            })
+        } else {
+            TrailUrlsService.getTrailUrls().$promise.then(function(result){
+                $scope.currentTrailId = '';
+                $scope.trailUrl = {};
+                $scope.safeDisplayedtrailUrls = result;
+                $scope.displayedTrailUrls = [].concat($scope.safeDisplayedtrailUrls);
+                $scope.loading = false;
+            });
+        }
+    }, function (err) {
+        console.log(err);
+    });
 });
 

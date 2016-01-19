@@ -141,14 +141,14 @@ app.controller('TrailsCtrl', function ($scope, $state, $http, $stateParams, DwTe
 
     $scope.loading = true;
     AppAuth.getCurrentUser().then(function (currUser) {
+        $scope.currentUser = currUser;
+        $scope.loadPicklists(currUser);
         if ($stateParams.id) {
             TrailsService.getTrail($stateParams.id).$promise.then(function (result) {
                 $scope.currentId = $stateParams.id;
                 $scope.trail = result;
                 $scope.safeDisplayedtrails = {};
                 $scope.displayedTrails = {};
-                $scope.loadPicklists(currUser);
-                $scope.currentUser = currUser;
                 $scope.loading = false;
             })
         } else {
@@ -158,8 +158,6 @@ app.controller('TrailsCtrl', function ($scope, $state, $http, $stateParams, DwTe
                     $scope.trailUrl = {};
                     $scope.safeDisplayedtrails = result;
                     $scope.displayedTrails = [].concat($scope.safeDisplayedtrails);
-                    $scope.loadPicklists(currUser);
-                    $scope.currentUser = currUser;
                     $scope.loading = false;
                 });
             }

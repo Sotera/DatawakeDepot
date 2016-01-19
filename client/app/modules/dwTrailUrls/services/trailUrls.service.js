@@ -1,14 +1,14 @@
 'use strict';
 var app = angular.module('com.module.dwTrailUrls');
 
-app.service('TrailUrlsService', ['$state', 'CoreService', 'DwTrail','DwTrailUrl','DwUrlExtraction', 'gettextCatalog', function($state, CoreService, DwTrail, DwTrailUrl,DwUrlExtraction, gettextCatalog) {
+app.service('TrailUrlsService', ['$state', 'CoreService', 'DwTrailUrl','DwUrlExtraction', 'gettextCatalog', function($state, CoreService, DwTrailUrl, DwUrlExtraction, gettextCatalog) {
 
   this.getTrailUrls = function() {
     var whereClause={
         filter:{
             order:"url DESC",
             include:[
-                'trail',
+                {relation:'trail',scope:{fields: ['name']}},
                 'crawlType',
                 {relation:'urlExtractions',scope:{fields: ['id']}}
             ]
@@ -31,7 +31,7 @@ app.service('TrailUrlsService', ['$state', 'CoreService', 'DwTrail','DwTrailUrl'
                 dwTrailId:trailId
             },
             include:[
-                'trail',
+                {relation:'trail',scope:{fields: ['name']}},
                 'crawlType',
                 {relation:'urlExtractions',scope:{fields: ['id']}}
             ]
@@ -78,11 +78,3 @@ app.service('TrailUrlsService', ['$state', 'CoreService', 'DwTrail','DwTrailUrl'
   };
 
 }]);
-
-//{"fields":["id","name","description"],"include":[{"relation":"domainEntityTypes","scope":{"fields":["name","description"]}},{"relation":"domainItems","scope":{"fields":["itemValue","type","source"]}}]}
-//
-//{"fields":["id","name","description"],"include":[
-//    {"relation":"domainEntityTypes","scope":{"fields":["name","description"]}},
-//    {"relation":"domainItems","scope":{"fields":["itemValue","type","source"]}}
-//
-//]}

@@ -4,7 +4,7 @@ var app = angular.module('com.module.dwForensic');
 app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser, DwTrail, DwDomainEntityType, ForensicService, gettextCatalog, AppAuth) {
     $scope.trail = {};
     //Put the currentUser in $scope for convenience
-    $scope.currentUser = AppAuth.currentUser;
+    $scope.currentUser = AppAuth.getCurrentUser();
     $scope.teams = [];
     $scope.domains = [];
     $scope.trails = [];
@@ -125,7 +125,7 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser
     var userFilter = {
         filter: {
             where: {
-                id: AppAuth.currentUser.id
+                id: $scope.currentUser.id
             },
             "include": [{
                 "relation": "teams",

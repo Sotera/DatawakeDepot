@@ -85,43 +85,46 @@ app.controller('TrailUrlsCtrl', function($scope, $state, $stateParams, $window, 
         $window.open(trailUrl.url);
     };
 
-    DwCrawlType.find({filter: {include: []}}).$promise
-        .then(function (allCrawlTypes) {
-            for (var i = 0; i < allCrawlTypes.length; ++i) {
-                $scope.crawlTypes.push({
-                    value: allCrawlTypes[i].name,
-                    name: allCrawlTypes[i].name + " - " + allCrawlTypes[i].description,
-                    id: allCrawlTypes[i].id
-                });
+    $scope.loadPicklists = function () {
+        DwCrawlType.find({filter: {include: []}}).$promise
+            .then(function (allCrawlTypes) {
+                for (var i = 0; i < allCrawlTypes.length; ++i) {
+                    $scope.crawlTypes.push({
+                        value: allCrawlTypes[i].name,
+                        name: allCrawlTypes[i].name + " - " + allCrawlTypes[i].description,
+                        id: allCrawlTypes[i].id
+                    });
+                }
+            })
+            .catch(function (err) {
+                console.log(err);
+            })
+            .then(function () {
             }
-        })
-        .catch(function (err) {
-            console.log(err);
-        })
-        .then(function () {
-        }
-    );
+        );
 
-    DwTrail.find({filter: {include: []}}).$promise
-        .then(function (allTrails) {
-            for (var i = 0; i < allTrails.length; ++i) {
-                $scope.trails.push({
-                    value: allTrails[i].name,
-                    name: allTrails[i].name + " - " + allTrails[i].description,
-                    id: allTrails[i].id
-                });
+        DwTrail.find({filter: {include: []}}).$promise
+            .then(function (allTrails) {
+                for (var i = 0; i < allTrails.length; ++i) {
+                    $scope.trails.push({
+                        value: allTrails[i].name,
+                        name: allTrails[i].name + " - " + allTrails[i].description,
+                        id: allTrails[i].id
+                    });
+                }
+            })
+            .catch(function (err) {
+                console.log(err);
+            })
+            .then(function () {
             }
-        })
-        .catch(function (err) {
-            console.log(err);
-        })
-        .then(function () {
-        }
-    );
+        );
+    };
 
     $scope.loading = true;
     AppAuth.getCurrentUser().then(function (currUser) {
         $scope.currentUser = currUser;
+        $scope.loadPicklists();
         if ($stateParams.id) {
             TrailUrlsService.getTrailUrl($stateParams.id).$promise.then(function(result) {
                 $scope.currentTrailId = $stateParams.trailId;

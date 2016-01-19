@@ -7,16 +7,12 @@ app.service('UrlExtractionsService', ['$state', 'CoreService', 'DwUrlExtraction'
     var whereClause={
       filter:{
         order:"occurrences DESC",
-        //where:{
-        //  dwTrailUrlId:trailUrlId
-        //},
         include:[
           {relation:'trailUrl',scope:{include: ['trail']}}
         ]
       }
     };
     return (DwUrlExtraction.find(whereClause));
-    //return DwUrlExtraction.find({filter: {include: [{relation:'trailUrl',scope:{include: ['trail']}},'domainEntityType']}});
   };
 
   this.getUrlExtraction = function(id) {
@@ -34,8 +30,6 @@ app.service('UrlExtractionsService', ['$state', 'CoreService', 'DwUrlExtraction'
             },
             include:[
                 {relation:'trailUrl',scope:{include: ['trail']}}
-                //,
-                //'domainEntityType'
             ]
         }
     };

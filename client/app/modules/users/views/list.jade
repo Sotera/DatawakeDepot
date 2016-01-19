@@ -6,8 +6,11 @@
     table.table.table-striped(st-table='displayedUsers', st-safe-src='safeDisplayedUsers')
       thead
         tr
-          th(colspan="7")
+          th(colspan="6")
             input.input-sm.form-control(st-search='' type='search' placeholder='search')
+          th(colspan="1")
+            button.btn.btn-sm.btn-default(ui-sref='^.list' ui-sref-opts="{reload: true, notify: true}",title='Refresh Trails')
+              i.fa.fa-refresh
       thead
         tr
           th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='username' st-sort-default="true") Username

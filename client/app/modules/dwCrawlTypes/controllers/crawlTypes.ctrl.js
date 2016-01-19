@@ -49,10 +49,13 @@ app.controller('CrawlTypesCtrl', function($scope, $state, $stateParams, CrawlTyp
         if ($stateParams.id) {
             CrawlTypesService.getCrawlType($stateParams.id).$promise.then(function(result){
                 $scope.crawlType = result;
+                $scope.safeDisplayedcrawlTypes = {};
+                $scope.displayedcrawlTypes = {};
                 $scope.loading = false;
             })
         } else {
             CrawlTypesService.getCrawlTypes().$promise.then(function(result){
+                $scope.crawlType = {};
                 $scope.safeDisplayedcrawlTypes = result;
                 $scope.displayedcrawlTypes = [].concat($scope.safeDisplayedcrawlTypes);
                 $scope.loading = false;

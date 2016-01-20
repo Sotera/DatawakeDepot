@@ -118,6 +118,7 @@ function setUIStateToLoggedIn(pluginState) {
   $('#domainList').removeAttr('disabled');
   $('#trailList').removeAttr('disabled');
   $('#trailInput').removeAttr('disabled');
+  $('#trailInput').val(window.addTrailText);
   syncSelectElementsWithPluginState();
 }
 function setUIStateToLoggedOut() {
@@ -138,6 +139,7 @@ function setUIStateToLoggedOut() {
   $('#trailList').attr('disabled', 'disabled');
   $('#trailInput').val('');
   $('#trailInput').attr('disabled', 'disabled');
+  $('#trailInput').val('');
   $('#toggleTrailButton').addClass('disabled');
   clearSelectElements();
 }
@@ -324,7 +326,7 @@ function createTrail(){
 function cancelTrail(){
     //reset the input box
     unlockToolbar();
-    window.createTrailMode = true;
+    window.createTrailMode = false;
     window.refreshTrails = false;
     $('#trailInput').val(window.addTrailText);
 }

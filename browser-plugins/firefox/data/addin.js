@@ -69,6 +69,9 @@ exports.init = function () {
           var target = '';
 
             switch (msg.tabTarget){
+                case 'dashboard':
+                    target = pluginState.dashboard;
+                    break;
                 case 'dwForensic':
                     target = pluginState.dwForensic;
                     break;

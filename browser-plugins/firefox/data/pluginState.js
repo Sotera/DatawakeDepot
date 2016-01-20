@@ -25,6 +25,7 @@ var PluginState = function () {
   me.createDomainItem = '/api/dwDomains/_domainId_/domainItems';
   me.dwForensic = '/#/app/dwForensic/list/';
   me.dwTrailUrls = '/#/app/dwTrailUrls/list/';
+  me.dashboard = '/#/app';
   me.trailingActive = false;
   me.panelActive = true;
   me.dataItemsActive = false;

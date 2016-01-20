@@ -1,6 +1,6 @@
 window.trailingActive = false;
 window.panelActive = true;
-window.dataitemsActive = false;
+window.dataItemsActive = false;
 window.refreshTrails = false;
 window.createTrailMode = false;
 window.addTrailText = ' < add Trail >';
@@ -111,7 +111,7 @@ function toggleTrailing() {
 function setUIStateToLoggedIn(pluginState) {
   window.pluginState = pluginState;
   $('#loginButton')
-    .html('Logout: ' + pluginState.loggedInUser.username)
+    .html('Logout')
     .removeClass('btn-primary')
     .addClass('btn-danger');
   $('#teamList').removeAttr('disabled');
@@ -185,7 +185,7 @@ function togglePanel(){
 
 function toggleDataItems(){
     if (window.trailingActive) {
-        if (window.dataitemsActive) {
+        if (window.dataItemsActive) {
             toggleDataItemButtonOff();
         } else {
             toggleDataItemButtonOn();
@@ -195,19 +195,19 @@ function toggleDataItems(){
 
 function toggleDataItemButtonOn(){
     $('#toggleDomainItems').attr('src', './images/OnButton_Green_transparent.png');
-    window.dataitemsActive = true;
+    window.dataItemsActive = true;
     postMessageToAddin({
         action: 'toggle-dataitems',
-        data: window.dataitemsActive
+        data: window.dataItemsActive
     });
 }
 
 function toggleDataItemButtonOff(){
     $('#toggleDomainItems').attr('src', './images/OffButton_transparent.png');
-    window.dataitemsActive = false;
+    window.dataItemsActive = false;
     postMessageToAddin({
         action: 'toggle-dataitems',
-        data: window.dataitemsActive
+        data: window.dataItemsActive
     });
 }
 
@@ -272,26 +272,20 @@ function trailSelectionChanged() {
 
 function lockToolbar(){
     $('#domainList').addClass('disabled');
-    $('#trailInput').removeAttr('.select-editable');
-    $('#trailInput').addClass('.selected-editable');
-    $('#trailList').hide();
-    $('#toggleDiv').hide();
-    $('#domainDiv').hide();
-    $('#toggleTrailButton').hide();
-    $('#loginButton').hide();
+    $('#toggleDiv').css('visibility','hidden');
+    $('#domainDiv').css('visibility','hidden');
+    $('#toggleTrailButton').css('visibility','hidden');
+    $('#loginButton').css('visibility','hidden');
     $('#addTrailButton').show();
     $('#cancelTrailButton').show();
 }
 
 function unlockToolbar(){
     $('#domainList').removeAttr('disabled');
-    $('#trailInput').addClass('.select-editable');
-    $('#trailInput').removeAttr('.selected-editable');
-    $('#trailList').show();
-    $('#toggleDiv').show();
-    $('#domainDiv').show();
-    $('#toggleTrailButton').show();
-    $('#loginButton').show();
+    $('#toggleDiv').css('visibility','visible');
+    $('#domainDiv').css('visibility','visible');
+    $('#toggleTrailButton').css('visibility','visible');
+    $('#loginButton').css('visibility','visible');
     $('#addTrailButton').hide();
     $('#cancelTrailButton').hide();
 }

@@ -3,14 +3,59 @@ var app = angular.module('com.module.dwTrails');
 
 app.service('TrailsService', ['$state', 'CoreService', 'DwDomain','DwTrail', 'DwTrailUrl', 'DwUrlExtraction', 'DwCrawlType', 'DwDomainEntityType','DwDomainItem', 'DwTeam','gettextCatalog', function($state, CoreService, DwDomain, DwTrail, DwTrailUrl, DwUrlExtraction, DwCrawlType, DwDomainEntityType, DwDomainItem, DwTeam, gettextCatalog) {
 
-  this.getTrails = function() {
-    return DwTrail.find({filter: {include: ['domain','team','users','trailUrls','feeds']}});
+  this.getTrail = function(id) {
+      return DwTrail.findById({
+          id: id
+      });
   };
 
-  this.getTrail = function(id) {
-    return DwTrail.findById({
-      id: id
+  this.getTrails = function() {
+    return DwTrail.find({
+        filter:
+            {include:
+                [
+                    'domain',
+                    'users',
+                    'trailUrls'
+                ]
+            }
     });
+  };
+
+  this.getUserTrails = function(domainList) {
+      return DwTrail.find({
+          filter:{
+            where:{
+                dwDomainId:{inq:domainList}
+            },
+            include:
+              [
+                  'domain',
+                  'users',
+                  'trailUrls'
+              ]
+          }
+      });
+  };
+
+  this.getUserTeamTrails = function(teamList) {
+      var userTeams = [];
+      teamList.forEach(function (team) {
+          userTeams.push(team.id);
+      });
+      return DwTrail.find({
+          filter:{
+              where:{
+                  dwTeamId:{inq:userTeams}
+              },
+              include:
+                  [
+                      'domain',
+                      'users',
+                      'trailUrls'
+                  ]
+          }
+      });
   };
 
   this.upsertTrail = function(trail, cb) {

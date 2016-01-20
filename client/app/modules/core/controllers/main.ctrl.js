@@ -12,15 +12,15 @@
  **/
 angular.module('com.module.core')
   .controller('MainCtrl', function ($scope, $rootScope, $state, $location, UserLoginOrLogoutMsg,
-                                    CoreService, AminoUser, AppAuth, gettextCatalog) {
+                                    CoreService, AppAuth, gettextCatalog) {
     //This currentUser is for filling out the Login screen and has nothing to do with
     //whether anyone is logged in
     UserLoginOrLogoutMsg.listen(function (_event, msg) {
       if(msg.action === 'initiate-logout'){
-        AminoUser.logout(function () {
+        AppAuth.logout(function () {
           $state.go('login');
-          CoreService.toastSuccess(gettextCatalog.getString('Logged out'),
-            gettextCatalog.getString('You are logged out!'));
+          CoreService.toastSuccess(gettextCatalog.getString('Logged out'), gettextCatalog.getString('You are logged out!'));
+          //Notify toolbar
           UserLoginOrLogoutMsg.broadcast({action: 'logout'});
         });
       }else if(msg.action === 'logout'){
@@ -29,11 +29,11 @@ angular.module('com.module.core')
         $scope.noOneLoggedIn = false;
       }
     });
-    $scope.currentUser = AminoUser.getCurrent();
-    //We have to call AppAuth to see if anyone is logged in
-    $scope.noOneLoggedIn = !AppAuth.currentUser;
+
+    $scope.currentUser = AppAuth.getCurrentUser();
     $scope.menuoptions = $rootScope.menu;
+
     $scope.logout = function () {
-      UserLoginOrLogoutMsg.broadcast({action: 'initiate-logout'});
+        UserLoginOrLogoutMsg.broadcast({action: 'initiate-logout'});
     };
   });

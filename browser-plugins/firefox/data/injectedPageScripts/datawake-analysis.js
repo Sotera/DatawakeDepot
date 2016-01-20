@@ -5,6 +5,7 @@
 var myContentScriptKey = null;
 var myVar = null;
 var iInterval = 4000;
+var currentDomainId = '';
 
 
 $(document).ready(function () {
@@ -17,10 +18,15 @@ function getTrailingStatus(){
     self.port.emit('requestTrailingActive-target-addin', {contentScriptKey: myContentScriptKey});
 }
 
-//Listen for the addin's getTrailingStatus response. If active then show the panel
+//Listen for the addin's getTrailingStatus response. If active then show the panel and dataitems if active
 self.port.on('trailingStatus-target-content-script', function (data) {
-    if(data.trailingActive && data.panelActive){
-        showPanel();
+    if(data.trailingActive){
+        if(data.panelActive){
+            showPanel();
+        }
+        if(data.dataItemsActive){
+            showDataItems(data.dataItems);
+        }
     }
 });
 
@@ -39,14 +45,29 @@ function getPanelData(){
     self.port.emit('requestPanelHtml-target-addin', {contentScriptKey: myContentScriptKey});
 }
 
+function showDataItems(dataItems){
+    dataItems.forEach(function (domainItem) {
+        $('body').highlight(domainItem.itemValue);
+    });
+}
+
+function showNewDataItem(dataitem){
+    $('body').highlight(dataitem);
+}
+
+function hideDataItems(){
+    $('body').unhighlight();
+}
+
 //Receive panel data and populate it
 self.port.on('send-panel', function (data) {
-    buildPanelContents(data);
+    buildPanelContents(data.panelHtml);
+    currentDomainId = data.currentDomainId;
     //clearInterval(myVar);
 });
 
-function buildPanelContents(data){
-    var panelHtml = data.panelHtml;
+function buildPanelContents(panelHtml){
+    var panelHtml = panelHtml;
     rewritePanelDiv("#widgetOne", panelHtml);
 }
 
@@ -94,16 +115,15 @@ self.port.on('send-toggle-datawake-panel', function (data) {
         $("#datawake-right-panel").remove();
         //clearInterval(myVar);
     }
+
 });
 
 //Toggle dataitems highlighting
 self.port.on('send-toggle-datawake-dataitems', function (data) {
-    if(data.dataitemsActive){
-        data.domainItems.forEach(function (domainItem) {
-            $('body').highlight(domainItem);
-        });
+    if(data.dataItemsActive){
+        showDataItems(data.dataItems);
     }else{
-        $('body').unhighlight();
+        hideDataItems();
     }
 });
 
@@ -138,16 +158,17 @@ function receiveMessage(e){
                 itemValue: e.data.dwItem.value,
                 type: 'extracted',
                 source: e.data.dwItem.extractorId,
-                dwDomainId: e.data.dwItem.domainId
+                dwDomainId: currentDomainId
             };
             //Pass to Addin
             self.port.emit('addDomainItem-target-addin', newDomainItem);
+            showNewDataItem(e.data.dwItem.value);
             break;
         case 'domainType':
             var newDomainType = {
                 name: e.data.dwItem.value,
                 description: e.data.dwItem.value,
-                dwDomainId: e.data.dwItem.domainId,
+                dwDomainId: currentDomainId,
                 dwExtractorId: e.data.dwItem.extractorId,
                 source: 'Converted'
             };

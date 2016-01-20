@@ -83,42 +83,42 @@
                 <table st-table="visitedGridSafe" st-safe-src="visitedGrid" class="table table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th st-sort="searchTerms">Search Terms</th>
-                            <th st-sort="url">URL</th>
-                            <th st-sort="timestamp">Time</th>
+                            <th st-sort="searchTerms" class="col-sm-2">Search Terms</th>
+                            <th st-sort="url" class="col-sm-8">URL</th>
+                            <th st-sort="timestamp" class="col-sm-2">Time</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr ng-repeat="page in visitedGridSafe">
-                            <td>{{ page.searchTerms}}</td>
-                            <td><a href="{{page.url}}" target="_blank">{{ page.url.substring(0,100) }}</a></td>
-                            <td>{{ page.timestamp }}</td>
+                            <td class="col-sm-2"><span class="span label label-ltgray" ng-repeat="term in page.searchTerms">{{term}}</span></td>
+                            <td class="col-sm-8"><a href="{{page.url}}" target="_blank"><p>{{ page.url.substring(0,100) }}</p></a></td>
+                            <td class="col-sm-2">{{ page.timestamp }}</td>
                         </tr>
                     </tbody>
                 </table>
             </tab>
             <tab heading="Entities">
-                <table st-table="entitiesGridSafe" st-safe-src="entitiesGrid" class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th st-sort="text">Name</th>
-                            <th st-sort="type">Type</th>
-                            <th st-sort="url">URL</th>
-                            <th st-sort="weight">Count</th>
-                            <th st-sort="extractor">Extractor</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="entity in entitiesGridSafe">
-                            <td>{{ entity.text }}</td>
-                            <td><span class="span label label-ltgray" ng-repeat="type in entity.type">{{type}}</span></td>
-                            <td><span class="span label" ng-repeat="url in entity.urls"><a href="{{url}}" target="_blank">{{
-                                url.substring(0,100) }}</a></span></td>
-                            <td>{{ entity.weight }}</td>
-                            <td>{{ entity.extractor }}</td>
-                        </tr>
-                    </tbody>
-                </table>
+                    <table st-table="entitiesGridSafe" st-safe-src="entitiesGrid" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th st-sort="text" class="col-sm-2">Name</th>
+                                <th st-sort="type" class="col-sm-5">Types</th>
+                                <th st-sort="url" class="col-sm-3">URLs</th>
+                                <th st-sort="weight" class="col-sm-1">Count</th>
+                                <th st-sort="extractor" class="col-sm-1">Extractor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="entity in entitiesGridSafe">
+                                <td class="col-sm-2">{{ entity.text }}</td>
+                                <td class="col-sm-5"><span class="span label label-ltgray" ng-repeat="type in entity.type">{{type}}</span></td>
+                                <td class="col-sm-3"><span class="span label" ng-repeat="url in entity.urls"><a href="{{url}}" target="_blank"><br>{{
+                                    url.substring(0,80) }}</a></span></td>
+                                <td class="col-sm-1">{{ entity.weight }}</td>
+                                <td class="col-sm-1">{{ entity.extractor }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
             </tab>
             <tab heading="Word Cloud" select="drawGraph()">
                 <div class="row">

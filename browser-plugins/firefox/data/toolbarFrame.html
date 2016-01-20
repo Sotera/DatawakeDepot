@@ -20,6 +20,7 @@
 <div>
     <!--<div style="vertical-align: middle"
        class="container-fluid">-->
+<!--Replacing icon with datawake toolbar button
     <a id="openDWHome"
        role="button"
        onclick="openTab()">
@@ -29,6 +30,7 @@
              height="24"
              width="24">
     </a>
+-->
     <form class="form-horizontal">
         <div class="form-group" style="min-width:1000px">
             <!--Not exposing Team picklist now
@@ -43,7 +45,12 @@
                          class="form-control btn-info input-sm"></select>
                </div>
                -->
-
+              <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="padding-left:20px;padding-right:2px;">
+                 <a onclick="openTab()" class="btn btn-primary btn-xs glyphicon icon-dw"></a>
+                 <a onclick="openTab(dwForensic)" class="btn btn-primary btn-xs glyphicon icon-forensic"></a>
+                 <a onclick="window.open('http://www.google.com')" class="btn btn-primary btn-xs glyphicon icon-trails"></a>
+                 <a onclick="window.open('http://www.google.com')" class="btn btn-primary btn-xs glyphicon icon-domains"></a>
+              </div>
             <div id="toggleDiv"
                  class="col-lg-2 col-md-2 col-sm-2 col-xs-2"
                  style="padding-left:80px;padding-right:2px;min-width: 390px">

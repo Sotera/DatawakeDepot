@@ -12,7 +12,7 @@ body {
     -webkit-font-smoothing: antialiased;
     font-weight: 600;
     /*color: #2770a8;*/
-    background: lightblue;
+    background: #3E3F3A;
 }
 
 #waveImg {
@@ -182,4 +182,98 @@ select {
     background-color: #ddd;
 }*/
 
+.icon-dw {
+    background-image: url("./images/waveicon-white.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 24px;
+    width: 24px;
+}
 
+.icon-dw:hover {
+    background-image: url("./images/waveicon-white.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 24px;
+    width: 24px;
+}
+
+.icon-dw:focus {
+    background-image: url("./images/waveicon-white.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 24px;
+    width: 24px;
+}
+
+.icon-forensic {
+    background-image: url("./images/forensic.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 24px;
+    width: 24px;
+}
+
+.icon-forensic:hover {
+    background-image: url("./images/forensic.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 24px;
+    width: 24px;
+}
+
+.icon-forensic:focus {
+    background-image: url("./images/forensic.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 24px;
+    width: 24px;
+}
+
+.icon-trails {
+    background-image: url("./images/trails.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 24px;
+    width: 24px;
+}
+
+.icon-trails:hover {
+    background-image: url("./images/trails.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 24px;
+    width: 24px;
+}
+
+.icon-trails:focus {
+    background-image: url("./images/trails.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 24px;
+    width: 24px;
+}
+
+.icon-domains {
+    background-image: url("./images/domains.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 24px;
+    width: 24px;
+}
+
+.icon-domains:hover {
+    background-image: url("./images/domains.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 24px;
+    width: 24px;
+}
+
+.icon-domains:focus {
+    background-image: url("./images/domains.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 24px;
+    width: 24px;
+}

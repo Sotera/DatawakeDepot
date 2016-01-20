@@ -12,10 +12,9 @@
                 i.fa.fa-refresh
       thead
         tr
-          th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='name' st-sort-default="true") Name
+          th.sortable.col-sm-3.col-md-3.col-lg-3(st-sort='name' st-sort-default="true") Name
           th.sortable.col-sm-3.col-md-3.col-lg-3(st-sort='description') Description
-          th.sortable.col-sm-1.col-md-1.col-lg-1.td-center.text-nowrap(st-sort='domain.name') Domain
-          th.sortable.col-sm-2.col-md-2.col-lg-2.td-center.text-nowrap(st-sort='') # Users
+          th.sortable.col-sm-2.col-md-2.col-lg-2.td-center.text-nowrap(st-sort='domain.name') Domain
           th.sortable.col-sm-1.col-md-1.col-lg-1.td-center.text-nowrap(st-sort='trailUrls.length') # URLs
           th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='timestamp') Timestamp
           th.col-sm-1.col-md-1.col-lg-1.td-center
@@ -30,8 +29,6 @@
             span.text-muted {{trail.description}}
           td.td-center
             span.label.label-ltgray {{trail.domain.name}}
-          td.td-center
-            span.label.label-ltgray(ng-repeat="user in trail.users") {{user.username}}
           td.td-center
             a(ui-sref='app.dwTrailUrls.list({id:null, trailId:trail.id})') {{trail.trailUrls.length}}
           td

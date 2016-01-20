@@ -3,8 +3,7 @@ var app = angular.module('com.module.dwForensic');
 
 app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser, DwTrail, DwDomainEntityType, ForensicService, gettextCatalog, AppAuth) {
     $scope.trail = {};
-    //Put the currentUser in $scope for convenience
-    $scope.currentUser = AppAuth.currentUser;
+
     $scope.teams = [];
     $scope.domains = [];
     $scope.trails = [];
@@ -29,7 +28,6 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser
         $scope.selectedTrail = null;
         $scope.domains = team.domains;
     };
-
 
     $scope.domainChanged = function (domain) {
         $scope.selectedDomain = domain;
@@ -122,26 +120,31 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser
         }
     };
 
-    var userFilter = {
-        filter: {
-            where: {
-                id: AppAuth.currentUser.id
-            },
-            "include": [{
-                "relation": "teams",
-                "scope": {"include": [{"relation": "domains", "scope": {"include": [{"relation": "trails"}]}}]}
-            }]
-        }
-    };
-    console.log("userFilter");
-    console.log(JSON.stringify(userFilter));
-    AminoUser.findOne(userFilter).$promise
-        .then(function (user) {
-            $scope.teams = user.teams;
+    $scope.loading = true;
+    AppAuth.getCurrentUser().then(function (currUser) {
 
-        })
-        .catch(function (err) {
-            console.log("Error getting trail: " + trailId);
-            console.log(err);
-        });
+        var userFilter = {
+            filter: {
+                where: {
+                    id: currUser.id
+                },
+                "include": [{
+                    "relation": "teams",
+                    "scope": {"include": [{"relation": "domains", "scope": {"include": [{"relation": "trails"}]}}]}
+                }]
+            }
+        };
+        console.log("userFilter");
+        console.log(JSON.stringify(userFilter));
+        AminoUser.findOne(userFilter).$promise
+            .then(function (user) {
+                $scope.teams = user.teams;
+
+            })
+            .catch(function (err) {
+                console.log("Error getting trail: " + trailId);
+                console.log(err);
+            });
+        $scope.loading = false;
+    });
 });

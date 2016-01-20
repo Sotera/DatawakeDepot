@@ -38,6 +38,26 @@ app.service('TrailsService', ['$state', 'CoreService', 'DwDomain','DwTrail', 'Dw
       });
   };
 
+  this.getUserTeamTrails = function(teamList) {
+      var userTeams = [];
+      teamList.forEach(function (team) {
+          userTeams.push(team.id);
+      });
+      return DwTrail.find({
+          filter:{
+              where:{
+                  dwTeamId:{inq:userTeams}
+              },
+              include:
+                  [
+                      'domain',
+                      'users',
+                      'trailUrls'
+                  ]
+          }
+      });
+  };
+
   this.upsertTrail = function(trail, cb) {
 
       //TODO: I think we can create the team and domain first, then use the object reference of each to replace the

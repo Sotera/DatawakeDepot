@@ -1,12 +1,8 @@
 'use strict';
 var app = angular.module('com.module.dwDomainItems');
 
-app.controller('DomainItemsCtrl', function($scope, $state, $stateParams, DwDomain, DwDomainItem, DomainItemsService, gettextCatalog, AppAuth) {
-
-    //Put the currentUser in $scope for convenience
-    $scope.currentUser = AppAuth.currentUser;
+app.controller('DomainItemsCtrl', function($scope, $state, $stateParams, DwDomain, DomainItemsService, gettextCatalog, AppAuth) {
     $scope.domains = [];
-
     $scope.currentDomainId= '';
     $scope.domainItem = {};
     $scope.formFields = [{
@@ -60,49 +56,57 @@ app.controller('DomainItemsCtrl', function($scope, $state, $stateParams, DwDomai
         });
     };
 
-    DwDomain.find({filter: {include: []}}).$promise
-        .then(function (allDomains) {
-            $scope.domains.length=0;
-            for (var i = 0; i < allDomains.length; ++i) {
-                $scope.domains.push({
-                    value: allDomains[i].name,
-                    name: allDomains[i].name + " - " + allDomains[i].description,
-                    id: allDomains[i].id
-                });
+    $scope.loadPicklists = function () {
+        DwDomain.find({filter: {include: []}}).$promise
+            .then(function (allDomains) {
+                $scope.domains.length=0;
+                for (var i = 0; i < allDomains.length; ++i) {
+                    $scope.domains.push({
+                        value: allDomains[i].name,
+                        name: allDomains[i].name + " - " + allDomains[i].description,
+                        id: allDomains[i].id
+                    });
+                }
+            })
+            .catch(function (err) {
+                console.log(err);
+            })
+            .then(function () {
             }
-        })
-        .catch(function (err) {
-            console.log(err);
-        })
-        .then(function () {
-        }
-    );
+        );
+    };
 
     $scope.loading = true;
-    if ($stateParams.id && $stateParams.domainId) {
-        DomainItemsService.getDomainItem($stateParams.id).$promise.then(function(result) {
-            $scope.currentDomainId = $stateParams.domainId;
-            $scope.domainItem = result;
-            $scope.safeDisplayeddomainItems = {};
-            $scope.displayedDomainItems = {};
-            $scope.loading = false;
-        })
-    } else if ($stateParams.domainId){
-        DomainItemsService.getFilteredDomainItems($stateParams.domainId).$promise.then(function(result){
-            $scope.currentDomainId = $stateParams.domainId;
-            $scope.domainItem = {};
-            $scope.safeDisplayeddomainItems = result;
-            $scope.displayedDomainItems = [].concat($scope.displayedDomainItems);
-            $scope.loading = false;
-        })
-    } else {
-        DomainItemsService.getDomainItems().$promise.then(function(result){
-            $scope.currentDomainId = '';
-            $scope.domainItem = {};
-            $scope.safeDisplayeddomainItems = result;
-            $scope.displayedDomainItems = [].concat($scope.displayedDomainItems);
-            $scope.loading = false;
-        });
-    }
+    AppAuth.getCurrentUser().then(function (currUser) {
+        $scope.currentUser = currUser;
+        $scope.loadPicklists(currUser);
+        if ($stateParams.id && $stateParams.domainId) {
+            DomainItemsService.getDomainItem($stateParams.id).$promise.then(function(result) {
+                $scope.currentDomainId = $stateParams.domainId;
+                $scope.domainItem = result;
+                $scope.safeDisplayeddomainItems = {};
+                $scope.displayedDomainItems = {};
+                $scope.loading = false;
+            })
+        } else if ($stateParams.domainId){
+            DomainItemsService.getFilteredDomainItems($stateParams.domainId).$promise.then(function(result){
+                $scope.currentDomainId = $stateParams.domainId;
+                $scope.domainItem = {};
+                $scope.safeDisplayeddomainItems = result;
+                $scope.displayedDomainItems = [].concat($scope.displayedDomainItems);
+                $scope.loading = false;
+            })
+        } else {
+            DomainItemsService.getDomainItems().$promise.then(function(result){
+                $scope.currentDomainId = '';
+                $scope.domainItem = {};
+                $scope.safeDisplayeddomainItems = result;
+                $scope.displayedDomainItems = [].concat($scope.displayedDomainItems);
+                $scope.loading = false;
+            });
+        }
+    }, function (err) {
+        console.log(err);
+    });
 });
 

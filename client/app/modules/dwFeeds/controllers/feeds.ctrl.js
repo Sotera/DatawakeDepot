@@ -1,10 +1,8 @@
 'use strict';
 var app = angular.module('com.module.dwFeeds');
 
-app.controller('FeedsCtrl', function($scope, $state, $stateParams, DwDomain, DwTrail, DwTeam, DwFeed, DwServiceType, FeedsService, gettextCatalog, AppAuth) {
+app.controller('FeedsCtrl', function($scope, $state, $stateParams, DwDomain, DwTrail, DwTeam, DwServiceType, FeedsService, gettextCatalog, AppAuth) {
 
-    //Put the currentUser in $scope for convenience
-    $scope.currentUser = AppAuth.currentUser;
     $scope.feed = {};
     $scope.plProtocols = [
         {"name": "http","description": "http://"},
@@ -120,93 +118,96 @@ app.controller('FeedsCtrl', function($scope, $state, $stateParams, DwDomain, DwT
         });
     };
 
+    $scope.loadPicklists = function () {
+        DwServiceType.find({filter: {include: []}}).$promise
+            .then(function (allServiceTypes) {
+                for (var i = 0; i < allServiceTypes.length; ++i) {
+                    $scope.plServiceTypes.push({
+                        value: allServiceTypes[i].name,
+                        name: allServiceTypes[i].name + " - " + allServiceTypes[i].description,
+                        id: allServiceTypes[i].id
+                    });
+                }
+            })
+            .catch(function (err) {
+                console.log(err);
+            })
+            .then(function () {
+            }
+        );
+
+        DwDomain.find({filter: {include: []}}).$promise
+            .then(function (allDomains) {
+                for (var i = 0; i < allDomains.length; ++i) {
+                    $scope.plDomains.push({
+                        value: allDomains[i].name,
+                        name: allDomains[i].description,
+                        id: allDomains[i].id
+                    });
+                }
+            })
+            .catch(function (err) {
+                console.log(err);
+            })
+            .then(function () {
+            }
+        );
+
+        DwTrail.find({filter: {include: []}}).$promise
+            .then(function (allTrails) {
+                for (var i = 0; i < allTrails.length; ++i) {
+                    $scope.plTrails.push({
+                        value: allTrails[i].name,
+                        name: allTrails[i].description,
+                        id: allTrails[i].id
+                    });
+                }
+            })
+            .catch(function (err) {
+                console.log(err);
+            })
+            .then(function () {
+            }
+        );
+
+        DwTeam.find({filter: {include: []}}).$promise
+            .then(function (allTeams) {
+                for (var i = 0; i < allTeams.length; ++i) {
+                    $scope.plTeams.push({
+                        value: allTeams[i].name,
+                        name: allTeams[i].description,
+                        id: allTeams[i].id
+                    });
+                }
+            })
+            .catch(function (err) {
+                console.log(err);
+            })
+            .then(function () {
+            }
+        );
+    };
+
     $scope.loading = true;
-    DwFeed.find({filter: {include: ['transmissions','teams','trails','domains','serviceType']}}).$promise
-        .then(function (allFeeds) {
-            $scope.safeDisplayedfeeds = allFeeds;
-            $scope.displayedfeeds = [].concat($scope.safeDisplayedfeeds);
-        })
-        .catch(function (err) {
-            console.log(err);
-        })
-        .then(function () {
-            $scope.loading = false;
+    AppAuth.getCurrentUser().then(function (currUser) {
+        $scope.currentUser = currUser;
+        $scope.loadPicklists();
+        if ($stateParams.id) {
+            FeedsService.getFeed($stateParams.id).$promise.then(function(result){
+                $scope.feed = result;
+                $scope.safeDisplayedfeeds = {};
+                $scope.displayedfeeds = {};
+                $scope.loading = false;
+            })
+        } else {
+            FeedsService.getFeeds().$promise.then(function(result){
+                $scope.feed = {};
+                $scope.safeDisplayedfeeds = result;
+                $scope.displayedfeeds = [].concat($scope.safeDisplayedfeeds);
+                $scope.loading = false;
+            })
         }
-    );
-
-    DwServiceType.find({filter: {include: []}}).$promise
-        .then(function (allServiceTypes) {
-            for (var i = 0; i < allServiceTypes.length; ++i) {
-                $scope.plServiceTypes.push({
-                    value: allServiceTypes[i].name,
-                    name: allServiceTypes[i].name + " - " + allServiceTypes[i].description,
-                    id: allServiceTypes[i].id
-                });
-            }
-        })
-        .catch(function (err) {
-            console.log(err);
-        })
-        .then(function () {
-        }
-    );
-
-    DwDomain.find({filter: {include: []}}).$promise
-        .then(function (allDomains) {
-            for (var i = 0; i < allDomains.length; ++i) {
-                $scope.plDomains.push({
-                    value: allDomains[i].name,
-                    name: allDomains[i].description,
-                    id: allDomains[i].id
-                });
-            }
-        })
-        .catch(function (err) {
-            console.log(err);
-        })
-        .then(function () {
-        }
-    );
-
-    DwTrail.find({filter: {include: []}}).$promise
-        .then(function (allTrails) {
-            for (var i = 0; i < allTrails.length; ++i) {
-                $scope.plTrails.push({
-                    value: allTrails[i].name,
-                    name: allTrails[i].description,
-                    id: allTrails[i].id
-                });
-            }
-        })
-        .catch(function (err) {
-            console.log(err);
-        })
-        .then(function () {
-        }
-    );
-
-    DwTeam.find({filter: {include: []}}).$promise
-        .then(function (allTeams) {
-            for (var i = 0; i < allTeams.length; ++i) {
-                $scope.plTeams.push({
-                    value: allTeams[i].name,
-                    name: allTeams[i].description,
-                    id: allTeams[i].id
-                });
-            }
-        })
-        .catch(function (err) {
-            console.log(err);
-        })
-        .then(function () {
-        }
-    );
-
-    if ($stateParams.id) {
-        FeedsService.getFeed($stateParams.id).$promise.then(function(result){
-            $scope.feed = result;})
-    } else {
-        $scope.feed = {};
-    }
+    }, function (err) {
+        console.log(err);
+    });
 });
-

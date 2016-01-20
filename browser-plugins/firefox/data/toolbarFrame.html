@@ -86,13 +86,15 @@
                     <select id="trailList"
                             disabled="disabled"
                             onchange="trailSelectionChanged()"
+                            onfocus="this.selectedIndex = -1;"
                             class="form-control btn-info input-sm">
                     </select>
                     <input id="trailInput"
                            disabled="disabled"
                            type="text"
                            name="trailInput"
-                           onkeyup="trailSelectionChanged2()"
+                           onfocus="clearTrailInput()"
+                           onkeyup="trailSelectionChangedManual()"
                            value=""
                            class="form-control btn-info input-sm"/>
                 </div>
@@ -119,6 +121,11 @@
                        class="btn btn-sm btn-primary"
                        onclick="toggleLogin()">Login</a>
                 </div>
+            </div>
+            <div id='divError'
+                 style="display:none;color:red;text-align: left"
+                 class="control-label col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                <label id="lblError" style="text-align: right"/> Trail already exists!
             </div>
         </div>
     </form>

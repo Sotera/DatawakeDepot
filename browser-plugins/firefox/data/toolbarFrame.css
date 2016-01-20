@@ -12,7 +12,7 @@ body {
     -webkit-font-smoothing: antialiased;
     font-weight: 600;
     /*color: #2770a8;*/
-    background: #3E3F3A;
+    background: #5F5F5F;
 }
 
 #waveImg {
@@ -277,3 +277,4 @@ select {
     height: 24px;
     width: 24px;
 }
+

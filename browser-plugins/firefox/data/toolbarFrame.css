@@ -182,24 +182,24 @@ select {
     background-color: #ddd;
 }*/
 
-.icon-dw {
-    background-image: url("./images/waveicon-white.png");
+.icon-home {
+    background-image: url("./images/home.png");
     background-position: center center;
     background-repeat: no-repeat;
     height: 24px;
     width: 24px;
 }
 
-.icon-dw:hover {
-    background-image: url("./images/waveicon-white.png");
+.icon-home:hover {
+    background-image: url("./images/home.png");
     background-position: center center;
     background-repeat: no-repeat;
     height: 24px;
     width: 24px;
 }
 
-.icon-dw:focus {
-    background-image: url("./images/waveicon-white.png");
+.icon-home:focus {
+    background-image: url("./images/home.png");
     background-position: center center;
     background-repeat: no-repeat;
     height: 24px;

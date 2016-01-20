@@ -46,10 +46,10 @@
                </div>
                -->
               <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="padding-left:20px;padding-right:2px;">
-                 <a onclick="openTab(dashboard)" class="btn btn-primary btn-xs glyphicon icon-dw"></a>
-                 <a onclick="openTab(dwForensic)" class="btn btn-primary btn-xs glyphicon icon-forensic"></a>
-                 <a onclick="window.open('http://www.google.com')" class="btn btn-primary btn-xs glyphicon icon-trails"></a>
-                 <a onclick="window.open('http://www.google.com')" class="btn btn-primary btn-xs glyphicon icon-domains"></a>
+                 <a onclick="openTab('dashboard')" class="btn btn-primary btn-xs glyphicon icon-home"></a>
+                 <a onclick="openTab('dwForensic')" class="btn btn-primary btn-xs glyphicon icon-forensic"></a>
+                 <a onclick="openTab('dwTrailUrls')" class="btn btn-primary btn-xs glyphicon icon-trails"></a>
+                 <a onclick="openTab('domainsUrl')" class="btn btn-primary btn-xs glyphicon icon-domains"></a>
               </div>
             <div id="toggleDiv"
                  class="col-lg-2 col-md-2 col-sm-2 col-xs-2"
@@ -82,7 +82,7 @@
                     <select id="domainList"
                             disabled="disabled"
                             onchange="domainSelectionChanged()"
-                            class="form-control btn-info input-sm">
+                            class="form-control input-sm">
                     </select>
                 </div>
                 <label for="trailList"
@@ -103,7 +103,7 @@
                            onfocus="clearTrailInput()"
                            onkeyup="trailSelectionChangedManual()"
                            value=""
-                           class="form-control btn-info input-sm"/>
+                           class="form-control input-sm"/>
                 </div>
             </div>
             <div id="buttonDiv">

@@ -78,6 +78,9 @@ exports.init = function () {
                 case 'dwTrailUrls':
                     target = pluginState.dwTrailUrls + pluginState.currentTrail.id;
                     break;
+                case 'domainsUrl':
+                    target = pluginState.domainsUrl + pluginState.currentDomain.id;
+                    break;
                 default:
                     target = '';
                     break;

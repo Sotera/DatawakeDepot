@@ -218,6 +218,7 @@ select {
     background-repeat: no-repeat;
     height: 24px;
     width: 24px;
+    border-color: #2c4361 #2c4361 hsl(214, 37%, 19.5%);
 }
 
 .icon-forensic:hover {
@@ -242,6 +243,7 @@ select {
     background-repeat: no-repeat;
     height: 24px;
     width: 24px;
+    border-color: #2c4361 #2c4361 hsl(214, 37%, 19.5%);
 }
 
 .icon-trails:hover {
@@ -266,6 +268,7 @@ select {
     background-repeat: no-repeat;
     height: 24px;
     width: 24px;
+    border-color: #2c4361 #2c4361 hsl(214, 37%, 19.5%);
 }
 
 .icon-domains:hover {

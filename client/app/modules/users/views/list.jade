@@ -34,9 +34,9 @@
               span.text-muted {{user.lastName}}
             td
               span.text-muted {{user.email}}
-            td.td-center
+            td
               span.label.label-ltgray(ng-repeat="role in user.roles") {{role.name}}
-            td.td-center
+            td
               span.label.label-ltgray(ng-repeat="team in user.teams") {{team.name}}
             td.td-center(style='width: 120px')
               .btn-group

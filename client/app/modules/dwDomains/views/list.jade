@@ -15,37 +15,37 @@
             thead
               tr
                 th.sortable.col-sm-1(st-sort='name' st-sort-default="true") Name
-                th.sortable.col-sm-1(st-sort='description') Description
+                th.sortable.col-sm-2(st-sort='description') Description
                 th.sortable.col-sm-1(st-sort='name') Team
-                th.col-sm-2 Trails
+                th.col-sm-4 Trails
                 th.sortable.col-sm-1(st-sort='domainItems.length') # Items
                 th.col-sm-1 Extractors
-                th.col-sm-1
+                th.col-sm-2.td-center
                     button.btn.btn-sm.btn-success(ui-sref='^.add' ui-sref-opts="{reload: true, notify: true}",title='Add Domain' ng-disabled='!currentUser.isAdmin')
                         i.fa.fa-plus &nbsp;Add Domain
             tbody
               tr(ng-repeat='domain in displayedDomains')
                 td.hidden
                   span {{domain.id}}
-                td.col-sm-1
+                td
                   a(ui-sref='app.dwDomains.view({id:domain.id})') {{domain.name}}
-                td.col-sm-1
+                td
                   span.text-muted {{domain.description}}
-                td.col-sm-1
+                td
                   span.text-muted {{domain.teams[0].name}}
-                td.col-sm-2
+                td
                   span.label.label-ltgray(ng-repeat="trail in domain.trails") {{trail.name + ' '}} <br ng-if="($index+1)%4==0">
-                td.col-sm-1
+                td
                   a(ui-sref='app.dwDomainItems.list({id:null, domainId:domain.id})') {{domain.domainItems.length}}
-                td.col-sm-1
+                td
                   span.label.label-ltgray(ng-repeat="extractor in domain.extractors") {{extractor.name+ ' '}} <br ng-if="($index+1)%2==0">
-                td.col-sm-1
-                  .btn-toolbar
-                    button.btn.btn-sm.btn-default(ui-sref='app.dwDomains.edit({id:domain.id})', ng-disabled='!currentUser.isAdmin')
+                td.td-center
+                  .btn-group
+                    button.btn.btn-sm.btn-default(ui-sref='app.dwDomains.edit({id:domain.id})',ng-disabled='!currentUser.isAdmin')
                       i.fa.fa-pencil
                     button.btn.btn-sm.btn-warning(ng-click='export({id:domain.id})' title='Export Domain Summary')
                       i.fa.fa-save
                     button.btn.btn-sm.btn-danger(ng-click='delete({id:domain})', ng-disabled='!currentUser.isAdmin')
-                          i.fa.fa-trash-o
+                      i.fa.fa-trash-o
   .overlay(ng-if='loading')
   .loading-img(ng-if='loading')

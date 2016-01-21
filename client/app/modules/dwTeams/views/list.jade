@@ -13,28 +13,28 @@
         table.table.table-striped
           thead
             tr
-              th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='name' st-sort-default="true") Name
-              th.sortable.col-sm-3.col-md-3.col-lg-3(st-sort='description') Description
-              th.col-sm-1.col-md-1.col-lg-1 Members
-              th.col-sm-2.col-md-2.col-lg-2 Domains
-              th.col-sm-2.col-md-2.col-lg-2 Trails
-              th.col-sm-2.col-md-2.col-lg-2
+              th.sortable.col-sm-1(st-sort='name' st-sort-default="true") Name
+              th.sortable.col-sm-2(st-sort='description') Description
+              th.col-sm-2 Members
+              th.col-sm-1 Domains
+              th.col-sm-5 Trails
+              th.col-sm-1
                 a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
                   | Add Team
 
           tbody
             tr(ng-repeat='team in displayedTeams')
-              td.col-sm-2
-                a(href='', ui-sref='app.dwTeams.view({id: team.id})') {{team.name}}
-              td.col-sm-3
-                text-muted {{team.description}}
               td.col-sm-1
-                label.label-ltgray(ng-repeat="user in team.users") {{user.username}}
+                a(href='', ui-sref='app.dwTeams.view({id: team.id})') {{team.name}}
               td.col-sm-2
-                label.label-ltgray(ng-repeat="domain in team.domains") {{domain.name}}
+                text-muted {{team.description}}
               td.col-sm-2
-                label.label-ltgray(ng-repeat="trail in team.trails") {{trail.name + ' '}}
-              td.col-sm-2
+                label.label.label-ltgray(ng-repeat="user in team.users") {{user.username}}
+              td.col-sm-1
+                label.label.label-ltgray(ng-repeat="domain in team.domains") {{domain.name}}
+              td.col-sm-5
+                  label.label.label-ltgray(ng-repeat="trail in team.trails") {{trail.name + ' '}} <br ng-if="($index+1)%4==0">
+              td.col-sm-1
                 .btn-toolbar
                     button.btn.btn-sm.btn-default(ui-sref='app.dwTeams.edit({id:team.id})', , ng-disabled='!currentUser.isAdmin')
                         i.fa.fa-pencil

@@ -69,11 +69,17 @@ exports.init = function () {
           var target = '';
 
             switch (msg.tabTarget){
+                case 'dashboard':
+                    target = pluginState.dashboard;
+                    break;
                 case 'dwForensic':
                     target = pluginState.dwForensic;
                     break;
-                case 'dwTrailUrls':
-                    target = pluginState.dwTrailUrls + pluginState.currentTrail.id;
+                case 'dwTrails':
+                    target = pluginState.dwTrails;
+                    break;
+                case 'dwDomains':
+                    target = pluginState.dwDomains;
                     break;
                 default:
                     target = '';

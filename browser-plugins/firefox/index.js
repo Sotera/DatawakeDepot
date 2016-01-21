@@ -9,4 +9,3 @@ pluginState.loginUrl = 'http://localhost:3000';
 require('./data/contextMenu').init();
 require('./data/pageMods').init();
 require('./data/addin').init();
-

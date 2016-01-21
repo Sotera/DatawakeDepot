@@ -18,18 +18,8 @@
 </head>
 <body onload="onLoad()">
 <div>
-    <!--<div style="vertical-align: middle"
-       class="container-fluid">-->
-    <a id="openDWHome"
-       role="button"
-       onclick="openTab()">
-        <img src="./images/waveicon24.png"
-             id="waveImg"
-             style="margin-left: 6px;position: absolute;"
-             height="24"
-             width="24">
-    </a>
-    <form class="form-horizontal">
+
+    <form class="form-horizontal container-fluid">
         <div class="form-group" style="min-width:1000px">
             <!--Not exposing Team picklist now
                <label for="teamList"
@@ -43,12 +33,18 @@
                          class="form-control btn-info input-sm"></select>
                </div>
                -->
+              <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="padding-left:20px;padding-right:2px;padding-top:3px">
+                <a onclick="openTab('dashboard')" class="btn icon-dw"></a>
+                <a onclick="openTab('dwForensic')" class="btn btn-primary btn-xs icon-forensic"></a>
+                <a onclick="openTab('dwTrails')" class="btn btn-primary btn-xs icon-trails"></a>
+                <a onclick="openTab('dwDomains')" class="btn btn-primary btn-xs icon-domains"></a>
+              </div>
 
             <div id="toggleDiv"
                  class="col-lg-2 col-md-2 col-sm-2 col-xs-2"
-                 style="padding-left:80px;padding-right:2px;min-width: 390px">
+                 style="padding-left:10px;padding-right:2px;min-width:260px">
                   <span>
-                  <label for="toggleDomainItems" style="font-size:10px;padding-left:0;padding-right:5px;">Show Domain Items:</label>
+                  <label for="toggleDomainItems" style="color:#f2f3f2;font-size:10px;padding-left:0;padding-right:5px;">Domain Items:</label>
                   <img src="./images/OffButton_transparent.png"
                        id="toggleDomainItems"
                        align="bottom"
@@ -57,7 +53,7 @@
                        onclick="toggleDataItems()">
                   </span>
                   <span>
-                  <label for="toggleDWPanel" style="font-size:10px;padding-left:0;padding-right:5px;">Show Panel:</label>
+                  <label for="toggleDWPanel" style="color:#f2f3f2;font-size:10px;padding-left:0;padding-right:5px;">Panel:</label>
                   <img src="./images/OffButton_transparent.png"
                        id="toggleDWPanel"
                        align="bottom"
@@ -68,26 +64,26 @@
             </div>
             <div id="domainDiv" style="visibility: visible">
                 <label for="domainList"
-                       style="padding-left:0;padding-right:4px;white-space:nowrap;padding-top:7px;margin-bottom:0;text-align:right;"
+                       style="font-size:12px;color:#f2f3f2;padding-left:0;padding-right:4px;white-space:nowrap;padding-top:7px;margin-bottom:0;text-align:right;"
                        class="col-lg-1 col-md-1 col-sm-1 col-xs-1">Domain:</label>
                 <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"
                      style="padding-left:0;padding-right:0;white-space:nowrap;">
                     <select id="domainList"
                             disabled="disabled"
                             onchange="domainSelectionChanged()"
-                            class="form-control btn-info input-sm">
+                            class="form-control input-sm">
                     </select>
                 </div>
                 <label for="trailList"
-                       style="padding-left:0;padding-right:4px;white-space:nowrap;padding-top:7px;margin-bottom:0;text-align:right;"
+                       style="font-size:12px;color:#f2f3f2;padding-left:0;padding-right:4px;white-space:nowrap;padding-top:7px;margin-bottom:0;text-align:right;"
                        class="col-lg-1 col-md-1 col-sm-1 col-xs-1">Trail:</label>
                 <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 select-editable"
-                     style="padding-left:0;padding-right:0;visibility: visible;white-space:nowrap;">
+                     style="color:#f2f3f2;padding-left:0;padding-right:0;visibility: visible;white-space:nowrap;">
                     <select id="trailList"
                             disabled="disabled"
                             onchange="trailSelectionChanged()"
                             onfocus="this.selectedIndex = -1;"
-                            class="form-control btn-info input-sm">
+                            class="form-control input-sm">
                     </select>
                     <input id="trailInput"
                            disabled="disabled"
@@ -96,12 +92,17 @@
                            onfocus="clearTrailInput()"
                            onkeyup="trailSelectionChangedManual()"
                            value=""
-                           class="form-control btn-info input-sm"/>
+                           class="form-control input-sm"/>
                 </div>
             </div>
+            <div id='divError'
+                 style="display:none;color:red;text-align: left"
+                 class="control-label col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                <label id="lblError" style="text-align:left;padding-right:2px"/>Trail already exists!
+            </div>
             <div id="buttonDiv">
-                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 pull-right"
-                     style="padding-left:4px;padding-right:2px;min-width: 200px">
+                <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 pull-right"
+                     style="padding-left:4px;padding-right:2px;min-width:200px;white-space:nowrap">
                     <a id="addTrailButton"
                        role="button"
                        class="btn btn-sm btn-success"
@@ -122,11 +123,7 @@
                        onclick="toggleLogin()">Login</a>
                 </div>
             </div>
-            <div id='divError'
-                 style="display:none;color:red;text-align: left"
-                 class="control-label col-lg-2 col-md-2 col-sm-2 col-xs-2">
-                <label id="lblError" style="text-align: right"/> Trail already exists!
-            </div>
+
         </div>
     </form>
 </div>

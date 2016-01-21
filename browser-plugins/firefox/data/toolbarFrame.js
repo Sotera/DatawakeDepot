@@ -82,7 +82,7 @@ function toggleTrailing() {
     $('#teamList').removeAttr('disabled');
     $('#toggleTrailButton')
       .addClass('btn-success')
-      .removeClass('btn-default')
+      .removeClass('btn-danger')
       .html('Start');
     $('body').removeClass('body-throb');
     togglePanelButtonOff();
@@ -95,7 +95,7 @@ function toggleTrailing() {
     $('#teamList').attr('disabled', 'disabled');
     $('#toggleTrailButton')
       .removeClass('btn-success')
-      .addClass('btn-default')
+      .addClass('btn-danger')
       .html('Stop');
     $('body').addClass('body-throb');
     togglePanelButtonOn();

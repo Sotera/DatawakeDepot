@@ -37,8 +37,8 @@ body {
 }
 
 @-moz-keyframes color_change2 {
-    from { background-color: lightskyblue; }
-    to { background-color: lightblue; }
+    from { background-color: #908c88; }
+    to { background-color: #77716f; }
 }
 
 a,

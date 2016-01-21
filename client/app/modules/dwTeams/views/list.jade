@@ -27,11 +27,11 @@
                 td.col-sm-2
                   text-muted {{team.description}}
                 td.col-sm-2
-                  label.label.label-ltgray(ng-repeat="user in team.users") {{user.username + ' '}} <br ng-if="($index+1)%2==0">
+                  span.label.label-ltgray(ng-repeat="user in team.users") {{user.username + ' '}} <br ng-if="($index+1)%2==0">
                 td.col-sm-1
-                  label.label.label-ltgray(ng-repeat="domain in team.domains") {{domain.name+ ' '}} <br ng-if="($index+1)%2==0">
+                  span.label.label-ltgray(ng-repeat="domain in team.domains") {{domain.name+ ' '}} <br ng-if="($index+1)%2==0">
                 td.col-sm-5
-                    label.label.label-ltgray(ng-repeat="trail in team.trails") {{trail.name + ' '}} <br ng-if="($index+1)%4==0">
+                  span.label.label-ltgray(ng-repeat="trail in team.trails") {{trail.name + ' '}} <br ng-if="($index+1)%4==0">
                 td.col-sm-1
                   .btn-toolbar
                       button.btn.btn-sm.btn-default(ui-sref='app.dwTeams.edit({id:team.id})', , ng-disabled='!currentUser.isAdmin')

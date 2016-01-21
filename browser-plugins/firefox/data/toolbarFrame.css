@@ -154,15 +154,19 @@ select {
     /*border:solid grey 1px;*/
     width:120px;
     height:30px;
+    line-height: 1.5;
+    border-radius: 3px;
 }
 .select-editable select {
     position:absolute;
     top:0px;
     left:0px;
-    font-size:14px;
+    font-size:12px;
     border:none;
     width:120px;
     margin:0;
+    line-height: 1.5;
+    border-radius: 3px;
 }
 .select-editable input {
     position:absolute;
@@ -172,6 +176,8 @@ select {
     padding:1px;
     font-size:12px;
     border:none;
+    line-height: 1.5;
+    border-radius: 3px;
 }
 .select-editable select:focus, .select-editable input:focus {
     outline:none;
@@ -182,24 +188,24 @@ select {
     background-color: #ddd;
 }*/
 
-.icon-home {
-    background-image: url("./images/home.png");
+.icon-dw {
+    background-image: url("./images/waveicon24.png");
     background-position: center center;
     background-repeat: no-repeat;
     height: 24px;
     width: 24px;
 }
 
-.icon-home:hover {
-    background-image: url("./images/home.png");
+.icon-dw:hover {
+    background-image: url("./images/waveicon24.png");
     background-position: center center;
     background-repeat: no-repeat;
     height: 24px;
     width: 24px;
 }
 
-.icon-home:focus {
-    background-image: url("./images/home.png");
+.icon-dw:focus {
+    background-image: url("./images/waveicon24.png");
     background-position: center center;
     background-repeat: no-repeat;
     height: 24px;

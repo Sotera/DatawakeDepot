@@ -18,19 +18,7 @@
 </head>
 <body onload="onLoad()">
 <div>
-    <!--<div style="vertical-align: middle"
-       class="container-fluid">-->
-<!--Replacing icon with datawake toolbar button
-    <a id="openDWHome"
-       role="button"
-       onclick="openTab()">
-        <img src="./images/waveicon24.png"
-             id="waveImg"
-             style="margin-left: 6px;position: absolute;"
-             height="24"
-             width="24">
-    </a>
--->
+
     <form class="form-horizontal">
         <div class="form-group" style="min-width:1000px">
             <!--Not exposing Team picklist now
@@ -45,12 +33,13 @@
                          class="form-control btn-info input-sm"></select>
                </div>
                -->
-              <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="padding-left:20px;padding-right:2px;">
-                 <a onclick="openTab('dashboard')" class="btn btn-primary btn-xs glyphicon icon-home"></a>
-                 <a onclick="openTab('dwForensic')" class="btn btn-primary btn-xs glyphicon icon-forensic"></a>
-                 <a onclick="openTab('dwTrailUrls')" class="btn btn-primary btn-xs glyphicon icon-trails"></a>
-                 <a onclick="openTab('domainsUrl')" class="btn btn-primary btn-xs glyphicon icon-domains"></a>
+              <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="padding-left:20px;padding-right:2px;padding-top:3px">
+                <a onclick="openTab('dashboard')" class="btn icon-dw"></a>
+                <a onclick="openTab('dwForensic')" class="btn btn-primary btn-xs icon-forensic"></a>
+                <a onclick="openTab('dwTrailUrls')" class="btn btn-primary btn-xs icon-trails"></a>
+                <a onclick="openTab('domainsUrl')" class="btn btn-primary btn-xs icon-domains"></a>
               </div>
+
             <div id="toggleDiv"
                  class="col-lg-2 col-md-2 col-sm-2 col-xs-2"
                  style="padding-left:80px;padding-right:2px;min-width: 390px">
@@ -89,12 +78,12 @@
                        style="color:#f2f3f2;padding-left:0;padding-right:4px;white-space:nowrap;padding-top:7px;margin-bottom:0;text-align:right;"
                        class="col-lg-1 col-md-1 col-sm-1 col-xs-1">Trail:</label>
                 <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 select-editable"
-                     style="padding-left:0;padding-right:0;visibility: visible;white-space:nowrap;">
+                     style="color:#f2f3f2;padding-left:0;padding-right:0;visibility: visible;white-space:nowrap;">
                     <select id="trailList"
                             disabled="disabled"
                             onchange="trailSelectionChanged()"
                             onfocus="this.selectedIndex = -1;"
-                            class="form-control btn-info input-sm">
+                            class="form-control input-sm">
                     </select>
                     <input id="trailInput"
                            disabled="disabled"

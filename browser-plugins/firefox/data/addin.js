@@ -75,11 +75,11 @@ exports.init = function () {
                 case 'dwForensic':
                     target = pluginState.dwForensic;
                     break;
-                case 'dwTrailUrls':
-                    target = pluginState.dwTrailUrls + pluginState.currentTrail.id;
+                case 'dwTrails':
+                    target = pluginState.dwTrails;
                     break;
-                case 'domainsUrl':
-                    target = pluginState.domainsUrl + pluginState.currentDomain.id;
+                case 'dwDomains':
+                    target = pluginState.dwDomains;
                     break;
                 default:
                     target = '';

@@ -19,7 +19,7 @@
 <body onload="onLoad()">
 <div>
 
-    <form class="form-horizontal">
+    <form class="form-horizontal container-fluid">
         <div class="form-group" style="min-width:1000px">
             <!--Not exposing Team picklist now
                <label for="teamList"
@@ -36,8 +36,8 @@
               <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="padding-left:20px;padding-right:2px;padding-top:3px">
                 <a onclick="openTab('dashboard')" class="btn icon-dw"></a>
                 <a onclick="openTab('dwForensic')" class="btn btn-primary btn-xs icon-forensic"></a>
-                <a onclick="openTab('dwTrailUrls')" class="btn btn-primary btn-xs icon-trails"></a>
-                <a onclick="openTab('domainsUrl')" class="btn btn-primary btn-xs icon-domains"></a>
+                <a onclick="openTab('dwTrails')" class="btn btn-primary btn-xs icon-trails"></a>
+                <a onclick="openTab('dwDomains')" class="btn btn-primary btn-xs icon-domains"></a>
               </div>
 
             <div id="toggleDiv"
@@ -96,8 +96,8 @@
                 </div>
             </div>
             <div id="buttonDiv">
-                <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 pull-right"
-                     style="padding-left:4px;padding-right:2px;min-width: 150px;white-space:nowrap;">
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 pull-right"
+                     style="padding-left:4px;padding-right:2px;min-width: 200px;white-space:nowrap;display:inline-block">
                     <a id="addTrailButton"
                        role="button"
                        class="btn btn-sm btn-success"

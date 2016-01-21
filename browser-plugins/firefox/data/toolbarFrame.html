@@ -42,7 +42,7 @@
 
             <div id="toggleDiv"
                  class="col-lg-2 col-md-2 col-sm-2 col-xs-2"
-                 style="padding-left:10px;padding-right:2px;min-width: 390px">
+                 style="padding-left:10px;padding-right:2px;min-width:260px">
                   <span>
                   <label for="toggleDomainItems" style="color:#f2f3f2;font-size:10px;padding-left:0;padding-right:5px;">Domain Items:</label>
                   <img src="./images/OffButton_transparent.png"
@@ -95,9 +95,14 @@
                            class="form-control input-sm"/>
                 </div>
             </div>
+            <div id='divError'
+                 style="display:none;color:red;text-align: left"
+                 class="control-label col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                <label id="lblError" style="text-align:left;padding-right:2px"/>Trail already exists!
+            </div>
             <div id="buttonDiv">
-                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 pull-right"
-                     style="padding-left:4px;padding-right:2px;min-width: 200px;white-space:nowrap;display:inline-block">
+                <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 pull-right"
+                     style="padding-left:4px;padding-right:2px;min-width:200px;white-space:nowrap">
                     <a id="addTrailButton"
                        role="button"
                        class="btn btn-sm btn-success"
@@ -118,11 +123,7 @@
                        onclick="toggleLogin()">Login</a>
                 </div>
             </div>
-            <div id='divError'
-                 style="display:none;color:red;text-align: left"
-                 class="control-label col-lg-2 col-md-2 col-sm-2 col-xs-2">
-                <label id="lblError" style="text-align: right"/> Trail already exists!
-            </div>
+
         </div>
     </form>
 </div>

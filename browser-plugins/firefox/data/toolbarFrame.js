@@ -323,6 +323,7 @@ function cancelTrail(){
     window.createTrailMode = false;
     window.refreshTrails = false;
     $('#trailInput').val(window.addTrailText);
+    $('#divError').hide();
 }
 
 function openTab(tabTarget){

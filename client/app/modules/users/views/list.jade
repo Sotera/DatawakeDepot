@@ -1,50 +1,50 @@
 //
    Created by jreeme-dw-depot on 8/13/15.
+.box
+  .box-body.no-padding(style='min-height: 120px;')
+    .row
+      .col-sm-12
+        section(st-table='displayedUsers', st-safe-src='safeDisplayedUsers')
+          .input-group.col-sm-12
+            .col-sm-11
+              input.input-sm.form-control(st-search='' type='search' placeholder='Search')
+            .col-sm-1
+              button.btn.btn-sm.btn-default(ui-sref='^.list' ui-sref-opts="{reload: true, notify: true}",title='Refresh Users')
+                i.fa.fa-refresh
+          table.table.table-striped
+            thead
+              tr
+                th.sortable.col-sm-2(st-sort='username' st-sort-default="true") Username
+                th.sortable.col-sm-2.text-nowrap(st-sort='firstName') First Name
+                th.sortable.col-sm-2.text-nowrap(st-sort='lastName') Last Name
+                th.sortable.col-sm-2(st-sort='email') E-Mail
+                th.col-sm-1 Roles
+                th.col-sm-1 Teams
+                th.col-sm-1.td-center
+                  a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
+                    | Add User
 
-.row
-  .col-sm-12
-    section(st-table='displayedUsers', st-safe-src='safeDisplayedUsers')
-      .row
-        .input-group.col-sm-12
-          .col-sm-11
-            input.input-sm.form-control(st-search='' type='search' placeholder='Search')
-          .col-sm-1
-            button.btn.btn-sm.btn-default(ui-sref='^.list' ui-sref-opts="{reload: true, notify: true}",title='Refresh Users')
-              i.fa.fa-refresh
-      table.table.table-striped
-        thead
-          tr
-            th.sortable.col-sm-2(st-sort='username' st-sort-default="true") Username
-            th.sortable.col-sm-2.text-nowrap(st-sort='firstName') First Name
-            th.sortable.col-sm-2.text-nowrap(st-sort='lastName') Last Name
-            th.sortable.col-sm-2(st-sort='email') E-Mail
-            th.col-sm-1 Roles
-            th.col-sm-1 Teams
-            th.col-sm-1.td-center
-              a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
-                | Add User
-
-        tbody
-          tr(ng-repeat='user in displayedUsers')
-            td(style='width: 120px')
-              a(href='', ui-sref='app.users.view({id: user.id})') {{user.username}}
-            td
-              span.text-muted {{user.firstName}}
-            td
-              span.text-muted {{user.lastName}}
-            td
-              span.text-muted {{user.email}}
-            td
-              span.label.label-ltgray(ng-repeat="role in user.roles") {{role.name}}
-            td
-              span.label.label-ltgray(ng-repeat="team in user.teams") {{team.name}}
-            td.td-center(style='width: 120px')
-              .btn-group
-                button.btn.btn-sm.btn-default(ui-sref='app.users.password({id:user.id})',ng-disabled='!currentUser.isAdmin')
-                  i.fa.fa-key
-                button.btn.btn-sm.btn-default(ui-sref='app.users.edit({id:user.id})',ng-disabled='!currentUser.isAdmin')
-                  i.fa.fa-pencil
-                button.btn.btn-sm.btn-danger(ng-click='delete({id:user.id})',ng-disabled='!currentUser.isAdmin')
-                  i.fa.fa-trash-o
+            tbody
+              tr(ng-repeat='user in displayedUsers')
+                td(style='width: 120px')
+                  a(href='', ui-sref='app.users.view({id: user.id})') {{user.username}}
+                td
+                  span.text-muted {{user.firstName}}
+                td
+                  span.text-muted {{user.lastName}}
+                td
+                  span.text-muted {{user.email}}
+                td
+                  span.label.label-ltgray(ng-repeat="role in user.roles") {{role.name}}
+                td
+                  span.label.label-ltgray(ng-repeat="team in user.teams") {{team.name}}
+                td.td-center(style='width: 120px')
+                  .btn-group
+                    button.btn.btn-sm.btn-default(ui-sref='app.users.password({id:user.id})',ng-disabled='!currentUser.isAdmin')
+                      i.fa.fa-key
+                    button.btn.btn-sm.btn-default(ui-sref='app.users.edit({id:user.id})',ng-disabled='!currentUser.isAdmin')
+                      i.fa.fa-pencil
+                    button.btn.btn-sm.btn-danger(ng-click='delete({id:user.id})',ng-disabled='!currentUser.isAdmin')
+                      i.fa.fa-trash
   .overlay(ng-if='loading')
   .loading-img(ng-if='loading')

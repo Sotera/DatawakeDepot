@@ -17,13 +17,13 @@ angular.module('com.module.core')
     //whether anyone is logged in
     UserLoginOrLogoutMsg.listen(function (_event, msg) {
       if(msg.action === 'initiate-logout'){
-        UserLoginOrLogoutMsg.broadcast({action: 'logout'});
         AppAuth.logout(function () {
           $state.go('login');
           CoreService.toastSuccess(gettextCatalog.getString('Logged out'), gettextCatalog.getString('You are logged out!'));
-          //Notify toolbar
-
         });
+
+        //Notify toolbar
+        UserLoginOrLogoutMsg.broadcast({action: 'logout'});
       }else if(msg.action === 'logout'){
         $scope.noOneLoggedIn = true;
       }else if(msg.action === 'login'){

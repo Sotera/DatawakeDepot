@@ -17,10 +17,11 @@
                 th.sortable.col-sm-1(st-sort='name' st-sort-default="true") Name
                 th.sortable.col-sm-2(st-sort='description') Description
                 th.sortable.col-sm-1(st-sort='name') Team
-                th.col-sm-4 Trails
+                th.col-sm-3 Trails
+                th.col-sm-2.col-md-2.col-lg-2(st-sort='') EntityTypes
                 th.sortable.col-sm-1(st-sort='domainItems.length') # Items
                 th.col-sm-1 Extractors
-                th.col-sm-2.td-center
+                th.col-sm-1.td-center
                     button.btn.btn-sm.btn-success(ui-sref='^.add' ui-sref-opts="{reload: true, notify: true}",title='Add Domain' ng-disabled='!currentUser.isAdmin')
                         i.fa.fa-plus &nbsp;Add Domain
             tbody
@@ -35,6 +36,9 @@
                   span.text-muted {{domain.teams[0].name}}
                 td
                   span.label.label-ltgray(ng-repeat="trail in domain.trails") {{trail.name + ' '}} <br ng-if="($index+1)%4==0">
+                td
+                  a(ui-sref='app.dwDomainEntityTypes.list({id:null, domainId:domain.id})')
+                    span.label.label-active-entityType(ng-repeat="entType in domain.domainEntityTypes") {{entType.name + ' '}} <br ng-if="($index+1)%4==0">
                 td
                   a(ui-sref='app.dwDomainItems.list({id:null, domainId:domain.id})') {{domain.domainItems.length}}
                 td

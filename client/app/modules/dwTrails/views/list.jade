@@ -28,7 +28,8 @@
           td
             span.text-muted {{trail.description}}
           td.td-center
-            span.label.label-ltgray {{trail.domain.name}}
+            a(href='', ui-sref='app.dwDomains.view({id: trail.domain.id})')
+              span.label.label-ltgray {{trail.domain.name}}
           td.td-center
             a(ui-sref='app.dwTrailUrls.list({id:null, trailId:trail.id})') {{trail.trailUrls.length}}
           td

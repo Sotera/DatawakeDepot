@@ -3,7 +3,7 @@ window.panelActive = true;
 window.dataItemsActive = false;
 window.refreshTrails = false;
 window.createTrailMode = false;
-window.newTrailName = '';
+window.addTrailText = ' < add Trail >';
 
 //
 //Handle messages from the AddIn
@@ -36,17 +36,18 @@ function syncSelectElementsWithPluginState() {
   addItemsToSelectElement(ps.currentTeamList, ps.currentTeam, '#teamList');
   addItemsToSelectElement(ps.currentDomainList, ps.currentDomain, '#domainList');
   addItemsToSelectElement(ps.currentTrailList, ps.currentTrail, '#trailList');
-  if(ps.currentTrail){ //If not creating a trail, set the trail to the first available
+  if(ps.currentTrailList.length==0){
+      $('#trailList').attr('disabled', 'disabled');
+      $('#trailInput').val(window.addTrailText);
+  }
+  if(ps.currentTrail){
     if(!window.refreshTrails) {
         window.refreshTrails = false;
         window.createTrailMode = false;
-        $('#trailList')[0].onchange();
     }else{ //If creating a trail, set the trail to the name created, then notify the addin of the change since we
         //worked around the dropdown trailSelectionChanged event
         window.refreshTrails = false;
         window.createTrailMode = false;
-
-        $('#trailList').val(window.newTrailName);
         postMessageToAddin({
             action: 'set-current-trail-target-addin',
             value: $('#trailList').val()
@@ -81,7 +82,7 @@ function toggleTrailing() {
     $('#teamList').removeAttr('disabled');
     $('#toggleTrailButton')
       .addClass('btn-success')
-      .removeClass('btn-default')
+      .removeClass('btn-danger')
       .html('Start');
     $('body').removeClass('body-throb');
     togglePanelButtonOff();
@@ -90,12 +91,11 @@ function toggleTrailing() {
     $('#loginButton').hide();
     $('#domainList').attr('disabled', 'disabled');
     $('#trailList').attr('disabled', 'disabled');
-    //$('#trailInput').val('');
     $('#trailInput').attr('disabled', 'disabled');
     $('#teamList').attr('disabled', 'disabled');
     $('#toggleTrailButton')
       .removeClass('btn-success')
-      .addClass('btn-default')
+      .addClass('btn-danger')
       .html('Stop');
     $('body').addClass('body-throb');
     togglePanelButtonOn();
@@ -118,6 +118,7 @@ function setUIStateToLoggedIn(pluginState) {
   $('#domainList').removeAttr('disabled');
   $('#trailList').removeAttr('disabled');
   $('#trailInput').removeAttr('disabled');
+  $('#trailInput').val(window.addTrailText);
   syncSelectElementsWithPluginState();
 }
 function setUIStateToLoggedOut() {
@@ -138,6 +139,7 @@ function setUIStateToLoggedOut() {
   $('#trailList').attr('disabled', 'disabled');
   $('#trailInput').val('');
   $('#trailInput').attr('disabled', 'disabled');
+  $('#trailInput').val('');
   $('#toggleTrailButton').addClass('disabled');
   clearSelectElements();
 }
@@ -218,44 +220,46 @@ function teamSelectionChanged() {
     value: $('#teamList').val()
   });
 }
+
 function domainSelectionChanged() {
   postMessageToAddin({
     action: 'set-current-domain-target-addin',
     value: $('#domainList').val()
   });
-  //if(!window.refreshTrails)  {
-    $('#trailInput').attr('value', $('#trailList option:selected').text());
-  //}
+  $('#trailInput').val(window.addTrailText);
 }
 
-function trailSelectionChanged2(){
+function trailSelectionChangedManual(){
     if($('#trailInput').val()){
         window.refreshTrails = true;
         trailSelectionChanged();
     }
 }
 
-function trailSelectionChanged() {
-  //http://jsfiddle.net/nwH8A/ this.nextElementSibling.value=this.value
+function clearTrailInput(){
+    $('#divError').hide();
+    $('#trailInput').val('');
+    $('#toggleTrailButton').addClass('disabled');
+}
 
-  //detect if we're adding a new trail
-  if(!window.createTrailMode){
-      if(window.refreshTrails){
-          $('#trailList option').each(function(){
+function trailSelectionChanged() {
+    //detect if we're adding a new trail
+    if (!window.createTrailMode) {
+      if (window.refreshTrails) {
+          $('#trailList option').each(function () {
               if (this.value == $('#trailInput').val()) {
                   window.createTrailMode = false;
                   return false;
               }
           });
           window.createTrailMode = true;
-      }else{
+      } else {
           window.createTrailMode = false;
       }
 
-      if(window.createTrailMode){
-          //Lock the toolbar until the new Trail is either created or cancelled
+      if (window.createTrailMode) {
           lockToolbar();
-      }else{
+      } else if ($('#trailInput').val() != '< add trail >') {
           $('#trailInput').val($('#trailList option:selected').text());
           $('#toggleTrailButton').removeClass('disabled');
           postMessageToAddin({
@@ -263,7 +267,7 @@ function trailSelectionChanged() {
               value: $('#trailList').val()
           });
       }
-  }
+    }
 }
 
 function lockToolbar(){
@@ -287,22 +291,39 @@ function unlockToolbar(){
 }
 
 function createTrail(){
+    $('#divError').hide();
     if($('#trailInput').val()){
-        window.newTrailName = $('#trailInput').val();
-        postMessageToAddin({
-            action: 'add-current-trail-to-domain-target-addin',
-            trailName: window.newTrailName
+        //Does this already exist? If so show error
+        var isNewTrail=true;
+
+        $('#trailList option').each(function(){
+            if (this.value == $('#trailInput').val()) {
+                isNewTrail= false;
+            }
         });
-        unlockToolbar();
+
+        if(isNewTrail) {
+            $('#divError').hide();
+            postMessageToAddin({
+                action: 'add-current-trail-to-domain-target-addin',
+                trailName: $('#trailInput').val()
+            });
+            unlockToolbar();
+            $('#trailInput').val(window.addTrailText);
+        }else{
+            //Show error and don't submit
+            $('#divError').show();
+        }
     }
 }
 
 function cancelTrail(){
-    //reset the input box to blank, set trailist to 0
+    //reset the input box
     unlockToolbar();
-    window.createTrailMode = true;
+    window.createTrailMode = false;
     window.refreshTrails = false;
-    $('#trailList')[0].onchange();
+    $('#trailInput').val(window.addTrailText);
+    $('#divError').hide();
 }
 
 function openTab(tabTarget){

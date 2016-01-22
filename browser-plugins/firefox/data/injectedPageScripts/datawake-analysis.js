@@ -6,6 +6,7 @@ var myContentScriptKey = null;
 var myVar = null;
 var iInterval = 4000;
 var currentDomainId = '';
+var dataItemsActive = false;
 
 
 $(document).ready(function () {
@@ -46,16 +47,20 @@ function getPanelData(){
 }
 
 function showDataItems(dataItems){
+    dataItemsActive = true;
     dataItems.forEach(function (domainItem) {
         $('body').highlight(domainItem.itemValue);
     });
 }
 
 function showNewDataItem(dataitem){
-    $('body').highlight(dataitem);
+    if (dataItemsActive) {
+        $('body').highlight(dataitem);
+    }
 }
 
 function hideDataItems(){
+    dataItemsActive = false;
     $('body').unhighlight();
 }
 

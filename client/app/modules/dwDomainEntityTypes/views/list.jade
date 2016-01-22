@@ -27,9 +27,8 @@
           td
             span.text-muted {{entityType.description}}
           td
-            span.label.label-ltgray
-                a(ui-sref='app.dwDomains.list({domainId:domain.id})') {{entityType.domain.name}}
-                td
+            a(ui-sref='app.dwDomains.view({id: entityType.domain.id})').label.label-ltgray {{entityType.domain.name}}
+          td
             span.label.label-ltgray {{entityType.source}}
                 td.td-center(style='width: 120px')
                     .btn-toolbar

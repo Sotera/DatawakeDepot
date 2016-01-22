@@ -39,8 +39,8 @@
                 td
                   a(ui-sref='app.dwDomainEntityTypes.list({id:null, domainId:domain.id})')
                     span.label.label-active-entityType(ng-repeat="entType in domain.domainEntityTypes") {{entType.name + ' '}} <br ng-if="($index+1)%4==0">
-                td
-                  a(ui-sref='app.dwDomainItems.list({id:null, domainId:domain.id})') {{domain.domainItems.length}}
+                td.td-center
+                  a(ui-sref='app.dwDomainItems.list({id:null, domainId:domain.id})').badge {{domain.domainItems.length}}
                 td
                   span.label.label-ltgray(ng-repeat="extractor in domain.extractors") {{extractor.name+ ' '}} <br ng-if="($index+1)%2==0">
                 td.td-center

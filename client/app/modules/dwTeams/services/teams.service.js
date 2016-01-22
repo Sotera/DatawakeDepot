@@ -10,7 +10,8 @@ app.service('TeamsService', ['$state', 'CoreService', 'DwTeam', 'gettextCatalog'
                 {relation:'trails',
                     scope:{
                         fields:[
-                            "name"
+                            "name",
+                            "id"
                         ]
                     }
                 },
@@ -37,7 +38,8 @@ app.service('TeamsService', ['$state', 'CoreService', 'DwTeam', 'gettextCatalog'
                 {relation:'trails',
                     scope:{
                         fields:[
-                            "name"
+                            "name",
+                            "id"
                         ]
                     }
                 },

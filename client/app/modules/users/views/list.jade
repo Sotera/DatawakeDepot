@@ -33,11 +33,11 @@
                 td
                   span.text-muted {{user.lastName}}
                 td
-                  span.text-muted {{user.email}}
+                  a(href='mailto:{{user.email}}').text-muted {{user.email}}
                 td
                   span.label.label-ltgray(ng-repeat="role in user.roles") {{role.name}}
                 td
-                  span.label.label-ltgray(ng-repeat="team in user.teams") {{team.name}}
+                  a(href='', ui-sref='app.dwTeams.view({id: team.id})', ng-repeat='team in user.teams').label.label-ltgray {{team.name}}
                 td.td-center(style='width: 120px')
                   .btn-group
                     button.btn.btn-sm.btn-default(ui-sref='app.users.password({id:user.id})',ng-disabled='!currentUser.isAdmin')

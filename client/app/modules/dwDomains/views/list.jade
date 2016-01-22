@@ -35,7 +35,7 @@
                 td
                   span.text-muted {{domain.teams[0].name}}
                 td
-                  span.label.label-ltgray(ng-repeat="trail in domain.trails") {{trail.name + ' '}} <br ng-if="($index+1)%4==0">
+                  a(ng-repeat="trail in domain.trails" href='', ui-sref='app.dwTrails.view({id: trail.id})').label.label-ltgray {{trail.name + ' '}} <br ng-if="($index+1)%4==0">
                 td
                   a(ui-sref='app.dwDomainEntityTypes.list({id:null, domainId:domain.id})')
                     span.label.label-active-entityType(ng-repeat="entType in domain.domainEntityTypes") {{entType.name + ' '}} <br ng-if="($index+1)%4==0">

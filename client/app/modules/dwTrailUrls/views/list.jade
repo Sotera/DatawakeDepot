@@ -14,27 +14,24 @@
                     i.fa.fa-arrow-up &nbsp;to Trails
       thead
         tr
-          th.sortable.col-sm-4.col-md-4.col-lg-4(st-sort='url' st-sort-default="true") URL
-          th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='urlExtractions.length') # Extractions
-          th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='trail.name') Trail
-          //th.sortable.col-sm-1.col-md-1.col-lg-1.text-nowrap(st-sort='dwCrawlTypeId') Crawl Type
-          th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='comments') Comments
-          th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='timestamp') Timestamp
-          th.col-sm-1.col-md-1.col-lg-1.td-center
+          th.sortable.col-sm-4(st-sort='url' st-sort-default="true") URL
+          th.sortable.col-sm-1(st-sort='urlExtractions.length') Extractions
+          th.sortable.col-sm-2(st-sort='trail.name') Trail
+          th.sortable.col-sm-2(st-sort='comments') Comments
+          th.sortable.col-sm-2(st-sort='timestamp') Timestamp
+          th.col-sm-1.col-md-1.td-center
               a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add({trailId:currentTrailId})', ng-disabled='!currentUser.isAdmin') &nbsp;Add URL
       tbody
         tr(ng-repeat='trailUrl in displayedTrailUrls')
-          td.col-sm-4.col-md-4.col-lg-4
-            a(href='', ui-sref='app.dwTrailUrls.view({id: trailUrl.id, trailId:currentTrailId})') {{trailUrl.url}}
-          td.td-center.col-sm-1.col-md-1.col-lg-1
-            a(ui-sref='app.dwUrlExtractions.list({id: null, trailId: currentTrailId, trailUrlId: trailUrl.id})') {{trailUrl.urlExtractions.length}}
-          td
-            span.label.label-ltgray {{trailUrl.trail.name}}
-          //td
-          //  span.text-muted {{trailUrl.crawlType.name}}
-          td
+          td.col-sm-4
+            a(href='', ui-sref='app.dwTrailUrls.view({id: trailUrl.id, trailId:currentTrailId})') {{trailUrl.url.substring(0,80)}}
+          td.td-center.col-sm-1
+            a(ui-sref='app.dwUrlExtractions.list({id: null, trailId: currentTrailId, trailUrlId: trailUrl.id})').badge {{trailUrl.urlExtractions.length}}
+          td.col-sm-2
+            a(ui-sref='app.dwTrails.view({id: trailUrl.trail.id})').label.label-ltgray {{trailUrl.trail.name}}
+          td.col-sm-2
             span.text-muted {{trailUrl.comments}}
-          td
+          td.col-sm-2
             span.text-muted {{trailUrl.timestamp}}
           td.td-center(style='width: 120px')
             .btn-toolbar

@@ -30,7 +30,7 @@
           td.td-center
             a(href='', ui-sref='app.dwDomains.view({id: trail.domain.id})').label.label-ltgray {{trail.domain.name}}
           td.td-center
-            a(ui-sref='app.dwTrailUrls.list({id:null, trailId:trail.id})') {{trail.trailUrls.length}}
+            a(ui-sref='app.dwTrailUrls.list({id:null, trailId:trail.id})').badge {{trail.trailUrls.length}}
           td
             span.text-muted {{trail.timestamp}}
           td.td-center(style='width: 120px')

@@ -33,7 +33,7 @@
                 td
                   span.text-muted {{domain.description}}
                 td
-                  span.text-muted {{domain.teams[0].name}}
+                  a(href='', ui-sref='app.dwTeams.view({id: domain.teams[0].id})').label.label-ltgray {{domain.teams[0].name}}
                 td
                   a(ng-repeat="trail in domain.trails" href='', ui-sref='app.dwTrails.view({id: trail.id})').label.label-ltgray {{trail.name + ' '}} <br ng-if="($index+1)%4==0">
                 td

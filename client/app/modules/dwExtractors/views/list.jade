@@ -42,7 +42,7 @@
           td
             span.text-muted {{extractor.credentials}}
           td.td-center
-            span.label.label-ltgray(ng-repeat="domain in extractor.domains") {{domain.name}}
+            a(href='',ui-sref='app.dwDomains.view({id: domain.id})', ng-repeat="domain in extractor.domains").label.label-ltgray {{domain.name}}
           td.td-center(style='width: 120px')
             .btn-toolbar
                 button.btn.btn-sm.btn-default(ui-sref='app.dwExtractors.edit({id:extractor.id})',ng-disabled='!currentUser.isAdmin')

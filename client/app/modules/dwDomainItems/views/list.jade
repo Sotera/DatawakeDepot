@@ -14,28 +14,28 @@
                     i.fa.fa-arrow-up &nbsp;to Domains
       thead
         tr
-          th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='itemValue' st-sort-default="true") Reference
-          th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='itemType') Type
-          th.sortable.col-sm-1.col-md-1.col-lg-1 Source
-          th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='domainId') Domain
+          th.sortable.col-sm-2.col-md-2.col-lg-2.td-center(st-sort='itemValue' st-sort-default="true") Reference
+          th.sortable.col-sm-2.col-md-2.col-lg-2.td-center(st-sort='itemType') Type
+          th.sortable.col-sm-1.col-md-1.col-lg-1.td-center Source
+          th.sortable.col-sm-1.col-md-1.col-lg-1.td-center(st-sort='domainId') Domain
           th.col-sm-1.col-md-1.col-lg-1.td-center
             a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add({domainId:currentDomainId})', ng-disabled='!currentUser.isAdmin') &nbsp;Add Item
       tbody
         tr(ng-repeat='domainItem in displayedDomainItems')
           td
-            a(href='', ui-sref='app.dwDomainItems.view({id: domainItem.id, domainId: currentDomainId})') {{domainItem.itemValue}}
-          td(style='width: 120px')
-            span.label.label-ltgray {{domainItem.type}}
-          td
+            a(href='', ui-sref='app.dwDomainItems.view({id: domainItem.id, domainId: currentDomainId})' title='view Item JSON') {{domainItem.itemValue}}
+          td.td-center
+            span.span-max.label.label-ltgray {{domainItem.type}}
+          td.td-center
             span.label.label-ltgray {{domainItem.source}}
-          td
+          td.td-center
             span.label.label-ltgray
-                a(ui-sref='app.dwDomains.view({id:domain.id})') {{domainItem.domain.name}}
+                a(ui-sref='app.dwDomains.list({id:domain.id})' title='view Domains') {{domainItem.domain.name}}
           td.td-center(style='width: 120px')
             .btn-toolbar
-                button.btn.btn-sm.btn-default(ui-sref='app.dwDomainItems.edit({id:domainItem.id,domainId: currentDomainId})')
+                button.btn.btn-sm.btn-default(ui-sref='app.dwDomainItems.edit({id:domainItem.id,domainId: currentDomainId})', title='edit Item')
                     i.fa.fa-pencil
-                button.btn.btn-sm.btn-danger(ng-click='delete({id:domainItem.id})',ng-disabled='!currentUser.isAdmin')
+                button.btn.btn-sm.btn-danger(ng-click='delete({id:domainItem.id})',ng-disabled='!currentUser.isAdmin', title='delete Item')
                     i.fa.fa-trash-o
   .overlay(ng-if='loading')
   .loading-img(ng-if='loading')

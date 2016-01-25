@@ -14,28 +14,27 @@
                 i.fa.fa-arrow-up &nbsp;to Urls
       thead
         tr
-          th.sortable.col-sm-3.col-md-3.col-lg-3(st-sort='value') Value
-          th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='types') Types
-          th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='trail.name') Trail
-          th.sortable.col-sm-3.col-md-3.col-lg-3(st-sort='trailUrl.url') URL
-          th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='trailUrl.occurrences') Occurrences
+          th.sortable.col-sm-3.col-md-3.col-lg-3.td-center(st-sort='value') Value (Click Item to Add)
+          th.sortable.col-sm-2.col-md-2.col-lg-2.td-center(st-sort='types') Types (Click Type to Add)
+          th.sortable.col-sm-2.col-md-2.col-lg-2.td-center(st-sort='trail.name') Trail
+          th.sortable.col-sm-3.col-md-3.col-lg-3.td-center(st-sort='trailUrl.url') URL
+          th.sortable.col-sm-1.col-md-1.col-lg-1.td-center(st-sort='trailUrl.occurrences') Occurrences
           th.col-sm-1.col-md-1.col-lg-1.td-center
               //a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add({trailId: currentTrailId,trailUrlId:currentTrailUrlId})', ng-disabled='!currentUser.isAdmin')
               //  | &nbsp;Add Extraction
       tbody
         tr(ng-repeat='urlExtraction in displayedUrlExtractions')
           td
-            span.text-muted(title='Add as Domain Item')
-              button.btn.btn-sm.glyphicon.glyphicon-plus(ng-click='makeDomainItem({id:urlExtraction.id,itemValue:urlExtraction.value,itemType:urlExtraction.extractorTypes[0],itemSource:urlExtraction.extractor,domainId:urlExtraction.trailUrl.trail.dwDomainId})', ng-disabled='!currentUser.isAdmin')
-              | {{urlExtraction.value}}
+            span.span-trunc.label.label-ltgray(ng-click='makeDomainItem({id:urlExtraction.id,itemValue:urlExtraction.value,itemType:urlExtraction.extractorTypes[0],itemSource:urlExtraction.extractor,domainId:urlExtraction.trailUrl.trail.dwDomainId})', ng-disabled='!currentUser.isAdmin', title='Click to Add as Domain Item') {{urlExtraction.value}}
           td
-            span.label.label-active-entityType(ng-repeat="type in urlExtraction.extractorTypes" title='Add as Domain Type' ng-click='makeDomainEntityType({typeName:type, domainId: urlExtraction.trailUrl.trail.dwDomainId, extractorId: urlExtraction.extractor})') {{type}}
-          td
-            span.label.label-ltgray {{urlExtraction.trailUrl.trail.name}}
+            span.label.label-active-entityType(ng-repeat="type in urlExtraction.extractorTypes" title='Click to Add as Domain Type' ng-click='makeDomainEntityType({typeName:type, domainId: urlExtraction.trailUrl.trail.dwDomainId, extractorId: urlExtraction.extractor})') {{type}}
+          td.td-center
+            span.label.label-ltgray
+                a(ui-sref='app.dwTrails.list({id:urlExtraction.trailUrl.trail.id})' title='Go to Trails') {{urlExtraction.trailUrl.trail.name}}
           td
             span.text-muted
-              a(href='{{urlExtraction.trailUrl.url}}' target = '_blank') {{urlExtraction.trailUrl.url}}
-          td
+              a(href='{{urlExtraction.trailUrl.url}}' target = '_blank' title='Browse to Url') {{urlExtraction.trailUrl.url}}
+          td.td-center
             span.text-muted {{urlExtraction.occurrences}}
           td.td-center(style='width: 120px')
             .btn-toolbar

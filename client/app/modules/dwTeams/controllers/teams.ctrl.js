@@ -32,8 +32,7 @@ app.controller('TeamsCtrl', function($scope, $state, $stateParams, AminoUser, Dw
     type: 'multiCheckbox',
     templateOptions: {
       label: 'Domains',
-      options: $scope.domains,
-      disabled: !$scope.currentUser.isAdmin
+      options: $scope.domains
     }
   }, {
       key: 'users',
@@ -42,8 +41,7 @@ app.controller('TeamsCtrl', function($scope, $state, $stateParams, AminoUser, Dw
           label: 'Users',
           options: $scope.users,
           valueProp: 'id',
-          labelProp: 'name',
-          disabled: !$scope.currentUser.isAdmin
+          labelProp: 'name'
       }
   }];
 

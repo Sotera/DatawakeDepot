@@ -14,27 +14,29 @@
                     i.fa.fa-arrow-up &nbsp;to Domains
       thead
         tr
-          th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='name' st-sort-default="true") Entity Type
-          th.sortable.col-sm-3.col-md-3.col-lg-3(st-sort='description') Description
-          th.sortable.col-sm-1.col-md-1.col-lg-1 Domain
-          th.sortable.col-sm-2.col-md-2.col-lg-2 Source
+          th.sortable.col-sm-2.col-md-2.col-lg-2.td-center(st-sort='name' st-sort-default="true") Entity Type
+          th.sortable.col-sm-3.col-md-3.col-lg-3.td-center(st-sort='description') Description
+          th.sortable.col-sm-1.col-md-1.col-lg-1.td-center Domain
+          th.sortable.col-sm-2.col-md-2.col-lg-2.td-center Source
           th.col-sm-1.col-md-1.col-lg-1.td-center
-              a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add({domainId:currentDomainId})', ng-disabled='!currentUser.isAdmin') &nbsp;Add Type
+              //a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add({domainId:currentDomainId})', ng-disabled='!currentUser.isAdmin') &nbsp;Add Type
       tbody
         tr(ng-repeat='entityType in displayedEntityTypes')
-          td(style='width: 120px')
-            a(href='', ui-sref='app.dwDomainEntityTypes.view({id: entityType.id, domainId: currentDomainId})') {{entityType.name}}
           td
+            span.span-max.label.label-active-entityType
+                a(ui-sref='app.dwDomainEntityTypes.view({id: entityType.id, domainId: currentDomainId})' title='view Type JSON').label-active-entityType {{entityType.name}}
+          td.td-center
             span.text-muted {{entityType.description}}
-          td
-            a(ui-sref='app.dwDomains.view({id: entityType.domain.id})').label.label-ltgray {{entityType.domain.name}}
-          td
+          td.td-center
+            span.label.label-ltgray
+                a(ui-sref='app.dwDomains.list({id: entityType.domain.id})' title='view Domains') {{entityType.domain.name}}
+          td.td-center
             span.label.label-ltgray {{entityType.source}}
-                td.td-center(style='width: 120px')
-                    .btn-toolbar
-                        button.btn.btn-sm.btn-default(ui-sref='app.dwDomainEntityTypes.edit({id:entityType.id,domainId: currentDomainId})')
-                            i.fa.fa-pencil
-                        button.btn.btn-sm.btn-danger(ng-click='delete({id:entityType})',ng-disabled='!currentUser.isAdmin')
-                            i.fa.fa-trash-o
+          td.td-center
+              .btn-toolbar
+                button.btn.btn-sm.btn-default(ui-sref='app.dwDomainEntityTypes.edit({id:entityType.id,domainId: currentDomainId})', title='edit Type')
+                    i.fa.fa-pencil
+                button.btn.btn-sm.btn-danger(ng-click='delete({id:entityType})',ng-disabled='!currentUser.isAdmin',title='delete Type')
+                    i.fa.fa-trash-o
   .overlay(ng-if='loading')
   .loading-img(ng-if='loading')

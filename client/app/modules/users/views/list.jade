@@ -14,37 +14,36 @@
           table.table.table-striped
             thead
               tr
-                th.sortable.col-sm-2(st-sort='username' st-sort-default="true") Username
-                th.sortable.col-sm-2.text-nowrap(st-sort='firstName') First Name
-                th.sortable.col-sm-2.text-nowrap(st-sort='lastName') Last Name
-                th.sortable.col-sm-2(st-sort='email') E-Mail
-                th.col-sm-1 Roles
-                th.col-sm-1 Teams
-                th.col-sm-1.td-center
-                  a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
-                    | Add User
-
+                th.sortable.col-sm-2.col-md-2.col-lg-2.td-center(st-sort='username' st-sort-default="true") Username
+                th.sortable.col-sm-2.col-md-2.col-lg-2.td-center(st-sort='firstName') First Name
+                th.sortable.col-sm-2.col-md-2.col-lg-2.td-center(st-sort='lastName') Last Name
+                th.sortable.col-sm-2.col-md-2.col-lg-2.td-center(st-sort='email') E-Mail
+                th.col-sm-1.col-md-1.col-lg-1.td-center Roles
+                th.col-sm-1.col-md-1.col-lg-1.td-center Teams
+                th.col-sm-1.col-md-1.col-lg-1.td-center
+                  a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin') &nbsp; Add User
             tbody
               tr(ng-repeat='user in displayedUsers')
                 td(style='width: 120px')
-                  a(href='', ui-sref='app.users.view({id: user.id})') {{user.username}}
+                  a(href='', ui-sref='app.users.view({id: user.id})' title='view User JSON') {{user.username}}
                 td
                   span.text-muted {{user.firstName}}
                 td
                   span.text-muted {{user.lastName}}
                 td
                   a(href='mailto:{{user.email}}').text-muted {{user.email}}
-                td
+                td.td-center
                   span.label.label-ltgray(ng-repeat="role in user.roles") {{role.name}}
-                td
-                  a(href='', ui-sref='app.dwTeams.view({id: team.id})', ng-repeat='team in user.teams').label.label-ltgray {{team.name}}
+                td.td-center
+                  span.span-max.label.label-ltgray(ng-repeat='team in user.teams' title='view Teams')
+                    a(ui-sref='app.dwTeams.list({id: team.id})') {{team.name}}
                 td.td-center(style='width: 120px')
                   .btn-group
                     button.btn.btn-sm.btn-default(ui-sref='app.users.password({id:user.id})',ng-disabled='!currentUser.isAdmin')
                       i.fa.fa-key
-                    button.btn.btn-sm.btn-default(ui-sref='app.users.edit({id:user.id})',ng-disabled='!currentUser.isAdmin')
+                    button.btn.btn-sm.btn-default(ui-sref='app.users.edit({id:user.id})',ng-disabled='!currentUser.isAdmin' title='edit User')
                       i.fa.fa-pencil
-                    button.btn.btn-sm.btn-danger(ng-click='delete({id:user.id})',ng-disabled='!currentUser.isAdmin')
+                    button.btn.btn-sm.btn-danger(ng-click='delete({id:user.id})',ng-disabled='!currentUser.isAdmin' title ='delete User')
                       i.fa.fa-trash
   .overlay(ng-if='loading')
   .loading-img(ng-if='loading')

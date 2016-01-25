@@ -112,16 +112,14 @@ app.controller('UsersCtrl', function ($scope, $stateParams, $state, CoreService,
         type: 'multiCheckbox',
         templateOptions: {
             label: 'Roles',
-            options: $scope.displayRoles,
-            disabled: !$scope.currentUser.isAdmin
+            options: $scope.displayRoles
         }
     }, {
         key: 'memberTeams',
         type: 'multiCheckbox',
         templateOptions: {
             label: 'Teams',
-            options: $scope.displayTeams,
-            disabled: !$scope.currentUser.isAdmin
+            options: $scope.displayTeams
         }
     }];
     Role.find().$promise

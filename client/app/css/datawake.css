@@ -82,6 +82,22 @@ body {
   text-align: center;
 }
 
+.span-max {
+    max-width: 750px;
+    display: inline-block;
+    overflow: hidden;
+    white-space: pre-wrap;
+
+}
+
+.span-trunc {
+    max-width: 750px;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
 .label-ltgray {
   color: #666;
   background-color: #d4d4d4;

@@ -12,32 +12,33 @@
           table.table.table-striped
             thead
               tr
-                th.sortable.col-sm-1(st-sort='name' st-sort-default="true") Name
-                th.sortable.col-sm-2(st-sort='description') Description
-                th.col-sm-2 Members
-                th.col-sm-1 Domains
-                th.col-sm-5 Trails
-                th.col-sm-1.td-center
-                  a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
-                    | Add Team
+                th.sortable.col-sm-1.col-md-1.col-lg-1.td-center(st-sort='name' st-sort-default="true") Name
+                th.sortable.col-sm-2.col-md-2.col-lg-2.td-center(st-sort='description') Description
+                th.col-sm-2.col-md-2.col-lg-2.td-center Members
+                th.col-sm-2.col-md-2.col-lg-2.td-center Domains
+                th.col-sm-4.col-md-4.col-lg-4.td-center Trails
+                th.col-sm-1.col-md-1.col-lg-1.td-center
+                  a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin') &nbsp; Add Team
             tbody
               tr(ng-repeat='team in displayedTeams')
-                td.col-sm-1
-                  a(href='', ui-sref='app.dwTeams.view({id: team.id})') {{team.name}}
-                td.col-sm-2
+                td
+                  a(ui-sref='app.dwTeams.view({id: team.id})' title='view Team JSON') {{team.name}}
+                td
                   text-muted {{team.description}}
-                td.col-sm-2
-                  a(href='', ui-sref='app.users.view({id: user.id})', ng-repeat='user in team.users').label.label-ltgray
-                    {{user.username + ' '}} <br ng-if="($index+1)%2==0">
-                td.col-sm-1
-                  a(href='', ui-sref='app.dwDomains.view({id: domain.id})', ng-repeat='domain in team.domains').label.label-ltgray {{domain.name+ ' '}} <br ng-if="($index+1)%2==0">
-                td.col-sm-5
-                  a(href='', ui-sref='app.dwTrails.view({id: trail.id})', ng-repeat="trail in team.trails").label.label-ltgray {{trail.name + ' '}} <br ng-if="($index+1)%4==0">
+                td
+                  span.span-max.label.label-ltgray(ng-repeat='user in team.users' title='view Team Members')
+                    a(ui-sref='app.users.list({id: user.id})') {{user.username}}
+                td
+                  span.span-max.label.label-ltgray(ng-repeat='domain in team.domains' title='view Domains')
+                      a(ui-sref='app.dwDomains.list({id: domain.id})') {{domain.name}}
+                td
+                  span.span-max.label.label-ltgray(ng-repeat='trail in team.trails' title='view Trails')
+                      a(ui-sref='app.dwTrails.list({id: trail.id})') {{trail.name}}
                 td.col-sm-1
                   .btn-toolbar
-                      button.btn.btn-sm.btn-default(ui-sref='app.dwTeams.edit({id:team.id})', , ng-disabled='!currentUser.isAdmin')
+                      button.btn.btn-sm.btn-default(ui-sref='app.dwTeams.edit({id:team.id})', ng-disabled='!currentUser.isAdmin', title='edit Team' )
                           i.fa.fa-pencil
-                      button.btn.btn-sm.btn-danger(ng-click='delete({id:team})', , ng-disabled='!currentUser.isAdmin')
+                      button.btn.btn-sm.btn-danger(ng-click='delete({id:team})', ng-disabled='!currentUser.isAdmin', title='delete Team')
                           i.fa.fa-trash-o
   .overlay(ng-if='loading')
   .loading-img(ng-if='loading')

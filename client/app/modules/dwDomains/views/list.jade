@@ -1,56 +1,55 @@
-
 .box
   .box-body.no-padding(style='min-height: 120px;')
-    //span User: {{currentUser.username}}
-    table.table.table-striped(st-table='displayedDomains', st-safe-src='safeDisplayedDomains')
-      thead
-        tr
-          th(colspan="7")
-            input.input-sm.form-control(st-search='' type='search' placeholder='Search')
-          th(colspan="1")
-            button.btn.btn-sm.btn-default(ui-sref='^.list' ui-sref-opts="{reload: true, notify: true}",title='Refresh Domains')
-                i.fa.fa-refresh
-      thead
-        tr
-          th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='name' st-sort-default="true") Name
-          th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='description') Description
-          th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='') Teams
-          th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='domain.trails.name') Trail
-          th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='') EntityTypes
-          //th.sortable.col-sm-1.col-md-1.col-lg-1.td-center(st-sort='') Feeds
-          th.sortable.col-sm-1.col-md-1.col-lg-1.td-center.text-nowrap(st-sort='') # Items
-          th.sortable.col-sm-1.col-md-1.col-lg-1.td-center(st-sort='') Extractors
-          th.col-sm-1.col-md-1.col-lg-1.td-center
-              button.btn.btn-sm.btn-success(ui-sref='^.add' ui-sref-opts="{reload: true, notify: true}",title='Add Domain' ng-disabled='!currentUser.isAdmin')
-                  i.fa.fa-plus &nbsp;Add Domain
-      tbody
-        tr(ng-repeat='domain in displayedDomains')
-          td.hidden
-            span {{domain.id}}
-          td
-            a(ui-sref='app.dwDomains.view({id:domain.id})') {{domain.name}}
-          td
-            span.text-muted {{domain.description}}
-          td
-            span.label.label-ltgray(ng-repeat="team in domain.teams") {{team.name}}
-          td.col-sm-2.col-md-2.col-lg-2
-            span.label.label-ltgray(ng-repeat="trail in domain.trails") {{trail.name}}
-          td
-            a(ui-sref='app.dwDomainEntityTypes.list({id:null, domainId:domain.id})')
-                span.label.label-active-entityType(ng-repeat="entType in domain.domainEntityTypes") {{entType.name}}
-          //td.td-center
-          //  a(ui-sref='app.dwFeeds.list({id:null, domainId:domain.id})') {{domain.feeds.length}}
-          td.td-center
-            a(ui-sref='app.dwDomainItems.list({id:null, domainId:domain.id})') {{domain.domainItems.length}}
-          td.td-center
-            span.label.label-ltgray(ng-repeat="extractor in domain.extractors") {{extractor.name}}
-          td.td-center
-            .btn-toolbar
-              button.btn.btn-sm.btn-default(ui-sref='app.dwDomains.edit({id:domain.id})', ng-disabled='!currentUser.isAdmin')
-                i.fa.fa-pencil
-              button.btn.btn-sm.btn-warning(ng-click='export({id:domain.id})' title='Export Domain Summary')
-                i.fa.fa-save
-              button.btn.btn-sm.btn-danger(ng-click='delete({id:domain})', ng-disabled='!currentUser.isAdmin')
-                i.fa.fa-trash-o
+    .row
+      .col-sm-12
+        section(st-table='displayedDomains', st-safe-src='safeDisplayedDomains')
+          .row
+            .input-group.col-sm-12
+              .col-sm-11
+                input.input-sm.form-control(st-search='' type='search' placeholder='Search')
+              .col-sm-1
+                button.btn.btn-sm.btn-default(ui-sref='^.list' ui-sref-opts="{reload: true, notify: true}",title='Refresh Domains')
+                  i.fa.fa-refresh
+
+          table.table.table-striped
+            thead
+              tr
+                th.sortable.col-sm-1(st-sort='name' st-sort-default="true") Name
+                th.sortable.col-sm-2(st-sort='description') Description
+                th.sortable.col-sm-1(st-sort='name') Team
+                th.col-sm-3 Trails
+                th.col-sm-2.col-md-2.col-lg-2(st-sort='') EntityTypes
+                th.sortable.col-sm-1(st-sort='domainItems.length') # Items
+                th.col-sm-1 Extractors
+                th.col-sm-1.td-center
+                    button.btn.btn-sm.btn-success(ui-sref='^.add' ui-sref-opts="{reload: true, notify: true}",title='Add Domain' ng-disabled='!currentUser.isAdmin')
+                        i.fa.fa-plus &nbsp;Add Domain
+            tbody
+              tr(ng-repeat='domain in displayedDomains')
+                td.hidden
+                  span {{domain.id}}
+                td
+                  a(ui-sref='app.dwDomains.view({id:domain.id})') {{domain.name}}
+                td
+                  span.text-muted {{domain.description}}
+                td
+                  a(href='', ui-sref='app.dwTeams.view({id: domain.teams[0].id})').label.label-ltgray {{domain.teams[0].name}}
+                td
+                  a(ng-repeat="trail in domain.trails" href='', ui-sref='app.dwTrails.view({id: trail.id})').label.label-ltgray {{trail.name + ' '}} <br ng-if="($index+1)%4==0">
+                td
+                  a(ui-sref='app.dwDomainEntityTypes.list({id:null, domainId:domain.id})')
+                    span.label.label-active-entityType(ng-repeat="entType in domain.domainEntityTypes") {{entType.name + ' '}} <br ng-if="($index+1)%4==0">
+                td.td-center
+                  a(ui-sref='app.dwDomainItems.list({id:null, domainId:domain.id})').badge {{domain.domainItems.length}}
+                td
+                  span.label.label-ltgray(ng-repeat="extractor in domain.extractors") {{extractor.name+ ' '}} <br ng-if="($index+1)%2==0">
+                td.td-center
+                  .btn-group
+                    button.btn.btn-sm.btn-default(ui-sref='app.dwDomains.edit({id:domain.id})',ng-disabled='!currentUser.isAdmin')
+                      i.fa.fa-pencil
+                    button.btn.btn-sm.btn-warning(ng-click='export({id:domain.id})' title='Export Domain Summary')
+                      i.fa.fa-save
+                    button.btn.btn-sm.btn-danger(ng-click='delete({id:domain})', ng-disabled='!currentUser.isAdmin')
+                      i.fa.fa-trash-o
   .overlay(ng-if='loading')
   .loading-img(ng-if='loading')

@@ -15,7 +15,7 @@
       thead
         tr
           th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='itemValue' st-sort-default="true") Reference
-          th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='itemType') EntityType
+          th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='itemType') Type
           th.sortable.col-sm-1.col-md-1.col-lg-1 Source
           th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='domainId') Domain
           th.col-sm-1.col-md-1.col-lg-1.td-center
@@ -30,7 +30,7 @@
             span.label.label-ltgray {{domainItem.source}}
           td
             span.label.label-ltgray
-                a(ui-sref='app.dwDomains.list({domainId:domain.id})') {{domainItem.domain.name}}
+                a(ui-sref='app.dwDomains.view({id:domain.id})') {{domainItem.domain.name}}
           td.td-center(style='width: 120px')
             .btn-toolbar
                 button.btn.btn-sm.btn-default(ui-sref='app.dwDomainItems.edit({id:domainItem.id,domainId: currentDomainId})')

@@ -1,41 +1,43 @@
-
 .box
   .box-body.no-padding(style='min-height: 120px;')
-    table.table.table-striped(st-table='displayedTeams', st-safe-src='safeDisplayedTeams')
-      thead
-        tr
-          th(colspan="5")
-            input.input-sm.form-control(st-search='' type='search' placeholder='Search')
-          th(colspan="1")
-            button.btn.btn-sm.btn-default(ui-sref='^.list' ui-sref-opts="{reload: true, notify: true}",title='Refresh Teams')
-              i.fa.fa-refresh
-      thead
-        tr
-          th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='name' st-sort-default="true") Name
-          th.sortable.col-sm-3.col-md-3.col-lg-3(st-sort='description') Description
-          th.sortable.col-sm-1.col-md-1.col-lg-1.td-center(st-sort='') Members
-          th.sortable.col-sm-2.col-md-2.col-lg-2.td-center(st-sort='') Domains
-          th.sortable.col-sm-2.col-md-2.col-lg-2.td-center(st-sort='') Trails
-          th.col-sm-2.col-md-2.col-lg-2.td-center
-              a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
-                | Add Team
-      tbody
-        tr(ng-repeat='team in displayedTeams')
-          td(style='width: 120px')
-            a(href='', ui-sref='app.dwTeams.view({id: team.id})') {{team.name}}
-          td
-            span.text-muted {{team.description}}
-          td
-            span.label.label-ltgray(ng-repeat="user in team.users") {{user.username}}
-          td
-            span.label.label-ltgray(ng-repeat="domain in team.domains") {{domain.name}}
-          td.td-center
-            span.label.label-ltgray(ng-repeat="trail in team.trails") {{trail.name}}
-          td.td-center(style='width: 120px')
-            .btn-toolbar
-                button.btn.btn-sm.btn-default(ui-sref='app.dwTeams.edit({id:team.id})', , ng-disabled='!currentUser.isAdmin')
-                    i.fa.fa-pencil
-                button.btn.btn-sm.btn-danger(ng-click='delete({id:team})', , ng-disabled='!currentUser.isAdmin')
-                    i.fa.fa-trash-o
+    .row
+      .col-sm-12
+        section(st-table="displayedTeams", st-safe-src='safeDisplayedTeams')
+          .input-group.col-sm-12
+            .col-sm-11
+              input.input-sm.form-control(st-search='' type='search' placeholder='Search')
+            .col-sm-1
+              button.btn.btn-sm.btn-default(ui-sref='^.list' ui-sref-opts="{reload: true, notify: true}",title='Refresh Teams')
+                i.fa.fa-refresh
+          table.table.table-striped
+            thead
+              tr
+                th.sortable.col-sm-1(st-sort='name' st-sort-default="true") Name
+                th.sortable.col-sm-2(st-sort='description') Description
+                th.col-sm-2 Members
+                th.col-sm-1 Domains
+                th.col-sm-5 Trails
+                th.col-sm-1.td-center
+                  a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add', ng-disabled='!currentUser.isAdmin')
+                    | Add Team
+            tbody
+              tr(ng-repeat='team in displayedTeams')
+                td.col-sm-1
+                  a(href='', ui-sref='app.dwTeams.view({id: team.id})') {{team.name}}
+                td.col-sm-2
+                  text-muted {{team.description}}
+                td.col-sm-2
+                  a(href='', ui-sref='app.users.view({id: user.id})', ng-repeat='user in team.users').label.label-ltgray
+                    {{user.username + ' '}} <br ng-if="($index+1)%2==0">
+                td.col-sm-1
+                  a(href='', ui-sref='app.dwDomains.view({id: domain.id})', ng-repeat='domain in team.domains').label.label-ltgray {{domain.name+ ' '}} <br ng-if="($index+1)%2==0">
+                td.col-sm-5
+                  a(href='', ui-sref='app.dwTrails.view({id: trail.id})', ng-repeat="trail in team.trails").label.label-ltgray {{trail.name + ' '}} <br ng-if="($index+1)%4==0">
+                td.col-sm-1
+                  .btn-toolbar
+                      button.btn.btn-sm.btn-default(ui-sref='app.dwTeams.edit({id:team.id})', , ng-disabled='!currentUser.isAdmin')
+                          i.fa.fa-pencil
+                      button.btn.btn-sm.btn-danger(ng-click='delete({id:team})', , ng-disabled='!currentUser.isAdmin')
+                          i.fa.fa-trash-o
   .overlay(ng-if='loading')
   .loading-img(ng-if='loading')

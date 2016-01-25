@@ -25,8 +25,7 @@
           td
             a(href='', ui-sref='app.dwDomainItems.view({id: domainItem.id, domainId: currentDomainId})' title='view Item JSON') {{domainItem.itemValue}}
           td.td-center
-            span.span-max.label.label-active-entityType
-              a(ui-sref='app.dwDomainEntityTypes.list({id:null, domainId:domainItem.dwDomainId})' title='view Entity Types').label-active-entityType {{domainItem.type}}
+            span.span-max.label.label-ltgray {{domainItem.type}}
           td.td-center
             span.label.label-ltgray {{domainItem.source}}
           td.td-center

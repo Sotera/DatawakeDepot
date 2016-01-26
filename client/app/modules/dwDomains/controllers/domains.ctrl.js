@@ -295,6 +295,19 @@ app.controller('DomainsCtrl', function($scope, $state, $http, $stateParams, File
         });
     };
 
+    $scope.getPagedResults = function(itemIndex, itemsPer) {
+        $scope.loading = true;
+
+        DomainsService.getPagedDomains(itemIndex, itemsPer).$promise.then(function (result) {
+            $scope.domain = {};
+            $scope.safeDisplayedDomains = result;
+            $scope.displayedDomains = [].concat($scope.safeDisplayedDomains);
+
+            $scope.setPageButtons(result.length);
+            $scope.loading = false;
+        });
+    };
+
     $scope.loading = true;
     AppAuth.getCurrentUser().then(function (currUser) {
         $scope.currentUser = currUser;
@@ -307,9 +320,13 @@ app.controller('DomainsCtrl', function($scope, $state, $http, $stateParams, File
                 $scope.loading = false;
             })
         } else {
-            //get domain info for the given user based on user's teams
-            if (currUser.teams) {
-                $scope.getFilteredPagedResults(currUser.teams, $scope.itemIndex, $scope.itemsPerPage);
+            if(!currUser.isAdmin){
+                //get domain info for the given user based on user's teams
+                if (currUser.teams) {
+                    $scope.getFilteredPagedResults(currUser.teams, $scope.itemIndex, $scope.itemsPerPage);
+                }
+            }else{
+                $scope.getPagedResults($scope.itemIndex, $scope.itemsPerPage);
             }
         }
     }, function (err) {

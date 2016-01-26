@@ -1,7 +1,7 @@
 'use strict';
 var app = angular.module('com.module.dwForensic');
 
-app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser, DwTrail, DwDomainEntityType, ForensicService, gettextCatalog, AppAuth) {
+app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser, DwTeam, DwTrail, DwDomainEntityType, ForensicService, gettextCatalog, AppAuth) {
     $scope.trail = {};
 
     $scope.teams = [];
@@ -123,28 +123,52 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser
     $scope.loading = true;
     AppAuth.getCurrentUser().then(function (currUser) {
 
-        var userFilter = {
-            filter: {
-                where: {
-                    id: currUser.id
-                },
-                "include": [{
-                    "relation": "teams",
-                    "scope": {"include": [{"relation": "domains", "scope": {"include": [{"relation": "trails"}]}}]}
-                }]
-            }
-        };
-        console.log("userFilter");
-        console.log(JSON.stringify(userFilter));
-        AminoUser.findOne(userFilter).$promise
-            .then(function (user) {
-                $scope.teams = user.teams;
+        if(!currUser.isAdmin){
+            var userFilter = {
+                filter: {
+                    where: {
+                        id: currUser.id
+                    },
+                    "include": [{
+                        "relation": "teams",
+                        "scope": {"include": [{"relation": "domains", "scope": {"include": [{"relation": "trails"}]}}]}
+                    }]
+                }
+            };
+            console.log("userFilter");
+            console.log(JSON.stringify(userFilter));
+            AminoUser.findOne(userFilter).$promise
+                .then(function (user) {
+                    $scope.teams = user.teams;
 
-            })
-            .catch(function (err) {
-                console.log("Error getting trail: " + trailId);
-                console.log(err);
-            });
-        $scope.loading = false;
+                })
+                .catch(function (err) {
+                    console.log("Error getting trail: " + trailId);
+                    console.log(err);
+                });
+            $scope.loading = false;
+        }else{
+            var teamFilter = {
+                filter: {
+                    "include": [{
+                        "relation": "domains",
+                        "scope": {"include": [{"relation": "trails"}]}}]
+                    }
+            };
+
+            console.log("teamFilter");
+            console.log(JSON.stringify(teamFilter));
+            DwTeam.find(teamFilter).$promise
+                .then(function (teams) {
+                    $scope.teams = teams;
+
+                })
+                .catch(function (err) {
+                    console.log("Error getting admin teams");
+                    console.log(err);
+                });
+            $scope.loading = false;
+        }
+
     });
 });

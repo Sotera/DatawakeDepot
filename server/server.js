@@ -1,4 +1,5 @@
 'use strict';
+/*
  var mongoAddr = '"' + process.env.MONGO_PORT_27017_TCP_ADDR + '"';
  var mongoPort = process.env.MONGO_PORT_27017_TCP_PORT;
  var fs = require('fs');
@@ -7,7 +8,7 @@
  fileContents = fileContents.replace(/MONGO_HOST_ADDR/g, mongoAddr);
  fileContents = fileContents.replace(/MONGO_HOST_PORT/g, mongoPort);
  fs.writeFileSync(__dirname + '/datasources.json', fileContents);
-
+ */
 var loopback = require('loopback');
 var boot = require('loopback-boot');
 var path = require('path');

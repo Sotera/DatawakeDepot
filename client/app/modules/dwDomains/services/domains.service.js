@@ -18,6 +18,24 @@ app.service('DomainsService', ['$state', 'CoreService', 'DwDomain','gettextCatal
         });
     };
 
+    this.getPagedDomains = function(start,number) {
+        return DwDomain.find({
+            filter: {
+                limit: number,
+                skip: start,
+                order:"name DESC",
+                include: [
+                    'domainEntityTypes',
+                    'domainItems',
+                    'extractors',
+                    'trails',
+                    'feeds',
+                    'teams'
+                ]
+            }
+        });
+    };
+
     this.getDomain = function(domainId) {
         return DwDomain.find({
             filter: {
@@ -35,6 +53,7 @@ app.service('DomainsService', ['$state', 'CoreService', 'DwDomain','gettextCatal
         });
         var whereClause={
             filter:{
+                order:"name DESC",
                 include: [
                     'domainEntityTypes',
                     'domainItems',

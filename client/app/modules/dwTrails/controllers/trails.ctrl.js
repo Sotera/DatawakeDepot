@@ -1,10 +1,11 @@
 'use strict';
 var app = angular.module('com.module.dwTrails');
 
-app.controller('TrailsCtrl', function ($scope, $state, $http, $stateParams, DwTeam, TrailsService, gettextCatalog, AppAuth, FileUploader, CoreService) {
+app.controller('TrailsCtrl', function ($scope, $state, $http, $stateParams, DwTeam, DwDomain, TrailsService, gettextCatalog, AppAuth, FileUploader, CoreService) {
     $scope.plDomains = [];
     $scope.plTeams = [];
     $scope.trail = {};
+    $scope.defaultDomains = true;
 
     $scope.formFields = [{
         key: 'id',
@@ -37,7 +38,11 @@ app.controller('TrailsCtrl', function ($scope, $state, $http, $stateParams, DwTe
         expressionProperties: {
             // This watches for form changes and enables/disables the Domain dropdown as necessary
             'templateOptions.disabled': function () {
-                return $scope.plDomains.length <= 0;
+                if($scope.defaultDomains){
+                    return true;
+                }else{
+                    return $scope.plDomains.length <= 0
+                }
             }
         },
         templateOptions: {
@@ -73,6 +78,7 @@ app.controller('TrailsCtrl', function ($scope, $state, $http, $stateParams, DwTe
     }];
 
     $scope.loadDomains = function (teamId) {
+        $scope.defaultDomains = false;
         $scope.plDomains.length = 0;
         //Populate plDomains from the domains for the given teamId in plTeams
         $scope.plTeams.forEach(function (team) {
@@ -123,6 +129,25 @@ app.controller('TrailsCtrl', function ($scope, $state, $http, $stateParams, DwTe
                 });
             }
         }
+        //set default Domains
+        $scope.defaultDomains = true;
+        $scope.plDomains.length = 0;
+        DwDomain.find().$promise
+            .then(function (allDomains) {
+                for (var i = 0; i < allDomains.length; ++i) {
+                    $scope.plDomains.push({
+                        value: allDomains[i].name,
+                        name: allDomains[i].name,
+                        id: allDomains[i].id
+                    });
+                }
+            })
+            .catch(function (err) {
+                console.log(err);
+            })
+            .then(function () {
+            }
+        );
     };
 
     $scope.delete = function (trail) {

@@ -18,6 +18,24 @@ app.service('DomainsService', ['$state', 'CoreService', 'DwDomain','gettextCatal
         });
     };
 
+    this.getPagedDomains = function(start,number) {
+        return DwDomain.find({
+            filter: {
+                limit: number,
+                skip: start,
+                order:"name DESC",
+                include: [
+                    'domainEntityTypes',
+                    'domainItems',
+                    'extractors',
+                    'trails',
+                    'feeds',
+                    'teams'
+                ]
+            }
+        });
+    };
+
     this.getDomain = function(domainId) {
         return DwDomain.find({
             filter: {
@@ -33,8 +51,9 @@ app.service('DomainsService', ['$state', 'CoreService', 'DwDomain','gettextCatal
         teamList.forEach(function (team) {
             userTeams.push(team.id);
         });
-        return DwDomain.find({
+        var whereClause={
             filter:{
+                order:"name DESC",
                 include: [
                     'domainEntityTypes',
                     'domainItems',
@@ -50,7 +69,38 @@ app.service('DomainsService', ['$state', 'CoreService', 'DwDomain','gettextCatal
                     }
                 ]
             }
+        };
+
+        return (DwDomain.find(whereClause));
+    };
+
+    this.getUserPagedTeamDomains = function(teamList,start,number) {
+        var userTeams = [];
+        teamList.forEach(function (team) {
+            userTeams.push(team.id);
         });
+        var whereClause={
+            filter:{
+                limit: number,
+                skip: start,
+                order:"name DESC",
+                include: [
+                    'domainEntityTypes',
+                    'domainItems',
+                    'extractors',
+                    'trails',
+                    'feeds',
+                    {relation:'teams',
+                        scope:{
+                            where:{
+                                id:{inq:userTeams}
+                            }
+                        }
+                    }
+                ]
+            }
+        };
+        return (DwDomain.find(whereClause));
     };
 
     this.getPrettyDomain = function(domainId){

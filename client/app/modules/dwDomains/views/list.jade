@@ -53,5 +53,12 @@
                       i.fa.fa-save
                     button.btn.btn-sm.btn-danger(ng-click='delete({id:domain})', ng-disabled='!currentUser.isAdmin', title='delete Domain')
                       i.fa.fa-trash-o
+              tr
+                td.text-center(colspan='8')
+                  .btn-toolbar
+                    button.btn.btn-sm.btn-default(id='pageBack' ng-click='prevPage()' disabled=true)
+                      i.fa.fa-chevron-left
+                    button.btn.btn-sm.btn-default(id='pageFwd' ng-click='nextPage()' disabled=true)
+                      i.fa.fa-chevron-right
   .overlay(ng-if='loading')
   .loading-img(ng-if='loading')

@@ -40,6 +40,25 @@ app.service('TrailUrlsService', ['$state', 'CoreService', 'DwTrailUrl','DwUrlExt
     return (DwTrailUrl.find(whereClause));
   };
 
+  this.getFilteredPagedTrailUrls = function(trailId,start,number) {
+      var whereClause={
+          filter:{
+              limit: number,
+              skip: start,
+              order:"url DESC",
+              where:{
+                  dwTrailId:trailId
+              },
+              include:[
+                  {relation:'trail',scope:{fields: ['name']}},
+                  'crawlType',
+                  {relation:'urlExtractions',scope:{fields: ['id']}}
+              ]
+          }
+      };
+      return (DwTrailUrl.find(whereClause));
+  };
+
   this.upsertTrailUrl = function(trailUrl, cb) {
     DwTrailUrl.upsert(trailUrl, function() {
       CoreService.toastSuccess(gettextCatalog.getString(

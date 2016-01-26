@@ -41,6 +41,23 @@ app.service('DomainItemsService', ['$state', 'CoreService', 'DwDomainItem', 'get
       return (DwDomainItem.find(whereClause));
   };
 
+  this.getFilteredPagedDomainItems = function(domainId, start, number) {
+      var whereClause={
+          filter:{
+              limit: number,
+              skip: start,
+              order:"name DESC",
+              where:{
+                  dwDomainId:domainId
+              },
+              include:[
+                  'domain'
+              ]
+          }
+      };
+      return (DwDomainItem.find(whereClause));
+  };
+
   this.upsertDomainItem = function(domainItem, cb) {
     DwDomainItem.upsert(domainItem, function() {
       CoreService.toastSuccess(gettextCatalog.getString(

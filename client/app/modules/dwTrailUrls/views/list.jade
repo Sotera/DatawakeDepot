@@ -8,7 +8,7 @@
             input.input-sm.form-control(st-search='' type='search' placeholder='Search')
           th(colspan="1")
             .btn-toolbar
-                button.btn.btn-sm.btn-default(ui-sref='^.list({id:trailUrl.id, trailId:currentTrailId})' ui-sref-opts="{reload: true, notify: true}",title='Refresh URLs')
+                button.btn.btn-sm.btn-default(ui-sref='^.list({trailUrlId:trailUrl.id, trailId:currentTrailId})' ui-sref-opts="{reload: true, notify: true}",title='Refresh URLs')
                     i.fa.fa-refresh
                 button.btn.btn-sm.btn-default(ui-sref='app.dwTrails.list({trailId: currentTrailId})',title='To Trails')
                     i.fa.fa-arrow-up &nbsp;to Trails
@@ -40,5 +40,12 @@
                     i.fa.fa-pencil
                 button.btn.btn-sm.btn-danger(ng-click='delete({id:trailUrl})',ng-disabled='!currentUser.isAdmin')
                     i.fa.fa-trash-o
+          tr
+              td.text-center(colspan='5')
+                  .btn-toolbar
+                      button.btn.btn-sm.btn-default(id='pageBack' ng-click='prevPage()' disabled=true)
+                          i.fa.fa-chevron-left
+                      button.btn.btn-sm.btn-default(id='pageFwd' ng-click='nextPage()' disabled=true)
+                          i.fa.fa-chevron-right
   .overlay(ng-if='loading')
   .loading-img(ng-if='loading')

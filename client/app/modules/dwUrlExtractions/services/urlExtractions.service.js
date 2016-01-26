@@ -36,6 +36,23 @@ app.service('UrlExtractionsService', ['$state', 'CoreService', 'DwUrlExtraction'
     return (DwUrlExtraction.find(whereClause));
   };
 
+  this.getFilteredPagedUrlExtractions = function(trailUrlId,start,number) {
+      var whereClause={
+          filter:{
+              limit: number,
+              skip: start,
+              order:"occurrences DESC",
+              where:{
+                  dwTrailUrlId:trailUrlId
+              },
+              include:[
+                  {relation:'trailUrl',scope:{include: ['trail']}}
+              ]
+          }
+      };
+      return (DwUrlExtraction.find(whereClause));
+  };
+
 
   this.upsertUrlExtraction = function(urlExtraction, cb) {
     DwUrlExtraction.upsert(urlExtraction, function() {

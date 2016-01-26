@@ -9,6 +9,9 @@ app.controller('UrlExtractionsCtrl', function($scope, $state, $stateParams, Doma
   $scope.currentTrailUrlId = '';
   $scope.urlExtraction = {};
 
+  $scope.itemIndex = 0;
+  $scope.itemsPerPage = 15;
+
   $scope.formFields = [{
     key: 'id',
     type: 'input',
@@ -50,6 +53,69 @@ app.controller('UrlExtractionsCtrl', function($scope, $state, $stateParams, Doma
           required: true
       }
   }];
+
+  $scope.setPageButtons = function(resultLen){
+      var pageState =  '';
+      var fwd = false;
+      var back = false;
+
+      //figure out if we have more than one page of results to see if we enable Fwd
+      if(resultLen >= $scope.itemsPerPage){
+          fwd = true;
+      }
+      //figure out if we're on page greater than page 1 to enable Back
+      if($scope.itemIndex >= $scope.itemsPerPage){
+          back = true;
+      }
+      if(fwd && back){
+          pageState = 'both';
+      }else if (!fwd && back){
+          pageState = 'backwardOnly';
+      }else if (fwd && !back){
+          pageState = 'forwardOnly';
+      }
+
+      switch (pageState){
+          case 'forwardOnly':
+              $('#pageBack').attr('disabled', 'disabled');
+              $('#pageFwd').removeAttr('disabled');
+              break;
+          case 'backwardOnly':
+              $('#pageFwd').attr('disabled', 'disabled');
+              $('#pageBack').removeAttr('disabled');
+              break;
+          case 'both':
+              $('#pageBack').removeAttr('disabled');
+              $('#pageFwd').removeAttr('disabled');
+              break;
+          default: //disabled
+              $('#pageBack').attr('disabled', 'disabled');
+              $('#pageFwd').attr('disabled', 'disabled');
+      }
+  };
+
+  $scope.nextPage = function(){
+      $scope.itemIndex = $scope.itemIndex + $scope.itemsPerPage;
+      $scope.getFilteredPagedResults($scope.currentTrailUrlId, $scope.itemIndex,  $scope.itemsPerPage);
+  };
+
+  $scope.prevPage = function(){
+      $scope.itemIndex = $scope.itemIndex - $scope.itemsPerPage;
+      $scope.getFilteredPagedResults($scope.currentTrailUrlId, $scope.itemIndex,  $scope.itemsPerPage);
+  };
+
+  $scope.getFilteredPagedResults = function(trailUrlId, itemIndex, itemsPer) {
+      $scope.loading = true;
+      UrlExtractionsService.getFilteredPagedUrlExtractions(trailUrlId, itemIndex, itemsPer).$promise.then(function (result) {
+          $scope.currentTrailUrlId = trailUrlId;
+          $scope.urlExtraction = {};
+          $scope.safeDisplayedurlExtractions = result;
+          $scope.displayedUrlExtractions = [].concat($scope.safeDisplayedurlExtractions);
+
+          $scope.setPageButtons(result.length);
+          $scope.loading = false;
+      });
+  };
 
   $scope.delete = function(id) {
     UrlExtractionsService.deleteUrlExtraction(id, function() {
@@ -116,6 +182,7 @@ app.controller('UrlExtractionsCtrl', function($scope, $state, $stateParams, Doma
   AppAuth.getCurrentUser().then(function (currUser) {
       $scope.currentUser = currUser;
       $scope.loadPicklists();
+
       if ($stateParams.id && $stateParams.trailId && $stateParams.trailUrlId) {
         UrlExtractionsService.getUrlExtraction($stateParams.id).$promise.then(function(result){
           $scope.currentTrailId = $stateParams.trailId;
@@ -126,14 +193,8 @@ app.controller('UrlExtractionsCtrl', function($scope, $state, $stateParams, Doma
           $scope.loading = false;
         })
       } else if ($stateParams.trailUrlId && $stateParams.trailId){
-        UrlExtractionsService.getFilteredUrlExtractions($stateParams.trailUrlId).$promise.then(function(result){
           $scope.currentTrailId = $stateParams.trailId;
-          $scope.currentTrailUrlId = $stateParams.trailUrlId;
-          $scope.urlExtraction = {};
-          $scope.safeDisplayedurlExtractions = result;
-          $scope.displayedUrlExtractions = [].concat($scope.safeDisplayedurlExtractions);
-          $scope.loading = false;
-        })
+          $scope.getFilteredPagedResults($stateParams.trailUrlId, $scope.itemIndex, $scope.itemsPerPage);
       } else {
         UrlExtractionsService.getUrlExtractions().$promise.then(function(result) {
           $scope.currentTrailId = '';

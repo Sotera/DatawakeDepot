@@ -3,25 +3,30 @@ var app = angular.module('com.module.users');
 app.controller('UsersCtrl', function ($scope, $stateParams, $state, CoreService, AminoUser, DwTeam, Role, AppAuth, gettextCatalog) {
 
     //Define a couple of scope methods
-    $scope.delete = function (id) {
-        CoreService.confirm(gettextCatalog.getString('Are you sure?'),
-            gettextCatalog.getString('Deleting this cannot be undone'),
-            function () {
-                AminoUser.deleteById(id, function () {
-                        CoreService.toastSuccess(gettextCatalog.getString(
-                            'User deleted'), gettextCatalog.getString(
-                            'Your user is deleted!'));
-                        $state.go('app.users.list');
-                    },
-                    function (err) {
-                        CoreService.toastError(gettextCatalog.getString(
-                            'Error deleting user'), gettextCatalog.getString(
-                            'Your user is not deleted:' + err));
-                    });
-            },
-            function () {
-                return false;
-            });
+    $scope.delete = function (user) {
+        if(user.id) {
+
+            CoreService.confirm(gettextCatalog.getString('Are you sure?'),
+                gettextCatalog.getString('Deleting this cannot be undone'),
+                function () {
+                    AminoUser.deleteById(user, function () {
+                            CoreService.toastSuccess(gettextCatalog.getString(
+                                'User deleted'), gettextCatalog.getString(
+                                'Your user is deleted!'));
+                            $state.go('^.list');
+                        },
+                        function (err) {
+                            CoreService.toastError(gettextCatalog.getString(
+                                'Error deleting user'), gettextCatalog.getString(
+                                'Your user is not deleted:' + err));
+                        });
+                },
+                function () {
+                    return false;
+                });
+        }else{
+            $state.go('^.list');
+        }
     };
     $scope.onSubmit = function () {
         var newUser = {

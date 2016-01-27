@@ -27,11 +27,15 @@ app.controller('ServiceTypesCtrl', function($scope, $state, $stateParams, Servic
         }
     }];
 
-    $scope.delete = function(id) {
-        ServiceTypesService.deleteServiceType(id, function() {
-            $scope.safeDisplayedserviceTypes = ServiceTypesService.getServiceTypes();
+    $scope.delete = function(serviceType) {
+        if(serviceType.id){
+            ServiceTypesService.deleteServiceType(serviceType, function() {
+                $scope.safeDisplayedserviceTypes = ServiceTypesService.getServiceTypes();
+                $state.go('^.list');
+            });
+        }else{
             $state.go('^.list');
-        });
+        }
     };
 
     $scope.onSubmit = function() {

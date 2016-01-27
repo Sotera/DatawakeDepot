@@ -94,10 +94,14 @@ app.controller('ExtractorsCtrl', function($scope, $state, $stateParams, DwDomain
     }];
 
     $scope.delete = function(extractor) {
-        ExtractorsService.deleteExtractor(extractor, function() {
-            $scope.safeDisplayedextractors = ExtractorsService.getExtractors();
+        if(extractor.id){
+            ExtractorsService.deleteExtractor(extractor, function() {
+                $scope.safeDisplayedextractors = ExtractorsService.getExtractors();
+                $state.go('^.list');
+            });
+        }else{
             $state.go('^.list');
-        });
+        }
     };
 
     $scope.onSubmit = function() {

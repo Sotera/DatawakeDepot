@@ -59,11 +59,15 @@ app.controller('TrailUrlsCtrl', function($scope, $state, $stateParams, $window, 
         }
     }];
 
-    $scope.delete = function(id) {
-        TrailUrlsService.deleteTrailUrl(id, function() {
-            $scope.safeDisplayedtrailUrls = TrailUrlsService.getFilteredTrailUrls($scope.currentTrailId);
+    $scope.delete = function(trail) {
+        if(trail.id){
+            TrailUrlsService.deleteTrailUrl(trail, function() {
+                $scope.safeDisplayedtrailUrls = TrailUrlsService.getFilteredTrailUrls($scope.currentTrailId);
+                $state.go('^.list', { 'trailId': $scope.currentTrailId});
+            });
+        }else{
             $state.go('^.list', { 'trailId': $scope.currentTrailId});
-        });
+        }
     };
 
     $scope.onSubmit = function() {

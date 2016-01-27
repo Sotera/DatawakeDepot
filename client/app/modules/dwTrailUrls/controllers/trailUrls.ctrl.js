@@ -1,10 +1,9 @@
 'use strict';
 var app = angular.module('com.module.dwTrailUrls');
 
-app.controller('TrailUrlsCtrl', function($scope, $state, $stateParams, $window, DwCrawlType, DwTrail, DwTrailUrl, TrailUrlsService, gettextCatalog, AppAuth) {
+app.controller('TrailUrlsCtrl', function($scope, $state, $stateParams, $window, DwTrail, DwTrailUrl, TrailUrlsService, gettextCatalog, AppAuth) {
 
     $scope.trails = [];
-    $scope.crawlTypes = [];
     $scope.currentTrailId = '';
     $scope.trailUrl = {};
 
@@ -43,17 +42,6 @@ app.controller('TrailUrlsCtrl', function($scope, $state, $stateParams, $window, 
             label: gettextCatalog.getString('Scraped Content')
         }
     }, {
-        key: 'dwCrawlTypeId',
-        type: 'select',
-        templateOptions: {
-            label: gettextCatalog.getString('CrawlType'),
-            options: $scope.crawlTypes,
-            valueProp: 'id',
-            labelProp: 'name',
-            required: true,
-            disabled: false
-        }
-    }, {
         key: 'timestamp',
         type: 'input',
         templateOptions: {
@@ -74,14 +62,14 @@ app.controller('TrailUrlsCtrl', function($scope, $state, $stateParams, $window, 
     $scope.delete = function(id) {
         TrailUrlsService.deleteTrailUrl(id, function() {
             $scope.safeDisplayedtrailUrls = TrailUrlsService.getFilteredTrailUrls($scope.currentTrailId);
-            $state.go('^.list');
+            $state.go('^.list', { 'trailId': $scope.currentTrailId});
         });
     };
 
     $scope.onSubmit = function() {
         TrailUrlsService.upsertTrailUrl($scope.trailUrl, function() {
             $scope.safeDisplayedtrailUrls = TrailUrlsService.getFilteredTrailUrls($scope.currentTrailId);
-            $state.go('^.list');
+            $state.go('^.list', { 'trailId': $scope.currentTrailId});
         });
     };
 
@@ -90,23 +78,6 @@ app.controller('TrailUrlsCtrl', function($scope, $state, $stateParams, $window, 
     };
 
     $scope.loadPicklists = function () {
-        DwCrawlType.find({filter: {include: []}}).$promise
-            .then(function (allCrawlTypes) {
-                for (var i = 0; i < allCrawlTypes.length; ++i) {
-                    $scope.crawlTypes.push({
-                        value: allCrawlTypes[i].name,
-                        name: allCrawlTypes[i].name + " - " + allCrawlTypes[i].description,
-                        id: allCrawlTypes[i].id
-                    });
-                }
-            })
-            .catch(function (err) {
-                console.log(err);
-            })
-            .then(function () {
-            }
-        );
-
         DwTrail.find({filter: {include: []}}).$promise
             .then(function (allTrails) {
                 for (var i = 0; i < allTrails.length; ++i) {

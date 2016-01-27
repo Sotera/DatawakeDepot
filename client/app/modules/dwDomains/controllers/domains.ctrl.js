@@ -4,7 +4,6 @@ var app = angular.module('com.module.dwDomains');
 app.controller('DomainsCtrl', function($scope, $state, $http, $stateParams, FileUploader, DwTeam, DwExtractor, CoreService,
                                        DomainsService, gettextCatalog, AppAuth) {
     $scope.plExtractors = [];
-    $scope.plFeeds = [];
     $scope.plTeams=[];
 
     $scope.itemIndex = 0;
@@ -36,14 +35,6 @@ app.controller('DomainsCtrl', function($scope, $state, $http, $stateParams, File
         templateOptions: {
             label: 'Teams',
             options: $scope.plTeams,
-            valueProp: 'id'
-        }
-    }, {
-        key: 'dwFeeds',
-        type: 'multiCheckbox',
-        templateOptions: {
-            label: 'Feeds',
-            options: $scope.plFeeds,
             valueProp: 'id'
         }
     }, {

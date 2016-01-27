@@ -1,10 +1,9 @@
 'use strict';
 var app = angular.module('com.module.dwDomainEntityTypes');
 
-app.controller('EntityTypesCtrl', function ($scope, $state, $stateParams, DwDomain, DwExtractor, EntityTypesService, gettextCatalog, AppAuth) {
+app.controller('EntityTypesCtrl', function ($scope, $state, $stateParams, DwDomain, EntityTypesService, gettextCatalog, AppAuth) {
 
     $scope.domains = [];
-    $scope.extractors = [];
     $scope.currentDomainId = '';
 
     $scope.entityType = {};
@@ -43,31 +42,25 @@ app.controller('EntityTypesCtrl', function ($scope, $state, $stateParams, DwDoma
             'templateOptions.disabled': 'model.id'
         }
     }, {
-        key: 'dwExtractorId',
-        type: 'select',
+        key: 'source',
+        type: 'input',
         templateOptions: {
-            label: gettextCatalog.getString('Extractor'),
-            options: $scope.extractors,
-            valueProp: 'id',
-            labelProp: 'name',
-            required: true
-        },
-        expressionProperties: {
-            'templateOptions.disabled': 'model.id'
+            label: gettextCatalog.getString('Source'),
+            required: false
         }
     }];
 
     $scope.delete = function (id) {
         EntityTypesService.deleteEntityType(id, function () {
             $scope.safeDisplayedentityTypes = EntityTypesService.getFilteredEntityTypes($scope.currentDomainId);
-            $state.go('^.list');
+            $state.go('^.list', { 'domainId': $scope.currentDomainId});
         });
     };
 
     $scope.onSubmit = function () {
         EntityTypesService.upsertEntityType($scope.entityType, function () {
             $scope.safeDisplayedentityTypes = EntityTypesService.getFilteredEntityTypes($scope.currentDomainId);
-            $state.go('^.list');
+            $state.go('^.list', { 'domainId': $scope.currentDomainId});
         });
     };
 
@@ -87,23 +80,6 @@ app.controller('EntityTypesCtrl', function ($scope, $state, $stateParams, DwDoma
             })
             .then(function () {
             });
-
-        DwExtractor.find({filter: {include: []}}).$promise
-            .then(function (allExtractors) {
-                for (var i = 0; i < allExtractors.length; ++i) {
-                    $scope.extractors.push({
-                        value: allExtractors[i].name,
-                        name: allExtractors[i].name,
-                        id: allExtractors[i].id
-                    });
-                }
-            })
-            .catch(function (err) {
-                console.log(err);
-            })
-            .then(function () {
-            }
-        );
     };
 
     $scope.loading = true;

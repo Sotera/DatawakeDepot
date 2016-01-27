@@ -120,14 +120,14 @@ app.controller('UrlExtractionsCtrl', function($scope, $state, $stateParams, Doma
   $scope.delete = function(id) {
     UrlExtractionsService.deleteUrlExtraction(id, function() {
       $scope.safeDisplayedurlExtractions = UrlExtractionsService.getFilteredUrlExtractions($scope.currentTrailUrlId);
-      $state.go('^.list');
+      $state.go('^.list', { 'trailId': $scope.currentTrailId,'trailUrlId': $scope.currentTrailUrlId});
     });
   };
 
   $scope.onSubmit = function() {
     UrlExtractionsService.upsertUrlExtraction($scope.urlExtraction, function() {
       $scope.safeDisplayedurlExtractions = UrlExtractionsService.getFilteredUrlExtractions($scope.currentTrailUrlId);
-        $state.go('^.list');
+      $state.go('^.list', { 'trailId': $scope.currentTrailId,'trailUrlId': $scope.currentTrailUrlId});
     });
   };
 

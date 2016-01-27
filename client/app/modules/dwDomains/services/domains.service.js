@@ -11,7 +11,6 @@ app.service('DomainsService', ['$state', 'CoreService', 'DwDomain','gettextCatal
                     'domainItems',
                     'extractors',
                     'trails',
-                    'feeds',
                     'teams'
                 ]
             }
@@ -29,20 +28,15 @@ app.service('DomainsService', ['$state', 'CoreService', 'DwDomain','gettextCatal
                     'domainItems',
                     'extractors',
                     'trails',
-                    'feeds',
                     'teams'
                 ]
             }
         });
     };
 
-    this.getDomain = function(domainId) {
-        return DwDomain.find({
-            filter: {
-                where: {id: domainId},
-                fields:{'name':true,'description':true,'id':true},
-                include: ['domainEntityTypes','domainItems']
-            }
+    this.getDomain = function(id) {
+        return DwDomain.findById({
+            id: id
         });
     };
 
@@ -59,7 +53,6 @@ app.service('DomainsService', ['$state', 'CoreService', 'DwDomain','gettextCatal
                     'domainItems',
                     'extractors',
                     'trails',
-                    'feeds',
                     {relation:'teams',
                         scope:{
                             where:{
@@ -89,7 +82,6 @@ app.service('DomainsService', ['$state', 'CoreService', 'DwDomain','gettextCatal
                     'domainItems',
                     'extractors',
                     'trails',
-                    'feeds',
                     {relation:'teams',
                         scope:{
                             where:{
@@ -216,14 +208,6 @@ app.service('DomainsService', ['$state', 'CoreService', 'DwDomain','gettextCatal
                 });
             }
 
-            if(domain.dwFeeds) {
-                domain.dwFeeds.forEach(function (feed) {
-                    DwDomain.feeds.link({id: newDomain.id, fk: feed}, null, function (value, header) {
-                        //success
-                    });
-                });
-            }
-
             if(domain.dwExtractors) {
                 domain.dwExtractors.forEach(function (extractor) {
                     DwDomain.extractors.link({id: newDomain.id, fk: extractor}, null, function (value, header) {
@@ -268,14 +252,6 @@ app.service('DomainsService', ['$state', 'CoreService', 'DwDomain','gettextCatal
                 if(domain.id.dwTeams) {
                     domain.id.dwTeams.forEach(function (team) {
                         DwDomain.teams.unlink({id: domain.id, fk: team}, null, function (value, header) {
-                            //success
-                        });
-                    });
-                }
-
-                if(domain.id.dwFeeds) {
-                    domain.id.dwFeeds.forEach(function (feed) {
-                        DwDomain.feeds.unlink({id: domain.id, fk: feed}, null, function (value, header) {
                             //success
                         });
                     });

@@ -48,10 +48,14 @@ app.controller('DomainsCtrl', function($scope, $state, $http, $stateParams, File
     }];
 
     $scope.delete = function(domain) {
-        DomainsService.deleteDomain(domain, function() {
-            $scope.safeDisplayedDomains = DomainsService.getDomains();
+        if(domain.id) {
+            DomainsService.deleteDomain(domain, function () {
+                $scope.safeDisplayedDomains = DomainsService.getDomains();
+                $state.go('^.list');
+            });
+        }else{
             $state.go('^.list');
-        });
+        }
     };
 
     $scope.deleteFile = function(index, id) {

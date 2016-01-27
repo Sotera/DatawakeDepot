@@ -153,10 +153,14 @@ app.controller('TrailsCtrl', function ($scope, $state, $http, $stateParams, DwTe
     };
 
     $scope.delete = function (trail) {
-        TrailsService.deleteTrail(trail, function () {
-            $scope.safeDisplayedtrails = TrailsService.getTrails();
+        if(trail.id){
+            TrailsService.deleteTrail(trail, function () {
+                $scope.safeDisplayedtrails = TrailsService.getTrails();
+                $state.go('^.list');
+            });
+        }else{
             $state.go('^.list');
-        });
+        }
     };
 
     $scope.onSubmit = function () {

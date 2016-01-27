@@ -28,11 +28,15 @@ app.controller('CrawlTypesCtrl', function($scope, $state, $stateParams, CrawlTyp
     }];
 
 
-    $scope.delete = function(id) {
-        CrawlTypesService.deleteCrawlType(id, function() {
-            $scope.safeDisplayedcrawlTypes = CrawlTypesService.getCrawlTypes();
+    $scope.delete = function(crawlType) {
+        if(crawlType.id){
+            CrawlTypesService.deleteCrawlType(crawlType, function() {
+                $scope.safeDisplayedcrawlTypes = CrawlTypesService.getCrawlTypes();
+                $state.go('^.list');
+            });
+        }else{
             $state.go('^.list');
-        });
+        }
     };
 
     $scope.onSubmit = function() {

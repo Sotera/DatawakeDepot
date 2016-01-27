@@ -46,11 +46,15 @@ app.controller('DomainItemsCtrl', function($scope, $state, $stateParams, DwDomai
         }
     }];
 
-    $scope.delete = function(id) {
-        DomainItemsService.deleteDomainItem(id, function() {
-            $scope.safeDisplayeddomainItems = DomainItemsService.getFilteredDomainItems($scope.currentDomainId);
+    $scope.delete = function(domainItem) {
+        if(domainItem.id){
+            DomainItemsService.deleteDomainItem(domainItem, function() {
+                $scope.safeDisplayeddomainItems = DomainItemsService.getFilteredDomainItems($scope.currentDomainId);
+                $state.go('^.list');
+            });
+        }else{
             $state.go('^.list');
-        });
+        }
     };
 
     $scope.onSubmit = function() {

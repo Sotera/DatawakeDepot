@@ -101,6 +101,7 @@ app.controller('TrailsCtrl', function ($scope, $state, $http, $stateParams, DwTe
 
     $scope.loadPicklists = function (aminoUser) {
         //Admins get all teams
+        $scope.plTeams.length = 0;
         if (aminoUser.isAdmin) {
             DwTeam.find({filter: {include: ['domains']}}).$promise
                 .then(function (allTeams) {
@@ -120,6 +121,7 @@ app.controller('TrailsCtrl', function ($scope, $state, $http, $stateParams, DwTe
                 }
             );
         } else {
+            $scope.plTeams.length = 0;
             for (var i = 0; i < aminoUser.teams.length; ++i) {
                 $scope.plTeams.push({
                     value: aminoUser.teams[i].name,

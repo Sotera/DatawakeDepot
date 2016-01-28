@@ -281,8 +281,29 @@ app.controller('DomainsCtrl', function($scope, $state, $http, $stateParams, File
         $scope.loading = true;
 
         DomainsService.getUserPagedTeamDomains(teams, itemIndex, itemsPer).$promise.then(function (result) {
+            var domains = [];
+            result.forEach(function (team) {
+                if(team.domains){
+
+                    team.domains.forEach(function (domain){
+                        domains.push({
+                            name: domain.name,
+                            description: domain.description,
+                            id: domain.id,
+                            teams: domain.teams,
+                            trails: domain.trails,
+                            domainEntityTypes: domain.domainEntityTypes,
+                            domainItems: domain.domainItems
+                        });
+                        //filter duplicates
+                        if(domains.indexOf(domain)!=-1){
+                            domains.push(domain);
+                        }
+                    });
+                }
+            });
             $scope.domain = {};
-            $scope.safeDisplayedDomains = result;
+            $scope.safeDisplayedDomains = domains;
             $scope.displayedDomains = [].concat($scope.safeDisplayedDomains);
 
             $scope.setPageButtons(result.length);

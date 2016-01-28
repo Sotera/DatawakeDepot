@@ -34,7 +34,8 @@
                   span.text-muted {{domain.description}}
                 td.td-center
                   span.label.label-ltgray
-                    a(href='', ui-sref='app.dwTeams.list({id: domain.teams[0].id})' title='view Teams') {{domain.teams[0].name}}
+                  span.span-max.label.label.label-ltgray(ng-repeat="team in domain.teams" title='view Teams')
+                    a(ui-sref='app.dwTeams.list({id: team.id})') {{team.name}}
                 td
                   span.span-max.label.label-ltgray(ng-repeat='trail in domain.trails' title='view Trails')
                     a(ui-sref='app.dwTrails.list({id: trail.id})') {{trail.name}}

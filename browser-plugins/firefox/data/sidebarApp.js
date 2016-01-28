@@ -18,7 +18,7 @@ function refreshSidebar(){
 
 function addDomainObject(domObj){
     if(!domObj.dwItem.type){
-        return;
+        return false;
     }
 
     switch(domObj.dwItem.type){
@@ -44,8 +44,9 @@ function addDomainObject(domObj){
             addon.port.emit('addEntityType-target-addin', newDomainType);
             break;
         default:
-            return;
+            return false;
     }
+    return false;
 }
 
 function showNewDataItem(value){

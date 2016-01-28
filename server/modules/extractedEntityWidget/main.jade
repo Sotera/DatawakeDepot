@@ -15,9 +15,9 @@ div.DWD_widget(id='widgetOne')
                 each entity, i in extractedEntities
                      tr.DWD_tr
                          td.DWD_td
-                             a(title='add as Domain Item' onclick='addDomainObject({"dwItem":{"type":"domainItem","id":"#{entity.id}","value":"#{entity.value}","extractorId":"#{entity.extractor}"}})') #{entity.value}
+                             a(title='add as Domain Item' href='' onclick='return addDomainObject({"dwItem":{"type":"domainItem","id":"#{entity.id}","value":"#{entity.value}","extractorId":"#{entity.extractor}"}})') #{entity.value}
                          td.DWD_td #{entity.occurrences}
                          td.DWD_td
                              each type in entity.extractorTypes
-                                 a(title='add as Domain Type' onclick='addDomainObject({"dwItem":{"type":"domainType","value":"#{type}","extractorId":"#{entity.extractor}"}})') #{type}
+                                 a(title='add as Domain Type' href='' onclick='return addDomainObject({"dwItem":{"type":"domainType","value":"#{type}","extractorId":"#{entity.extractor}"}})') #{type}
 

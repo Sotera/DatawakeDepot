@@ -28,13 +28,15 @@ exports.init = function () {
           pluginState.postEventToDatawakeDepotContentScript('logout-target-content-script');
           break;
         case 'toggle-panel':
-          var activeTabId = tabs.activeTab.id;
-          pluginState.panelActive = msg.data;
-          pluginState.postEventToContentScript(activeTabId, 'send-toggle-datawake-panel',{panelActive:msg.data});
+          //var activeTabId = tabs.activeTab.id;
+          //pluginState.panelActive = msg.data;
+          //pluginState.postEventToContentScript(activeTabId, 'send-toggle-datawake-panel',{panelActive:msg.data});
 
           //show sidebar
           if(pluginState.panelActive){
               sidebar.show();
+              //Get sidebar contents
+              getExtractedEntities(tabs.activeTab.url);
           }else{
               sidebar.hide();
           }
@@ -124,14 +126,13 @@ exports.init = function () {
 
           //Listen for sidebar requests to create Domain Items
           worker.port.on('addDomainItem-target-addin', function(domainItem) {
-              addDomainItem(domainItem);
+              addDomainItem(domainItem, tabs.activeTab.id);
           });
 
           //Listen for sidebar requests to create Domain Types
           worker.port.on('addEntityType-target-addin', function(domainType) {
               addDomainEntityType(domainType);
           });
-
       }
   });
 
@@ -146,13 +147,10 @@ exports.init = function () {
     //Send sidebar the current tab info
     sidebarWorker.port.emit("send-sidebar-current-tab",data);
 
-    //Listen for panelHTML requests from the injected page
+    //Listen for when the content script loads a new page to tell sidebar to get extracted items
     pluginState.addContentScriptEventHandler(data.contentScriptKey,'requestPanelHtml-target-addin', function () {
         pluginState.getExtractedEntities(data.pageUrl, function (divHtml){
             if (divHtml) {
-                var messageToContentScript = {panelHtml:divHtml,currentDomainId:pluginState.currentDomain.id};
-                pluginState.postEventToContentScript(data.contentScriptKey, 'send-panel', messageToContentScript);
-
                 //send contents to sidebar
                 sidebarWorker.port.emit("sidebarContent",divHtml);
             }
@@ -272,6 +270,16 @@ exports.init = function () {
   });
 };
 
+function getExtractedEntities(url){
+    //Get panel contents
+    pluginState.getExtractedEntities(url, function (divHtml){
+        if (divHtml) {
+            //send contents to sidebar
+            sidebarWorker.port.emit("sidebarContent",divHtml);
+        }
+    });
+}
+
 function logoutSuccessfulHandler(tellToolBar) {
   pluginState.reset();
   pluginState.postEventToAddInModule('logged-out-target-context-menu');
@@ -284,11 +292,13 @@ function logoutSuccessfulHandler(tellToolBar) {
   };
   pluginState.postMessageToToolBar(msg);
 }
+
 function loginSuccessfulHandler(user) {
   pluginState.loggedInUser = user;
   pluginState.postEventToAddInModule('logged-in-target-context-menu');
   pluginState.postEventToAddInModule('get-teams-for-logged-in-user');
 }
+
 function postPluginStateToToolBar() {
   var semiPluginState = {
     loggedInUser: pluginState.loggedInUser,
@@ -317,7 +327,7 @@ function addDomainEntityType(entType){
   );
 }
 
-function addDomainItem(domItem){
+function addDomainItem(domItem, activeTabId){
   var currentDomainId = pluginState.currentDomain.id;
   domItem['dwDomainId'] = currentDomainId;
   var specificDomainInsertUrl =  pluginState.createDomainItem.replace("_domainId_",currentDomainId);
@@ -328,6 +338,12 @@ function addDomainItem(domItem){
   );
   //After creating the new item, make the plugin refresh its list
   pluginState.getDomainItemsForCurrentDomain();
+
+  //Then tell the page to refresh its dataitems
+  pluginState.postEventToContentScript(activeTabId, 'refresh-data-items-target-content-script', {
+      dataItemsActive: pluginState.dataItemsActive,
+      dataItems: pluginState.currentDomainItems
+  });
 }
 
 function addTrail(trailName){

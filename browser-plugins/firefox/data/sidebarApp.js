@@ -24,7 +24,6 @@ function addDomainObject(domObj){
     switch(domObj.dwItem.type){
         case 'domainItem':
             var newDomainItem = {
-                id: domObj.dwItem.id,
                 itemValue: domObj.dwItem.value,
                 type: 'extracted',
                 source: domObj.dwItem.extractorId

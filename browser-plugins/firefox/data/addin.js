@@ -28,10 +28,6 @@ exports.init = function () {
           pluginState.postEventToDatawakeDepotContentScript('logout-target-content-script');
           break;
         case 'toggle-panel':
-          //var activeTabId = tabs.activeTab.id;
-          //pluginState.panelActive = msg.data;
-          //pluginState.postEventToContentScript(activeTabId, 'send-toggle-datawake-panel',{panelActive:msg.data});
-
           //show sidebar
           if(!pluginState.panelActive){
               sidebar.show();
@@ -155,6 +151,31 @@ exports.init = function () {
       return;
     }
   });
+
+  //Listen for tabs being activated
+  tabs.on('activate', function () {
+    //If we're trailing and if sidebar is open then we need to refresh its content
+    if(pluginState.panelActive) {
+        //Send sidebar the current tab info
+        sidebarWorker.port.emit("send-sidebar-current-tab",{contentScriptKey: tabs.activeTab.id,pageUrl: tabs.activeTab.url});
+
+        //Request fresh sidebar content
+        pluginState.getExtractedEntities(tabs.activeTab.url, function (divHtml) {
+            if (divHtml) {
+                //send contents to sidebar
+                sidebarWorker.port.emit("sidebarContent", divHtml);
+            }
+        });
+
+        //Then tell the page to refresh its dataitems
+        pluginState.postEventToContentScript(tabs.activeTab.id, 'refresh-data-items-target-content-script', {
+            dataItemsActive: pluginState.dataItemsActive,
+            dataItems: pluginState.currentDomainItems
+        });
+    }
+  });
+
+
   //Here we listen for when the content scripts is fired up and ready.
   pluginState.onAddInModuleEvent('page-content-script-attached-target-addin', function (data) {
     //Send sidebar the current tab info

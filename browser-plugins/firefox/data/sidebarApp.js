@@ -1,11 +1,13 @@
 var pageData = null;
 
+//Receive the current tab from the addin
 addon.port.on("send-sidebar-current-tab", function(data) {
     pageData = data;
     $('#widgetOne').remove();
     $("#widgetContent").append('<div id="widgetOne" class="DWD_widget">&nbsp;&nbsp;extracting...</div>');
 });
 
+//Replace sidebar content with content from addin
 addon.port.on("sidebarContent", function(divHtml) {
     $('#widgetOne').remove();
     $("#widgetContent").append(divHtml);

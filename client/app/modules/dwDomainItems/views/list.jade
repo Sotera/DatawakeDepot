@@ -15,9 +15,9 @@
       thead
         tr
           th.sortable.col-sm-2.col-md-2.col-lg-2.td-center(st-sort='itemValue' st-sort-default="true") Reference
-          th.sortable.col-sm-2.col-md-2.col-lg-2.td-center(st-sort='itemType') Type
-          th.sortable.col-sm-1.col-md-1.col-lg-1.td-center Source
-          th.sortable.col-sm-1.col-md-1.col-lg-1.td-center(st-sort='domainId') Domain
+          th.sortable.col-sm-2.col-md-2.col-lg-2.td-center(st-sort='type') Type
+          th.sortable.col-sm-1.col-md-1.col-lg-1.td-center(st-sort='source') Source
+          th.sortable.col-sm-1.col-md-1.col-lg-1.td-center(st-sort='domain.name') Domain
           th.col-sm-1.col-md-1.col-lg-1.td-center
             a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add({domainId:currentDomainId})', ng-disabled='!currentUser.isAdmin') &nbsp;Add Item
       tbody

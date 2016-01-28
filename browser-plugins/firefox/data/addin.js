@@ -3,6 +3,7 @@ var {setInterval, clearInterval} = require('sdk/timers');
 var {pluginState} = require('./pluginState');
 exports.init = function () {
   var tabs = require('sdk/tabs');
+
   var { Toolbar } = require('sdk/ui/toolbar');
   var { Frame } = require('sdk/ui/frame');
   var frame = new Frame({
@@ -30,6 +31,13 @@ exports.init = function () {
           var activeTabId = tabs.activeTab.id;
           pluginState.panelActive = msg.data;
           pluginState.postEventToContentScript(activeTabId, 'send-toggle-datawake-panel',{panelActive:msg.data});
+
+          //show sidebar
+          if(pluginState.panelActive){
+              sidebar.show();
+          }else{
+              sidebar.hide();
+          }
           break;
         case 'toggle-dataitems':
           var activeTabId = tabs.activeTab.id;
@@ -94,6 +102,40 @@ exports.init = function () {
     title: 'Datawake',
     items: [frame]
   });
+
+  var sidebarWorker = null;
+
+  var sidebar = require("sdk/ui/sidebar").Sidebar({
+      id: 'datawake-sidebar',
+      title: 'Datawake Sidebar',
+      url: require("sdk/self").data.url("sidebar.html"),
+      onAttach: function (worker) {
+          sidebarWorker = worker;
+
+          //Listen for sidebar requests to refresh content
+          worker.port.on("refreshSidebar", function(data) {
+              pluginState.getExtractedEntities(data.pageUrl, function (divHtml){
+                  if (divHtml) {
+                       //send contents to sidebar
+                      sidebarWorker.port.emit("sidebarContent",divHtml);
+                  }
+              });
+          });
+
+          //Listen for sidebar requests to create Domain Items
+          worker.port.on('addDomainItem-target-addin', function(domainItem) {
+              addDomainItem(domainItem);
+          });
+
+          //Listen for sidebar requests to create Domain Types
+          worker.port.on('addEntityType-target-addin', function(domainType) {
+              addDomainEntityType(domainType);
+          });
+
+      }
+  });
+
+
   tabs.on('ready', function (tab) {
     if (!pluginState.trailingActive) {
       return;
@@ -101,26 +143,20 @@ exports.init = function () {
   });
   //Here we listen for when the content scripts is fired up and ready.
   pluginState.onAddInModuleEvent('page-content-script-attached-target-addin', function (data) {
+    //Send sidebar the current tab info
+    sidebarWorker.port.emit("send-sidebar-current-tab",data);
+
     //Listen for panelHTML requests from the injected page
     pluginState.addContentScriptEventHandler(data.contentScriptKey,'requestPanelHtml-target-addin', function () {
         pluginState.getExtractedEntities(data.pageUrl, function (divHtml){
             if (divHtml) {
                 var messageToContentScript = {panelHtml:divHtml,currentDomainId:pluginState.currentDomain.id};
                 pluginState.postEventToContentScript(data.contentScriptKey, 'send-panel', messageToContentScript);
+
+                //send contents to sidebar
+                sidebarWorker.port.emit("sidebarContent",divHtml);
             }
         });
-    });
-
-    //Listen for panel requests to create domain entity type
-    pluginState.addContentScriptEventHandler(data.contentScriptKey,'addEntityType-target-addin', function (domainEntity) {
-        var newEnt = domainEntity;
-        addDomainEntityType(newEnt);
-    });
-
-    //Listen for panel requests to create domain item
-    pluginState.addContentScriptEventHandler(data.contentScriptKey,'addDomainItem-target-addin', function (domainItem) {
-        var newItem = domainItem;
-        addDomainItem(newItem);
     });
 
     pluginState.addContentScriptEventHandler(data.contentScriptKey, 'send-css-urls-target-addin', function (scriptData) {
@@ -271,15 +307,20 @@ function postPluginStateToToolBar() {
 }
 
 function addDomainEntityType(entType){
+  var currentDomainId = pluginState.currentDomain.id;
+  entType['dwDomainId'] = currentDomainId;
+
   pluginState.restPost(pluginState.createEntityType,
-      entType, function (res) {
-        console.log(res.text);
-      }
+    entType, function (res) {
+      console.log(res.text);
+    }
   );
 }
 
 function addDomainItem(domItem){
-  var specificDomainInsertUrl =  pluginState.createDomainItem.replace("_domainId_",domItem.dwDomainId);
+  var currentDomainId = pluginState.currentDomain.id;
+  domItem['dwDomainId'] = currentDomainId;
+  var specificDomainInsertUrl =  pluginState.createDomainItem.replace("_domainId_",currentDomainId);
   pluginState.restPost(specificDomainInsertUrl,
       domItem, function (res) {
           console.log(res.text);

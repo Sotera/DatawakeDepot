@@ -32,10 +32,10 @@ self.port.on('trailingStatus-target-content-script', function (data) {
 });
 
 function showPanel(){
-    if ($('#datawake-right-panel').length === 0){
-        var datawakePanel = '<div class="DWD_widget" id="datawake-right-panel"><div id="widgetOne">&nbsp;&nbsp;extracting...</div></divDWD_widget>';
-        $('body').append(datawakePanel);
-    }
+    //if ($('#datawake-right-panel').length === 0){
+    //    var datawakePanel = '<div class="DWD_widget" id="datawake-right-panel"><div id="widgetOne">&nbsp;&nbsp;extracting...</div></divDWD_widget>';
+    //    $('body').append(datawakePanel);
+    //}
 
     //Now that we've shown it, let's give it a few seconds to get some data
     //TODO: Really we should refresh until we have a few rows of data

@@ -33,11 +33,13 @@ exports.init = function () {
           //pluginState.postEventToContentScript(activeTabId, 'send-toggle-datawake-panel',{panelActive:msg.data});
 
           //show sidebar
-          if(pluginState.panelActive){
+          if(!pluginState.panelActive){
               sidebar.show();
+              pluginState.panelActive=true;
               //Get sidebar contents
               getExtractedEntities(tabs.activeTab.url);
           }else{
+              pluginState.panelActive=false;
               sidebar.hide();
           }
           break;
@@ -51,8 +53,19 @@ exports.init = function () {
           break;
         case 'set-trailing-active':
           pluginState.trailingActive = msg.data;
-          //Get the domain items in case they want to see them
-          pluginState.getDomainItemsForCurrentDomain();
+
+          if(msg.data)  {
+              //Show the sidebar
+              sidebar.show();
+              pluginState.panelActive=true;
+              //Get the domain items in case they want to see them
+              pluginState.getDomainItemsForCurrentDomain();
+          }else{
+              //Hide the sidebar
+              sidebar.hide();
+              pluginState.panelActive=false;
+          }
+
           break;
         case 'set-current-team-target-addin':
           pluginState.currentTeam = pluginState.currentTeamList.filter(function (el) {

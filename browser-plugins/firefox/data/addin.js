@@ -3,6 +3,7 @@ var {setInterval, clearInterval} = require('sdk/timers');
 var {pluginState} = require('./pluginState');
 exports.init = function () {
   var tabs = require('sdk/tabs');
+  var activeTab = null;
 
   var { Toolbar } = require('sdk/ui/toolbar');
   var { Frame } = require('sdk/ui/frame');
@@ -148,48 +149,57 @@ exports.init = function () {
 
   tabs.on('ready', function (tab) {
     if (!pluginState.trailingActive) {
-      return;
+        return;
+    }else{
+        if(pluginState.panelActive && (tabs.activeTab.url == tab.url)) {
+            //Send sidebar the current tab info
+            sidebarWorker.port.emit("send-sidebar-current-tab", {
+                contentScriptKey: tabs.activeTab.id,
+                pageUrl: tabs.activeTab.url
+            });
+
+            //Request fresh sidebar content
+            pluginState.getExtractedEntities(tabs.activeTab.url, function (divHtml) {
+                if (divHtml) {
+                    //send contents to sidebar
+                    sidebarWorker.port.emit("sidebarContent", divHtml);
+                }
+            });
+        }
     }
   });
 
-  //Listen for tabs being activated
-  tabs.on('activate', function () {
-    //If we're trailing and if sidebar is open then we need to refresh its content
-    if(pluginState.panelActive) {
-        //Send sidebar the current tab info
-        sidebarWorker.port.emit("send-sidebar-current-tab",{contentScriptKey: tabs.activeTab.id,pageUrl: tabs.activeTab.url});
+  //We've selected this tab, get its extracted items for the sidebar
+  tabs.on('activate', function (tab) {
+      activeTab = tab;
 
-        //Request fresh sidebar content
-        pluginState.getExtractedEntities(tabs.activeTab.url, function (divHtml) {
-            if (divHtml) {
-                //send contents to sidebar
-                sidebarWorker.port.emit("sidebarContent", divHtml);
-            }
-        });
+      //Only if we're trailing
+      if(pluginState.panelActive) {
+          //Send sidebar the current tab info
+          sidebarWorker.port.emit("send-sidebar-current-tab", {
+              contentScriptKey: tabs.activeTab.id,
+              pageUrl: tabs.activeTab.url
+          });
 
-        //Then tell the page to refresh its dataitems
-        pluginState.postEventToContentScript(tabs.activeTab.id, 'refresh-data-items-target-content-script', {
-            dataItemsActive: pluginState.dataItemsActive,
-            dataItems: pluginState.currentDomainItems
-        });
-    }
+          //Request fresh sidebar content
+          pluginState.getExtractedEntities(tabs.activeTab.url, function (divHtml) {
+              if (divHtml) {
+                  //send contents to sidebar
+                  sidebarWorker.port.emit("sidebarContent", divHtml);
+              }
+          });
+
+          //Then tell the page to refresh its dataitems
+          pluginState.postEventToContentScript(tabs.activeTab.id, 'refresh-data-items-target-content-script', {
+              dataItemsActive: pluginState.dataItemsActive,
+              dataItems: pluginState.currentDomainItems
+          });
+      }
   });
 
 
   //Here we listen for when the content scripts is fired up and ready.
   pluginState.onAddInModuleEvent('page-content-script-attached-target-addin', function (data) {
-    //Send sidebar the current tab info
-    sidebarWorker.port.emit("send-sidebar-current-tab",data);
-
-    //Listen for when the content script loads a new page to tell sidebar to get extracted items
-    pluginState.addContentScriptEventHandler(data.contentScriptKey,'requestPanelHtml-target-addin', function () {
-        pluginState.getExtractedEntities(data.pageUrl, function (divHtml){
-            if (divHtml) {
-                //send contents to sidebar
-                sidebarWorker.port.emit("sidebarContent",divHtml);
-            }
-        });
-    });
 
     pluginState.addContentScriptEventHandler(data.contentScriptKey, 'send-css-urls-target-addin', function (scriptData) {
       pluginState.postEventToContentScript(scriptData.contentScriptKey, 'load-css-urls-target-content-script',
@@ -222,10 +232,17 @@ exports.init = function () {
       if (!pluginState.trailingActive) {
         return;
       }
-      //pluginState.restPost(pluginState.textToHtmlUrl,
-      // TODO: This still renders some pages multiple times but at least cleans up the ads.
-      //if (pageContents.url === tabs.activeTab.url && tabs.activeTab.readyState === 'complete') {
-      if (pageContents.url === tabs.activeTab.url) {
+
+      //To prevent scraping ads, we'll only record Trails where the url matches an open tab url
+      var urlValid = false;
+      for (let tab of tabs){
+          if(pageContents.url === tab.url){
+              urlValid = true;
+          }
+      }
+
+
+      if (urlValid) {
         pluginState.restPost(pluginState.trailsUrlsUrl,
             {
               dwTrailId: pluginState.currentTrail.id

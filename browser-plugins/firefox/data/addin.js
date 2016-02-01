@@ -57,12 +57,13 @@ exports.init = function () {
               pluginState.panelActive=true;
               //Get the domain items in case they want to see them
               pluginState.getDomainItemsForCurrentDomain();
+              pluginState.postEventToAddInModule('trailing-active');
           }else{
               //Hide the sidebar
               sidebar.hide();
               pluginState.panelActive=false;
+              pluginState.postEventToAddInModule('trailing-inactive');
           }
-
           break;
         case 'set-current-team-target-addin':
           pluginState.currentTeam = pluginState.currentTeamList.filter(function (el) {
@@ -218,6 +219,16 @@ exports.init = function () {
             dataItemsActive:pluginState.dataItemsActive,
             dataItems:pluginState.currentDomainItems
         });
+    });
+
+    //Listens for requests to add manual extractions as data items
+    pluginState.addContentScriptEventHandler(data.contentScriptKey, 'request-add-data-item-target-addin', function (manualExtraction) {
+        var newDomainItem = {
+            itemValue: manualExtraction.value,
+            type: 'manual',
+            source: 'manual extraction'
+        };
+        addDomainItem(newDomainItem, data.contentScriptKey);
     });
 
     //Listens for requests to get user trailing status

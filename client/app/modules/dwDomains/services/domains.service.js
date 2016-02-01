@@ -1,7 +1,7 @@
 'use strict';
 var app = angular.module('com.module.dwDomains');
 
-app.service('DomainsService', ['$state', 'CoreService', 'DwDomain','gettextCatalog','DwDomainEntityType','DwDomainItem','DwTrail', function($state, CoreService, DwDomain, gettextCatalog, DwDomainEntityType, DwDomainItem, DwTrail) {
+app.service('DomainsService', ['$state', 'CoreService', 'DwDomain','gettextCatalog','DwDomainEntityType','DwDomainItem','DwTrail','DwTeam', function($state, CoreService, DwDomain, gettextCatalog, DwDomainEntityType, DwDomainItem, DwTrail, DwTeam) {
 
     this.getDomains = function() {
         return DwDomain.find({
@@ -76,23 +76,25 @@ app.service('DomainsService', ['$state', 'CoreService', 'DwDomain','gettextCatal
             filter:{
                 limit: number,
                 skip: start,
-                order:"name DESC",
+                where: {
+                    id: {inq:userTeams}
+                },
                 include: [
-                    'domainEntityTypes',
-                    'domainItems',
-                    'extractors',
-                    'trails',
-                    {relation:'teams',
+                    {relation:'domains',
                         scope:{
-                            where:{
-                                id:{inq:userTeams}
-                            }
+                            include:[
+                                'domainItems',
+                                'domainEntityTypes',
+                                'extractors',
+                                'trails',
+                                'teams'
+                            ]
                         }
                     }
                 ]
             }
         };
-        return (DwDomain.find(whereClause));
+        return (DwTeam.find(whereClause));
     };
 
     this.getPrettyDomain = function(domainId){

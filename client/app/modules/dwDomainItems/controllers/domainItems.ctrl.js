@@ -137,7 +137,7 @@ app.controller('DomainItemsCtrl', function($scope, $state, $stateParams, DwDomai
     $scope.getFilteredPagedResults = function(domainId, itemIndex, itemsPer) {
         $scope.loading = true;
 
-        DomainItemsService.getFilteredPagedDomainItems(domainId.id, itemIndex, itemsPer).$promise.then(function(result){
+        DomainItemsService.getFilteredPagedDomainItems(domainId, itemIndex, itemsPer).$promise.then(function(result){
             $scope.currentDomainId = domainId;
             $scope.domainItem = {};
             $scope.safeDisplayeddomainItems = result;

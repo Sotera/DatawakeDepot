@@ -39,6 +39,11 @@
       "model": "DwTrailUrl",
       "foreignKey": "userId"
     },
+    "domainItems": {
+      "type": "hasMany",
+      "model": "DwDomainItem",
+      "foreignKey": "userId"
+    },
     "teams": {
       "type": "hasAndBelongsToMany",
       "model": "DwTeam"

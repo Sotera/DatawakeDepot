@@ -43,6 +43,10 @@
       "type": "belongsTo",
       "model": "DwCrawlType",
       "foreignKey": "dwCrawlTypeId"
+    },
+    "user": {
+      "type": "belongsTo",
+      "model": "AminoUser"
     }
   },
   "acls": [],

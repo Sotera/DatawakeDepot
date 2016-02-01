@@ -4,7 +4,7 @@
     table.table.table-striped(st-table='displayedTrailUrls', st-safe-src='safeDisplayedtrailUrls')
       thead
         tr
-          th(colspan="4")
+          th(colspan="5")
             input.input-sm.form-control(st-search='' type='search' placeholder='Search')
           th(colspan="1")
             .btn-toolbar
@@ -14,12 +14,13 @@
                     i.fa.fa-arrow-up &nbsp;to Trails
       thead
         tr
-          th.sortable.col-sm-6.td-center(st-sort='url' st-sort-default="true") URL
-          th.sortable.col-sm-1.td-center(st-sort='urlExtractions.length') Extractions
-          th.sortable.col-sm-2.td-center(st-sort='trail.name') Trail
+          th.sortable.col-sm-6.col-md-6.col-lg-6.td-center(st-sort='url' st-sort-default="true") URL
+          th.sortable.col-sm-1.col-md-1.col-lg-1.td-center(st-sort='urlExtractions.length') Extractions
+          th.sortable.col-sm-1.col-md-1.col-lg-1.td-center(st-sort='trail.name') Trail
+          th.sortable.col-sm-1.col-md-1.col-lg-1.td-center(st-sort='user.username') User
           //th.sortable.col-sm-2(st-sort='comments') Comments
-          th.sortable.col-sm-2.td-center(st-sort='timestamp') Timestamp
-          th.col-sm-1.col-md-1.td-center
+          th.sortable.col-sm-2.col-md-2.col-lg-2.td-center(st-sort='timestamp') Timestamp
+          th.col-sm-1.col-md-1.col-lg-1.td-center
               a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add({trailId:currentTrailId})', ng-disabled='!currentUser.isAdmin') &nbsp;Add URL
       tbody
         tr(ng-repeat='trailUrl in displayedTrailUrls')
@@ -31,6 +32,8 @@
           td.td-center
             span.label.label-ltgray
                 a(ui-sref='app.dwTrails.list({id:trailUrl.trail.id})' title='view Trails') {{trailUrl.trail.name}}
+          td.td-center
+            span.label.label-ltgray {{trailUrl.user.username}}
           //td.col-sm-2
           //  span.text-muted {{trailUrl.comments}}
           td.td-center

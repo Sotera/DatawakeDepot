@@ -34,6 +34,11 @@
       "foreignKey": "principalId",
       "through": "RoleMapping"
     },
+    "trailUrls": {
+      "type": "hasMany",
+      "model": "DwTrailUrl",
+      "foreignKey": "userId"
+    },
     "teams": {
       "type": "hasAndBelongsToMany",
       "model": "DwTeam"

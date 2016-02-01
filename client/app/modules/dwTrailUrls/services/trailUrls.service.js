@@ -9,7 +9,8 @@ app.service('TrailUrlsService', ['$state', 'CoreService', 'DwTrailUrl','DwUrlExt
             order:"url DESC",
             include:[
                 {relation:'trail',scope:{fields: ['name']}},
-                {relation:'urlExtractions',scope:{fields: ['id']}}
+                {relation:'urlExtractions',scope:{fields: ['id']}},
+                {relation:'user',scope:{fields: ['username']}}
             ]
         }
     };
@@ -31,7 +32,8 @@ app.service('TrailUrlsService', ['$state', 'CoreService', 'DwTrailUrl','DwUrlExt
             },
             include:[
                 {relation:'trail',scope:{fields: ['name']}},
-                {relation:'urlExtractions',scope:{fields: ['id']}}
+                {relation:'urlExtractions',scope:{fields: ['id']}},
+                {relation:'user',scope:{fields: ['username']}}
             ]
         }
     };
@@ -49,7 +51,8 @@ app.service('TrailUrlsService', ['$state', 'CoreService', 'DwTrailUrl','DwUrlExt
               },
               include:[
                   {relation:'trail',scope:{fields: ['name']}},
-                  {relation:'urlExtractions',scope:{fields: ['id']}}
+                  {relation:'urlExtractions',scope:{fields: ['id']}},
+                  {relation:'user',scope:{fields: ['username']}}
               ]
           }
       };

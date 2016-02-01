@@ -260,6 +260,7 @@ exports.init = function () {
               , url: pageContents.url
               , scrapedContent: pageContents.zippedHtmlBody
               , searchTerms: pageContents.searchTerms
+              , userId: pluginState.loggedInUser.id
             }, function (res) {
               //console.log(res.text);
             }

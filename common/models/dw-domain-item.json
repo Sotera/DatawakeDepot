@@ -26,6 +26,10 @@
       "type": "belongsTo",
       "model": "DwDomain",
       "foreignKey": "dwDomainId"
+    },
+    "user": {
+      "type": "belongsTo",
+      "model": "AminoUser"
     }
   },
   "acls": [],

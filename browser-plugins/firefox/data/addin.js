@@ -393,6 +393,7 @@ function addDomainEntityType(entType){
 function addDomainItem(domItem, activeTabId){
   var currentDomainId = pluginState.currentDomain.id;
   domItem['dwDomainId'] = currentDomainId;
+  domItem['userId'] = pluginState.loggedInUser.id;
   var specificDomainInsertUrl =  pluginState.createDomainItem.replace("_domainId_",currentDomainId);
   pluginState.restPost(specificDomainInsertUrl,
       domItem, function (res) {

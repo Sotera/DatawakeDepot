@@ -4,7 +4,7 @@
     table.table.table-striped(st-table='displayedDomainItems', st-safe-src='safeDisplayeddomainItems')
       thead
         tr
-          th(colspan="4")
+          th(colspan="5")
             input.input-sm.form-control(st-search='' type='search' placeholder='Search')
           th(colspan="1")
             .btn-toolbar
@@ -14,9 +14,10 @@
                     i.fa.fa-arrow-up &nbsp;to Domains
       thead
         tr
-          th.sortable.col-sm-2.col-md-2.col-lg-2.td-center(st-sort='itemValue' st-sort-default="true") Reference
-          th.sortable.col-sm-2.col-md-2.col-lg-2.td-center(st-sort='type') Type
+          th.sortable.col-sm-3.col-md-3.col-lg-3.td-center(st-sort='itemValue' st-sort-default="true") Reference
+          th.sortable.col-sm-3.col-md-3.col-lg-3.td-center(st-sort='type') Type
           th.sortable.col-sm-1.col-md-1.col-lg-1.td-center(st-sort='source') Source
+          th.sortable.col-sm-2.col-md-2.col-lg-2.td-center(st-sort='user.username') Added By
           th.sortable.col-sm-1.col-md-1.col-lg-1.td-center(st-sort='domain.name') Domain
           th.col-sm-1.col-md-1.col-lg-1.td-center
             a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add({domainId:currentDomainId})', ng-disabled='!currentUser.isAdmin') &nbsp;Add Item
@@ -28,6 +29,8 @@
             span.span-max.label.label-ltgray {{domainItem.type}}
           td.td-center
             span.label.label-ltgray {{domainItem.source}}
+          td.td-center
+            span.label.label-ltgray {{domainItem.user.username}}
           td.td-center
             span.label.label-ltgray
                 a(ui-sref='app.dwDomains.list({id:domain.id})' title='view Domains') {{domainItem.domain.name}}

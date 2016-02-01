@@ -12,7 +12,7 @@ exports.init = function () {
         //'./vendor/highlightRegex/highlightRegex.min.js',
         './injectedPageScripts/datawake-analysis.js',
         './injectedPageScripts/scraper.js'],
-      attachTo: ['existing', 'top', 'frame'],
+      attachTo: ['existing', 'top'],
       onAttach: pluginState.onContentScriptAttach
     });
   }
@@ -24,7 +24,7 @@ exports.init = function () {
       include: pluginState.pageModDatawakeDepotIncludeFilter,
       //exclude: '*',
       contentScriptFile: './injectedPageScripts/datawake-depot.js',
-      attachTo: ['existing', 'top', 'frame'],
+      attachTo: ['existing', 'top'],
       onAttach: pluginState.onDatawakeDepotContentScriptAttach
     });
   }

@@ -17,19 +17,24 @@ div#datawake-right-panel {
     z-index:10000;
 }
 
+.DWD_sidebar_body{
+    color: white;
+    background: steelblue;
+}
+
 .DWD_widget{
     width: 100%;
 }
 
 .DWD_table {
     border-collapse: collapse;
-    width: 100%;
+    width: 98%;
 }
 
 .DWD_td {
     text-align: left;
-    padding: 8px;
-    font-size: .65em;
+    padding: 5px;
+    font-size: .55em;
 }
 
 
@@ -42,12 +47,12 @@ div#datawake-right-panel {
     background-color: lightslategray;
     color: white;
     text-align: left;
-    padding: 8px;
+    padding: 5px;
     font-size: .8em;
 }
 
 .DWD_table_container{
-    max-height: 500px;
+    max-height: 800px;
     overflow: scroll;
 }
 
@@ -56,6 +61,8 @@ div#datawake-site {
 }
 
 .DWD_h1{
-    background-color: dodgerblue;
-    text-align: center
+    background-color: steelblue;
+    color: white;
+    text-align: center;
+    font-size: 1em;
 }

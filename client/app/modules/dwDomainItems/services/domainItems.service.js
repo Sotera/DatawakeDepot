@@ -15,15 +15,10 @@ app.service('DomainItemsService', ['$state', 'CoreService', 'DwDomainItem', 'get
     return (DwDomainItem.find(whereClause));
   };
 
-  this.getDomainItem = function(itemId) {
-      var whereClause={
-          filter:{
-              where:{
-                  id: itemId
-              }
-          }
-      };
-      return (DwDomainItem.find(whereClause));
+  this.getDomainItem = function(id) {
+      return DwDomainItem.findById({
+          id: id
+      });
   };
 
   this.getFilteredDomainItems = function(domainId) {

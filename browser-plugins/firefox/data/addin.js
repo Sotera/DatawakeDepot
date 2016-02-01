@@ -3,6 +3,8 @@ var {setInterval, clearInterval} = require('sdk/timers');
 var {pluginState} = require('./pluginState');
 exports.init = function () {
   var tabs = require('sdk/tabs');
+  var activeTab = null;
+
   var { Toolbar } = require('sdk/ui/toolbar');
   var { Frame } = require('sdk/ui/frame');
   var frame = new Frame({
@@ -27,9 +29,16 @@ exports.init = function () {
           pluginState.postEventToDatawakeDepotContentScript('logout-target-content-script');
           break;
         case 'toggle-panel':
-          var activeTabId = tabs.activeTab.id;
-          pluginState.panelActive = msg.data;
-          pluginState.postEventToContentScript(activeTabId, 'send-toggle-datawake-panel',{panelActive:msg.data});
+          //show sidebar
+          if(!pluginState.panelActive){
+              sidebar.show();
+              pluginState.panelActive=true;
+              //Get sidebar contents
+              getExtractedEntities(tabs.activeTab.url);
+          }else{
+              pluginState.panelActive=false;
+              sidebar.hide();
+          }
           break;
         case 'toggle-dataitems':
           var activeTabId = tabs.activeTab.id;
@@ -41,8 +50,19 @@ exports.init = function () {
           break;
         case 'set-trailing-active':
           pluginState.trailingActive = msg.data;
-          //Get the domain items in case they want to see them
-          pluginState.getDomainItemsForCurrentDomain();
+
+          if(msg.data)  {
+              //Show the sidebar
+              sidebar.show();
+              pluginState.panelActive=true;
+              //Get the domain items in case they want to see them
+              pluginState.getDomainItemsForCurrentDomain();
+          }else{
+              //Hide the sidebar
+              sidebar.hide();
+              pluginState.panelActive=false;
+          }
+
           break;
         case 'set-current-team-target-addin':
           pluginState.currentTeam = pluginState.currentTeamList.filter(function (el) {
@@ -94,34 +114,92 @@ exports.init = function () {
     title: 'Datawake',
     items: [frame]
   });
+
+  var sidebarWorker = null;
+
+  var sidebar = require("sdk/ui/sidebar").Sidebar({
+      id: 'datawake-sidebar',
+      title: 'Datawake Sidebar',
+      url: require("sdk/self").data.url("sidebar.html"),
+      onAttach: function (worker) {
+          sidebarWorker = worker;
+
+          //Listen for sidebar requests to refresh content
+          worker.port.on("refreshSidebar", function(data) {
+              pluginState.getExtractedEntities(data.pageUrl, function (divHtml){
+                  if (divHtml) {
+                       //send contents to sidebar
+                      sidebarWorker.port.emit("sidebarContent",divHtml);
+                  }
+              });
+          });
+
+          //Listen for sidebar requests to create Domain Items
+          worker.port.on('addDomainItem-target-addin', function(domainItem) {
+              addDomainItem(domainItem, tabs.activeTab.id);
+          });
+
+          //Listen for sidebar requests to create Domain Types
+          worker.port.on('addEntityType-target-addin', function(domainType) {
+              addDomainEntityType(domainType);
+          });
+      }
+  });
+
+
   tabs.on('ready', function (tab) {
     if (!pluginState.trailingActive) {
-      return;
+        return;
+    }else{
+        if(pluginState.panelActive && (tabs.activeTab.url == tab.url)) {
+            //Send sidebar the current tab info
+            sidebarWorker.port.emit("send-sidebar-current-tab", {
+                contentScriptKey: tabs.activeTab.id,
+                pageUrl: tabs.activeTab.url
+            });
+
+            //Request fresh sidebar content
+            pluginState.getExtractedEntities(tabs.activeTab.url, function (divHtml) {
+                if (divHtml) {
+                    //send contents to sidebar
+                    sidebarWorker.port.emit("sidebarContent", divHtml);
+                }
+            });
+        }
     }
   });
+
+  //We've selected this tab, get its extracted items for the sidebar
+  tabs.on('activate', function (tab) {
+      activeTab = tab;
+
+      //Only if we're trailing
+      if(pluginState.panelActive) {
+          //Send sidebar the current tab info
+          sidebarWorker.port.emit("send-sidebar-current-tab", {
+              contentScriptKey: tabs.activeTab.id,
+              pageUrl: tabs.activeTab.url
+          });
+
+          //Request fresh sidebar content
+          pluginState.getExtractedEntities(tabs.activeTab.url, function (divHtml) {
+              if (divHtml) {
+                  //send contents to sidebar
+                  sidebarWorker.port.emit("sidebarContent", divHtml);
+              }
+          });
+
+          //Then tell the page to refresh its dataitems
+          pluginState.postEventToContentScript(tabs.activeTab.id, 'refresh-data-items-target-content-script', {
+              dataItemsActive: pluginState.dataItemsActive,
+              dataItems: pluginState.currentDomainItems
+          });
+      }
+  });
+
+
   //Here we listen for when the content scripts is fired up and ready.
   pluginState.onAddInModuleEvent('page-content-script-attached-target-addin', function (data) {
-    //Listen for panelHTML requests from the injected page
-    pluginState.addContentScriptEventHandler(data.contentScriptKey,'requestPanelHtml-target-addin', function () {
-        pluginState.getExtractedEntities(data.pageUrl, function (divHtml){
-            if (divHtml) {
-                var messageToContentScript = {panelHtml:divHtml,currentDomainId:pluginState.currentDomain.id};
-                pluginState.postEventToContentScript(data.contentScriptKey, 'send-panel', messageToContentScript);
-            }
-        });
-    });
-
-    //Listen for panel requests to create domain entity type
-    pluginState.addContentScriptEventHandler(data.contentScriptKey,'addEntityType-target-addin', function (domainEntity) {
-        var newEnt = domainEntity;
-        addDomainEntityType(newEnt);
-    });
-
-    //Listen for panel requests to create domain item
-    pluginState.addContentScriptEventHandler(data.contentScriptKey,'addDomainItem-target-addin', function (domainItem) {
-        var newItem = domainItem;
-        addDomainItem(newItem);
-    });
 
     pluginState.addContentScriptEventHandler(data.contentScriptKey, 'send-css-urls-target-addin', function (scriptData) {
       pluginState.postEventToContentScript(scriptData.contentScriptKey, 'load-css-urls-target-content-script',
@@ -154,10 +232,17 @@ exports.init = function () {
       if (!pluginState.trailingActive) {
         return;
       }
-      //pluginState.restPost(pluginState.textToHtmlUrl,
-      // TODO: This still renders some pages multiple times but at least cleans up the ads.
-      //if (pageContents.url === tabs.activeTab.url && tabs.activeTab.readyState === 'complete') {
-      if (pageContents.url === tabs.activeTab.url) {
+
+      //To prevent scraping ads, we'll only record Trails where the url matches an open tab url
+      var urlValid = false;
+      for (let tab of tabs){
+          if(pageContents.url === tab.url){
+              urlValid = true;
+          }
+      }
+
+
+      if (urlValid) {
         pluginState.restPost(pluginState.trailsUrlsUrl,
             {
               dwTrailId: pluginState.currentTrail.id
@@ -236,6 +321,16 @@ exports.init = function () {
   });
 };
 
+function getExtractedEntities(url){
+    //Get panel contents
+    pluginState.getExtractedEntities(url, function (divHtml){
+        if (divHtml) {
+            //send contents to sidebar
+            sidebarWorker.port.emit("sidebarContent",divHtml);
+        }
+    });
+}
+
 function logoutSuccessfulHandler(tellToolBar) {
   pluginState.reset();
   pluginState.postEventToAddInModule('logged-out-target-context-menu');
@@ -248,11 +343,13 @@ function logoutSuccessfulHandler(tellToolBar) {
   };
   pluginState.postMessageToToolBar(msg);
 }
+
 function loginSuccessfulHandler(user) {
   pluginState.loggedInUser = user;
   pluginState.postEventToAddInModule('logged-in-target-context-menu');
   pluginState.postEventToAddInModule('get-teams-for-logged-in-user');
 }
+
 function postPluginStateToToolBar() {
   var semiPluginState = {
     loggedInUser: pluginState.loggedInUser,
@@ -271,15 +368,20 @@ function postPluginStateToToolBar() {
 }
 
 function addDomainEntityType(entType){
+  var currentDomainId = pluginState.currentDomain.id;
+  entType['dwDomainId'] = currentDomainId;
+
   pluginState.restPost(pluginState.createEntityType,
-      entType, function (res) {
-        console.log(res.text);
-      }
+    entType, function (res) {
+      console.log(res.text);
+    }
   );
 }
 
-function addDomainItem(domItem){
-  var specificDomainInsertUrl =  pluginState.createDomainItem.replace("_domainId_",domItem.dwDomainId);
+function addDomainItem(domItem, activeTabId){
+  var currentDomainId = pluginState.currentDomain.id;
+  domItem['dwDomainId'] = currentDomainId;
+  var specificDomainInsertUrl =  pluginState.createDomainItem.replace("_domainId_",currentDomainId);
   pluginState.restPost(specificDomainInsertUrl,
       domItem, function (res) {
           console.log(res.text);
@@ -287,6 +389,12 @@ function addDomainItem(domItem){
   );
   //After creating the new item, make the plugin refresh its list
   pluginState.getDomainItemsForCurrentDomain();
+
+  //Then tell the page to refresh its dataitems
+  pluginState.postEventToContentScript(activeTabId, 'refresh-data-items-target-content-script', {
+      dataItemsActive: pluginState.dataItemsActive,
+      dataItems: pluginState.currentDomainItems
+  });
 }
 
 function addTrail(trailName){

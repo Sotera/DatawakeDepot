@@ -4,9 +4,44 @@ var app = angular.module('com.module.dwTrails');
 app.service('TrailsService', ['$state', 'CoreService', 'DwDomain','DwTrail', 'DwTrailUrl', 'DwUrlExtraction', 'DwCrawlType', 'DwDomainEntityType','DwDomainItem', 'DwTeam','gettextCatalog', function($state, CoreService, DwDomain, DwTrail, DwTrailUrl, DwUrlExtraction, DwCrawlType, DwDomainEntityType, DwDomainItem, DwTeam, gettextCatalog) {
 
   this.getTrail = function(id) {
-      return DwTrail.findById({
-          id: id
-      });
+      //return DwTrail.findById({
+      //    id: id
+      //});
+
+      var whereClause = {
+          id: id,
+
+          filter:{
+              include:
+                  [
+                      {relation: 'domain',
+                          scope:{
+                              fields:['name','description','id'],
+                              include:[
+                                  'domainItems',
+                                  'domainEntityTypes'
+                              ]
+                          }
+                      },
+                      {relation:'trailUrls',
+                          scope:{
+                              fields: [
+                                  'url',
+                                  'searchTerms',
+                                  'comments',
+                                  'timestamp',
+                                  'id',
+                                  'dwTrailId',
+                                  'dwTrailUrlId'
+                              ],
+                              include:['urlExtractions']
+                          }
+                      }
+                  ]
+              }
+      };
+
+      return (DwTrail.findById(whereClause));
   };
 
   this.getTrails = function() {

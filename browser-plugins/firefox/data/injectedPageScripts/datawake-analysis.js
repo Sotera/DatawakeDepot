@@ -105,6 +105,11 @@ self.port.on('toggle-showing-domain-items', function (data) {
   }
 });
 
+//Forward context menu add manual extraction request
+self.port.on('capture-data-item', function (data) {
+    self.port.emit('request-add-data-item-target-addin', {contentScriptKey: myContentScriptKey, value: data.value});
+});
+
 self.port.on('page-attached-target-content-script', function (data) {
   myContentScriptKey = data.contentScriptKey;
   self.port.emit('send-css-urls-target-addin', {contentScriptKey: myContentScriptKey});

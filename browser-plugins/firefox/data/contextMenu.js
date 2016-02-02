@@ -4,7 +4,7 @@ var tabs = require('sdk/tabs');
 var self = require('sdk/self');
 var menu = null;
 var showDomainItems = 'Toggle Domain Item Highlighting';
-var captureDataItem = 'Save Selection as Data Item';
+var captureDataItem = 'Save Selection as Domain Item';
 //var hideDomainItems = 'Toggle Domain Item Highlighting';
 
 exports.init = function () {

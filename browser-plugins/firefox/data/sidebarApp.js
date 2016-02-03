@@ -6,8 +6,14 @@ var divExtracted = "<div id='widgetOne'><table class='DWD_table'><tr><th class='
 //Receive the current tab from the addin
 addon.port.on("send-sidebar-current-tab", function(data) {
     pageData = data;
+    setRating();
     $('#widgetOne').remove();
     $("#widgetExtraction").append(divExtracted);
+});
+
+//Replace sidebar rating with retrieved value from addin
+addon.port.on("sidebarRating", function(rating) {
+    setRating(rating);
 });
 
 //Replace sidebar content with content from addin
@@ -28,6 +34,14 @@ function pageRating(rateEvent, val){
 
     //Pass to Addin
     addon.port.emit(addinMsg, {url:pageData.pageUrl,event:rateEvent,pageRating:val});
+}
+
+function setRating(rating){
+    if(!rating){
+        $('#divPageRating').rateit('value', null);
+        return;
+    }
+    $('#divPageRating').rateit('value', rating);
 }
 
 function refreshSidebar(){

@@ -44,6 +44,10 @@
       "model": "DwTrailUrl",
       "foreignKey": "dwTrailId"
     },
+    "trailUrlRatings": {
+      "type": "hasMany",
+      "model": "DwTrailUrlRating"
+    },
     "feeds": {
       "type": "hasAndBelongsToMany",
       "model": "DwFeed"

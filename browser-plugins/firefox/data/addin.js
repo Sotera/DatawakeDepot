@@ -194,6 +194,17 @@ exports.init = function () {
               pageUrl: tabs.activeTab.url
           });
 
+          //Request rating for this url if it exists
+          pluginState.getPageRating(tabs.activeTab.url, function (rating) {
+              if (rating) {
+                  //send rating to sidebar
+                  sidebarWorker.port.emit("sidebarRating", rating);
+              }else{
+                  sidebarWorker.port.emit("sidebarRating", null);
+              }
+
+          });
+
           //Request fresh sidebar content
           pluginState.getExtractedEntities(tabs.activeTab.url, function (divHtml) {
               if (divHtml) {

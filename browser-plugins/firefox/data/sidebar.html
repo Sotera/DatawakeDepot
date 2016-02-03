@@ -1,11 +1,59 @@
 <!DOCTYPE html>
-<link rel="stylesheet" href="injectedPageCSS/datawake-analysis.css" />
-<script src="sidebarApp.js"></script>
-<script src="jquery.js"></script>
+
+
 <html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="injectedPageCSS/datawake-analysis.css" />
+        <link rel="stylesheet" type="text/css" href="js/rateit/rateit.css" />
+        <link rel="stylesheet" type="text/css" href="js/font-awesome-4.5.0/css/font-awesome.min.css" />
+    </head>
+    <script src="sidebarApp.js"></script>
+    <script src="js/jquery.js"></script>
+    <script src="js/rateit/jquery.rateit.js"></script>
     <body class="DWD_sidebar_body">
-        <div id="widgetContent" class="DWD_widget">
-            <div id="widgetOne" class="DWD_widget">&nbsp;&nbsp;default...</div>
+        <div id="widgetContent"  class="DWD_widget_container">
+
+            <div id="widgetPageRate" class="DWD_widget">
+                <table class="DWD_table">
+                    <tr>
+                        <th class="DWD_th">Rate this page</th>
+                    </tr>
+                    <tr>
+                        <td class="DWD_td">
+                            <input type="range" min="0" max="10" value="0" step="1" id="backing2">
+                            <div class="rateit" data-rateit-backingfld="#backing2"></div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div id="widgetExtraction" class="DWD_widget">
+                <div id="widgetOne">
+                    <table class="DWD_table">
+                        <tr>
+                            <th class="DWD_th">Extracted Entities</th>
+                        </tr>
+                        <tr>
+                            <td class="DWD_td"></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!--<div id="widgetRancor" class="DWD_widget">-->
+                <!--<div id="widgetTwo">-->
+                    <!--<table class="DWD_table">-->
+                        <!--<tr>-->
+                            <!--<th class="DWD_th">Page Rancor</th>-->
+                        <!--</tr>-->
+                        <!--<tr>-->
+                            <!--<td class="DWD_td"> Rawr!</td>-->
+                        <!--</tr>-->
+
+                    <!--</table>-->
+                <!--</div>-->
+            <!--</div>-->
+
         </div>
     </body>
 </html>

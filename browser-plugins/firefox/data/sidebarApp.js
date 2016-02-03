@@ -16,6 +16,15 @@ addon.port.on("sidebarContent", function(divHtml) {
 });
 
 
+function pageRank(ev, val){
+    if(ev == 'rated'){
+        var x = val;
+    }
+    if(ev == 'reset'){
+        var y = val;
+    }
+}
+
 function refreshSidebar(){
     addon.port.emit('refreshSidebar', pageData);
 }

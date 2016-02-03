@@ -5,9 +5,10 @@
         <link rel="stylesheet" type="text/css" href="js/rateit/rateit.css" />
         <link rel="stylesheet" type="text/css" href="js/font-awesome-4.5.0/css/font-awesome.min.css" />
     </head>
-    <script src="sidebarApp.js"></script>
+
     <script src="js/jquery.js"></script>
     <script src="js/rateit/jquery.rateit.js"></script>
+    <script src="sidebarApp.js"></script>
 
     <body class="DWD_sidebar_body">
         <div id="widgetContent"  class="DWD_widget_container">
@@ -19,8 +20,9 @@
                     </tr>
                     <tr>
                         <td class="DWD_td">
-                            <div class="rateit" id="divPageRank" data-rateit-min="2">
-                            </div>
+                            <input type="hidden" id="inputRating">
+                            <div id="divPageRating"></div>
+
                         </td>
                     </tr>
                 </table>
@@ -39,12 +41,6 @@
                 </div>
             </div>
 
-
-
-        <script type="text/javascript">
-            $("#divPageRank").bind('rated', function (event,value) {pageRank(event.type,value)});
-            $("#divPageRank").bind('reset', function (event,value) {pageRank(event.type,value)});
-        </script>
 
             <!--<div id="widgetRancor" class="DWD_widget">-->
                 <!--<div id="widgetTwo">-->

@@ -27,6 +27,7 @@ var PluginState = function () {
   me.dwTrailUrls = '/#/app/dwTrailUrls/list/';
   me.dwTrails = '/#/app/dwTrails';
   me.dwDomains = '/#/app/dwDomains';
+  me.dwTrailUrlRating = '/api/dwTrailUrlRatings';
   me.dashboard = '/#/app';
   me.trailingActive = false;
   me.panelActive = true;
@@ -43,6 +44,14 @@ var PluginState = function () {
       content: content,
       onComplete: callback
     }).post();
+  };
+  me.restPut = function (url, content, callback) {
+      url = me.loginUrl + url;
+      Request({
+          url: url,
+          content: content,
+          onComplete: callback
+      }).put();
   };
   me.restGet = function (url, queryStringObj, callback) {
     queryStringObj = queryStringObj || {};

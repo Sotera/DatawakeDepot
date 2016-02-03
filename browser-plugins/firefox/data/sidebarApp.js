@@ -1,3 +1,4 @@
+
 var pageData = null;
 
 var divExtracted = "<div id='widgetOne'><table class='DWD_table'><tr><th class='DWD_th'>Extracted Entities</th></tr><tr><td class='DWD_td'></td></tr></table></div>";
@@ -15,14 +16,18 @@ addon.port.on("sidebarContent", function(divHtml) {
     $("#widgetExtraction").append(divHtml);
 });
 
+//Create rateit star system and bind to its event actions
+$(function () {
+    $('#divPageRating').rateit({ max: 5, step: 1, backingfld: '#inputRating' });
+    $("#divPageRating").bind('rated', function (event,value) {pageRating(event.type,value)});
+    $("#divPageRating").bind('reset', function (event,value) {pageRating(event.type,value)});
+});
 
-function pageRank(ev, val){
-    if(ev == 'rated'){
-        var x = val;
-    }
-    if(ev == 'reset'){
-        var y = val;
-    }
+function pageRating(rateEvent, val){
+    var addinMsg = 'ratePage-target-addin';
+
+    //Pass to Addin
+    addon.port.emit(addinMsg, {url:pageData.pageUrl,event:rateEvent,pageRating:val});
 }
 
 function refreshSidebar(){

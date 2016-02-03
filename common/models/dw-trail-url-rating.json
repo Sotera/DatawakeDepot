@@ -1,0 +1,40 @@
+{
+  "name": "DwTrailUrlRating",
+  "plural": "dwTrailUrlRatings",
+  "base": "PersistedModel",
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "url": {
+      "type": "string",
+      "id": true,
+      "required": true
+    },
+    "pageRating": {
+      "type": "number"
+    }
+  },
+  "indexes": {
+    "uniquePair": {
+      "keys":{
+        "url": 1,
+        "dwTrailId": 1
+      },
+      "options": {
+        "unique": true
+      }
+    }
+  },
+  "validations": [],
+  "relations": {
+    "trail": {
+      "type": "belongsTo",
+      "model": "DwTrail",
+      "foreignKey": "dwTrailId",
+      "id": true
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

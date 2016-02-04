@@ -11,7 +11,7 @@ addon.port.on("send-sidebar-current-tab", function(data) {
     $('#widgetOne').replaceWith(divExtracted);
 });
 
-//Replace sidebar rating with retrieved value from addin
+//Replace sidebar Page Rating with retrieved value from addin
 addon.port.on("sidebarRating", function(rating) {
     setRating(rating);
 });
@@ -20,6 +20,11 @@ addon.port.on("sidebarRating", function(rating) {
 addon.port.on("sidebarContent", function(divHtml) {
     $('#btnExtractRefresh').show();
     $('#widgetOne').replaceWith(divHtml);
+});
+
+//Replace sidebar Rancor with content from addin
+addon.port.on("sidebarRancor", function(divHtml) {
+    $('#widgetTwo').replaceWith(divHtml);
 });
 
 //Create rateit star system and bind to its event actions

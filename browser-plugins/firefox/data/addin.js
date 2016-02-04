@@ -35,7 +35,7 @@ exports.init = function () {
               sidebar.show();
               pluginState.panelActive=true;
               //Get sidebar contents
-              getExtractedEntities(tabs.activeTab.url);
+              getSidebarContents(tabs.activeTab.url);
           }else{
               pluginState.panelActive=false;
               sidebar.hide();
@@ -171,11 +171,19 @@ exports.init = function () {
                 pageUrl: tabs.activeTab.url
             });
 
-            //Request fresh sidebar content
+            //Request fresh Extracted Entity sidebar content
             pluginState.getExtractedEntities(tabs.activeTab.url, function (divHtml) {
                 if (divHtml) {
                     //send contents to sidebar
                     sidebarWorker.port.emit("sidebarContent", divHtml);
+                }
+            });
+
+            //Request fresh Rancor sidebar content
+            pluginState.getRancor(tabs.activeTab.url, function (divHtml) {
+                if (divHtml) {
+                    //send contents to sidebar
+                    sidebarWorker.port.emit("sidebarRancor", divHtml);
                 }
             });
         }
@@ -205,11 +213,19 @@ exports.init = function () {
 
           });
 
-          //Request fresh sidebar content
+          //Request fresh Extracted Entity sidebar content
           pluginState.getExtractedEntities(tabs.activeTab.url, function (divHtml) {
               if (divHtml) {
                   //send contents to sidebar
                   sidebarWorker.port.emit("sidebarContent", divHtml);
+              }
+          });
+
+          //Request fresh Rancor sidebar content
+          pluginState.getRancor(tabs.activeTab.url, function (divHtml) {
+              if (divHtml) {
+                  //send contents to sidebar
+                  sidebarWorker.port.emit("sidebarRancor", divHtml);
               }
           });
 
@@ -346,12 +362,27 @@ exports.init = function () {
   });
 };
 
+function getSidebarContents(url){
+    getExtractedEntities(url);
+    getRancor(url);
+}
+
 function getExtractedEntities(url){
     //Get panel contents
     pluginState.getExtractedEntities(url, function (divHtml){
         if (divHtml) {
             //send contents to sidebar
             sidebarWorker.port.emit("sidebarContent",divHtml);
+        }
+    });
+}
+
+function getRancor(url){
+    //Get panel contents
+    pluginState.getRancor(url, function (divHtml){
+        if (divHtml) {
+            //send contents to sidebar
+            sidebarWorker.port.emit("sidebarRancor",divHtml);
         }
     });
 }

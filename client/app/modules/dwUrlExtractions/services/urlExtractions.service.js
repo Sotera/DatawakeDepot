@@ -8,7 +8,10 @@ app.service('UrlExtractionsService', ['$state', 'CoreService', 'DwUrlExtraction'
       filter:{
         order:"occurrences DESC",
         include:[
-          {relation:'trailUrl',scope:{include: ['trail']}}
+          {relation:'trailUrl',
+              fields:['url'],
+              scope:{include: [{relation:'trail',fields:['id','name']}]}
+          }
         ]
       }
     };
@@ -29,7 +32,10 @@ app.service('UrlExtractionsService', ['$state', 'CoreService', 'DwUrlExtraction'
                 dwTrailUrlId:trailUrlId
             },
             include:[
-                {relation:'trailUrl',scope:{include: ['trail']}}
+                {relation:'trailUrl',
+                    fields:['url'],
+                    scope:{include: [{relation:'trail',fields:['id','name']}]}
+                }
             ]
         }
     };
@@ -46,7 +52,10 @@ app.service('UrlExtractionsService', ['$state', 'CoreService', 'DwUrlExtraction'
                   dwTrailUrlId:trailUrlId
               },
               include:[
-                  {relation:'trailUrl',scope:{include: ['trail']}}
+                  {relation:'trailUrl',
+                      fields:['url'],
+                      scope:{include: [{relation:'trail',fields:['id','name']}]}
+                  }
               ]
           }
       };

@@ -1,7 +1,7 @@
 
 var pageData = null;
 
-var divExtracted = "<div id='widgetOne'><table class='DWD_table'><tr><th class='DWD_th'>Extracted Entities</th></tr><tr><td class='DWD_td'></td></tr></table></div>";
+var divExtracted = "<div id='widgetOne'><table class='DWD_table'><tr><th class='DWD_th'>Extracted Entities</th></tr><tr class='DWD_tr'><td class='DWD_td'></td></tr></table></div>";
 
 //Receive the current tab from the addin
 addon.port.on("send-sidebar-current-tab", function(data) {

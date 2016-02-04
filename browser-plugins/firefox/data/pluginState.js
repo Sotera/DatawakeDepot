@@ -95,23 +95,24 @@ var PluginState = function () {
   };
 
   me.getPageRating = function(trailUrl, cb){
-      var filter={
-          "where":{
-              "and":[
-                  {"url":trailUrl},
-                  {"dwTrailId": me.currentTrail.id}
-              ]
+      var strFilter={
+          "filter":{
+              "where":{
+                  "and":[
+                      {"url":trailUrl},
+                      {"dwTrailId": me.currentTrail.id}
+                  ]
+              }
           }
       };
 
-      me.restGet(me.dwTrailUrlRating, filter, function (res) {
+      me.restGet(me.dwTrailUrlRating, strFilter, function (res) {
           if(res.status == 200){
             var responseText = JSON.parse(res.text);
             cb(responseText[0].pageRating);
           }else{
             cb();
           }
-
       });
   };
 
@@ -205,7 +206,13 @@ var PluginState = function () {
     var str = [];
     for (var p in obj)
       if (obj.hasOwnProperty(p)) {
-        str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+          var xtype = (typeof obj[p] === 'object');
+        if(!xtype)  {
+            str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+        }else {
+            str.push(encodeURIComponent(p) + "=" + encodeURIComponent(JSON.stringify(obj[p])));
+        }
+
       }
     return str.join("&");
   }

@@ -13,7 +13,7 @@
 }
 
 .DWD_widget{
-    border:2px solid #231d2b;
+    border:1px solid #231d2b;
     text-align: center;
     max-height: 500px;
     overflow: auto;
@@ -30,22 +30,25 @@
 .DWD_table {
     overflow-y: scroll;
     width: 100%;
+    background-color: #231d2b;
+    border-spacing:0;
 }
 
 .DWD_table_extracted{
     max-height: 500px;
     overflow-y: scroll;
     table-layout:fixed;
+    background-color: #231d2b;
+    border-spacing:0;
 }
 
 .DWD_tr{
-    background-color: #5F5F5F;
-    color: white;
-    font-size: .65em;
+    background-color: white;
+    color: #5F5F5F;
 }
 
 .DWD_tr:nth-child(odd){
-    background-color: white;
+    background-color: silver;
     color: #5F5F5F;
 }
 
@@ -56,9 +59,16 @@
     font-size: .8em;
 }
 
+.DWD_th_ext{
+    background-color: powderblue;
+    color: #5F5F5F;
+    padding: 5px;
+    font-size: .7em;
+}
+
 .DWD_th_ext1{
     width:112px;
-    background-color: lightskyblue;
+    background-color: powderblue;
     color: #5F5F5F;
     padding: 5px;
     font-size: .7em;
@@ -66,7 +76,7 @@
 
 .DWD_th_ext2{
     width:25px;
-    background-color: lightskyblue;
+    background-color: powderblue;
     color: #5F5F5F;
     padding: 5px;
     font-size: .7em;
@@ -74,24 +84,22 @@
 
 .DWD_th_ext3{
     width:80px;
-    background-color: lightskyblue;
+    background-color: powderblue;
     color: #5F5F5F;
     padding: 5px;
     font-size: .7em;
 }
 
-
 .DWD_td {
-    background-color: white;
-    color:#5F5F5F;
+    color:black;
     text-align: left;
     padding: 5px;
     font-size: .75em;
 }
 
 .DWD_td_small {
-    background-color: white;
-    color:#5F5F5F;
+    color:black;
+    width:112px;
     text-align: left;
     padding: 1px;
     font-size: .58em;

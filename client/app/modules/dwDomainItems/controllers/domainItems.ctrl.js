@@ -1,8 +1,9 @@
 'use strict';
 var app = angular.module('com.module.dwDomainItems');
 
-app.controller('DomainItemsCtrl', function($scope, $state, $stateParams, DwDomain, DomainItemsService, gettextCatalog, AppAuth) {
+app.controller('DomainItemsCtrl', function($scope, $state, $stateParams, AminoUser, DwDomain, DomainItemsService, gettextCatalog, AppAuth) {
     $scope.domains = [];
+    $scope.plUsers = [];
     $scope.currentDomainId= '';
     $scope.domainItem = {};
 
@@ -36,6 +37,17 @@ app.controller('DomainItemsCtrl', function($scope, $state, $stateParams, DwDomai
         templateOptions: {
             label: gettextCatalog.getString('Value'),
             required: true
+        }
+    }, {
+        key: 'userId',
+        type: 'select',
+        templateOptions: {
+            label: gettextCatalog.getString('User'),
+            options: $scope.plUsers,
+            valueProp: 'id',
+            labelProp: 'name',
+            required: false,
+            disabled: true
         }
     },{
         key: 'coreItem',
@@ -73,6 +85,23 @@ app.controller('DomainItemsCtrl', function($scope, $state, $stateParams, DwDomai
                         value: allDomains[i].name,
                         name: allDomains[i].name + " - " + allDomains[i].description,
                         id: allDomains[i].id
+                    });
+                }
+            })
+            .catch(function (err) {
+                console.log(err);
+            })
+            .then(function () {
+            }
+        );
+
+        AminoUser.find({filter: {include: []}}).$promise
+            .then(function (allUsers) {
+                for (var i = 0; i < allUsers.length; ++i) {
+                    $scope.plUsers.push({
+                        value: allUsers[i].username,
+                        name: allUsers[i].firstName + " " + allUsers[i].lastName,
+                        id: allUsers[i].id
                     });
                 }
             })

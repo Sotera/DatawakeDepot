@@ -8,7 +8,8 @@ app.service('DomainItemsService', ['$state', 'CoreService', 'DwDomainItem', 'get
         filter:{
             order:"name DESC",
             include:[
-                'domain'
+                'domain',
+                {relation:'user',scope:{fields: ['username']}}
             ]
         }
     };
@@ -29,7 +30,8 @@ app.service('DomainItemsService', ['$state', 'CoreService', 'DwDomainItem', 'get
                   dwDomainId:domainId
               },
               include:[
-                  'domain'
+                  'domain',
+                  {relation:'user',scope:{fields: ['username']}}
               ]
           }
       };
@@ -46,7 +48,8 @@ app.service('DomainItemsService', ['$state', 'CoreService', 'DwDomainItem', 'get
                   dwDomainId:domainId
               },
               include:[
-                  'domain'
+                  'domain',
+                  {relation:'user',scope:{fields: ['username']}}
               ]
           }
       };

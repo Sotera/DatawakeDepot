@@ -12,7 +12,7 @@ app.service('TrailsService', ['$state', 'CoreService', 'DwDomain','DwTrail', 'Dw
                   [
                       {relation:'trailUrlRatings',
                         scope:{
-                            fields:['url','pageRating'],
+                            fields:['url','pageRating']
                         }
                       },
                       {relation: 'domain',

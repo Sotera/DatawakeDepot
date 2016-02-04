@@ -27,16 +27,25 @@
                 </table>
             </div>
 
-            <div id="widgetExtraction" class="DWD_widget">
-                <div id="widgetOne">
+            <div id="widgetTitle" class="DWD_widget_base">
+                <div id="widgetOneHeader">
                     <table class="DWD_table">
                         <tr>
-                            <th class="DWD_th">Extracted Entities</th>
+                            <th class="DWD_th" colspan="3">
+                                &nbsp;Extracted Entities&nbsp;
+                                <button id="btnExtractRefresh" onclick='refreshSidebar()' class="fa fa-refresh" style="display:none"/>
+                            </th>
                         </tr>
                         <tr class="DWD_tr">
-                            <td class="DWD_td"></td>
+                            <th class="DWD_th_ext DWD_th_ext1">Value</th>
+                            <th class="DWD_th_ext DWD_th_ext2">#</th>
+                            <th class="DWD_th_ext DWD_th_ext3">Types</th>
                         </tr>
                     </table>
+                </div>
+            </div>
+            <div id="widgetExtraction" class="DWD_widget">
+                <div id="widgetOne">
                 </div>
             </div>
 

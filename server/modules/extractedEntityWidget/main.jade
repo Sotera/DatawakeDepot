@@ -2,16 +2,6 @@ div(id='widgetOne')
     link(rel="stylesheet" type="text/css" href="js/font-awesome-4.5.0/css/font-awesome.min.css")
     div
         table.DWD_table_extracted
-            tr
-                th.DWD_th(colspan="3")
-                    button(onclick='refreshSidebar()')
-                        i.fa.fa-refresh
-                    span &nbsp;Extracted Entities
-            tr
-                th.DWD_th_ext1 Value
-                th.DWD_th_ext2 #
-                th.DWD_th_ext3 Types
-
             tbody
                 each entity, i in extractedEntities
                     tr.DWD_tr

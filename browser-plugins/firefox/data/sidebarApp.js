@@ -1,14 +1,14 @@
 
 var pageData = null;
 
-var divExtracted = "<div id='widgetOne'><table class='DWD_table'><tr><th class='DWD_th'>Extracted Entities</th></tr><tr class='DWD_tr'><td class='DWD_td'></td></tr></table></div>";
+var divExtracted = "<div id='widgetOne'><table class='DWD_table'><tr class='DWD_tr'><td class='DWD_td'>Loading . . .</td></tr></table></div>";
 
 //Receive the current tab from the addin
 addon.port.on("send-sidebar-current-tab", function(data) {
     pageData = data;
     setRating();
-    $('#widgetOne').remove();
-    $("#widgetExtraction").append(divExtracted);
+    $('#btnExtractRefresh').hide();
+    $('#widgetOne').replaceWith(divExtracted);
 });
 
 //Replace sidebar rating with retrieved value from addin
@@ -18,8 +18,8 @@ addon.port.on("sidebarRating", function(rating) {
 
 //Replace sidebar content with content from addin
 addon.port.on("sidebarContent", function(divHtml) {
-    $('#widgetOne').remove();
-    $("#widgetExtraction").append(divHtml);
+    $('#btnExtractRefresh').show();
+    $('#widgetOne').replaceWith(divHtml);
 });
 
 //Create rateit star system and bind to its event actions

@@ -1,6 +1,6 @@
 'use strict';
 
-var mongoAddr = process.env.MONGO_PORT_27017_TCP_ADDR||"localhost";
+var mongoAddr = process.env.MONGO_PORT_27017_TCP_ADDR||'"localhost"';
 var mongoPort = process.env.MONGO_PORT_27017_TCP_PORT||"27017";
 var fs = require('fs');
 

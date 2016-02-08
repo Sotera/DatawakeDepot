@@ -95,22 +95,22 @@ app.controller('DomainsCtrl', function($scope, $state, $http, $stateParams, File
                     if(trail.trailUrls){
                         trail.trailUrls.forEach(function (trailUrl){
                             //Build unique array of Urls
-                            if(domainUrls.indexOf(trailUrl.url)!=-1){
+                            if(domainUrls.indexOf(trailUrl.url)==-1){
                                 domainUrls.push(trailUrl.url);
                             }
 
                             if(trailUrl.searchTerms){
                                 //Build array of unique searchTerms
-                                if(domainSearchTerms.indexOf(trailUrl.searchTerms)!=-1){
-                                    domainSearchTerms.push(trailUrl.searchTerms);
+                                if(domainSearchTerms.indexOf(trailUrl.searchTerms[0])==-1){
+                                    domainSearchTerms.push(trailUrl.searchTerms[0]);
                                 }
                             }
 
                             if(trailUrl.urlExtractions){
                                 //Build array of unique urlExtractions
                                 trailUrl.urlExtractions.forEach(function(extraction){
-                                    if(domainExtractions.indexOf(extraction)!=-1){
-                                        domainExtractions.push(extraction);
+                                    if(domainExtractions.indexOf(extraction.value)==-1){
+                                        domainExtractions.push(extraction.value);
                                     }
                                 })
                             }
@@ -127,8 +127,8 @@ app.controller('DomainsCtrl', function($scope, $state, $http, $stateParams, File
                 constructedDomain['searchTerms'] = domainSearchTerms;
                 constructedDomain['domainTop5'] = domainTop25;
                 constructedDomain['top50Extractions'] = domainTop50Extractions;
-                constructedDomain['domainEntities'] = uniqify(foundDomain.domainItems);
-                constructedDomain['domainEntityTypes'] = uniqify(foundDomain.domainEntityTypes);
+                constructedDomain['domainEntities'] = foundDomain.domainItems;
+                constructedDomain['domainEntityTypes'] = foundDomain.domainEntityTypes;
 
                 $scope.saveFile(foundDomain.name + '.json',JSON.stringify(constructedDomain));
             });

@@ -1,18 +1,48 @@
+
 var pageData = null;
+
+var divExtracted = "<div id='widgetOne'><table class='DWD_table'><tr class='DWD_tr'><td class='DWD_td'>Loading . . .</td></tr></table></div>";
 
 //Receive the current tab from the addin
 addon.port.on("send-sidebar-current-tab", function(data) {
     pageData = data;
-    $('#widgetOne').remove();
-    $("#widgetContent").append('<div id="widgetOne" class="DWD_widget">&nbsp;&nbsp;extracting...</div>');
+    setRating();
+    $('#btnExtractRefresh').hide();
+    $('#widgetOne').replaceWith(divExtracted);
+});
+
+//Replace sidebar rating with retrieved value from addin
+addon.port.on("sidebarRating", function(rating) {
+    setRating(rating);
 });
 
 //Replace sidebar content with content from addin
 addon.port.on("sidebarContent", function(divHtml) {
-    $('#widgetOne').remove();
-    $("#widgetContent").append(divHtml);
+    $('#btnExtractRefresh').show();
+    $('#widgetOne').replaceWith(divHtml);
 });
 
+//Create rateit star system and bind to its event actions
+$(function () {
+    $('#divPageRating').rateit({ max: 5, step: 1, backingfld: '#inputRating' });
+    $("#divPageRating").bind('rated', function (event,value) {pageRating(event.type,value)});
+    $("#divPageRating").bind('reset', function (event,value) {pageRating(event.type,value)});
+});
+
+function pageRating(rateEvent, val){
+    var addinMsg = 'ratePage-target-addin';
+
+    //Pass to Addin
+    addon.port.emit(addinMsg, {url:pageData.pageUrl,event:rateEvent,pageRating:val});
+}
+
+function setRating(rating){
+    if(!rating){
+        $('#divPageRating').rateit('value', null);
+        return;
+    }
+    $('#divPageRating').rateit('value', rating);
+}
 
 function refreshSidebar(){
     addon.port.emit('refreshSidebar', pageData);

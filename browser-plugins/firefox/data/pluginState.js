@@ -27,6 +27,7 @@ var PluginState = function () {
   me.dwTrailUrls = '/#/app/dwTrailUrls/list/';
   me.dwTrails = '/#/app/dwTrails';
   me.dwDomains = '/#/app/dwDomains';
+  me.dwTrailUrlRating = '/api/dwTrailUrlRatings';
   me.dashboard = '/#/app';
   me.trailingActive = false;
   me.panelActive = true;
@@ -44,11 +45,21 @@ var PluginState = function () {
       onComplete: callback
     }).post();
   };
+  me.restPut = function (url, content, callback) {
+      url = me.loginUrl + url;
+      Request({
+          url: url,
+          content: content,
+          onComplete: callback
+      }).put();
+  };
   me.restGet = function (url, queryStringObj, callback) {
     queryStringObj = queryStringObj || {};
     if(me.loggedInUser) {
         queryStringObj.access_token = me.loggedInUser.accessToken;
     }
+    //TODO: must handle complex querystrings
+
     var queryStringJson = me.convertObjToQueryString(queryStringObj);
     url = me.loginUrl + url;
     url += '?' + queryStringJson;
@@ -81,6 +92,28 @@ var PluginState = function () {
     me.restGet(url, filter, function (res) {
       cb(res.text);
     });
+  };
+
+  me.getPageRating = function(trailUrl, cb){
+      var strFilter={
+          "filter":{
+              "where":{
+                  "and":[
+                      {"url":trailUrl},
+                      {"dwTrailId": me.currentTrail.id}
+                  ]
+              }
+          }
+      };
+
+      me.restGet(me.dwTrailUrlRating, strFilter, function (res) {
+          if(res.status == 200){
+            var responseText = JSON.parse(res.text);
+            cb(responseText[0].pageRating);
+          }else{
+            cb();
+          }
+      });
   };
 
   me.getDomainItemsForCurrentDomain = function (cb) {
@@ -173,7 +206,13 @@ var PluginState = function () {
     var str = [];
     for (var p in obj)
       if (obj.hasOwnProperty(p)) {
-        str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+          var xtype = (typeof obj[p] === 'object');
+        if(!xtype)  {
+            str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+        }else {
+            str.push(encodeURIComponent(p) + "=" + encodeURIComponent(JSON.stringify(obj[p])));
+        }
+
       }
     return str.join("&");
   }

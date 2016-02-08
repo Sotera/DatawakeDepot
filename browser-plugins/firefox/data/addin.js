@@ -4,6 +4,7 @@ var {pluginState} = require('./pluginState');
 exports.init = function () {
   var tabs = require('sdk/tabs');
   var activeTab = null;
+  var currentTrailUrlId = null;
 
   var { Toolbar } = require('sdk/ui/toolbar');
   var { Frame } = require('sdk/ui/frame');
@@ -144,6 +145,18 @@ exports.init = function () {
           worker.port.on('addEntityType-target-addin', function(domainType) {
               addDomainEntityType(domainType);
           });
+
+          //Listen for sidebar requests to rate Page
+          worker.port.on('ratePage-target-addin', function(data) {
+              if(data.event == 'rated'){
+                  var urlObj = {url:data.url,pageRating:data.pageRating};
+
+              }else{
+                  var urlObj = {url:data.url,pageRating:null};
+              }
+              urlObj['dwTrailId']=pluginState.currentTrail.id;
+              addPageRank(urlObj);
+          });
       }
   });
 
@@ -180,6 +193,17 @@ exports.init = function () {
           sidebarWorker.port.emit("send-sidebar-current-tab", {
               contentScriptKey: tabs.activeTab.id,
               pageUrl: tabs.activeTab.url
+          });
+
+          //Request rating for this url if it exists
+          pluginState.getPageRating(tabs.activeTab.url, function (rating) {
+              if (rating) {
+                  //send rating to sidebar
+                  sidebarWorker.port.emit("sidebarRating", rating);
+              }else{
+                  sidebarWorker.port.emit("sidebarRating", null);
+              }
+
           });
 
           //Request fresh sidebar content
@@ -252,7 +276,6 @@ exports.init = function () {
           }
       }
 
-
       if (urlValid) {
         pluginState.restPost(pluginState.trailsUrlsUrl,
             {
@@ -262,6 +285,8 @@ exports.init = function () {
               , searchTerms: pageContents.searchTerms
               , userId: pluginState.loggedInUser.id
             }, function (res) {
+                //Get the id of the created TrailUrl
+
               //console.log(res.text);
             }
         );
@@ -408,6 +433,16 @@ function addDomainItem(domItem, activeTabId){
       dataItemsActive: pluginState.dataItemsActive,
       dataItems: pluginState.currentDomainItems
   });
+}
+
+function addPageRank(urlObj){
+    var pageRankUrl =  pluginState.dwTrailUrlRating;
+    pluginState.restPut(pageRankUrl,
+        urlObj, function (res) {
+            console.log(res.text);
+        }
+    );
+
 }
 
 function addTrail(trailName){

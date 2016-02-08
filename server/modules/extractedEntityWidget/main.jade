@@ -1,23 +1,16 @@
-div.DWD_widget(id='widgetOne')
-    link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css")
-    div.DWD_table_container
-        h3.DWD_h1
-            button(onclick='refreshSidebar()')
-                i.fa.fa-refresh
-            span Extracted Entities
-        table.DWD_table(border='1')
-            thead.DWD_th
-                tr.DWD_tr
-                     th.DWD_th Value
-                     th.DWD_th #
-                     th.DWD_th Types
+div(id='widgetOne')
+    link(rel="stylesheet" type="text/css" href="js/font-awesome-4.5.0/css/font-awesome.min.css")
+    div
+        table.DWD_table_extracted
             tbody
                 each entity, i in extractedEntities
-                     tr.DWD_tr
-                         td.DWD_td
-                             a(title='add as Domain Item' href='' onclick='return addDomainObject({"dwItem":{"type":"domainItem","id":"#{entity.id}","value":"#{entity.value}","extractorId":"#{entity.extractor}"}})') #{entity.value}
-                         td.DWD_td #{entity.occurrences}
-                         td.DWD_td
-                             each type in entity.extractorTypes
-                                 a(title='add as Domain Type' href='' onclick='return addDomainObject({"dwItem":{"type":"domainType","value":"#{type}","extractorId":"#{entity.extractor}"}})') #{type}
-
+                    tr.DWD_tr
+                        td.DWD_td_small
+                            div.DWD_div.DWD_div_col1
+                                a(title='add as Domain Item' href='' onclick='return addDomainObject({"dwItem":{"type":"domainItem","id":"#{entity.id}","value":"#{entity.value}","extractorId":"#{entity.extractor}"}})') #{entity.value}
+                        td.DWD_td_small
+                            div.DWD_div.DWD_div_col2 #{entity.occurrences}
+                        td.DWD_td_small
+                            each type in entity.extractorTypes
+                                div.DWD_div.DWD_div_col3
+                                    a(title='add as Domain Type' href='' onclick='return addDomainObject({"dwItem":{"type":"domainType","value":"#{type}","extractorId":"#{entity.extractor}"}})') #{type}

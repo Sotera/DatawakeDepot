@@ -3,6 +3,125 @@
     background-color: #252644;
 }
 
+.DWD_sidebar_body{
+    color: white;
+    background: steelblue;
+}
+
+.DWD_widget_container{
+    border:0px solid red
+}
+
+.DWD_widget_base{
+    border:1px solid #231d2b;
+    text-align: center;
+    max-height: 500px;
+    overflow: auto;
+    margin-bottom: 0;
+}
+
+.DWD_widget{
+    border:1px solid #231d2b;
+    text-align: center;
+    max-height: 500px;
+    overflow: auto;
+    margin-bottom: 5px;
+}
+
+.DWD_h1{
+    background-color: steelblue;
+    color: white;
+    text-align: center;
+    font-size: 1em;
+}
+
+.DWD_table {
+    overflow-y: scroll;
+    width: 100%;
+    background-color: #231d2b;
+    border-spacing:0;
+}
+
+.DWD_table_extracted{
+    max-height: 500px;
+    overflow-y: scroll;
+    table-layout:fixed;
+    background-color: #231d2b;
+    border-spacing:0;
+}
+
+.DWD_tr{
+    background-color: white;
+    color: #5F5F5F;
+}
+
+.DWD_tr:nth-child(odd){
+    background-color: lightsteelblue;
+    color: #5F5F5F;
+}
+
+.DWD_th {
+    background-color: #5F5F5F;
+    color: white;
+    padding: 5px;
+    font-size: .8em;
+}
+
+.DWD_th_ext{
+    background-color: gra;
+    color: #5F5F5F;
+    padding: 5px;
+    font-size: .7em;
+}
+
+.DWD_th_ext1{
+    width:112px;
+}
+
+.DWD_th_ext2{
+    width:25px;
+}
+
+.DWD_th_ext3{
+    width:80px;
+}
+
+.DWD_td {
+    color:black;
+    text-align: left;
+    padding: 5px;
+    font-size: .75em;
+}
+
+.DWD_td_small {
+    color:black;
+    width:112px;
+    text-align: left;
+    padding: 1px;
+    font-size: .58em;
+}
+
+.DWD_div{
+    height:12px;
+}
+
+.DWD_div_col1{
+    width:112px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.DWD_div_col2{
+    width:25px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.DWD_div_col3{
+    width:80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
 div#datawake-right-panel {
     position: absolute;
     border-radius:5px;
@@ -17,52 +136,9 @@ div#datawake-right-panel {
     z-index:10000;
 }
 
-.DWD_sidebar_body{
-    color: white;
-    background: steelblue;
-}
 
-.DWD_widget{
-    width: 100%;
-}
-
-.DWD_table {
-    border-collapse: collapse;
-    width: 98%;
-}
-
-.DWD_td {
-    text-align: left;
-    padding: 5px;
-    font-size: .55em;
-}
-
-
-.DWD_tr:nth-child(odd){
-    background-color: white;
-    color: black
-}
-
-.DWD_th {
-    background-color: lightslategray;
-    color: white;
-    text-align: left;
-    padding: 5px;
-    font-size: .8em;
-}
-
-.DWD_table_container{
-    max-height: 800px;
-    overflow: scroll;
-}
 
 div#datawake-site {
     margin-right: 300px;
 }
 
-.DWD_h1{
-    background-color: steelblue;
-    color: white;
-    text-align: center;
-    font-size: 1em;
-}

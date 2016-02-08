@@ -50,9 +50,16 @@ app.service('TrailsService', ['$state', 'CoreService', 'DwDomain','DwTrail', 'Dw
         filter:
             {include:
                 [
-                    'domain',
-                    'users',
-                    'trailUrls'
+                    {relation:'domain',
+                        scope:{
+                            fields:['name','id']
+                        }
+                    },
+                    {relation:'trailUrls',
+                        scope:{
+                            fields:['url']
+                        }
+                    }
                 ]
             }
     });
@@ -66,9 +73,16 @@ app.service('TrailsService', ['$state', 'CoreService', 'DwDomain','DwTrail', 'Dw
             },
             include:
               [
-                  'domain',
-                  'users',
-                  'trailUrls'
+                  {relation:'domain',
+                      scope:{
+                          fields:['name','id']
+                      }
+                  },
+                  {relation:'trailUrls',
+                      scope:{
+                          fields:['url']
+                      }
+                  }
               ]
           }
       });
@@ -86,9 +100,16 @@ app.service('TrailsService', ['$state', 'CoreService', 'DwDomain','DwTrail', 'Dw
               },
               include:
                   [
-                      'domain',
-                      'users',
-                      'trailUrls'
+                      {relation:'domain',
+                          scope:{
+                              fields:['name','id']
+                          }
+                      },
+                      {relation:'trailUrls',
+                        scope:{
+                            fields:['url']
+                        }
+                      }
                   ]
           }
       });

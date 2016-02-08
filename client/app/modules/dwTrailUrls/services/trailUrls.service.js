@@ -7,6 +7,7 @@ app.service('TrailUrlsService', ['$state', 'CoreService', 'DwTrailUrl','DwUrlExt
     var whereClause={
         filter:{
             order:"url DESC",
+            fields:['id','url','timestamp','dwTrailId'],
             include:[
                 {relation:'trail',scope:{fields: ['name']}},
                 {relation:'urlExtractions',scope:{fields: ['id']}},
@@ -30,6 +31,7 @@ app.service('TrailUrlsService', ['$state', 'CoreService', 'DwTrailUrl','DwUrlExt
             where:{
                 dwTrailId:trailId
             },
+            fields:['id','url','timestamp','dwTrailId'],
             include:[
                 {relation:'trail',scope:{fields: ['name']}},
                 {relation:'urlExtractions',scope:{fields: ['id']}},
@@ -49,6 +51,7 @@ app.service('TrailUrlsService', ['$state', 'CoreService', 'DwTrailUrl','DwUrlExt
               where:{
                   dwTrailId:trailId
               },
+              fields:['id','url','timestamp','dwTrailId'],
               include:[
                   {relation:'trail',scope:{fields: ['name']}},
                   {relation:'urlExtractions',scope:{fields: ['id']}},

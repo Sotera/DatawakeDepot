@@ -1,14 +1,14 @@
 'use strict';
-/*
- var mongoAddr = '"' + process.env.MONGO_PORT_27017_TCP_ADDR + '"';
- var mongoPort = process.env.MONGO_PORT_27017_TCP_PORT;
- var fs = require('fs');
 
- var fileContents = fs.readFileSync(__dirname + '/datasources_template.json', 'utf8');
- fileContents = fileContents.replace(/MONGO_HOST_ADDR/g, mongoAddr);
- fileContents = fileContents.replace(/MONGO_HOST_PORT/g, mongoPort);
- fs.writeFileSync(__dirname + '/datasources.json', fileContents);
- */
+var mongoAddr = process.env.MONGO_PORT_27017_TCP_ADDR||"localhost";
+var mongoPort = process.env.MONGO_PORT_27017_TCP_PORT||"27017";
+var fs = require('fs');
+
+var fileContents = fs.readFileSync(__dirname + '/datasources_template.json', 'utf8');
+fileContents = fileContents.replace(/MONGO_HOST_ADDR/g, mongoAddr);
+fileContents = fileContents.replace(/MONGO_HOST_PORT/g, mongoPort);
+fs.writeFileSync(__dirname + '/datasources.json', fileContents);
+
 var loopback = require('loopback');
 var boot = require('loopback-boot');
 var path = require('path');

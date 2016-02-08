@@ -79,6 +79,10 @@ app.controller('DomainsCtrl', function($scope, $state, $http, $stateParams, File
             });
     };
 
+    $scope.uniqify = function(arrayWithDupes){
+      return Array.from(new Set(arrayWithDupes));
+    };
+
     $scope.export = function(domain){
         DomainsService.getPrettyDomain(domain.id).$promise.then(function(foundDomain){
             DomainsService.getDomainUrls(domain.id).$promise.then(function(trails){
@@ -90,31 +94,41 @@ app.controller('DomainsCtrl', function($scope, $state, $http, $stateParams, File
                 trails.forEach(function(trail){
                     if(trail.trailUrls){
                         trail.trailUrls.forEach(function (trailUrl){
-                            domainUrls.push(trailUrl.url);
-                            if(trailUrl.searchTerms){
-                                domainSearchTerms.push(trailUrl.searchTerms);
+                            //Build unique array of Urls
+                            if(domainUrls.indexOf(trailUrl.url)!=-1){
+                                domainUrls.push(trailUrl.url);
                             }
-                            //TODO: not sure exactly how many of these we want to return, there will be a LOT
+
+                            if(trailUrl.searchTerms){
+                                //Build array of unique searchTerms
+                                if(domainSearchTerms.indexOf(trailUrl.searchTerms)!=-1){
+                                    domainSearchTerms.push(trailUrl.searchTerms);
+                                }
+                            }
+
                             if(trailUrl.urlExtractions){
+                                //Build array of unique urlExtractions
                                 trailUrl.urlExtractions.forEach(function(extraction){
-                                    domainExtractions.push(extraction.value);
+                                    if(domainExtractions.indexOf(extraction)!=-1){
+                                        domainExtractions.push(extraction);
+                                    }
                                 })
                             }
                         });
                     }
                 });
 
-                //TODO: we need to get the top 20, not just the first 20
-                var domainTop20Extractions = domainExtractions.slice(0,20);
-                var domainTop5 = DomainsService.getTopLevels(domainUrls,5);
+                //TODO: we need to get the top 50, not just the first 50
+                var domainTop50Extractions = DomainsService.getTopExtractions(domainExtractions,50);
+                var domainTop25 = DomainsService.getTopLevels(domainUrls,25);
 
                 constructedDomain['domainName'] = foundDomain.name;
                 constructedDomain['urls'] = domainUrls;
                 constructedDomain['searchTerms'] = domainSearchTerms;
-                constructedDomain['domainTop5'] = domainTop5;
-                constructedDomain['top20Extractions'] = domainTop20Extractions;
-                constructedDomain['domainEntities'] = foundDomain.domainItems;
-                constructedDomain['domainEntityTypes'] = foundDomain.domainEntityTypes;
+                constructedDomain['domainTop5'] = domainTop25;
+                constructedDomain['top50Extractions'] = domainTop50Extractions;
+                constructedDomain['domainEntities'] = uniqify(foundDomain.domainItems);
+                constructedDomain['domainEntityTypes'] = uniqify(foundDomain.domainEntityTypes);
 
                 $scope.saveFile(foundDomain.name + '.json',JSON.stringify(constructedDomain));
             });

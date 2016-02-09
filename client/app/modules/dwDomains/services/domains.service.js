@@ -99,33 +99,35 @@ app.service('DomainsService', ['$state', 'CoreService', 'DwDomain','gettextCatal
 
     this.getPrettyDomain = function(domainId){
         var filter = {
-                filter:{
-                    fields: ['id','name','description'],
-                    where:{
-                        id: domainId
-                    },
-                    include: [
-                        {relation:'domainEntityTypes',
-                            scope:{
-                                fields: {
-                                    'name': true,
-                                    'description': true,
-                                    'dwDomainId': false
-                                }
-                            }
-                        },
-                        {relation:'domainItems',
-                            scope:{
-                                fields:{
-                                    'itemValue':true,
-                                    'type':true,
-                                    'source':true,
-                                    'dwDomainId':false
-                                }
-                            }
+            filter:{
+                fields: ['id','name','description'],
+                where:{
+                    id: domainId
+                },
+
+                include: [
+                    {relation:'domainEntityTypes',
+                        scope:{
+                            fields: [
+                                'name',
+                                'description',
+                                'source',
+                                {'dwDomainId': false}
+                            ]
                         }
-                    ]
-                }
+                    },
+                    {relation:'domainItems',
+                        scope:{
+                            fields:[
+                                'itemValue',
+                                'type',
+                                'source',
+                                {'dwDomainId': false}
+                            ]
+                        }
+                    }
+                ]
+            }
         };
         return DwDomain.findOne(filter);
     };

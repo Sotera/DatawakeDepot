@@ -4,7 +4,7 @@
     "connector": "memory"
   },
   "db": {
-    "host": MONGO_HOST_ADDR,
+    "host": "MONGO_HOST_ADDR",
     "port": MONGO_HOST_PORT,
     "database": "datawake",
     "name": "db",

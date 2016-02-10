@@ -67,6 +67,7 @@
     "grunt-wiredep": "2.0.0",
     "gulp-nodemon": "2.0.4",
     "jade": "1.11.0",
+    "jpm": "^1.0.5",
     "jshint": "2.8.0",
     "jshint-stylish": "2.0.1",
     "jszip": "^2.5.0",

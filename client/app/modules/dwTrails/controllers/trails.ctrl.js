@@ -187,6 +187,7 @@ app.controller('TrailsCtrl', function ($scope, $state, $http, $stateParams, DwTe
                 //get trail info for the given user based on user's teams
                 if (currUser.teams) {
                     TrailsService.getUserTeamTrails(currUser.teams).$promise.then(function (result) {
+                        $scope.trail = {};
                         $scope.trailUrl = {};
                         $scope.safeDisplayedtrails = result;
                         $scope.displayedTrails = [].concat($scope.safeDisplayedtrails);
@@ -196,6 +197,7 @@ app.controller('TrailsCtrl', function ($scope, $state, $http, $stateParams, DwTe
             }else{
                 //get all trails for Admin
                 TrailsService.getTrails().$promise.then(function (result) {
+                    $scope.trail = {};
                     $scope.trailUrl = {};
                     $scope.safeDisplayedtrails = result;
                     $scope.displayedTrails = [].concat($scope.safeDisplayedtrails);

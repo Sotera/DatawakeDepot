@@ -1,9 +1,10 @@
 'use strict';
 var app = angular.module('com.module.dwTrailUrls');
 
-app.controller('TrailUrlsCtrl', function($scope, $state, $stateParams, $window, DwTrail, DwTrailUrl, TrailUrlsService, gettextCatalog, AppAuth) {
+app.controller('TrailUrlsCtrl', function($scope, $state, $stateParams, $window, AminoUser, DwTrail, DwTrailUrl, TrailUrlsService, gettextCatalog, AppAuth) {
 
     $scope.trails = [];
+    $scope.plUsers = [];
     $scope.currentTrailId = '';
     $scope.trailUrl = {};
 
@@ -50,6 +51,17 @@ app.controller('TrailUrlsCtrl', function($scope, $state, $stateParams, $window, 
             disabled: true
         }
     }, {
+        key: 'userId',
+        type: 'select',
+        templateOptions: {
+            label: gettextCatalog.getString('User'),
+            options: $scope.plUsers,
+            valueProp: 'id',
+            labelProp: 'name',
+            required: false,
+            disabled: true
+        }
+    }, {
         key: 'comments',
         type: 'input',
         templateOptions: {
@@ -89,6 +101,23 @@ app.controller('TrailUrlsCtrl', function($scope, $state, $stateParams, $window, 
                         value: allTrails[i].name,
                         name: allTrails[i].name + " - " + allTrails[i].description,
                         id: allTrails[i].id
+                    });
+                }
+            })
+            .catch(function (err) {
+                console.log(err);
+            })
+            .then(function () {
+            }
+        );
+
+        AminoUser.find({filter: {include: []}}).$promise
+            .then(function (allUsers) {
+                for (var i = 0; i < allUsers.length; ++i) {
+                    $scope.plUsers.push({
+                        value: allUsers[i].username,
+                        name: allUsers[i].firstName + " " + allUsers[i].lastName,
+                        id: allUsers[i].id
                     });
                 }
             })
@@ -149,7 +178,6 @@ app.controller('TrailUrlsCtrl', function($scope, $state, $stateParams, $window, 
         $scope.itemIndex = $scope.itemIndex - $scope.itemsPerPage;
         $scope.getFilteredPagedResults($scope.currentTrailId, $scope.itemIndex,  $scope.itemsPerPage);
     };
-
     $scope.getFilteredPagedResults = function(trailId, itemIndex, itemsPer) {
         $scope.loading = true;
         TrailUrlsService.getFilteredPagedTrailUrls(trailId, itemIndex, itemsPer).$promise.then(function (result) {

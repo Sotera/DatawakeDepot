@@ -60,12 +60,13 @@ exports.init = function () {
               pluginState.panelActive=true;
               //Get the domain items in case they want to see them
               pluginState.getDomainItemsForCurrentDomain();
+              pluginState.postEventToAddInModule('trailing-active');
           }else{
               //Hide the sidebar
               sidebar.hide();
               pluginState.panelActive=false;
+              pluginState.postEventToAddInModule('trailing-inactive');
           }
-
           break;
         case 'set-current-team-target-addin':
           pluginState.currentTeam = pluginState.currentTeamList.filter(function (el) {
@@ -259,6 +260,16 @@ exports.init = function () {
         });
     });
 
+    //Listens for requests to add manual extractions as data items
+    pluginState.addContentScriptEventHandler(data.contentScriptKey, 'request-add-data-item-target-addin', function (manualExtraction) {
+        var newDomainItem = {
+            itemValue: manualExtraction.value,
+            type: 'manual',
+            source: 'manual extraction'
+        };
+        addDomainItem(newDomainItem, data.contentScriptKey);
+    });
+
     //Listens for requests to get user trailing status
     pluginState.addContentScriptEventHandler(data.contentScriptKey, 'requestPanelActive-target-addin', function (scriptData) {
         pluginState.postEventToContentScript(data.contentScriptKey, 'panelStatus-target-content-script', {panelActive: pluginState.panelActive});
@@ -287,6 +298,7 @@ exports.init = function () {
               , url: pageContents.url
               , scrapedContent: pageContents.zippedHtmlBody
               , searchTerms: pageContents.searchTerms
+              , userId: pluginState.loggedInUser.id
             }, function (res) {
                 //Get the id of the created TrailUrl
 
@@ -447,6 +459,7 @@ function addDomainEntityType(entType){
 function addDomainItem(domItem, activeTabId){
   var currentDomainId = pluginState.currentDomain.id;
   domItem['dwDomainId'] = currentDomainId;
+  domItem['userId'] = pluginState.loggedInUser.id;
   var specificDomainInsertUrl =  pluginState.createDomainItem.replace("_domainId_",currentDomainId);
   pluginState.restPost(specificDomainInsertUrl,
       domItem, function (res) {

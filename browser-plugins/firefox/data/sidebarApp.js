@@ -23,8 +23,8 @@ addon.port.on("sidebarContent", function(divHtml) {
 });
 
 //Replace sidebar Rancor with content from addin
-addon.port.on("sidebarRancor", function(divHtml) {
-    $('#widgetTwo').replaceWith(divHtml);
+addon.port.on("sidebarRancor", function(urlResults) {
+    setRancorResults(urlResults);
 });
 
 //Create rateit star system and bind to its event actions
@@ -47,6 +47,10 @@ function setRating(rating){
         return;
     }
     $('#divPageRating').rateit('value', rating);
+}
+
+function setRancorResults(urlResults){
+    drawRancor(urlResults);
 }
 
 function refreshSidebar(){

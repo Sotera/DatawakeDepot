@@ -1,6 +1,8 @@
 var self = require('sdk/self');
-var {setInterval, clearInterval} = require('sdk/timers');
+
+var {setInterval, clearInterval,setTimeout} = require('sdk/timers');
 var {pluginState} = require('./pluginState');
+var timerId;
 exports.init = function () {
   var tabs = require('sdk/tabs');
   var activeTab = null;
@@ -180,12 +182,10 @@ exports.init = function () {
             });
 
             //Request fresh Rancor sidebar content
-            pluginState.getRancor(tabs.activeTab.url, function (divHtml) {
-                if (divHtml) {
-                    //send contents to sidebar
-                    sidebarWorker.port.emit("sidebarRancor", divHtml);
-                }
-            });
+            pluginState.postRancor(tabs.activeTab, function () {});
+            //Get the Rancor results
+            timerId = setInterval(getRancorResults(tabs.activeTab,sidebarWorker), 5000);
+
         }
     }
   });
@@ -222,12 +222,11 @@ exports.init = function () {
           });
 
           //Request fresh Rancor sidebar content
-          pluginState.getRancor(tabs.activeTab.url, function (divHtml) {
-              if (divHtml) {
-                  //send contents to sidebar
-                  sidebarWorker.port.emit("sidebarRancor", divHtml);
-              }
-          });
+          pluginState.postRancor(tabs.activeTab, function () {});
+          //Get the Rancor results
+          //setTimeout(getRancorResults(tabs.activeTab,sidebarWorker),5000);
+          timerId = setInterval(getRancorResults(tabs.activeTab,sidebarWorker), 5000);
+
 
           //Then tell the page to refresh its dataitems
           pluginState.postEventToContentScript(tabs.activeTab.id, 'refresh-data-items-target-content-script', {
@@ -362,6 +361,17 @@ exports.init = function () {
   });
 };
 
+function getRancorResults(activeTab,sbw){
+    var x = 'mike';
+    pluginState.getRancor(activeTab,function(urlRankings){
+        //if we have results, send to sidebar and clear the interval
+        if(urlRankings){
+            sbw.port.emit("sidebarRancor", urlRankings);
+            clearTimeout(timerId);
+        }
+    });
+}
+
 function getSidebarContents(url){
     getExtractedEntities(url);
     getRancor(url);
@@ -377,15 +387,15 @@ function getExtractedEntities(url){
     });
 }
 
-function getRancor(url){
-    //Get panel contents
-    pluginState.getRancor(url, function (divHtml){
-        if (divHtml) {
-            //send contents to sidebar
-            sidebarWorker.port.emit("sidebarRancor",divHtml);
-        }
-    });
-}
+//function getRancor(url){
+//    //Get panel contents
+//    pluginState.getRancor(url, function (divHtml){
+//        if (divHtml) {
+//            //send contents to sidebar
+//            sidebarWorker.port.emit("sidebarRancor",divHtml);
+//        }
+//    });
+//}
 
 function logoutSuccessfulHandler(tellToolBar) {
   pluginState.reset();

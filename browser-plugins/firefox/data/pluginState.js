@@ -116,7 +116,8 @@ var PluginState = function () {
           dwTrailUrlId: me.currentTrail.id,
           requester:activeTab.id,
           urls: activeTab.url,
-          terms: dataItems.toString()
+          terms: dataItems.toString(),
+          minScore: dataItems.length/2
       };
 
       me.restRemotePost(feedRancorUrl, rancorFood,function (res){

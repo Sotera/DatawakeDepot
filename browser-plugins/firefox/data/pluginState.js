@@ -125,10 +125,11 @@ var PluginState = function () {
       });
   };
 
-  me.getRancor = function (activeTab, cb) {
+
+  me.getRancor = function (activeTabId, cb) {
       var feedRancorUrl = me.trailUrlRancor;
       var filter = {
-          "requester":activeTab.id
+          "requester":activeTabId
       };
       me.restRemoteGet(feedRancorUrl, filter, function (res) {
           cb(res.json[0]);

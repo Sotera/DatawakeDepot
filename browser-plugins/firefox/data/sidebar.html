@@ -37,7 +37,7 @@
                 <tr>
                     <th class="DWD_th" colspan="3">
                         &nbsp;Extracted Entities&nbsp;
-                        <button id="btnExtractRefresh" onclick='refreshSidebar()' class="fa fa-refresh" style="display:none"/>
+                        <button id="btnExtractRefresh" onclick='refreshExtractions()' class="fa fa-refresh" style="display:none"/>
                     </th>
                 </tr>
                 <tr class="DWD_tr">
@@ -57,7 +57,10 @@
     <div id="widgetRancor" class="DWD_widget">
         <table class="DWD_table">
             <tr>
-                <th class="DWD_th">Page Rancor</th>
+                <th class="DWD_th">
+                    Page Rancor
+                    <button id="btnRancorRefresh" onclick='refreshRancor()' class="fa fa-refresh"/>
+                </th>
             </tr>
         </table>
 

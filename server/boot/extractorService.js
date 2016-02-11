@@ -59,6 +59,7 @@ module.exports = function (app) {
                         extractorContainer.failureCount = 0;
                         try {
                             JSON.parse(body).forEach(function (extraction) {
+                                delete extraction['id'];
                                 dwUrlExtraction.create(extraction, function (err, obj) {
                                     if (err) {
                                         console.log(err);

@@ -2,7 +2,7 @@ var self = require('sdk/self');
 
 var {setInterval, clearInterval,setTimeout} = require('sdk/timers');
 var {pluginState} = require('./pluginState');
-var timerId;
+
 exports.init = function () {
   var tabs = require('sdk/tabs');
   var activeTab = null;
@@ -37,7 +37,7 @@ exports.init = function () {
               sidebar.show();
               pluginState.panelActive=true;
               //Get sidebar contents
-              getSidebarContents(tabs.activeTab.url);
+              getSidebarContents(tabs.activeTab);
           }else{
               pluginState.panelActive=false;
               sidebar.hide();
@@ -128,9 +128,9 @@ exports.init = function () {
       onAttach: function (worker) {
           sidebarWorker = worker;
 
-          //Listen for sidebar requests to refresh content
-          worker.port.on("refreshSidebar", function(data) {
-              pluginState.getExtractedEntities(data.pageUrl, function (divHtml){
+          //Listen for sidebar requests to refresh Extractions content
+          worker.port.on("refreshExtractions", function(pageUrl) {
+              pluginState.getExtractedEntities(pageUrl, function (divHtml){
                   if (divHtml) {
                        //send contents to sidebar
                       sidebarWorker.port.emit("sidebarContent",divHtml);
@@ -138,9 +138,15 @@ exports.init = function () {
               });
           });
 
+          //Listen for sidebar requests to refresh Rancor content
+          worker.port.on("refreshRancor", function(tabId) {
+              //Get the Rancor results
+              getRancorResults(tabId,sidebarWorker);
+          });
+
           //Listen for sidebar requests to create Domain Items
-          worker.port.on('addDomainItem-target-addin', function(domainItem) {
-              addDomainItem(domainItem, tabs.activeTab.id);
+          worker.port.on('addDomainItem-target-addin', function(domainItem,tabId) {
+              addDomainItem(domainItem, tabId);
           });
 
           //Listen for sidebar requests to create Domain Types
@@ -174,6 +180,17 @@ exports.init = function () {
                 pageUrl: tabs.activeTab.url
             });
 
+            //Request rating for this url if it exists
+            pluginState.getPageRating(tabs.activeTab.url, function (rating) {
+                if (rating) {
+                    //send rating to sidebar
+                    sidebarWorker.port.emit("sidebarRating", rating);
+                }else{
+                    sidebarWorker.port.emit("sidebarRating", null);
+                }
+
+            });
+
             //Request fresh Extracted Entity sidebar content
             pluginState.getExtractedEntities(tabs.activeTab.url, function (divHtml) {
                 if (divHtml) {
@@ -184,9 +201,6 @@ exports.init = function () {
 
             //Request fresh Rancor sidebar content
             pluginState.postRancor(tabs.activeTab, function () {});
-            //Get the Rancor results
-            timerId = setInterval(getRancorResults(tabs.activeTab,sidebarWorker), 5000);
-
         }
     }
   });
@@ -224,10 +238,6 @@ exports.init = function () {
 
           //Request fresh Rancor sidebar content
           pluginState.postRancor(tabs.activeTab, function () {});
-          //Get the Rancor results
-          //setTimeout(getRancorResults(tabs.activeTab,sidebarWorker),5000);
-          timerId = setInterval(getRancorResults(tabs.activeTab,sidebarWorker), 5000);
-
 
           //Then tell the page to refresh its dataitems
           pluginState.postEventToContentScript(tabs.activeTab.id, 'refresh-data-items-target-content-script', {
@@ -373,20 +383,21 @@ exports.init = function () {
   });
 };
 
-function getRancorResults(activeTab,sbw){
-    var x = 'mike';
-    pluginState.getRancor(activeTab,function(urlRankings){
+function getRancorResults(activeTabId,sbw){
+    pluginState.getRancor(activeTabId,function(urlRankings){
+        if(!urlRankings){
+          return;
+        };
         //if we have results, send to sidebar and clear the interval
-        if(urlRankings){
+        if(urlRankings.edges.length>0 || urlRankings.finished){
             sbw.port.emit("sidebarRancor", urlRankings);
-            clearTimeout(timerId);
         }
     });
 }
 
-function getSidebarContents(url){
-    getExtractedEntities(url);
-    getRancor(url);
+function getSidebarContents(activeTab){
+    getExtractedEntities(activeTab.url);
+    getRancorResults(activeTab.id);
 }
 
 function getExtractedEntities(url){
@@ -398,16 +409,6 @@ function getExtractedEntities(url){
         }
     });
 }
-
-//function getRancor(url){
-//    //Get panel contents
-//    pluginState.getRancor(url, function (divHtml){
-//        if (divHtml) {
-//            //send contents to sidebar
-//            sidebarWorker.port.emit("sidebarRancor",divHtml);
-//        }
-//    });
-//}
 
 function logoutSuccessfulHandler(tellToolBar) {
   pluginState.reset();

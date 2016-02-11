@@ -9,6 +9,7 @@ addon.port.on("send-sidebar-current-tab", function(data) {
     setRating();
     $('#btnExtractRefresh').hide();
     $('#widgetOne').replaceWith(divExtracted);
+    destroyRancor();
 });
 
 //Replace sidebar Page Rating with retrieved value from addin
@@ -24,6 +25,7 @@ addon.port.on("sidebarContent", function(divHtml) {
 
 //Replace sidebar Rancor with content from addin
 addon.port.on("sidebarRancor", function(urlResults) {
+    $('#btnRancorRefresh').show();
     setRancorResults(urlResults);
 });
 
@@ -53,8 +55,13 @@ function setRancorResults(urlResults){
     drawRancor(urlResults);
 }
 
-function refreshSidebar(){
-    addon.port.emit('refreshSidebar', pageData);
+function refreshExtractions(){
+    addon.port.emit('refreshExtractions', pageData.pageUrl);
+}
+
+function refreshRancor(){
+    destroyRancor();
+    addon.port.emit('refreshRancor', pageData.contentScriptKey);
 }
 
 function addDomainObject(domObj){
@@ -70,7 +77,7 @@ function addDomainObject(domObj){
                 source: domObj.dwItem.extractorId
             };
             //Pass to Addin
-            addon.port.emit('addDomainItem-target-addin', newDomainItem);
+            addon.port.emit('addDomainItem-target-addin', newDomainItem,pageData.contentScriptKey);
             //showNewDataItem(domObj.dwItem.value);
             break;
         case 'domainType':

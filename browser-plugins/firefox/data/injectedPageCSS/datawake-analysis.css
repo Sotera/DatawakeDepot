@@ -78,6 +78,7 @@
     background-color: yellow;
     color: #5F5F5F;
     font-size: .65em;
+    text-overflow: ellipsis;
 }
 
 .DWD_th_ext1{
@@ -129,7 +130,6 @@
 .DWD_div_rancor{
     height:12px;
     width:217px;
-    border: 1px solid green;
 }
 
 

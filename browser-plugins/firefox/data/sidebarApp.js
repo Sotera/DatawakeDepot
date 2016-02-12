@@ -6,7 +6,7 @@ var rancorStatus = null;
 var sidebarTimer = null;
 
 var divExtracted = "<div id='widgetOne'><table class='DWD_table'><tr class='DWD_tr'><td class='DWD_td'>Loading . . .</td></tr></table></div>";
-var divRancor = "<div id='widgetTwo' style='background-color:white'><table class='DWD_table'><tr class='DWD_tr'><td class='DWD_td'>Loading . . .</td></tr></table><div id='popup' class='DWD_url'>_</div></div>";
+var divRancor = "<div id='widgetTwo' style='background-color:white'><table class='DWD_table'><tr class='DWD_tr'><td class='DWD_td'>Loading . . .</td></tr></table></div>";
 
 //Receive the current tab from the addin
 addon.port.on("send-sidebar-current-tab", function(data) {
@@ -22,8 +22,9 @@ addon.port.on("send-sidebar-current-tab", function(data) {
     extractorFinished = false;
 
     destroyRancor();
-    //$('#btnRancorRescore').hide();
+    $('#btnRancorRescore').hide();
     $('#widgetTwo').replaceWith(divRancor);
+    $('#popup').text('');
     rancorFinished = false;
 
     //Start checking for sidebar content
@@ -87,7 +88,6 @@ function refreshRancor(){
 
 function rescoreRancor(){
     destroyRancor();
-    //$('#btnRancorRescore').hide();
     $('#widgetTwo').replaceWith(divRancor);
     rancorFinished = false;
 
@@ -101,7 +101,7 @@ function rescoreRancor(){
 addon.port.on("sidebarRancor", function(urlResults) {
     if(!rancorFinished){
         if(urlResults.finished){
-            //$('#btnRancorRescore').show();
+            $('#btnRancorRescore').show();
             drawRancor(urlResults);
             rancorFinished = true;
         }

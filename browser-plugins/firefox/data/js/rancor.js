@@ -41,4 +41,7 @@ function drawRancor(urlResults) {
     network.on('hoverNode', function (params) {
         $('#popup').text(data.nodes[params.node].url);
     });
+    network.on("blurNode", function (params) {
+        $('#popup').text('');
+    });
 }

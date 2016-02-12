@@ -175,6 +175,7 @@ exports.init = function () {
     }else{
         if(pluginState.panelActive && (tabs.activeTab.url == tab.url)) {
             //Send sidebar the current tab info
+            //This will now call to prepare Extracted Entities and Rancor, but let the sidebar request them
             sidebarWorker.port.emit("send-sidebar-current-tab", {
                 contentScriptKey: tabs.activeTab.id,
                 pageUrl: tabs.activeTab.url
@@ -191,14 +192,6 @@ exports.init = function () {
 
             });
 
-            //Request fresh Extracted Entity sidebar content
-            pluginState.getExtractedEntities(tabs.activeTab.url, function (divHtml) {
-                if (divHtml) {
-                    //send contents to sidebar
-                    sidebarWorker.port.emit("sidebarContent", divHtml);
-                }
-            });
-
             //Request fresh Rancor sidebar content
             pluginState.postRancor(tabs.activeTab, function () {});
         }
@@ -212,6 +205,7 @@ exports.init = function () {
       //Only if we're trailing
       if(pluginState.panelActive) {
           //Send sidebar the current tab info
+          //This will now call to prepare Extracted Entities and Rancor, but let the sidebar request them
           sidebarWorker.port.emit("send-sidebar-current-tab", {
               contentScriptKey: tabs.activeTab.id,
               pageUrl: tabs.activeTab.url
@@ -226,14 +220,6 @@ exports.init = function () {
                   sidebarWorker.port.emit("sidebarRating", null);
               }
 
-          });
-
-          //Request fresh Extracted Entity sidebar content
-          pluginState.getExtractedEntities(tabs.activeTab.url, function (divHtml) {
-              if (divHtml) {
-                  //send contents to sidebar
-                  sidebarWorker.port.emit("sidebarContent", divHtml);
-              }
           });
 
           //Request fresh Rancor sidebar content

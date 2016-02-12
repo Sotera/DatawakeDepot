@@ -38,7 +38,6 @@ var PluginState = function () {
   me.datawakeDepotContentScriptHandle = null;
   me.contentScriptHandles = {};
   me.pageModDatawakeDepotIncludeFilter = null;
-  me.minRancorScore = dataItems.length/2;
   me.maxRancorNodes = 25;
 
   me.restRemotePost = function (url, content, callback) {
@@ -119,7 +118,7 @@ var PluginState = function () {
           requester:activeTab.id,
           urls: activeTab.url,
           terms: dataItems.toString(),
-          minScore: me.minRancorScore,
+          minScore: dataItems.length/2,
           maxNodes: me.maxRancorNodes
       };
 

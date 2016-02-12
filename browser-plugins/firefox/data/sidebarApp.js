@@ -1,23 +1,33 @@
+
 var pageData = null;
 var extractorFinished = false;
 var rancorFinished = false;
+var rancorStatus = null;
 var sidebarTimer = null;
 
 var divExtracted = "<div id='widgetOne'><table class='DWD_table'><tr class='DWD_tr'><td class='DWD_td'>Loading . . .</td></tr></table></div>";
+var divRancor = "<div id='widgetTwo' style='background-color:white'><table class='DWD_table'><tr class='DWD_tr'><td class='DWD_td'>Loading . . .</td></tr></table></div>";
 
 //Receive the current tab from the addin
 addon.port.on("send-sidebar-current-tab", function(data) {
+    //Kill the previous interval is there is one
+    clearInterval(sidebarTimer);
+
     pageData = data;
-    //Clear the rating, reset the extractor, clear the rancor
+    //Clear the rating, reset the extractor, clear the rancor, reset variables
     setRating();
 
     $('#btnExtractRefresh').hide();
     $('#widgetOne').replaceWith(divExtracted);
+    extractorFinished = false;
 
     destroyRancor();
+    $('#btnRancorRefresh').hide();
+    $('#widgetTwo').replaceWith(divRancor);
+    rancorFinished = false;
 
-    //start interval to populate sidebar
-    sidebarTimer = setInterval(pollForSidebarContents(),5000);
+    //Start checking for sidebar content
+    sidebarTimer = setInterval(pollForSidebarContents,5000);
 });
 
 function pollForSidebarContents(){
@@ -35,7 +45,7 @@ function pollForSidebarContents(){
 }
 
 //Populate sidebar Page Rating from addin
-addon.port.on("sidebarRating", function(rating) {
+addon.port.on("sidebarRating", function(rating) {sidebarTimer
     setRating(rating);
 });
 
@@ -54,31 +64,37 @@ function setRating(rating){
     $('#divPageRating').rateit('value', rating);
 }
 
-//Populate sidebar Extractions from addin
-addon.port.on("sidebarContent", function(divHtml) {
-    $('#btnExtractRefresh').show();
-    $('#widgetOne').replaceWith(divHtml);
-    extractorFinished = true;
-});
-
 function refreshExtractions(){
     addon.port.emit('refreshExtractions', pageData.pageUrl);
 }
 
-//Populate sidebar Rancor from addin
-addon.port.on("sidebarRancor", function(urlResults) {
-    if(urlResults.finished){
-        $('#btnRancorRefresh').show();
-        drawRancor(urlResults);
-        rancorFinished = true;
+//Populate sidebar Extractions from addin
+addon.port.on("sidebarContent", function(divHtml) {
+    if(!extractorFinished){
+        if(!divHtml){
+            return;
+        }else if(divHtml.length != 189){
+            $('#btnExtractRefresh').show();
+            $('#widgetOne').replaceWith(divHtml);
+            extractorFinished=true;
+        }
     }
-
 });
 
 function refreshRancor(){
-    destroyRancor();
     addon.port.emit('refreshRancor', pageData.contentScriptKey);
 }
+
+//Populate sidebar Rancor from addin
+addon.port.on("sidebarRancor", function(urlResults) {
+    if(!rancorFinished){
+        if(urlResults.finished){
+            $('#btnRancorRefresh').show();
+            drawRancor(urlResults);
+            rancorFinished = true;
+        }
+    }
+});
 
 //Create rateit star system and bind to its event actions
 $(function () {

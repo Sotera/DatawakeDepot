@@ -38,7 +38,7 @@ var PluginState = function () {
   me.datawakeDepotContentScriptHandle = null;
   me.contentScriptHandles = {};
   me.pageModDatawakeDepotIncludeFilter = null;
-  me.maxRancorNodes = 25;
+  me.maxRancorNodes = 15;
 
   me.restRemotePost = function (url, content, callback) {
       Request({
@@ -108,6 +108,9 @@ var PluginState = function () {
   };
 
   me.postRancor = function(activeTab){
+      if(!me.currentDomainItems){
+          return;
+      }
       var feedRancorUrl = me.trailUrlRancor;
       var dataItems = me.currentDomainItems.map(function(di){
         return di.itemValue;

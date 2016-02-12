@@ -16,6 +16,7 @@ function drawRancor(urlResults) {
     var data = {nodes: urlResults.nodes, edges: urlResults.edges};
 
     var options = {
+        interaction:{hover:true},
         layout: {
             randomSeed: undefined,
             improvedLayout: false
@@ -36,5 +37,8 @@ function drawRancor(urlResults) {
     // add event listeners
     network.on('select', function (params) {
         window.open(data.nodes[params.nodes[0]].url, '_blank');
+    });
+    network.on('hoverNode', function (params) {
+        $('#popup').text(data.nodes[params.node].url);
     });
 }

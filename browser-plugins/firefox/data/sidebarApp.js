@@ -6,7 +6,7 @@ var rancorStatus = null;
 var sidebarTimer = null;
 
 var divExtracted = "<div id='widgetOne'><table class='DWD_table'><tr class='DWD_tr'><td class='DWD_td'>Loading . . .</td></tr></table></div>";
-var divRancor = "<div id='widgetTwo' style='background-color:white'><table class='DWD_table'><tr class='DWD_tr'><td class='DWD_td'>Loading . . .</td></tr></table></div>";
+var divRancor = "<div id='widgetTwo' style='background-color:white'><table class='DWD_table'><tr class='DWD_tr'><td class='DWD_td'>Loading . . .</td></tr></table><div id='popup' class='DWD_url'>_</div></div>";
 
 //Receive the current tab from the addin
 addon.port.on("send-sidebar-current-tab", function(data) {
@@ -22,12 +22,12 @@ addon.port.on("send-sidebar-current-tab", function(data) {
     extractorFinished = false;
 
     destroyRancor();
-    $('#btnRancorRefresh').hide();
+    //$('#btnRancorRescore').hide();
     $('#widgetTwo').replaceWith(divRancor);
     rancorFinished = false;
 
     //Start checking for sidebar content
-    sidebarTimer = setInterval(pollForSidebarContents,5000);
+    sidebarTimer = setInterval(pollForSidebarContents,1000);
 });
 
 function pollForSidebarContents(){
@@ -85,11 +85,23 @@ function refreshRancor(){
     addon.port.emit('refreshRancor', pageData.contentScriptKey);
 }
 
+function rescoreRancor(){
+    destroyRancor();
+    //$('#btnRancorRescore').hide();
+    $('#widgetTwo').replaceWith(divRancor);
+    rancorFinished = false;
+
+    addon.port.emit('rescoreRancor', pageData);
+
+    //Start checking for sidebar content
+    sidebarTimer = setInterval(pollForSidebarContents,1000);
+}
+
 //Populate sidebar Rancor from addin
 addon.port.on("sidebarRancor", function(urlResults) {
     if(!rancorFinished){
         if(urlResults.finished){
-            $('#btnRancorRefresh').show();
+            //$('#btnRancorRescore').show();
             drawRancor(urlResults);
             rancorFinished = true;
         }

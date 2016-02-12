@@ -74,6 +74,12 @@
     font-size: .7em;
 }
 
+.DWD_url{
+    background-color: white;
+    color: #5F5F5F;
+    font-size: .65em;
+}
+
 .DWD_th_ext1{
     width:112px;
 }
@@ -119,6 +125,10 @@
     width:80px;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+.DWD_div_rancor{
+    height:12px;
+    width:217px;
 }
 
 

@@ -144,6 +144,12 @@ exports.init = function () {
               getRancorResults(tabId,sidebarWorker);
           });
 
+          //Listen for sidebar requests to rescore Rancor content
+          worker.port.on("rescoreRancor", function() {
+              //Requery for rancor results
+              pluginState.postRancor(activeTab, function () {});
+          });
+
           //Listen for sidebar requests to create Domain Items
           worker.port.on('addDomainItem-target-addin', function(domainItem,tabId) {
               addDomainItem(domainItem, tabId);
@@ -221,9 +227,9 @@ exports.init = function () {
               }
 
           });
-
-          //Request fresh Rancor sidebar content
-          pluginState.postRancor(tabs.activeTab, function () {});
+          //
+          ////Request fresh Rancor sidebar content
+          //pluginState.postRancor(tabs.activeTab, function () {});
 
           //Then tell the page to refresh its dataitems
           pluginState.postEventToContentScript(tabs.activeTab.id, 'refresh-data-items-target-content-script', {

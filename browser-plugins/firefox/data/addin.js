@@ -387,7 +387,7 @@ function getRancorResults(activeTabId,sbw){
     pluginState.getRancor(activeTabId,function(urlRankings){
         if(!urlRankings){
           return;
-        };
+        }
         //if we have results, send to sidebar and clear the interval
         if(urlRankings.edges.length>0 || urlRankings.finished){
             sbw.port.emit("sidebarRancor", urlRankings);

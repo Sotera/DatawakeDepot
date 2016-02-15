@@ -47,9 +47,11 @@ function getPanelData(){
 
 function showDataItems(dataItems){
     dataItemsActive = true;
-    dataItems.forEach(function (domainItem) {
-        $('body').highlight(domainItem.itemValue);
+    var newDomainItems = dataItems.map(function(dataitem){
+        return dataitem.itemValue;
     });
+
+    $('body').highlight(newDomainItems);
 }
 
 function showNewDataItem(dataitem){

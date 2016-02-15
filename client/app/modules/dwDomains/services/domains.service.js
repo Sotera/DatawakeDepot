@@ -99,25 +99,35 @@ app.service('DomainsService', ['$state', 'CoreService', 'DwDomain','gettextCatal
 
     this.getPrettyDomain = function(domainId){
         var filter = {
-                filter:{
-                    fields: ['id','name','description'],
-                    where:{
-                        id: domainId
-                    },
-                    include: [
-                        {relation:'domainEntityTypes',scope:{fields:['name','description']}},
-                        {relation:'domainItems',
-                            scope:{
-                                fields:{
-                                    'itemValue':true,
-                                    'type':true,
-                                    'source':true,
-                                    'dwDomainId':false
-                                }
-                            }
+            filter:{
+                fields: ['id','name','description'],
+                where:{
+                    id: domainId
+                },
+
+                include: [
+                    {relation:'domainEntityTypes',
+                        scope:{
+                            fields: [
+                                'name',
+                                'description',
+                                'source',
+                                {'dwDomainId': false}
+                            ]
                         }
-                    ]
-                }
+                    },
+                    {relation:'domainItems',
+                        scope:{
+                            fields:[
+                                'itemValue',
+                                'type',
+                                'source',
+                                {'dwDomainId': false}
+                            ]
+                        }
+                    }
+                ]
+            }
         };
         return DwDomain.findOne(filter);
     };
@@ -169,6 +179,23 @@ app.service('DomainsService', ['$state', 'CoreService', 'DwDomain','gettextCatal
         return sorted.slice(0,urlCount);
     };
 
+    this.getTopExtractions = function (extractions, extCount){
+        // count them
+        var extCounts = { };
+        for (var i = 0, j = extractions.length; i < j; i++) {
+            extCounts[extractions[i]] = (extCounts[extractions[i]] || 0) + 1;
+        }
+
+        //Now sort them
+        var sorted= [];
+        for(var key in extCounts){
+            sorted.push({value:key,count:extCounts[key]});
+        }
+        sorted.sort(sortBy('count',true)); //Descending
+
+        //Now crop and return them
+        return sorted.slice(0,extCount);
+    };
 
     function sortBy(key, reverse) {
         // Move smaller items towards the front or back of the array depending on if

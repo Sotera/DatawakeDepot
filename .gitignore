@@ -5,4 +5,5 @@ db.json
 node_modules/
 dist/
 providers.json
+server/datasources.json
 *.xpi

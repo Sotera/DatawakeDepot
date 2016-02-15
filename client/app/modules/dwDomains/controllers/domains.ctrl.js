@@ -2,7 +2,7 @@
 var app = angular.module('com.module.dwDomains');
 
 app.controller('DomainsCtrl', function($scope, $state, $http, $stateParams, FileUploader, DwTeam, DwExtractor, CoreService,
-                                       DomainsService, gettextCatalog, AppAuth) {
+                                       DomainsService, gettextCatalog, AppAuth, lodash) {
     $scope.plExtractors = [];
     $scope.plTeams=[];
 
@@ -79,8 +79,14 @@ app.controller('DomainsCtrl', function($scope, $state, $http, $stateParams, File
             });
     };
 
+    $scope.onlyUnique = function (value, index, self) {
+        return self.indexOf(value) === index;
+    };
+
     $scope.export = function(domain){
         DomainsService.getPrettyDomain(domain.id).$promise.then(function(foundDomain){
+            var domainItems = [];
+            var domainTypes = [];
             DomainsService.getDomainUrls(domain.id).$promise.then(function(trails){
                 var constructedDomain = {};
                 var domainUrls = [];
@@ -91,30 +97,47 @@ app.controller('DomainsCtrl', function($scope, $state, $http, $stateParams, File
                     if(trail.trailUrls){
                         trail.trailUrls.forEach(function (trailUrl){
                             domainUrls.push(trailUrl.url);
+
                             if(trailUrl.searchTerms){
-                                domainSearchTerms.push(trailUrl.searchTerms);
+                                //Don't get duplicate searchTerms
+                                if(domainSearchTerms.indexOf(trailUrl.searchTerms[0])==-1){
+                                    domainSearchTerms.push(trailUrl.searchTerms[0]);
+                                }
                             }
-                            //TODO: not sure exactly how many of these we want to return, there will be a LOT
+
                             if(trailUrl.urlExtractions){
                                 trailUrl.urlExtractions.forEach(function(extraction){
-                                    domainExtractions.push(extraction.value);
+                                    domainExtractions.push(extraction.extractorTypes.toString() +':' +extraction.value);
                                 })
                             }
                         });
                     }
                 });
 
-                //TODO: we need to get the top 20, not just the first 20
-                var domainTop20Extractions = domainExtractions.slice(0,20);
-                var domainTop5 = DomainsService.getTopLevels(domainUrls,5);
+                if(foundDomain.domainItems){
+                    foundDomain.domainItems.forEach(function(domainItem){
+                        var newDomainItem = {value:domainItem.itemValue,type:domainItem.type,source:domainItem.source};
+                        domainItems.push(newDomainItem);
+                    });
+                }
+
+                if(foundDomain.domainEntityTypes){
+                    foundDomain.domainEntityTypes.forEach(function(domainType){
+                        var newDomainType = {name:domainType.name,source:domainType.source};
+                        domainTypes.push(newDomainType);
+                    });
+                }
+
+                var domainTop50Extractions = DomainsService.getTopExtractions(domainExtractions,50);
+                var domainTop25 = DomainsService.getTopLevels(domainUrls,25);
 
                 constructedDomain['domainName'] = foundDomain.name;
-                constructedDomain['urls'] = domainUrls;
-                constructedDomain['searchTerms'] = domainSearchTerms;
-                constructedDomain['domainTop5'] = domainTop5;
-                constructedDomain['top20Extractions'] = domainTop20Extractions;
-                constructedDomain['domainEntities'] = foundDomain.domainItems;
-                constructedDomain['domainEntityTypes'] = foundDomain.domainEntityTypes;
+                constructedDomain['urls'] = lodash.uniq(domainUrls); //Deduped
+                constructedDomain['searchTerms'] = domainSearchTerms; //no need to Dedupe
+                constructedDomain['top25Urls'] = domainTop25; //contains counts
+                constructedDomain['top50ExtractedTerms'] = domainTop50Extractions; //contains counts
+                constructedDomain['domainEntities'] = lodash.uniqBy(domainItems,'value'); //Deduped
+                constructedDomain['domainEntityTypes'] = lodash.uniqBy(domainTypes,'name'); //Deduped
 
                 $scope.saveFile(foundDomain.name + '.json',JSON.stringify(constructedDomain));
             });

@@ -138,6 +138,11 @@ exports.init = function () {
               });
           });
 
+          //Listen for sidebar requests to get Extractoins
+          worker.port.on("toggleExtractionStatus", function(status) {
+              pluginState.extractionActive = status;
+          });
+
           //Listen for sidebar requests to refresh Rancor content
           worker.port.on("refreshRancor", function(tabId) {
               //Get the Rancor results

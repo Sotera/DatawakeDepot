@@ -37,6 +37,9 @@
                 <tr>
                     <th class="DWD_th" colspan="3">
                         &nbsp;Extracted Entities&nbsp;
+                        <button id="btnExtractRefresh" onclick='regetExtractions()' class="fa fa-refresh"/>
+                        <button id="btnExtractionToggleOn" onclick='toggleExtraction(true)' class="fa fa-toggle-off" style="display:none"/>
+                        <button id="btnExtractionToggleOff" onclick='toggleExtraction(false)' class="fa fa-toggle-on" />
 
                     </th>
                 </tr>
@@ -65,7 +68,15 @@
             </tr>
         </table>
 
-        <div id='widgetTwo' style='background-color:white'><table class='DWD_table'><tr class='DWD_tr'><td class='DWD_td'>Inactive</td></tr></table></div>
+        <div id='widgetTwo' style='background-color:white'>
+            <table class='DWD_table'>
+                <tr class='DWD_tr'>
+                    <td class='DWD_td'>
+                        Inactive
+                    </td>
+                </tr>
+            </table>
+        </div>
 
         <div id='popup' class='DWD_url'></div>
     </div>

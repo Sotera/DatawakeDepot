@@ -1,14 +1,15 @@
 var pageData = null;
-var extractorFinished = false;
+var extractionFinished = false;
 var rancorFinished = false;
 var rancorActive = null;
 var extractionActive = null;
 var extractionTimer = null;
 var rancorTimer = null;
 
-var divExtracted = "<div id='widgetOne'><table class='DWD_table'><tr class='DWD_tr'><td class='DWD_td'>Loading . . .</td></tr></table></div>";
+var divExtracted = "<div id='widgetOne'><table class='DWD_table'><tr class='DWD_tr'><td class='DWD_td'><img src='./images/animated_loader.gif' height='15'/>&nbsp;Loading . . .</td></tr></table></div>";
+var divExtractedStale = "<div id='widgetOne'><table class='DWD_table'><tr class='DWD_tr'><td class='DWD_td'>&nbsp;</td></tr></table></div>";
 var divExtractedInactive = "<div id='widgetOne'><table class='DWD_table'><tr class='DWD_tr'><td class='DWD_td'>Inactive</td></tr></table></div>";
-var divRancor = "<div id='widgetTwo' style='background-color:white'><table class='DWD_table'><tr class='DWD_tr'><td class='DWD_td'>Loading . . .</td></tr></table></div>";
+var divRancor = "<div id='widgetTwo' style='background-color:white'><table class='DWD_table'><tr class='DWD_tr'><td class='DWD_td'><img src='./images/animated_loader.gif' height='15'/>&nbsp;Loading . . .</td></tr></table></div>";
 var divRancorInactive = "<div id='widgetTwo' style='background-color:white'><table class='DWD_table'><tr class='DWD_tr'><td class='DWD_td'>Inactive</td></tr></table></div>";
 
 //Receive the current tab from the addin
@@ -28,11 +29,18 @@ addon.port.on("send-sidebar-current-tab", function(data) {
     if(extractionActive){
         $('#btnExtractRefresh').hide();
         $('#widgetOne').replaceWith(divExtracted);
-        extractorFinished = false;
-    }else{
-        $('#btnExtractRefresh').hide();
-        $('#widgetOne').replaceWith(divExtractedInactive);
-        extractorFinished = true;
+        extractionFinished = false;
+    }else {
+        if (extractionActive == undefined) {
+            $('#btnExtractRefresh').show();
+            $('#widgetOne').replaceWith(divExtractedStale);
+        } else
+        {
+            $('#btnExtractRefresh').hide();
+            $('#widgetOne').replaceWith(divExtractedInactive);
+        }
+
+        extractionFinished = true;
     }
 
     //Reset the rancor
@@ -60,7 +68,7 @@ addon.port.on("send-sidebar-current-tab", function(data) {
 });
 
 function pollForExtractionContents(){
-    if(!extractorFinished){
+    if(!extractionFinished){
         refreshExtractions();
     }else{
         clearInterval(extractionTimer);
@@ -99,15 +107,49 @@ function refreshExtractions(){
     addon.port.emit('refreshExtractions', pageData.pageUrl);
 }
 
+function regetExtractions(){
+    $('#widgetOne').replaceWith(divExtracted);
+    extractionFinished = false;
+
+    addon.port.emit('refreshExtractions', pageData.pageUrl);
+
+    //Start checking for sidebar content
+    rancorTimer = setInterval(pollForExtractionContentsContents,1000);
+}
+
+function toggleExtraction(enabled){
+    if(enabled){
+        extractionActive = true;
+        extractionFinished = false;
+
+        $('#btnExtractionToggleOn').hide();
+        $('#btnExtractionToggleOff').show();
+        $('#btnExtractRefresh').hide();
+        $('#widgetOne').replaceWith(divExtracted);
+        extractionTimer = setInterval(pollForExtractionContents,1000);
+    } else{
+        extractionActive = false;
+        extractionFinished = true;
+
+        $('#btnExtractionToggleOn').show();
+        $('#btnExtractionToggleOff').hide();
+        $('#btnExtractRefresh').hide();
+        $('#widgetOne').replaceWith(divExtractedInactive);
+        clearInterval(extractionTimer);
+    }
+
+    addon.port.emit('toggleExtractionStatus', enabled);
+}
+
 //Populate sidebar Extractions from addin
 addon.port.on("sidebarContent", function(divHtml) {
-    if(!extractorFinished){
+    if(!extractionFinished){
         if(!divHtml){
             return;
         }else if(divHtml.length != 189){
             $('#btnExtractRefresh').show();
             $('#widgetOne').replaceWith(divHtml);
-            extractorFinished=true;
+            extractionFinished=true;
         }
     }
 });
@@ -170,7 +212,7 @@ addon.port.on("sidebarRancor", function(urlResults) {
 
 //Create rateit star system and bind to its event actions
 $(function () {
-    $('#divPageRating').rateit({ max: 5, step: 1, backingfld: '#inputRating' });
+    $('#divPageRating').rateit({ max: 11, step: 1, backingfld: '#inputRating' });
     $("#divPageRating").bind('rated', function (event,value) {pageRating(event.type,value)});
     $("#divPageRating").bind('reset', function (event,value) {pageRating(event.type,value)});
 });

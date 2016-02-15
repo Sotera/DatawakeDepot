@@ -39,7 +39,7 @@
     "options": {
       "unique": true
     }
-  }
+  },
   "validations": [],
   "relations": {
     "trailUrl": {

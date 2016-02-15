@@ -31,6 +31,15 @@
       "defaultFn": "now"
     }
   },
+  "uniqueExtraction": {
+    "keys":{
+      "value": 1,
+      "dwTrailUrlId": 1
+    },
+    "options": {
+      "unique": true
+    }
+  },
   "validations": [],
   "relations": {
     "trailUrl": {

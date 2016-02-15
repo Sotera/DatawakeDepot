@@ -17,19 +17,14 @@ module.exports = function (app) {
   var alphabet = 'ABCDEF'.split('');
   //var alphabet = 'ABCDEFGHIJKLM'.split('');
   //var alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-  var adminRoles = ['admins', 'users', 'guests'];
+  var adminRoles = [{id:'56941a164515b1441419422e',name:'admins'},{id: '56941a164515b14414194229',name: 'users'},{id: '56941a164515b14414194221',name: 'guests'}];
   var adminUsers = [{
+    id: '56941a164515b14414194239',
     firstName: 'Admin',
     lastName: 'User',
     email: 'admin@admin.com',
     username: 'admin',
     password: 'admin'
-  //}, {
-  //  firstName: 'John',
-  //  lastName: 'Reeme',
-  //  email: 'jreeme@gmail.com',
-  //  username: 'jreeme',
-  //  password: 'password'
   }];
   async.parallel([
       createAdminUsers
@@ -99,9 +94,9 @@ module.exports = function (app) {
 
   function createAdminRoles(cb) {
     var functionArray = [];
-    adminRoles.forEach(function (roleName) {
-      functionArray.push(async.apply(findOrCreateObj, Role, {where: {name: roleName}},
-        {name: roleName}));
+    adminRoles.forEach(function (role) {
+      functionArray.push(async.apply(findOrCreateObj, Role, {where: {id: role.id,name: role.name}},
+        {id: role.id,name: role.name}));
     });
     async.parallel(functionArray, cb);
   }
@@ -109,7 +104,7 @@ module.exports = function (app) {
   function createAdminUsers(cb) {
     var functionArray = [];
     adminUsers.forEach(function (user) {
-      functionArray.push(async.apply(findOrCreateObj, AminoUser, {where: {username: user.username}}, user));
+      functionArray.push(async.apply(findOrCreateObj, AminoUser, {where: {id:user.id, username: user.username}}, user));
     });
     async.parallel(functionArray, cb);
   }

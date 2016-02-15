@@ -1,52 +1,82 @@
-
 var pageData = null;
 var extractorFinished = false;
 var rancorFinished = false;
-var rancorStatus = null;
-var sidebarTimer = null;
+var rancorActive = null;
+var extractionActive = null;
+var extractionTimer = null;
+var rancorTimer = null;
 
 var divExtracted = "<div id='widgetOne'><table class='DWD_table'><tr class='DWD_tr'><td class='DWD_td'>Loading . . .</td></tr></table></div>";
+var divExtractedInactive = "<div id='widgetOne'><table class='DWD_table'><tr class='DWD_tr'><td class='DWD_td'>Inactive</td></tr></table></div>";
 var divRancor = "<div id='widgetTwo' style='background-color:white'><table class='DWD_table'><tr class='DWD_tr'><td class='DWD_td'>Loading . . .</td></tr></table></div>";
+var divRancorInactive = "<div id='widgetTwo' style='background-color:white'><table class='DWD_table'><tr class='DWD_tr'><td class='DWD_td'>Inactive</td></tr></table></div>";
 
 //Receive the current tab from the addin
 addon.port.on("send-sidebar-current-tab", function(data) {
     //Kill the previous interval is there is one
-    clearInterval(sidebarTimer);
+    clearInterval(extractionTimer);
+    clearInterval(rancorTimer);
 
     pageData = data;
-    //Clear the rating, reset the extractor, clear the rancor, reset variables
+    rancorActive = data.rancorActive;
+    extractionActive = data.extractionActive;
+
+    //Clear the rating
     setRating();
 
-    $('#btnExtractRefresh').hide();
-    $('#widgetOne').replaceWith(divExtracted);
-    extractorFinished = false;
+    //Reset the extractor
+    if(extractionActive){
+        $('#btnExtractRefresh').hide();
+        $('#widgetOne').replaceWith(divExtracted);
+        extractorFinished = false;
+    }else{
+        $('#btnExtractRefresh').hide();
+        $('#widgetOne').replaceWith(divExtractedInactive);
+        extractorFinished = true;
+    }
 
-    destroyRancor();
-    $('#btnRancorRescore').hide();
-    $('#widgetTwo').replaceWith(divRancor);
-    $('#popup').text('');
-    rancorFinished = false;
+    //Reset the rancor
+    if(rancorActive){
+        destroyRancor();
+        $('#btnRancorRescore').hide();
+        $('#widgetTwo').replaceWith(divRancor);
+        $('#popup').text('');
+        rancorFinished = false;
+    }else{
+        destroyRancor();
+        $('#btnRancorRescore').hide();
+        $('#widgetTwo').replaceWith(divRancorInactive);
+        $('#popup').text('');
+        rancorFinished = true;
+    }
 
     //Start checking for sidebar content
-    sidebarTimer = setInterval(pollForSidebarContents,1000);
+    if(extractionActive){
+        extractionTimer = setInterval(pollForExtractionContents,1000);
+    }
+    if(rancorActive){
+        rancorTimer = setInterval(pollForRancorContents,1000);
+    }
 });
 
-function pollForSidebarContents(){
+function pollForExtractionContents(){
     if(!extractorFinished){
         refreshExtractions();
+    }else{
+        clearInterval(extractionTimer);
     }
+}
 
+function pollForRancorContents(){
     if(!rancorFinished){
         refreshRancor();
-    }
-
-    if(extractorFinished && rancorFinished){
-        clearInterval(sidebarTimer);
+    }else{
+        clearInterval(rancorTimer);
     }
 }
 
 //Populate sidebar Page Rating from addin
-addon.port.on("sidebarRating", function(rating) {sidebarTimer
+addon.port.on("sidebarRating", function(rating) {
     setRating(rating);
 });
 
@@ -83,7 +113,9 @@ addon.port.on("sidebarContent", function(divHtml) {
 });
 
 function refreshRancor(){
-    addon.port.emit('refreshRancor', pageData.contentScriptKey);
+    if(pageData){
+        addon.port.emit('refreshRancor', pageData.contentScriptKey);
+    }
 }
 
 function rescoreRancor(){
@@ -94,7 +126,35 @@ function rescoreRancor(){
     addon.port.emit('rescoreRancor', pageData);
 
     //Start checking for sidebar content
-    sidebarTimer = setInterval(pollForSidebarContents,1000);
+    rancorTimer = setInterval(pollForRancorContents,1000);
+}
+
+function toggleRancor(enabled){
+    if(enabled){
+        rancorActive = true;
+        rancorFinished = false;
+        destroyRancor();
+        $('#btnRancorToggleOn').hide();
+        $('#btnRancorToggleOff').show();
+        $('#btnRancorRescore').hide();
+        $('#widgetTwo').replaceWith(divRancor);
+        $('#popup').text('');
+
+        rancorTimer = setInterval(pollForRancorContents,1000);
+    } else{
+        rancorActive = false;
+        rancorFinished = true;
+        destroyRancor();
+        $('#btnRancorToggleOn').show();
+        $('#btnRancorToggleOff').hide();
+        $('#btnRancorRescore').hide();
+        $('#widgetTwo').replaceWith(divRancorInactive);
+        $('#popup').text('');
+
+        clearInterval(rancorTimer);
+    }
+
+    addon.port.emit('toggleRancorStatus', enabled);
 }
 
 //Populate sidebar Rancor from addin

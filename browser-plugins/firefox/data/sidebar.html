@@ -49,8 +49,7 @@
         </div>
     </div>
     <div id="widgetExtraction" class="DWD_widget">
-        <div id="widgetOne">
-        </div>
+        <div id='widgetOne'><table class='DWD_table'><tr class='DWD_tr'><td class='DWD_td'>Inactive</td></tr></table></div>
     </div>
 
 
@@ -59,12 +58,14 @@
             <tr>
                 <th class="DWD_th">
                     Page Rancor
-                    <button id="btnRancorRescore" onclick='rescoreRancor()' class="fa fa-refresh"/>
+                    <button id="btnRancorRescore" onclick='rescoreRancor()' class="fa fa-refresh" style="display:none"/>
+                    <button id="btnRancorToggleOn" onclick='toggleRancor(true)' class="fa fa-toggle-off"/>
+                    <button id="btnRancorToggleOff" onclick='toggleRancor(false)' class="fa fa-toggle-on" style="display:none"/>
                 </th>
             </tr>
         </table>
 
-        <div id="widgetTwo" style="background-color:white"></div>
+        <div id='widgetTwo' style='background-color:white'><table class='DWD_table'><tr class='DWD_tr'><td class='DWD_td'>Inactive</td></tr></table></div>
 
         <div id='popup' class='DWD_url'></div>
     </div>

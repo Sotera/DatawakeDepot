@@ -150,6 +150,11 @@ exports.init = function () {
               pluginState.postRancor(activeTab, function () {});
           });
 
+          //Listen for sidebar requests to set Rancor Status
+          worker.port.on("toggleRancorStatus", function(status) {
+              pluginState.rancorActive = status;
+          });
+
           //Listen for sidebar requests to create Domain Items
           worker.port.on('addDomainItem-target-addin', function(domainItem,tabId) {
               addDomainItem(domainItem, tabId);
@@ -184,7 +189,9 @@ exports.init = function () {
             //This will now call to prepare Extracted Entities and Rancor, but let the sidebar request them
             sidebarWorker.port.emit("send-sidebar-current-tab", {
                 contentScriptKey: tabs.activeTab.id,
-                pageUrl: tabs.activeTab.url
+                pageUrl: tabs.activeTab.url,
+                rancorActive: pluginState.rancorActive,
+                extractionActive: pluginState.extractionActive
             });
 
             //Request rating for this url if it exists

@@ -1,8 +1,11 @@
 'use strict';
 // to enable these logs set `DEBUG=boot:02-load-users` or `DEBUG=boot:*`
 var async = require('async');
+var cluster = require('cluster');
+
 var log = require('debug')('boot:02-load-users');
 module.exports = function (app) {
+
   //JReeme sez: setMaxListeners so we don't have to see that ridiculous memory leak warning
   app.models.AminoUser.getDataSource().setMaxListeners(0);
   app.models.Role.getDataSource().setMaxListeners(0);
@@ -26,43 +29,54 @@ module.exports = function (app) {
     username: 'admin',
     password: 'admin'
   }];
-  async.parallel([
-      createAdminUsers
-      , createAdminRoles
-    ], function (err, result) {
-      if (err) {
-        log(err);
-        return;
-      }
-      var createdAdminUsers = result[0];
-      var createdAdminRoles = result[1];
-      //Add admin to admins group
-      createdAdminRoles.filter(function (role) {
-        return role.name === 'admins';
-      }).forEach(function (adminRole) {
-        async.map(createdAdminUsers, function (adminUser) {
-          adminRole.principals(function (err, roleMappings) {
-            if (roleMappings.length) {
-              return;
-            }
-            adminRole.principals.create(
-              {
-                principalType: RoleMapping.USER,
-                principalId: adminUser.id
-              },
-              function (err, roleMapping) {
-                if (err) {
-                  log('error creating rolePrincipal', err);
-                } else {
-                  log('created roleMapping: ' + roleMapping);
-                }
+
+  if(cluster.isMaster){
+      console.log('CLUSTER IS MASTER.');
+  }
+  if(cluster.isWorker && cluster.worker.id == '1'){
+      console.log('worker #1 exists.');
+  }
+
+
+  if (cluster.isMaster || (cluster.isWorker && cluster.worker.id == '1')) {
+      async.parallel([
+              createAdminUsers
+              , createAdminRoles
+          ], function (err, result) {
+              if (err) {
+                  log(err);
+                  return;
               }
-            );
-          });
-        });
-      });
-    }
-  );
+              var createdAdminUsers = result[0];
+              var createdAdminRoles = result[1];
+              //Add admin to admins group
+              createdAdminRoles.filter(function (role) {
+                  return role.name === 'admins';
+              }).forEach(function (adminRole) {
+                  async.map(createdAdminUsers, function (adminUser) {
+                      adminRole.principals(function (err, roleMappings) {
+                          if (roleMappings.length) {
+                              return;
+                          }
+                          adminRole.principals.create(
+                              {
+                                  principalType: RoleMapping.USER,
+                                  principalId: adminUser.id
+                              },
+                              function (err, roleMapping) {
+                                  if (err) {
+                                      log('error creating rolePrincipal', err);
+                                  } else {
+                                      log('created roleMapping: ' + roleMapping);
+                                  }
+                              }
+                          );
+                      });
+                  });
+              });
+          }
+      )
+  }
 
   //Create user cookies.  We don't currently use these but if/when we goto passport they are needed and should have already been here
   app.models.AminoUser.afterRemote('login', function(context, accessToken, next) {

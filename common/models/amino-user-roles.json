@@ -1,5 +1,5 @@
 {
-  "name": "RoleMapping",
+  "name": "AminoUserRoleMapping",
   "description": "Map principals to roles",
   "properties": {
     "id": {

@@ -12,13 +12,18 @@ body {
     -webkit-font-smoothing: antialiased;
     font-weight: 600;
     /*color: #2770a8;*/
-    background: #8cf4ff;
+    background: #5F5F5F;
 }
 
 #waveImg {
     margin-left: 0px;
     margin-top: 4px;
     vertical-align: top;
+}
+
+.body-throb{
+    background: ghostwhite;
+    -moz-animation: color_change2 1s infinite alternate;
 }
 
 .red-throb{
@@ -29,6 +34,11 @@ body {
 @-moz-keyframes color_change {
     from { background-color: #ac1b00; }
     to { background-color: #cd3400; }
+}
+
+@-moz-keyframes color_change2 {
+    from { background-color: #908c88; }
+    to { background-color: #77716f; }
 }
 
 a,
@@ -138,9 +148,142 @@ select {
     padding-left: 0px;
 }
 
+.select-editable {
+    position:relative;
+    background-color:white;
+    /*border:solid grey 1px;*/
+    width:120px;
+    height:30px;
+    line-height: 1.5;
+    border-radius: 3px;
+}
+.select-editable select {
+    position:absolute;
+    top:0px;
+    left:0px;
+    font-size:12px;
+    border:none;
+    width:120px;
+    margin:0;
+    line-height: 1.5;
+    border-radius: 3px;
+}
+.select-editable input {
+    position:absolute;
+    top:0px;
+    left:0px;
+    width:105px;
+    padding:1px;
+    font-size:12px;
+    border:none;
+    line-height: 1.5;
+    border-radius: 3px;
+}
+.select-editable select:focus, .select-editable input:focus {
+    outline:none;
+}
+
 /* only for column content visible */
 /*.col-lg-1 > div {
     background-color: #ddd;
 }*/
 
+.icon-dw {
+    background-image: url("./images/waveicon24.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 24px;
+    width: 24px;
+}
+
+.icon-dw:hover {
+    background-image: url("./images/waveicon24.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 24px;
+    width: 24px;
+}
+
+.icon-dw:focus {
+    background-image: url("./images/waveicon24.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 24px;
+    width: 24px;
+}
+
+.icon-forensic {
+    background-image: url("./images/forensic.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 24px;
+    width: 24px;
+    border-color: #2c4361 #2c4361 hsl(214, 37%, 19.5%);
+}
+
+.icon-forensic:hover {
+    background-image: url("./images/forensic.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 24px;
+    width: 24px;
+}
+
+.icon-forensic:focus {
+    background-image: url("./images/forensic.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 24px;
+    width: 24px;
+}
+
+.icon-trails {
+    background-image: url("./images/trails.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 24px;
+    width: 24px;
+    border-color: #2c4361 #2c4361 hsl(214, 37%, 19.5%);
+}
+
+.icon-trails:hover {
+    background-image: url("./images/trails.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 24px;
+    width: 24px;
+}
+
+.icon-trails:focus {
+    background-image: url("./images/trails.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 24px;
+    width: 24px;
+}
+
+.icon-domains {
+    background-image: url("./images/domains.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 24px;
+    width: 24px;
+    border-color: #2c4361 #2c4361 hsl(214, 37%, 19.5%);
+}
+
+.icon-domains:hover {
+    background-image: url("./images/domains.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 24px;
+    width: 24px;
+}
+
+.icon-domains:focus {
+    background-image: url("./images/domains.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 24px;
+    width: 24px;
+}
 

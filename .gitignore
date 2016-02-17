@@ -1,10 +1,9 @@
 .idea/
 .tmp/
 client/app/bower_components/
-client/app/index.html
-client/app/js/config.js
-client/app/js/lb-services.js
 db.json
 node_modules/
 dist/
 providers.json
+server/datasources.json
+*.xpi

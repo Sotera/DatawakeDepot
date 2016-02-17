@@ -3,8 +3,6 @@ var app = angular.module('com.module.dwSettings');
 
 app.controller('SettingsCtrl', function($scope, $state, $stateParams, DwSetting, SettingsService, gettextCatalog, AppAuth) {
 
-  //Put the currentUser in $scope for convenience
-  $scope.currentUser = AppAuth.currentUser;
 
   $scope.setting = {};
   $scope.formFields = [{

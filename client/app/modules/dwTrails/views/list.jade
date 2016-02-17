@@ -4,43 +4,34 @@
     table.table.table-striped(st-table='displayedTrails', st-safe-src='safeDisplayedtrails')
       thead
         tr
-          th(colspan="9")
+          th(colspan="5")
             input.input-sm.form-control(st-search='' type='search' placeholder='Search')
+          th(colspan="1")
+            button.btn.btn-sm.btn-default(ui-sref='^.list' ui-sref-opts="{reload: true, notify: true}",title='Refresh Trails')
+                i.fa.fa-refresh
       thead
         tr
-          th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='name' st-sort-default="true") Name
-          th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='description') Description
-          th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='team') Team
-          th.sortable.col-sm-1.col-md-1.col-lg-1.td-center.text-nowrap(st-sort='domainId') Domain
-          th.sortable.col-sm-1.col-md-1.col-lg-1(st-sort='scrape') Scrape
-          th.sortable.col-sm-1.col-md-1.col-lg-1.td-center.text-nowrap(st-sort='userId') # Users
-          th.sortable.col-sm-1.col-md-1.col-lg-1.td-center.text-nowrap(st-sort='') # URLs
-          th.sortable.col-sm-1.col-md-1.col-lg-1.td-center(st-sort='') Feeds
-          th.sortable.col-sm-2.col-md-2.col-lg-2(st-sort='timestamp') Timestamp
-          th.col-sm-2.col-md-2.col-lg-2.td-center
-              a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add')
-                | Add Trail
+          th.sortable.col-sm-3.col-md-3.col-lg-3.td-center(st-sort='name' st-sort-default="true") Name
+          th.sortable.col-sm-3.col-md-3.col-lg-3.td-center(st-sort='description') Description
+          th.sortable.col-sm-2.col-md-2.col-lg-2.td-center(st-sort='domain.name') Domain
+          th.sortable.col-sm-1.col-md-1.col-lg-1.td-center(st-sort='trailUrls.length') # URLs
+          th.sortable.col-sm-2.col-md-2.col-lg-2.td-center(st-sort='timestamp') Timestamp
+          th.col-sm-1.col-md-1.col-lg-1.td-center
+              a.btn.btn-sm.btn-success.glyphicon.glyphicon-plus.custom(ui-sref='^.add') &nbsp;Add Trail
       tbody
         tr(ng-repeat='trail in displayedTrails')
           td.hidden
             span {{trail.id}}
-          td(style='width: 120px')
-            a(href='', ui-sref='app.dwTrails.view({id: trail.id})') {{trail.name}}
+          td
+            a(ui-sref='app.dwTrails.view({id: trail.id})' title='view Trail JSON') {{trail.name}}
           td
             span.text-muted {{trail.description}}
-          td
-            span.text-muted {{trail.team.name}}
           td.td-center
-            span.label.label-ltgray {{trail.domain.name}}
-          td
-            span.text-muted {{trail.scrape}}
+            span.label.label-ltgray
+              a(ui-sref='app.dwDomains.list({id:domain.id})' title='view Domains') {{trail.domain.name}}
           td.td-center
-            span.label.label-ltgray(ng-repeat="user in trail.users") {{user.username}}
+            a(ui-sref='app.dwTrailUrls.list({id:null, trailId:trail.id})' title = 'view Trail Urls').badge {{trail.trailUrls.length}}
           td.td-center
-            a(ui-sref='app.dwTrailUrls.list({id:null, domainId:domain.id})') {{trail.trailUrls.length}}
-          td.td-center
-            span.label.label-ltgray(ng-repeat="feed in trail.feeds") {{feed.name}}
-          td
             span.text-muted {{trail.timestamp}}
           td.td-center(style='width: 120px')
             .btn-toolbar

@@ -7,19 +7,19 @@ app.config(function($stateProvider) {
         url: '/dwDomainItems',
         templateUrl: 'modules/dwDomainItems/views/main'
     }).state('app.dwDomainItems.list', {
-        url: '',
+        url: '/list/:domainId',
         templateUrl: 'modules/dwDomainItems/views/list',
         controller: 'DomainItemsCtrl'
     }).state('app.dwDomainItems.add', {
-        url: '/add',
+        url: '/add/:domainId',
         templateUrl: 'modules/dwDomainItems/views/form',
         controller: 'DomainItemsCtrl'
     }).state('app.dwDomainItems.edit', {
-        url: '/:id/edit',
+        url: '/edit/:id/:domainId',
         templateUrl: 'modules/dwDomainItems/views/form',
         controller: 'DomainItemsCtrl'
     }).state('app.dwDomainItems.view', {
-        url: '/:id',
+        url: '/view/:id/:domainId',
         templateUrl: 'modules/dwDomainItems/views/view',
         controller: 'DomainItemsCtrl'
     });

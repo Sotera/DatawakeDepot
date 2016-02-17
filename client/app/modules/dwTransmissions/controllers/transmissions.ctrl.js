@@ -1,10 +1,8 @@
 'use strict';
 var app = angular.module('com.module.dwTransmissions');
 
-app.controller('TransmissionsCtrl', function($scope, $state, $stateParams, DwFeed, DwTransmission, DwServiceType, TransmissionsService, gettextCatalog, AppAuth) {
+app.controller('TransmissionsCtrl', function($scope, $state, $stateParams, DwFeed, TransmissionsService, gettextCatalog, AppAuth) {
 
-    //Put the currentUser in $scope for convenience
-    $scope.currentUser = AppAuth.currentUser;
     $scope.feeds = [];
     $scope.statuses = [
         {"name": "SUCCEEDED","description": "Succeeded" },
@@ -64,7 +62,7 @@ app.controller('TransmissionsCtrl', function($scope, $state, $stateParams, DwFee
                 color: "white"
             }
         }
-    }
+    };
 
     $scope.delete = function(id) {
         TransmissionsService.deleteTransmission(id, function() {
@@ -80,67 +78,46 @@ app.controller('TransmissionsCtrl', function($scope, $state, $stateParams, DwFee
         });
     };
 
+    $scope.loadPicklists = function () {
+        DwFeed.find({filter: {include: []}}).$promise
+            .then(function (allFeeds) {
+                for (var i = 0; i < allFeeds.length; ++i) {
+                    $scope.feeds.push({
+                        value: allFeeds[i].name,
+                        name: allFeeds[i].name,
+                        id: allFeeds[i].id
+                    });
+                }
+            })
+            .catch(function (err) {
+                console.log(err);
+            })
+            .then(function () {
+            }
+        );
+    };
+
     $scope.loading = true;
-    DwTransmission.find({filter: {include: ['feeds']}}).$promise
-        .then(function (allTransmissions) {
-            $scope.safeDisplayedtransmissions = allTransmissions;
-            $scope.displayedtransmissions = [].concat($scope.safeDisplayedtransmissions);
-        })
-        .catch(function (err) {
-            console.log(err);
-        })
-        .then(function () {
-            $scope.loading = false;
+    AppAuth.getCurrentUser().then(function (currUser) {
+        $scope.currentUser = currUser;
+        $scope.loadPicklists();
+        if ($stateParams.id) {
+            TransmissionsService.getTransmission($stateParams.id).$promise.then(function(result){
+                $scope.transmission = result;
+                $scope.safeDisplayedtransmissions = {};
+                $scope.displayedtransmissions = {};
+                $scope.loading = false;
+            })
+        } else {
+            TransmissionsService.getTransmissions().$promise.then(function(result){
+                $scope.transmission = {};
+                $scope.safeDisplayedtransmissions = result;
+                $scope.displayedtransmissions = [].concat($scope.safeDisplayedtransmissions);
+                $scope.loading = false;
+            })
         }
-    );
-
-    DwFeed.find({filter: {include: []}}).$promise
-        .then(function (allFeeds) {
-            for (var i = 0; i < allFeeds.length; ++i) {
-                $scope.feeds.push({
-                    value: allFeeds[i].name,
-                    name: allFeeds[i].name,
-                    id: allFeeds[i].id
-                });
-            }
-        })
-        .catch(function (err) {
-            console.log(err);
-        })
-        .then(function () {
-        }
-    );
-
-    if ($stateParams.id) {
-        $scope.loading = true;
-        DwTransmission.findOne({
-            filter: {
-                where: {
-                    id: $stateParams.id
-                },
-                fields:{},
-                include: [
-                    {relation:'feeds',
-                        scope:{
-                            fields:[
-                                "name",
-                                "feedUrl",
-                                "protocol",
-                                "dwServiceTypeId",
-                                "id"
-                            ]
-                        }
-                    }
-                ]
-            }
-        }).$promise
-            .then(function (transmission) {
-                $scope.transmission = transmission;
-            });
-        $scope.loading = false;
-    } else {
-        $scope.transmission = {};
-    }
-
+    }, function (err) {
+        console.log(err);
+    });
 });
 

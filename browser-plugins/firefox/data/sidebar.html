@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="injectedPageCSS/datawake-analysis.css" />
+        <link rel="stylesheet" type="text/css" href="js/rateit/rateit.css" />
+        <link rel="stylesheet" type="text/css" href="js/font-awesome-4.5.0/css/font-awesome.min.css" />
+    </head>
+
+    <script src="js/jquery.js"></script>
+    <script src="js/rateit/jquery.rateit.js"></script>
+    <script src="sidebarApp.js"></script>
+
+    <body class="DWD_sidebar_body">
+        <div id="widgetContent"  class="DWD_widget_container">
+
+            <div id="widgetPageRate" class="DWD_widget">
+                <table class="DWD_table">
+                    <tr>
+                        <th class="DWD_th">Rate this page</th>
+                    </tr>
+                    <tr class="DWD_tr">
+                        <td class="DWD_td" style="text-align: center">
+                            <input type="hidden" id="inputRating">
+                            <div id="divPageRating"></div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div id="widgetTitle" class="DWD_widget_base">
+                <div id="widgetOneHeader">
+                    <table class="DWD_table">
+                        <tr>
+                            <th class="DWD_th" colspan="3">
+                                &nbsp;Extracted Entities&nbsp;
+                                <button id="btnExtractRefresh" onclick='refreshSidebar()' class="fa fa-refresh" style="display:none"/>
+                            </th>
+                        </tr>
+                        <tr class="DWD_tr">
+                            <th class="DWD_th_ext DWD_th_ext1">Value</th>
+                            <th class="DWD_th_ext DWD_th_ext2">#</th>
+                            <th class="DWD_th_ext DWD_th_ext3">Types</th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div id="widgetExtraction" class="DWD_widget">
+                <div id="widgetOne">
+                </div>
+            </div>
+
+
+            <!--<div id="widgetRancor" class="DWD_widget">-->
+                <!--<div id="widgetTwo">-->
+                    <!--<table class="DWD_table">-->
+                        <!--<tr>-->
+                            <!--<th class="DWD_th">Page Rancor</th>-->
+                        <!--</tr>-->
+                        <!--<tr>-->
+                            <!--<td class="DWD_td"> Rawr!</td>-->
+                        <!--</tr>-->
+
+                    <!--</table>-->
+                <!--</div>-->
+            <!--</div>-->
+
+        </div>
+    </body>
+</html>

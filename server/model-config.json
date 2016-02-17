@@ -78,6 +78,10 @@
     "dataSource": "db",
     "public": true
   },
+  "DwTrailUrlRating": {
+    "dataSource": "db",
+    "public": true
+  },
   "DwTrailUrl": {
     "dataSource": "db",
     "public": true

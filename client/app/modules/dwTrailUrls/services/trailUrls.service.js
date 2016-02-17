@@ -1,16 +1,65 @@
 'use strict';
 var app = angular.module('com.module.dwTrailUrls');
 
-app.service('TrailUrlsService', ['$state', 'CoreService', 'DwTrail','DwTrailUrl','DwUrlExtraction', 'gettextCatalog', function($state, CoreService, DwTrail, DwTrailUrl,DwUrlExtraction, gettextCatalog) {
+app.service('TrailUrlsService', ['$state', 'CoreService', 'DwTrailUrl','DwUrlExtraction', 'gettextCatalog', function($state, CoreService, DwTrailUrl, DwUrlExtraction, gettextCatalog) {
 
   this.getTrailUrls = function() {
-    return DwTrailUrl.find({filter: {include: ['trail','crawlType','urlExtractions']}});
+    var whereClause={
+        filter:{
+            order:"url DESC",
+            fields:['id','url','timestamp','dwTrailId'],
+            include:[
+                {relation:'trail',scope:{fields: ['name']}},
+                {relation:'urlExtractions',scope:{fields: ['id']}},
+                {relation:'user',scope:{fields: ['username']}}
+            ]
+        }
+    };
+    return (DwTrailUrl.find(whereClause));
   };
 
   this.getTrailUrl = function(id) {
     return DwTrailUrl.findById({
       id: id
     });
+  };
+
+  this.getFilteredTrailUrls = function(trailId) {
+    var whereClause={
+        filter:{
+            order:"url DESC",
+            where:{
+                dwTrailId:trailId
+            },
+            fields:['id','url','timestamp','dwTrailId'],
+            include:[
+                {relation:'trail',scope:{fields: ['name']}},
+                {relation:'urlExtractions',scope:{fields: ['id']}},
+                {relation:'user',scope:{fields: ['username']}}
+            ]
+        }
+    };
+    return (DwTrailUrl.find(whereClause));
+  };
+
+  this.getFilteredPagedTrailUrls = function(trailId,start,number) {
+      var whereClause={
+          filter:{
+              limit: number,
+              skip: start,
+              order:"url DESC",
+              where:{
+                  dwTrailId:trailId
+              },
+              fields:['id','url','timestamp','dwTrailId'],
+              include:[
+                  {relation:'trail',scope:{fields: ['name']}},
+                  {relation:'urlExtractions',scope:{fields: ['id']}},
+                  {relation:'user',scope:{fields: ['username']}}
+              ]
+          }
+      };
+      return (DwTrailUrl.find(whereClause));
   };
 
   this.upsertTrailUrl = function(trailUrl, cb) {
@@ -22,7 +71,7 @@ app.service('TrailUrlsService', ['$state', 'CoreService', 'DwTrail','DwTrailUrl'
     }, function(err) {
       CoreService.toastSuccess(gettextCatalog.getString(
         'Error saving trailUrl '), gettextCatalog.getString(
-        'This trailUrl could no be saved: ') + err);
+        'This trailUrl could not be saved: ') + err);
     });
   };
 

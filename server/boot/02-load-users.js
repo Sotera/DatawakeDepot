@@ -24,12 +24,12 @@ module.exports = function (app) {
     email: 'admin@admin.com',
     username: 'admin',
     password: 'admin'
-  }, {
-    firstName: 'John',
-    lastName: 'Reeme',
-    email: 'jreeme@gmail.com',
-    username: 'jreeme',
-    password: 'password'
+  //}, {
+  //  firstName: 'John',
+  //  lastName: 'Reeme',
+  //  email: 'jreeme@gmail.com',
+  //  username: 'jreeme',
+  //  password: 'password'
   }];
   async.parallel([
       createAdminUsers
@@ -68,6 +68,34 @@ module.exports = function (app) {
       });
     }
   );
+
+  //Create user cookies.  We don't currently use these but if/when we goto passport they are needed and should have already been here
+  app.models.AminoUser.afterRemote('login', function(context, accessToken, next) {
+    var res1 = context.res;
+    var req1 = context.req;
+
+    if (accessToken != null) {
+      if (accessToken.id != null) {
+        res1.cookie('access_token', accessToken.id, {
+          signed: req1.signedCookies ? true : false,
+          maxAge: 1000 * accessToken.ttl
+        });
+        res1.cookie('userId', accessToken.userId.toString(), {
+          signed: req1.signedCookies ? true : false,
+          maxAge: 1000 * accessToken.ttl
+        });
+      }
+    }
+
+    return next();
+  });
+
+  app.models.AminoUser.afterRemote('logout', function(context, result, next) {
+    var res = context.result;
+    res.clearCookie('access_token');
+    res.clearCookie('userId');
+    return next();
+  });
 
   function createAdminRoles(cb) {
     var functionArray = [];

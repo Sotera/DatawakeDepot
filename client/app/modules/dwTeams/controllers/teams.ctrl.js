@@ -1,10 +1,8 @@
 'use strict';
 var app = angular.module('com.module.dwTeams');
 
-app.controller('TeamsCtrl', function($scope, $state, $stateParams, AminoUser, DwDomain, DwTeam, TeamsService, gettextCatalog, AppAuth) {
+app.controller('TeamsCtrl', function($scope, $state, $stateParams, AminoUser, DwDomain, TeamsService, gettextCatalog, AppAuth) {
 
-  //Put the currentUser in $scope for convenience
-  $scope.currentUser = AppAuth.currentUser;
   $scope.users = [];
   $scope.domains = [];
 
@@ -34,8 +32,7 @@ app.controller('TeamsCtrl', function($scope, $state, $stateParams, AminoUser, Dw
     type: 'multiCheckbox',
     templateOptions: {
       label: 'Domains',
-      options: $scope.domains,
-      disabled: !$scope.currentUser.isAdmin
+      options: $scope.domains
     }
   }, {
       key: 'users',
@@ -44,16 +41,19 @@ app.controller('TeamsCtrl', function($scope, $state, $stateParams, AminoUser, Dw
           label: 'Users',
           options: $scope.users,
           valueProp: 'id',
-          labelProp: 'name',
-          disabled: !$scope.currentUser.isAdmin
+          labelProp: 'name'
       }
   }];
 
   $scope.delete = function(team) {
-    TeamsService.deleteTeam(team, function() {
-      $scope.safeDisplayedTeams = TeamsService.getTeams();
-      $state.go('^.list');
-    });
+    if(team.id){
+        TeamsService.deleteTeam(team, function() {
+            $scope.safeDisplayedTeams = TeamsService.getTeams();
+            $state.go('^.list');
+        });
+    }else{
+        $state.go('^.list');
+    }
   };
 
   $scope.onSubmit = function() {
@@ -63,90 +63,73 @@ app.controller('TeamsCtrl', function($scope, $state, $stateParams, AminoUser, Dw
     });
   };
 
-  $scope.loading = true;
-  if($scope.currentUser.isAdmin){
-      DwTeam.find({filter: {include: ['trails','domains','users']}}).$promise
-          .then(function (allTeams) {
-            $scope.safeDisplayedTeams = allTeams;
-            $scope.displayedTeams = [].concat($scope.safeDisplayedTeams);
+  $scope.loadPicklists = function () {
+      AminoUser.find({filter: {include: []}}).$promise
+          .then(function (allUsers) {
+              for (var i = 0; i < allUsers.length; ++i) {
+                  $scope.users.push({
+                      value: allUsers[i].username,
+                      name: allUsers[i].username,
+                      id: allUsers[i].id
+                  });
+              }
           })
           .catch(function (err) {
-            console.log(err);
+              console.log(err);
           })
           .then(function () {
-            $scope.loading = false;
           }
       );
-  }else{
-      $scope.safeDisplayedTeams = $scope.currentUser.teams;
-      $scope.displayedTeams = [].concat($scope.safeDisplayedTeams);
-  }
-  $scope.loading = false;
 
-  AminoUser.find({filter: {include: []}}).$promise
-      .then(function (allUsers) {
-          for (var i = 0; i < allUsers.length; ++i) {
-              $scope.users.push({
-                  value: allUsers[i].username,
-                  name: allUsers[i].username,
-                  id: allUsers[i].id
+      DwDomain.find({filter: {include: []}}).$promise
+          .then(function (allDomains) {
+              for (var i = 0; i < allDomains.length; ++i) {
+                  $scope.domains.push({
+                      value: allDomains[i].name,
+                      name: allDomains[i].name,
+                      id: allDomains[i].id
+                  });
+              }
+          })
+          .catch(function (err) {
+              console.log(err);
+          })
+          .then(function () {
+          }
+      );
+  };
+
+  $scope.loading = true;
+  AppAuth.getCurrentUser().then(function (currUser) {
+      $scope.currentUser = currUser;
+      $scope.loadPicklists(currUser);
+      if ($stateParams.id) {
+          TeamsService.getTeam($stateParams.id).$promise.then(function (result) {
+              $scope.team = result[0];
+              $scope.safeDisplayedTeams = {};
+              $scope.displayedTeams = {};
+              $scope.loading = false;
+          })
+      } else {
+          if(currUser.isAdmin){
+              TeamsService.getTeams().$promise.then(function (result) {
+                  $scope.team = {};
+                  $scope.safeDisplayedTeams = result;
+                  $scope.displayedTeams = [].concat($scope.safeDisplayedTeams);
+                  $scope.loading = false;
+              });
+          }else {
+              TeamsService.getUserTeams(currUser).$promise.then(function (result) {
+                  $scope.team = {};
+                  $scope.safeDisplayedTeams = result;
+                  $scope.displayedTeams = [].concat($scope.safeDisplayedTeams);
+                  $scope.loading = false;
               });
           }
-      })
-      .catch(function (err) {
-          console.log(err);
-      })
-      .then(function () {
       }
-  );
-
-  DwDomain.find({filter: {include: []}}).$promise
-      .then(function (allDomains) {
-          for (var i = 0; i < allDomains.length; ++i) {
-              $scope.domains.push({
-                  value: allDomains[i].name,
-                  name: allDomains[i].name,
-                  id: allDomains[i].id
-              });
-          }
-      })
-      .catch(function (err) {
-          console.log(err);
-      })
-      .then(function () {
-      }
-  );
-
-  if ($stateParams.id) {
-      $scope.loading = true;
-      DwTeam.findOne({
-          filter: {
-              where: {
-                  id: $stateParams.id
-              },
-              fields:{},
-              include: [
-                  'users',
-                  'trails',
-                  {relation:'domains',
-                      scope:{
-                          fields:[
-                              "name",
-                              "description",
-                              "id"
-                          ]
-                      }
-                  }
-              ]
-          }
-      }).$promise
-          .then(function (domain) {
-              $scope.team = domain;
-          });
-      $scope.loading = false;
-  } else {
-      $scope.team = {};
-  }
+  }, function (err) {
+      console.log(err);
+  });
 
 });
 

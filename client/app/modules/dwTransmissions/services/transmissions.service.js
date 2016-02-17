@@ -4,7 +4,24 @@ var app = angular.module('com.module.dwTransmissions');
 app.service('TransmissionsService', ['$state', 'CoreService', 'DwTransmission', 'gettextCatalog', function($state, CoreService, DwTransmission, gettextCatalog) {
 
   this.getTransmissions = function() {
-    return DwTransmission.find({filter: {include: ['feeds']}});
+    var whereClause = {
+      filter: {
+          include: [
+              {relation:'feeds',
+                  scope:{
+                      fields:[
+                          "name",
+                          "feedUrl",
+                          "protocol",
+                          "dwServiceTypeId",
+                          "id"
+                      ]
+                  }
+              }
+          ]
+      }
+    };
+    return DwTransmission.find(whereClause);
   };
 
   this.getTransmission = function(id) {
@@ -22,7 +39,7 @@ app.service('TransmissionsService', ['$state', 'CoreService', 'DwTransmission', 
     }, function(err) {
       CoreService.toastSuccess(gettextCatalog.getString(
           'Error saving transmission '), gettextCatalog.getString(
-              'This transmission could no be saved: ') + err);
+              'This transmission could not be saved: ') + err);
     });
   };
 

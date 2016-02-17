@@ -18,6 +18,26 @@
       "type": [
         "string"
       ]
+    },
+    "extractor": {
+      "type": "string"
+    },
+    "requester": {
+      "type": "string",
+      "required": true
+    },
+    "created":{
+      "type": "date",
+      "defaultFn": "now"
+    }
+  },
+  "uniqueExtraction": {
+    "keys":{
+      "value": 1,
+      "dwTrailUrlId": 1
+    },
+    "options": {
+      "unique": true
     }
   },
   "validations": [],
@@ -26,11 +46,6 @@
       "type": "belongsTo",
       "model": "DwTrailUrl",
       "foreignKey": "dwTrailUrlId"
-    },
-    "domainEntityType": {
-      "type": "belongsTo",
-      "model": "DwDomainEntityType",
-      "foreignKey": "dwDomainEntityTypeId"
     }
   },
   "acls": [],

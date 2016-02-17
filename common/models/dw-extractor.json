@@ -45,6 +45,7 @@
       "model": "DwServiceType",
       "foreignKey": "dwServiceTypeId"
     }
+
   },
   "acls": [],
   "methods": {}

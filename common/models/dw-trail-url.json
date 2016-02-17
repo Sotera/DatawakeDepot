@@ -14,6 +14,11 @@
     "scrapedContent": {
       "type": "string"
     },
+    "searchTerms": {
+      "type": [
+        "string"
+      ]
+    },
     "comments": {
       "type": "string"
     },
@@ -38,6 +43,10 @@
       "type": "belongsTo",
       "model": "DwCrawlType",
       "foreignKey": "dwCrawlTypeId"
+    },
+    "user": {
+      "type": "belongsTo",
+      "model": "AminoUser"
     }
   },
   "acls": [],

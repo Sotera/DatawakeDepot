@@ -22,7 +22,7 @@ app.service('CrawlTypesService', ['$state', 'CoreService', 'DwCrawlType', 'gette
     }, function(err) {
       CoreService.toastSuccess(gettextCatalog.getString(
         'Error saving crawlType '), gettextCatalog.getString(
-        'This crawlType could no be saved: ') + err);
+        'This crawlType could not be saved: ') + err);
     });
   };
 

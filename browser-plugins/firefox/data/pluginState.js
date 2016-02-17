@@ -7,6 +7,7 @@ var PluginState = function () {
   me.currentTeamList = [];
   me.currentDomain = null;
   me.currentDomainList = [];
+  me.currentDomainItems = [];
   me.currentTrail = null;
   me.currentTrailList = [];
   me.loginUrl = '';
@@ -17,7 +18,20 @@ var PluginState = function () {
   me.trailsUrl = '/api/dwTrails';
   me.trailsUrlsUrl = '/api/dwTrailUrls';
   me.domainItemsUrl = '/api/dwDomainItems';
+  me.domainList = '/widget/get-domain-list';
+  me.trailExtractedEntities = '/widget/get-url-entities';
+  me.createTrail = '/api/dwTrails';
+  me.createEntityType = '/api/DwDomainEntityTypes';
+  me.createDomainItem = '/api/dwDomains/_domainId_/domainItems';
+  me.dwForensic = '/#/app/dwForensic';
+  me.dwTrailUrls = '/#/app/dwTrailUrls/list/';
+  me.dwTrails = '/#/app/dwTrails';
+  me.dwDomains = '/#/app/dwDomains';
+  me.dwTrailUrlRating = '/api/dwTrailUrlRatings';
+  me.dashboard = '/#/app';
   me.trailingActive = false;
+  me.panelActive = true;
+  me.dataItemsActive = false;
   me.toolbarFrameSource = null;
   me.toolbarFrameOrigin = null;
   me.datawakeDepotContentScriptHandle = null;
@@ -31,9 +45,21 @@ var PluginState = function () {
       onComplete: callback
     }).post();
   };
+  me.restPut = function (url, content, callback) {
+      url = me.loginUrl + url;
+      Request({
+          url: url,
+          content: content,
+          onComplete: callback
+      }).put();
+  };
   me.restGet = function (url, queryStringObj, callback) {
     queryStringObj = queryStringObj || {};
-    queryStringObj.access_token = me.loggedInUser.accessToken;
+    if(me.loggedInUser) {
+        queryStringObj.access_token = me.loggedInUser.accessToken;
+    }
+    //TODO: must handle complex querystrings
+
     var queryStringJson = me.convertObjToQueryString(queryStringObj);
     url = me.loginUrl + url;
     url += '?' + queryStringJson;
@@ -42,6 +68,54 @@ var PluginState = function () {
       onComplete: callback
     }).get();
   };
+
+  me.restSimpleGet = function (url, callback) {
+      url = me.loginUrl + url;
+      Request({
+          url: url,
+          onComplete: callback
+      }).get();
+  };
+
+  me.getDomainList = function (cb) {
+      var url = me.domainList;
+      me.restSimpleGet(url, function (res) {
+          cb(res.text);
+      });
+  };
+
+  me.getExtractedEntities = function (trailUrl, cb) {
+    var url = me.trailExtractedEntities;
+    var filter = {
+        "trailUrl":trailUrl
+    };
+    me.restGet(url, filter, function (res) {
+      cb(res.text);
+    });
+  };
+
+  me.getPageRating = function(trailUrl, cb){
+      var strFilter={
+          "filter":{
+              "where":{
+                  "and":[
+                      {"url":trailUrl},
+                      {"dwTrailId": me.currentTrail.id}
+                  ]
+              }
+          }
+      };
+
+      me.restGet(me.dwTrailUrlRating, strFilter, function (res) {
+          if(res.status == 200){
+            var responseText = JSON.parse(res.text);
+            cb(responseText[0].pageRating);
+          }else{
+            cb();
+          }
+      });
+  };
+
   me.getDomainItemsForCurrentDomain = function (cb) {
     var url = me.domainItemsUrl;
     var filter = {
@@ -50,6 +124,7 @@ var PluginState = function () {
       }
     };
     me.restGet(url, {filter: JSON.stringify(filter)}, function (res) {
+      me.currentDomainItems = res.json;
       cb(res.json);
     });
   };
@@ -118,7 +193,7 @@ var PluginState = function () {
     var newContentScriptKey = worker.tab.id;
     me.contentScriptHandles[newContentScriptKey] = worker;
     me.postEventToAddInModule('page-content-script-attached-target-addin',
-      {contentScriptKey: newContentScriptKey});
+      {contentScriptKey: newContentScriptKey,pageUrl: worker.tab.url});
     me.postEventToContentScript(newContentScriptKey, 'page-attached-target-content-script',
       {contentScriptKey: newContentScriptKey});
   }
@@ -131,7 +206,13 @@ var PluginState = function () {
     var str = [];
     for (var p in obj)
       if (obj.hasOwnProperty(p)) {
-        str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+          var xtype = (typeof obj[p] === 'object');
+        if(!xtype)  {
+            str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+        }else {
+            str.push(encodeURIComponent(p) + "=" + encodeURIComponent(JSON.stringify(obj[p])));
+        }
+
       }
     return str.join("&");
   }
@@ -143,7 +224,7 @@ var PluginState = function () {
     me.currentDomainList = [];
     me.currentTrail = null;
     me.currentTrailList = [];
-  }
+  };
   me.generateUUID = function () {
     var d = new Date().getTime();
     var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {

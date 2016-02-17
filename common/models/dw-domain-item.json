@@ -12,6 +12,12 @@
     },
     "coreItem": {
       "type": "boolean"
+    },
+    "type":{
+      "type": "string"
+    },
+    "source":{
+      "type": "string"
     }
   },
   "validations": [],
@@ -21,10 +27,9 @@
       "model": "DwDomain",
       "foreignKey": "dwDomainId"
     },
-    "domainEntityType": {
+    "user": {
       "type": "belongsTo",
-      "model": "DwDomainEntityType",
-      "foreignKey": "dwDomainEntityTypeId"
+      "model": "AminoUser"
     }
   },
   "acls": [],

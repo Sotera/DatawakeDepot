@@ -280,43 +280,25 @@ app.service('DomainsService', ['$state', 'CoreService', 'DwDomain','gettextCatal
                 //For Many-To-Many relationships you MUST manually unlink the entities before deleting the domain
                 if(domain.id.dwTeams) {
                     domain.id.dwTeams.forEach(function (team) {
-                        DwDomain.teams.unlink({id: domain.id, fk: team}, null, function (value, header) {
+                        DwDomain.teams.unlink({id: domain.id.id, fk: team}, null, function (value, header) {
                             //success
+                            var x = value;
                         });
                     });
                 }
-
+                //For Many-To-Many relationships you MUST manually unlink the entities before deleting the domain
                 if(domain.id.dwExtractors) {
                     domain.id.dwExtractors.forEach(function (extractor) {
-                        DwDomain.extractors.unlink({id: domain.id, fk: extractor}, null, function (value, header) {
+                        DwDomain.extractors.unlink({id: domain.id.id, fk: extractor}, null, function (value, header) {
                             //success
+                            var y = value;
                         });
                     });
                 }
 
-                //Now delete the domain
+                //Now delete the domain (cascading deletes provide in dw-domain.js for Domain Items and Domain Types)
                 DwDomain.deleteById(domain.id, function() {
                     CoreService.toastSuccess(gettextCatalog.getString('Domain deleted'), gettextCatalog.getString('Your domain is deleted!'));
-
-                    //For other relationships you MUST manually remove the child items
-                    if(domain.id.domainItems) {
-                        domain.id.domainItems.forEach(function (di) {
-                            DwDomainItem.delete(di, function() {
-                                //success
-                            }, function(err) {
-                            });
-                        });
-                    }
-
-                    if(domain.id.domainEntityTypes) {
-                        domain.id.domainEntityTypes.forEach(function (det) {
-                            DwDomainEntityType.delete(det, function() {
-                                //success
-                            }, function(err) {
-                            });
-                        });
-                    }
-
                     cb();
                 }, function(err) {
                     CoreService.toastError(gettextCatalog.getString(

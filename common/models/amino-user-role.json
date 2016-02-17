@@ -1,0 +1,12 @@
+{
+  "name": "AminoUserRole",
+  "base": "Role",
+  "idInjection": true,
+  "relations": {
+    "principals": {
+    "type": "hasMany",
+    "model": "AminoUserRoleMapping",
+    "foreignKey": "roleId"
+    }
+  }
+}

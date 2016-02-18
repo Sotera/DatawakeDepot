@@ -37,7 +37,7 @@ exports.init = function () {
               sidebar.show();
               pluginState.panelActive=true;
               //Get sidebar contents
-              getSidebarContents(tabs.activeTab);
+              getExtractedEntities(tabs.activeTab.url);
           }else{
               pluginState.panelActive=false;
               sidebar.hide();
@@ -184,34 +184,17 @@ exports.init = function () {
       }
   });
 
-
+  //Do this on completion of a new tab load (doesn't have to be active)
   tabs.on('ready', function (tab) {
     if (!pluginState.trailingActive) {
         return;
     }else{
         if(pluginState.panelActive && (tabs.activeTab.url == tab.url)) {
             //Send sidebar the current tab info
-            //This will now call to prepare Extracted Entities and Rancor, but let the sidebar request them
-            sidebarWorker.port.emit("send-sidebar-current-tab", {
-                contentScriptKey: tabs.activeTab.id,
-                pageUrl: tabs.activeTab.url,
-                rancorActive: pluginState.rancorActive,
-                extractionActive: pluginState.extractionActive
-            });
+            sendTabToSidebar(tab);
 
-            //Request rating for this url if it exists
-            pluginState.getPageRating(tabs.activeTab.url, function (rating) {
-                if (rating) {
-                    //send rating to sidebar
-                    sidebarWorker.port.emit("sidebarRating", rating);
-                }else{
-                    sidebarWorker.port.emit("sidebarRating", null);
-                }
-
-            });
-
-            //Request fresh Rancor sidebar content
-            pluginState.postRancor(tabs.activeTab, function () {});
+            //Request fresh sidebar content
+            sendExtractionsToSidebar(tab.url);
         }
     }
   });
@@ -223,34 +206,77 @@ exports.init = function () {
       //Only if we're trailing
       if(pluginState.panelActive) {
           //Send sidebar the current tab info
-          //This will now call to prepare Extracted Entities and Rancor, but let the sidebar request them
-          sidebarWorker.port.emit("send-sidebar-current-tab", {
-              contentScriptKey: tabs.activeTab.id,
-              pageUrl: tabs.activeTab.url
-          });
+          sendTabToSidebar(tab);
 
           //Request rating for this url if it exists
-          pluginState.getPageRating(tabs.activeTab.url, function (rating) {
-              if (rating) {
-                  //send rating to sidebar
-                  sidebarWorker.port.emit("sidebarRating", rating);
-              }else{
-                  sidebarWorker.port.emit("sidebarRating", null);
-              }
+          sendRatingToSidebar(tab.url);
 
+          //Request fresh sidebar content
+          sendExtractionsToSidebar(tab.url);
           });
           //
           ////Request fresh Rancor sidebar content
           //pluginState.postRancor(tabs.activeTab, function () {});
 
           //Then tell the page to refresh its dataitems
-          pluginState.postEventToContentScript(tabs.activeTab.id, 'refresh-data-items-target-content-script', {
-              dataItemsActive: pluginState.dataItemsActive,
-              dataItems: pluginState.currentDomainItems
-          });
+          refreshDataItems(tab.id);
       }
   });
 
+  //We've moved forward or backward in this tab, get its current url's extracted items for the sidebar
+  tabs.on('pageshow', function(tab) {
+      //Only if we're trailing
+      if(pluginState.panelActive) {
+          //Send sidebar the current tab info
+          sendTabToSidebar(tab);
+
+          //Request rating for this url if it exists
+          sendRatingToSidebar(tab.url);
+
+          //Request fresh sidebar content
+          sendExtractionsToSidebar(tab.url);
+
+          //Then tell the page to refresh its dataitems
+          refreshDataItems(tab.id);
+      }
+  });
+
+  //Send sidebar the current tab info
+  function sendTabToSidebar (tab) {
+      sidebarWorker.port.emit("send-sidebar-current-tab", {
+          contentScriptKey: tab.id,
+          pageUrl: tab.url
+      })
+  }
+
+  //Request rating for given tab's url if it exists
+  function sendRatingToSidebar(tabUrl){
+      pluginState.getPageRating(tabUrl, function (rating) {
+          if (rating) {
+              //send rating to sidebar
+              sidebarWorker.port.emit("sidebarRating", rating);
+          }else{
+              sidebarWorker.port.emit("sidebarRating", null);
+          }
+      });
+  }
+
+  //Request extractions for given tab's url if they exists
+  function sendExtractionsToSidebar(tabUrl){
+      pluginState.getExtractedEntities(tabUrl, function (divHtml) {
+          if (divHtml) {
+              //send contents to sidebar
+              sidebarWorker.port.emit("sidebarContent", divHtml);
+          }
+      });
+  }
+
+  function refreshDataItems(tabId){
+      pluginState.postEventToContentScript(tabId, 'refresh-data-items-target-content-script', {
+          dataItemsActive: pluginState.dataItemsActive,
+          dataItems: pluginState.currentDomainItems
+      });
+  }
 
   //Here we listen for when the content scripts is fired up and ready.
   pluginState.onAddInModuleEvent('page-content-script-attached-target-addin', function (data) {

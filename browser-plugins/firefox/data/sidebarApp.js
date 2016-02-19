@@ -11,7 +11,7 @@ var divExtractedStale = "<div id='widgetOne'><table class='DWD_table'><tr class=
 var divExtractedInactive = "<div id='widgetOne'><table class='DWD_table'><tr class='DWD_tr'><td class='DWD_td'>Inactive</td></tr></table></div>";
 var divRancor = "<div id='widgetTwo' style='background-color:white'><table class='DWD_table'><tr class='DWD_tr'><td class='DWD_td'><img src='./images/animated_loader.gif' height='15'/>&nbsp;Loading . . .</td></tr></table></div>";
 var divRancorStale = "<div id='widgetTwo' style='background-color:white'><table class='DWD_table'><tr class='DWD_tr'><td class='DWD_td'></td></tr></table></div>";
-var divRancorInactive = "<div id='widgetTwo' style='background-color:white'><table class='DWD_table'><tr class='DWD_tr'><td class='DWD_td'>Inactive</td></tr></table></div>";
+var divRancorInactive = "<div id='widgetTwo' style='background-color:white'><table class='DWD_table'><tr class='DWD_tr'><td class='DWD_td'><em>Attention</em>: This module will scrape every link on the page and follows no web scraping best practices.  Heavy use may result in your IP being blocked on certain pages. Use the toggle button to activate.</td></tr></table></div>";
 
 //Receive the current tab from the addin
 addon.port.on("send-sidebar-current-tab", function(data) {
@@ -179,6 +179,8 @@ function rescoreRancor(){
 }
 
 function toggleRancor(enabled){
+    addon.port.emit('toggleRancorStatus', enabled);
+
     if(enabled){
         rancorActive = true;
         rancorFinished = false;
@@ -188,6 +190,8 @@ function toggleRancor(enabled){
         $('#btnRancorRescore').hide();
         $('#widgetTwo').replaceWith(divRancor);
         $('#popup').text('');
+
+        addon.port.emit('rescoreRancor', {id:pageData.contentScriptKey,url:pageData.pageUrl});
 
         rancorTimer = setInterval(pollForRancorContents,1000);
     } else{
@@ -203,7 +207,6 @@ function toggleRancor(enabled){
         clearInterval(rancorTimer);
     }
 
-    addon.port.emit('toggleRancorStatus', enabled);
 }
 
 //Populate sidebar Rancor from addin

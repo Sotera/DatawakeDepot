@@ -15,7 +15,7 @@
 .DWD_widget_base{
     border:1px solid #231d2b;
     text-align: center;
-    max-height: 500px;
+    max-height: 475px;
     overflow: auto;
     margin-bottom: 0;
 }
@@ -23,7 +23,7 @@
 .DWD_widget{
     border:1px solid #231d2b;
     text-align: center;
-    max-height: 500px;
+    max-height: 475px;
     overflow: auto;
     margin-bottom: 5px;
 }
@@ -43,7 +43,7 @@
 }
 
 .DWD_table_extracted{
-    max-height: 500px;
+    max-height: 475px;
     overflow-y: scroll;
     table-layout:fixed;
     background-color: #231d2b;

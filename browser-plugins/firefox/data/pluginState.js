@@ -20,7 +20,7 @@ var PluginState = function () {
   me.domainItemsUrl = '/api/dwDomainItems';
   me.domainList = '/widget/get-domain-list';
   me.trailExtractedEntities = '/widget/get-url-entities';
-  me.trailUrlRancor = 'http://52.1.251.62:3004/api/rank/process';
+  me.trailUrlRancor = 'http://localhost:3004/api/rank/process';
   me.createTrail = '/api/dwTrails';
   me.createEntityType = '/api/DwDomainEntityTypes';
   me.createDomainItem = '/api/dwDomains/_domainId_/domainItems';
@@ -41,6 +41,8 @@ var PluginState = function () {
   me.contentScriptHandles = {};
   me.pageModDatawakeDepotIncludeFilter = null;
   me.maxRancorNodes = 15;
+  me.sidebarRequester = null;
+
 
   me.restRemotePost = function (url, content, callback) {
       Request({
@@ -118,9 +120,15 @@ var PluginState = function () {
         return di.itemValue;
       });
 
+      if(!me.sidebarRequester){
+          me.sidebarRequester = me.generateUUID();
+      }
+
+      var sbRequester = me.sidebarRequester + activeTab.id;
+
       var rancorFood ={
           dwTrailUrlId: me.currentTrail.id,
-          requester:activeTab.id,
+          requester:sbRequester,
           urls: activeTab.url,
           terms: dataItems.toString(),
           minScore: dataItems.length/2,
@@ -136,7 +144,7 @@ var PluginState = function () {
   me.getRancor = function (activeTabId, cb) {
       var feedRancorUrl = me.trailUrlRancor;
       var filter = {
-          "requester":activeTabId
+          "requester": me.sidebarRequester + activeTabId
       };
       me.restRemoteGet(feedRancorUrl, filter, function (res) {
           cb(res.json[0]);

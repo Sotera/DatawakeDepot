@@ -145,14 +145,14 @@ exports.init = function () {
 
           //Listen for sidebar requests to refresh Rancor content
           worker.port.on("refreshRancor", function(tabId) {
-              //Get the Rancor results
+              //Get the Rancor resultsjavascript:void(0);
               getRancorResults(tabId,sidebarWorker);
           });
 
           //Listen for sidebar requests to rescore Rancor content
-          worker.port.on("rescoreRancor", function() {
+          worker.port.on("rescoreRancor", function(tab) {
               //Requery for rancor results
-              pluginState.postRancor(activeTab, function () {});
+              pluginState.postRancor(tab, function () {});
           });
 
           //Listen for sidebar requests to set Rancor Status
@@ -193,8 +193,19 @@ exports.init = function () {
             //Send sidebar the current tab info
             sendTabToSidebar(tab);
 
+            //Request rating for this url if it exists
+            sendRatingToSidebar(tab.url);
+
             //Request fresh sidebar content
             sendExtractionsToSidebar(tab.url);
+
+            //If Rancor on request fresh Rancor sidebar content
+            if(pluginState.rancorActive){
+                pluginState.postRancor(tab, function () {});
+            }
+
+            //Then tell the page to refresh its dataitems
+            refreshDataItems(tab.id);
         }
     }
   });
@@ -213,10 +224,11 @@ exports.init = function () {
 
           //Request fresh sidebar content
           sendExtractionsToSidebar(tab.url);
-          });
-          //
-          ////Request fresh Rancor sidebar content
-          //pluginState.postRancor(tabs.activeTab, function () {});
+
+          //If Rancor on request fresh Rancor sidebar content
+          if(pluginState.rancorActive){
+            pluginState.postRancor(tab, function () {});
+          }
 
           //Then tell the page to refresh its dataitems
           refreshDataItems(tab.id);
@@ -236,6 +248,11 @@ exports.init = function () {
           //Request fresh sidebar content
           sendExtractionsToSidebar(tab.url);
 
+          //If Rancor on request fresh Rancor sidebar content
+          if(pluginState.rancorActive){
+              pluginState.postRancor(tab, function () {});
+          }
+
           //Then tell the page to refresh its dataitems
           refreshDataItems(tab.id);
       }
@@ -245,7 +262,9 @@ exports.init = function () {
   function sendTabToSidebar (tab) {
       sidebarWorker.port.emit("send-sidebar-current-tab", {
           contentScriptKey: tab.id,
-          pageUrl: tab.url
+          pageUrl: tab.url,
+          rancorActive: pluginState.rancorActive,
+          extractionActive: pluginState.extractionActive
       })
   }
 
@@ -423,11 +442,6 @@ function getRancorResults(activeTabId,sbw){
             sbw.port.emit("sidebarRancor", urlRankings);
         }
     });
-}
-
-function getSidebarContents(activeTab){
-    getExtractedEntities(activeTab.url);
-    getRancorResults(activeTab.id);
 }
 
 function getExtractedEntities(url){

@@ -15,7 +15,7 @@
 .DWD_widget_base{
     border:1px solid #231d2b;
     text-align: center;
-    max-height: 500px;
+    max-height: 475px;
     overflow: auto;
     margin-bottom: 0;
 }
@@ -23,7 +23,7 @@
 .DWD_widget{
     border:1px solid #231d2b;
     text-align: center;
-    max-height: 500px;
+    max-height: 475px;
     overflow: auto;
     margin-bottom: 5px;
 }
@@ -43,7 +43,7 @@
 }
 
 .DWD_table_extracted{
-    max-height: 500px;
+    max-height: 475px;
     overflow-y: scroll;
     table-layout:fixed;
     background-color: #231d2b;
@@ -68,10 +68,16 @@
 }
 
 .DWD_th_ext{
-    background-color: gra;
     color: #5F5F5F;
     padding: 5px;
     font-size: .7em;
+}
+
+.DWD_url{
+    background-color: yellow;
+    color: #5F5F5F;
+    font-size: .65em;
+    text-overflow: ellipsis;
 }
 
 .DWD_th_ext1{
@@ -119,6 +125,10 @@
     width:80px;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+.DWD_div_rancor{
+    height:12px;
+    width:217px;
 }
 
 

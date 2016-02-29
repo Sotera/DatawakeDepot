@@ -40,7 +40,7 @@ module.exports = function (app) {
     me.getExtractorContainer = function (extractor) {
         var extractorContainer = dwExtractorMap[extractor.id.toString()] || {
                 "failureCount": 0,
-                "failureLimit": 10,
+                "failureLimit": 1000,
                 "extractor": extractor,
                 "extractorUrl": extractor.protocol + "://" + extractor.extractorHost + ":" + extractor.port + "/" + extractor.extractorUrl,
                 "requester": requester

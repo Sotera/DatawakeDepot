@@ -3,7 +3,7 @@
 client/app/bower_components/
 db.json
 node_modules/
-dist/
+
 providers.json
 server/datasources.json
 *.xpi

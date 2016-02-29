@@ -133,7 +133,7 @@ exports.init = function () {
               pluginState.getExtractedEntities(pageUrl, function (divHtml){
                   if (divHtml) {
                        //send contents to sidebar
-                      sidebarWorker.port.emit("sidebarContent",divHtml);
+                      sidebarWorker.port.emit("sidebarContent",{divHtml:divHtml,url:pageUrl});
                   }
               });
           });
@@ -285,7 +285,7 @@ exports.init = function () {
       pluginState.getExtractedEntities(tabUrl, function (divHtml) {
           if (divHtml) {
               //send contents to sidebar
-              sidebarWorker.port.emit("sidebarContent", divHtml);
+              sidebarWorker.port.emit("sidebarContent", {divHtml:divHtml,url:tabUrl});
           }
       });
   }
@@ -449,7 +449,7 @@ function getExtractedEntities(url){
     pluginState.getExtractedEntities(url, function (divHtml){
         if (divHtml) {
             //send contents to sidebar
-            sidebarWorker.port.emit("sidebarContent",divHtml);
+            sidebarWorker.port.emit("sidebarContent",{divHtml:divHtml,url:url});
         }
     });
 }

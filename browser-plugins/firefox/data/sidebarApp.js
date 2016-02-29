@@ -149,13 +149,13 @@ function toggleExtraction(enabled){
 }
 
 //Populate sidebar Extractions from addin
-addon.port.on("sidebarContent", function(divHtml) {
+addon.port.on("sidebarContent", function(content) {
     if(!extractionFinished){
-        if(!divHtml){
+        if(!content.divHtml){
             return;
-        }else if(divHtml.length != 189){
+        }else if(content.divHtml.length != 189 && content.url == pageData.pageUrl){
             $('#btnExtractRefresh').show();
-            $('#widgetOne').replaceWith(divHtml);
+            $('#widgetOne').replaceWith(content.divHtml);
             extractionFinished=true;
         }
     }

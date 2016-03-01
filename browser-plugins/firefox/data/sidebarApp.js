@@ -119,7 +119,12 @@ function regetExtractions(){
     $('#widgetOne').replaceWith(divExtracted);
     extractionFinished = false;
 
-    addon.port.emit('refreshExtractions', pageData.pageUrl);
+    if(pageData){
+        addon.port.emit('refreshExtractions', pageData.pageUrl);
+    }else{
+        addon.port.emit('refreshExtractions', null);
+    }
+    
 
     //Start checking for sidebar content
     extractionTimer = setInterval(pollForExtractionContentsContents,1000);

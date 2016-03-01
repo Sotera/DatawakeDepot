@@ -1,5 +1,11 @@
 [
    {
+       "name": "data-container",
+       "Image": "jreeme/data-container:7.0",
+       "DockerFilePath": "docker/data-container",
+       "Hostname": "data-container"
+     },
+   {
        "name": "mongo",
        "Image": "jreeme\/mongo:2.6",
        "DockerFilePath": "docker\/mongo\/2.6",

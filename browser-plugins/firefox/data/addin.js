@@ -136,11 +136,11 @@ exports.init = function () {
               }else{
                   currentUrl = tabs.activeTab.url;
               }
-              
+
               pluginState.getExtractedEntities(currentUrl, function (divHtml){
                   if (divHtml) {
                        //send contents to sidebar
-                      sidebarWorker.port.emit("sidebarContent",{divHtml:divHtml,url:pageUrl});
+                      sidebarWorker.port.emit("sidebarContent",{divHtml:divHtml,url:currentUrl});
                   }
               });
           });

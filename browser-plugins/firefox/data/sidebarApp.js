@@ -122,12 +122,6 @@ function regetExtractions(){
     $('#widgetOne').replaceWith(divExtracted);
     extractionFinished = false;
 
-    //if(pageData){
-    //    addon.port.emit('refreshExtractions', pageData.pageUrl);
-    //}else{
-    //    addon.port.emit('refreshExtractions', null);
-    //}
-
     //Start checking for sidebar content
     extractionTimer = setInterval(pollForExtractionContents,1000);
 }

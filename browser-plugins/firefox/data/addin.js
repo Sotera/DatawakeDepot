@@ -152,8 +152,15 @@ exports.init = function () {
 
           //Listen for sidebar requests to refresh Rancor content
           worker.port.on("refreshRancor", function(tabId) {
-              //Get the Rancor resultsjavascript:void(0);
-              getRancorResults(tabId,sidebarWorker);
+              var currentTabId = null;
+              if(tabId){
+                  currentTabId = tabId;
+              }else{
+                  currentTabId = tabs.activeTab.id;
+              }
+
+              //Get the Rancor results
+              getRancorResults(currentTabId,sidebarWorker);
           });
 
           //Listen for sidebar requests to rescore Rancor content

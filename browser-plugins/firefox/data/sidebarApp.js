@@ -111,22 +111,25 @@ function setRating(rating){
 }
 
 function refreshExtractions(){
-    addon.port.emit('refreshExtractions', pageData.pageUrl);
+    if(pageData){
+        addon.port.emit('refreshExtractions', pageData.pageUrl);
+    }else{
+        addon.port.emit('refreshExtractions', null);
+    }
 }
 
 function regetExtractions(){
     $('#widgetOne').replaceWith(divExtracted);
     extractionFinished = false;
 
-    if(pageData){
-        addon.port.emit('refreshExtractions', pageData.pageUrl);
-    }else{
-        addon.port.emit('refreshExtractions', null);
-    }
-
+    //if(pageData){
+    //    addon.port.emit('refreshExtractions', pageData.pageUrl);
+    //}else{
+    //    addon.port.emit('refreshExtractions', null);
+    //}
 
     //Start checking for sidebar content
-    extractionTimer = setInterval(pollForExtractionContentsContents,1000);
+    extractionTimer = setInterval(pollForExtractionContents,1000);
 }
 
 function toggleExtraction(enabled){
@@ -169,6 +172,8 @@ addon.port.on("sidebarContent", function(content) {
 function refreshRancor(){
     if(pageData){
         addon.port.emit('refreshRancor', pageData.contentScriptKey);
+    }else{
+        addon.port.emit('refreshRancor', null);
     }
 }
 

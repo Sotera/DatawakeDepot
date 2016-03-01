@@ -32,7 +32,7 @@
       "type": "hasMany",
       "model": "Role",
       "foreignKey": "principalId",
-      "through": "RoleMapping"
+      "through": "AminoUserRoleMapping"
     },
     "trailUrls": {
       "type": "hasMany",

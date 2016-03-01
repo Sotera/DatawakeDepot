@@ -130,10 +130,17 @@ exports.init = function () {
 
           //Listen for sidebar requests to refresh Extractions content
           worker.port.on("refreshExtractions", function(pageUrl) {
-              pluginState.getExtractedEntities(pageUrl, function (divHtml){
+              var currentUrl = null;
+              if(pageUrl){
+                  currentUrl = pageUrl;
+              }else{
+                  currentUrl = tabs.activeTab.url;
+              }
+
+              pluginState.getExtractedEntities(currentUrl, function (divHtml){
                   if (divHtml) {
                        //send contents to sidebar
-                      sidebarWorker.port.emit("sidebarContent",{divHtml:divHtml,url:pageUrl});
+                      sidebarWorker.port.emit("sidebarContent",{divHtml:divHtml,url:currentUrl});
                   }
               });
           });
@@ -238,7 +245,7 @@ exports.init = function () {
   //We've moved forward or backward in this tab, get its current url's extracted items for the sidebar
   tabs.on('pageshow', function(tab) {
       //Only if we're trailing
-      if(pluginState.panelActive) {
+      if(pluginState.panelActive && (tabs.activeTab.url == tab.url)) {
           //Send sidebar the current tab info
           sendTabToSidebar(tab);
 

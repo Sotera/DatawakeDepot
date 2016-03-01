@@ -9633,60 +9633,6 @@ module.factory(
           method: "PUT"
         },
 
-        // INTERNAL. Use AminoUser.roles.findById() instead.
-        "prototype$__findById__roles": {
-          params: {
-          'fk': '@fk'
-          },
-          url: urlBase + "/AminoUsers/:id/roles/:fk",
-          method: "GET"
-        },
-
-        // INTERNAL. Use AminoUser.roles.destroyById() instead.
-        "prototype$__destroyById__roles": {
-          params: {
-          'fk': '@fk'
-          },
-          url: urlBase + "/AminoUsers/:id/roles/:fk",
-          method: "DELETE"
-        },
-
-        // INTERNAL. Use AminoUser.roles.updateById() instead.
-        "prototype$__updateById__roles": {
-          params: {
-          'fk': '@fk'
-          },
-          url: urlBase + "/AminoUsers/:id/roles/:fk",
-          method: "PUT"
-        },
-
-        // INTERNAL. Use AminoUser.roles.link() instead.
-        "prototype$__link__roles": {
-          params: {
-          'fk': '@fk'
-          },
-          url: urlBase + "/AminoUsers/:id/roles/rel/:fk",
-          method: "PUT"
-        },
-
-        // INTERNAL. Use AminoUser.roles.unlink() instead.
-        "prototype$__unlink__roles": {
-          params: {
-          'fk': '@fk'
-          },
-          url: urlBase + "/AminoUsers/:id/roles/rel/:fk",
-          method: "DELETE"
-        },
-
-        // INTERNAL. Use AminoUser.roles.exists() instead.
-        "prototype$__exists__roles": {
-          params: {
-          'fk': '@fk'
-          },
-          url: urlBase + "/AminoUsers/:id/roles/rel/:fk",
-          method: "HEAD"
-        },
-
         // INTERNAL. Use AminoUser.trailUrls.findById() instead.
         "prototype$__findById__trailUrls": {
           params: {
@@ -9849,6 +9795,60 @@ module.factory(
           method: "HEAD"
         },
 
+        // INTERNAL. Use AminoUser.roles.findById() instead.
+        "prototype$__findById__roles": {
+          params: {
+          'fk': '@fk'
+          },
+          url: urlBase + "/AminoUsers/:id/roles/:fk",
+          method: "GET"
+        },
+
+        // INTERNAL. Use AminoUser.roles.destroyById() instead.
+        "prototype$__destroyById__roles": {
+          params: {
+          'fk': '@fk'
+          },
+          url: urlBase + "/AminoUsers/:id/roles/:fk",
+          method: "DELETE"
+        },
+
+        // INTERNAL. Use AminoUser.roles.updateById() instead.
+        "prototype$__updateById__roles": {
+          params: {
+          'fk': '@fk'
+          },
+          url: urlBase + "/AminoUsers/:id/roles/:fk",
+          method: "PUT"
+        },
+
+        // INTERNAL. Use AminoUser.roles.link() instead.
+        "prototype$__link__roles": {
+          params: {
+          'fk': '@fk'
+          },
+          url: urlBase + "/AminoUsers/:id/roles/rel/:fk",
+          method: "PUT"
+        },
+
+        // INTERNAL. Use AminoUser.roles.unlink() instead.
+        "prototype$__unlink__roles": {
+          params: {
+          'fk': '@fk'
+          },
+          url: urlBase + "/AminoUsers/:id/roles/rel/:fk",
+          method: "DELETE"
+        },
+
+        // INTERNAL. Use AminoUser.roles.exists() instead.
+        "prototype$__exists__roles": {
+          params: {
+          'fk': '@fk'
+          },
+          url: urlBase + "/AminoUsers/:id/roles/rel/:fk",
+          method: "HEAD"
+        },
+
         // INTERNAL. Use AminoUser.roleMappings.findById() instead.
         "prototype$__findById__roleMappings": {
           params: {
@@ -9951,31 +9951,6 @@ module.factory(
           method: "GET"
         },
 
-        // INTERNAL. Use AminoUser.roles() instead.
-        "prototype$__get__roles": {
-          isArray: true,
-          url: urlBase + "/AminoUsers/:id/roles",
-          method: "GET"
-        },
-
-        // INTERNAL. Use AminoUser.roles.create() instead.
-        "prototype$__create__roles": {
-          url: urlBase + "/AminoUsers/:id/roles",
-          method: "POST"
-        },
-
-        // INTERNAL. Use AminoUser.roles.destroyAll() instead.
-        "prototype$__delete__roles": {
-          url: urlBase + "/AminoUsers/:id/roles",
-          method: "DELETE"
-        },
-
-        // INTERNAL. Use AminoUser.roles.count() instead.
-        "prototype$__count__roles": {
-          url: urlBase + "/AminoUsers/:id/roles/count",
-          method: "GET"
-        },
-
         // INTERNAL. Use AminoUser.trailUrls() instead.
         "prototype$__get__trailUrls": {
           isArray: true,
@@ -10073,6 +10048,31 @@ module.factory(
         // INTERNAL. Use AminoUser.teams.count() instead.
         "prototype$__count__teams": {
           url: urlBase + "/AminoUsers/:id/teams/count",
+          method: "GET"
+        },
+
+        // INTERNAL. Use AminoUser.roles() instead.
+        "prototype$__get__roles": {
+          isArray: true,
+          url: urlBase + "/AminoUsers/:id/roles",
+          method: "GET"
+        },
+
+        // INTERNAL. Use AminoUser.roles.create() instead.
+        "prototype$__create__roles": {
+          url: urlBase + "/AminoUsers/:id/roles",
+          method: "POST"
+        },
+
+        // INTERNAL. Use AminoUser.roles.destroyAll() instead.
+        "prototype$__delete__roles": {
+          url: urlBase + "/AminoUsers/:id/roles",
+          method: "DELETE"
+        },
+
+        // INTERNAL. Use AminoUser.roles.count() instead.
+        "prototype$__count__roles": {
+          url: urlBase + "/AminoUsers/:id/roles/count",
           method: "GET"
         },
 
@@ -12182,416 +12182,6 @@ module.factory(
         };
     /**
      * @ngdoc object
-     * @name lbServices.AminoUser.roles
-     * @header lbServices.AminoUser.roles
-     * @object
-     * @description
-     *
-     * The object `AminoUser.roles` groups methods
-     * manipulating `Role` instances related to `AminoUser`.
-     *
-     * Call {@link lbServices.AminoUser#roles AminoUser.roles()}
-     * to query all related instances.
-     */
-
-
-        /**
-         * @ngdoc method
-         * @name lbServices.AminoUser#roles
-         * @methodOf lbServices.AminoUser
-         *
-         * @description
-         *
-         * Queries roles of AminoUser.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *  - `id` – `{*}` - User id
-         *
-         *  - `filter` – `{object=}` - 
-         *
-         * @param {function(Array.<Object>,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Array.<Object>} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * <em>
-         * (The remote method definition does not provide any description.
-         * This usually means the response is a `Role` object.)
-         * </em>
-         */
-        R.roles = function() {
-          var TargetResource = $injector.get("Role");
-          var action = TargetResource["::get::AminoUser::roles"];
-          return action.apply(R, arguments);
-        };
-
-        /**
-         * @ngdoc method
-         * @name lbServices.AminoUser.roles#count
-         * @methodOf lbServices.AminoUser.roles
-         *
-         * @description
-         *
-         * Counts roles of AminoUser.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *  - `id` – `{*}` - User id
-         *
-         *  - `where` – `{object=}` - Criteria to match model instances
-         *
-         * @param {function(Object,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Object} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * Data properties:
-         *
-         *  - `count` – `{number=}` - 
-         */
-        R.roles.count = function() {
-          var TargetResource = $injector.get("Role");
-          var action = TargetResource["::count::AminoUser::roles"];
-          return action.apply(R, arguments);
-        };
-
-        /**
-         * @ngdoc method
-         * @name lbServices.AminoUser.roles#create
-         * @methodOf lbServices.AminoUser.roles
-         *
-         * @description
-         *
-         * Creates a new instance in roles of this model.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *  - `id` – `{*}` - User id
-         *
-         * @param {Object} postData Request data.
-         *
-         * This method expects a subset of model properties as request parameters.
-         *
-         * @param {function(Object,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Object} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * <em>
-         * (The remote method definition does not provide any description.
-         * This usually means the response is a `Role` object.)
-         * </em>
-         */
-        R.roles.create = function() {
-          var TargetResource = $injector.get("Role");
-          var action = TargetResource["::create::AminoUser::roles"];
-          return action.apply(R, arguments);
-        };
-
-        /**
-         * @ngdoc method
-         * @name lbServices.AminoUser.roles#createMany
-         * @methodOf lbServices.AminoUser.roles
-         *
-         * @description
-         *
-         * Creates a new instance in roles of this model.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *  - `id` – `{*}` - User id
-         *
-         * @param {Object} postData Request data.
-         *
-         * This method expects a subset of model properties as request parameters.
-         *
-         * @param {function(Array.<Object>,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Array.<Object>} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * <em>
-         * (The remote method definition does not provide any description.
-         * This usually means the response is a `Role` object.)
-         * </em>
-         */
-        R.roles.createMany = function() {
-          var TargetResource = $injector.get("Role");
-          var action = TargetResource["::createMany::AminoUser::roles"];
-          return action.apply(R, arguments);
-        };
-
-        /**
-         * @ngdoc method
-         * @name lbServices.AminoUser.roles#destroyAll
-         * @methodOf lbServices.AminoUser.roles
-         *
-         * @description
-         *
-         * Deletes all roles of this model.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *  - `id` – `{*}` - User id
-         *
-         * @param {function(Object,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Object} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * This method returns no data.
-         */
-        R.roles.destroyAll = function() {
-          var TargetResource = $injector.get("Role");
-          var action = TargetResource["::delete::AminoUser::roles"];
-          return action.apply(R, arguments);
-        };
-
-        /**
-         * @ngdoc method
-         * @name lbServices.AminoUser.roles#destroyById
-         * @methodOf lbServices.AminoUser.roles
-         *
-         * @description
-         *
-         * Delete a related item by id for roles.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *  - `id` – `{*}` - User id
-         *
-         *  - `fk` – `{*}` - Foreign key for roles
-         *
-         * @param {function(Object,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Object} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * This method returns no data.
-         */
-        R.roles.destroyById = function() {
-          var TargetResource = $injector.get("Role");
-          var action = TargetResource["::destroyById::AminoUser::roles"];
-          return action.apply(R, arguments);
-        };
-
-        /**
-         * @ngdoc method
-         * @name lbServices.AminoUser.roles#exists
-         * @methodOf lbServices.AminoUser.roles
-         *
-         * @description
-         *
-         * Check the existence of roles relation to an item by id.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *  - `id` – `{*}` - User id
-         *
-         *  - `fk` – `{*}` - Foreign key for roles
-         *
-         * @param {function(Object,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Object} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * <em>
-         * (The remote method definition does not provide any description.
-         * This usually means the response is a `Role` object.)
-         * </em>
-         */
-        R.roles.exists = function() {
-          var TargetResource = $injector.get("Role");
-          var action = TargetResource["::exists::AminoUser::roles"];
-          return action.apply(R, arguments);
-        };
-
-        /**
-         * @ngdoc method
-         * @name lbServices.AminoUser.roles#findById
-         * @methodOf lbServices.AminoUser.roles
-         *
-         * @description
-         *
-         * Find a related item by id for roles.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *  - `id` – `{*}` - User id
-         *
-         *  - `fk` – `{*}` - Foreign key for roles
-         *
-         * @param {function(Object,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Object} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * <em>
-         * (The remote method definition does not provide any description.
-         * This usually means the response is a `Role` object.)
-         * </em>
-         */
-        R.roles.findById = function() {
-          var TargetResource = $injector.get("Role");
-          var action = TargetResource["::findById::AminoUser::roles"];
-          return action.apply(R, arguments);
-        };
-
-        /**
-         * @ngdoc method
-         * @name lbServices.AminoUser.roles#link
-         * @methodOf lbServices.AminoUser.roles
-         *
-         * @description
-         *
-         * Add a related item by id for roles.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *  - `id` – `{*}` - User id
-         *
-         *  - `fk` – `{*}` - Foreign key for roles
-         *
-         * @param {Object} postData Request data.
-         *
-         * This method expects a subset of model properties as request parameters.
-         *
-         * @param {function(Object,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Object} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * <em>
-         * (The remote method definition does not provide any description.
-         * This usually means the response is a `Role` object.)
-         * </em>
-         */
-        R.roles.link = function() {
-          var TargetResource = $injector.get("Role");
-          var action = TargetResource["::link::AminoUser::roles"];
-          return action.apply(R, arguments);
-        };
-
-        /**
-         * @ngdoc method
-         * @name lbServices.AminoUser.roles#unlink
-         * @methodOf lbServices.AminoUser.roles
-         *
-         * @description
-         *
-         * Remove the roles relation to an item by id.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *  - `id` – `{*}` - User id
-         *
-         *  - `fk` – `{*}` - Foreign key for roles
-         *
-         * @param {function(Object,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Object} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * This method returns no data.
-         */
-        R.roles.unlink = function() {
-          var TargetResource = $injector.get("Role");
-          var action = TargetResource["::unlink::AminoUser::roles"];
-          return action.apply(R, arguments);
-        };
-
-        /**
-         * @ngdoc method
-         * @name lbServices.AminoUser.roles#updateById
-         * @methodOf lbServices.AminoUser.roles
-         *
-         * @description
-         *
-         * Update a related item by id for roles.
-         *
-         * @param {Object=} parameters Request parameters.
-         *
-         *  - `id` – `{*}` - User id
-         *
-         *  - `fk` – `{*}` - Foreign key for roles
-         *
-         * @param {Object} postData Request data.
-         *
-         * This method expects a subset of model properties as request parameters.
-         *
-         * @param {function(Object,Object)=} successCb
-         *   Success callback with two arguments: `value`, `responseHeaders`.
-         *
-         * @param {function(Object)=} errorCb Error callback with one argument:
-         *   `httpResponse`.
-         *
-         * @returns {Object} An empty reference that will be
-         *   populated with the actual data once the response is returned
-         *   from the server.
-         *
-         * <em>
-         * (The remote method definition does not provide any description.
-         * This usually means the response is a `Role` object.)
-         * </em>
-         */
-        R.roles.updateById = function() {
-          var TargetResource = $injector.get("Role");
-          var action = TargetResource["::updateById::AminoUser::roles"];
-          return action.apply(R, arguments);
-        };
-    /**
-     * @ngdoc object
      * @name lbServices.AminoUser.trailUrls
      * @header lbServices.AminoUser.trailUrls
      * @object
@@ -14010,6 +13600,416 @@ module.factory(
         R.teams.updateById = function() {
           var TargetResource = $injector.get("DwTeam");
           var action = TargetResource["::updateById::AminoUser::teams"];
+          return action.apply(R, arguments);
+        };
+    /**
+     * @ngdoc object
+     * @name lbServices.AminoUser.roles
+     * @header lbServices.AminoUser.roles
+     * @object
+     * @description
+     *
+     * The object `AminoUser.roles` groups methods
+     * manipulating `Role` instances related to `AminoUser`.
+     *
+     * Call {@link lbServices.AminoUser#roles AminoUser.roles()}
+     * to query all related instances.
+     */
+
+
+        /**
+         * @ngdoc method
+         * @name lbServices.AminoUser#roles
+         * @methodOf lbServices.AminoUser
+         *
+         * @description
+         *
+         * Queries roles of AminoUser.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - User id
+         *
+         *  - `filter` – `{object=}` - 
+         *
+         * @param {function(Array.<Object>,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Array.<Object>} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Role` object.)
+         * </em>
+         */
+        R.roles = function() {
+          var TargetResource = $injector.get("Role");
+          var action = TargetResource["::get::AminoUser::roles"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.AminoUser.roles#count
+         * @methodOf lbServices.AminoUser.roles
+         *
+         * @description
+         *
+         * Counts roles of AminoUser.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - User id
+         *
+         *  - `where` – `{object=}` - Criteria to match model instances
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * Data properties:
+         *
+         *  - `count` – `{number=}` - 
+         */
+        R.roles.count = function() {
+          var TargetResource = $injector.get("Role");
+          var action = TargetResource["::count::AminoUser::roles"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.AminoUser.roles#create
+         * @methodOf lbServices.AminoUser.roles
+         *
+         * @description
+         *
+         * Creates a new instance in roles of this model.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - User id
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Role` object.)
+         * </em>
+         */
+        R.roles.create = function() {
+          var TargetResource = $injector.get("Role");
+          var action = TargetResource["::create::AminoUser::roles"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.AminoUser.roles#createMany
+         * @methodOf lbServices.AminoUser.roles
+         *
+         * @description
+         *
+         * Creates a new instance in roles of this model.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - User id
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Array.<Object>,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Array.<Object>} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Role` object.)
+         * </em>
+         */
+        R.roles.createMany = function() {
+          var TargetResource = $injector.get("Role");
+          var action = TargetResource["::createMany::AminoUser::roles"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.AminoUser.roles#destroyAll
+         * @methodOf lbServices.AminoUser.roles
+         *
+         * @description
+         *
+         * Deletes all roles of this model.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - User id
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * This method returns no data.
+         */
+        R.roles.destroyAll = function() {
+          var TargetResource = $injector.get("Role");
+          var action = TargetResource["::delete::AminoUser::roles"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.AminoUser.roles#destroyById
+         * @methodOf lbServices.AminoUser.roles
+         *
+         * @description
+         *
+         * Delete a related item by id for roles.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - User id
+         *
+         *  - `fk` – `{*}` - Foreign key for roles
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * This method returns no data.
+         */
+        R.roles.destroyById = function() {
+          var TargetResource = $injector.get("Role");
+          var action = TargetResource["::destroyById::AminoUser::roles"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.AminoUser.roles#exists
+         * @methodOf lbServices.AminoUser.roles
+         *
+         * @description
+         *
+         * Check the existence of roles relation to an item by id.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - User id
+         *
+         *  - `fk` – `{*}` - Foreign key for roles
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Role` object.)
+         * </em>
+         */
+        R.roles.exists = function() {
+          var TargetResource = $injector.get("Role");
+          var action = TargetResource["::exists::AminoUser::roles"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.AminoUser.roles#findById
+         * @methodOf lbServices.AminoUser.roles
+         *
+         * @description
+         *
+         * Find a related item by id for roles.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - User id
+         *
+         *  - `fk` – `{*}` - Foreign key for roles
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Role` object.)
+         * </em>
+         */
+        R.roles.findById = function() {
+          var TargetResource = $injector.get("Role");
+          var action = TargetResource["::findById::AminoUser::roles"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.AminoUser.roles#link
+         * @methodOf lbServices.AminoUser.roles
+         *
+         * @description
+         *
+         * Add a related item by id for roles.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - User id
+         *
+         *  - `fk` – `{*}` - Foreign key for roles
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Role` object.)
+         * </em>
+         */
+        R.roles.link = function() {
+          var TargetResource = $injector.get("Role");
+          var action = TargetResource["::link::AminoUser::roles"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.AminoUser.roles#unlink
+         * @methodOf lbServices.AminoUser.roles
+         *
+         * @description
+         *
+         * Remove the roles relation to an item by id.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - User id
+         *
+         *  - `fk` – `{*}` - Foreign key for roles
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * This method returns no data.
+         */
+        R.roles.unlink = function() {
+          var TargetResource = $injector.get("Role");
+          var action = TargetResource["::unlink::AminoUser::roles"];
+          return action.apply(R, arguments);
+        };
+
+        /**
+         * @ngdoc method
+         * @name lbServices.AminoUser.roles#updateById
+         * @methodOf lbServices.AminoUser.roles
+         *
+         * @description
+         *
+         * Update a related item by id for roles.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - User id
+         *
+         *  - `fk` – `{*}` - Foreign key for roles
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Role` object.)
+         * </em>
+         */
+        R.roles.updateById = function() {
+          var TargetResource = $injector.get("Role");
+          var action = TargetResource["::updateById::AminoUser::roles"];
           return action.apply(R, arguments);
         };
     /**

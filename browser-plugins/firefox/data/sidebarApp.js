@@ -122,7 +122,7 @@ function regetExtractions(){
     addon.port.emit('refreshExtractions', pageData.pageUrl);
 
     //Start checking for sidebar content
-    rancorTimer = setInterval(pollForExtractionContentsContents,1000);
+    extractionTimer = setInterval(pollForExtractionContentsContents,1000);
 }
 
 function toggleExtraction(enabled){

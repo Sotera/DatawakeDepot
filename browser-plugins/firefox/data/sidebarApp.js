@@ -20,8 +20,7 @@ addon.port.on("send-sidebar-current-tab", function(data) {
     clearInterval(rancorTimer);
 
     pageData = data;
-    //rancorActive = data.rancorActive;
-    rancorActive = false;
+    rancorActive = data.rancorActive;
     extractionActive = data.extractionActive;
 
     //Clear the rating

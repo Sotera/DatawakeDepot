@@ -238,7 +238,7 @@ exports.init = function () {
   //We've moved forward or backward in this tab, get its current url's extracted items for the sidebar
   tabs.on('pageshow', function(tab) {
       //Only if we're trailing
-      if(pluginState.panelActive) {
+      if(pluginState.panelActive && (tabs.activeTab.url == tab.url)) {
           //Send sidebar the current tab info
           sendTabToSidebar(tab);
 

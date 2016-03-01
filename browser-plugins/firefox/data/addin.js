@@ -130,7 +130,14 @@ exports.init = function () {
 
           //Listen for sidebar requests to refresh Extractions content
           worker.port.on("refreshExtractions", function(pageUrl) {
-              pluginState.getExtractedEntities(pageUrl, function (divHtml){
+              var currentUrl = null;
+              if(pageUrl){
+                  currentUrl = pageUrl;
+              }else{
+                  currentUrl = tabs.activeTab.url;
+              }
+              
+              pluginState.getExtractedEntities(currentUrl, function (divHtml){
                   if (divHtml) {
                        //send contents to sidebar
                       sidebarWorker.port.emit("sidebarContent",{divHtml:divHtml,url:pageUrl});

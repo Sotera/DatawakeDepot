@@ -124,7 +124,7 @@ function regetExtractions(){
     }else{
         addon.port.emit('refreshExtractions', null);
     }
-    
+
 
     //Start checking for sidebar content
     extractionTimer = setInterval(pollForExtractionContentsContents,1000);
@@ -159,7 +159,7 @@ addon.port.on("sidebarContent", function(content) {
     if(!extractionFinished){
         if(!content.divHtml){
             return;
-        }else if(content.divHtml.length != 189 && content.url == pageData.pageUrl){
+        }else if(content.divHtml.length != 189 && (!pageData ||content.url == pageData.pageUrl)){
             $('#btnExtractRefresh').show();
             $('#widgetOne').replaceWith(content.divHtml);
             extractionFinished=true;

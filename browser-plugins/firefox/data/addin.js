@@ -166,6 +166,10 @@ exports.init = function () {
           //Listen for sidebar requests to rescore Rancor content
           worker.port.on("rescoreRancor", function(tab) {
               //Requery for rancor results
+              if(!tab.id || !tab.url){
+                tab.id = tabs.activeTab.id;
+                tab.url = tabs.activeTab.url;
+              }
               pluginState.postRancor(tab, function () {});
           });
 

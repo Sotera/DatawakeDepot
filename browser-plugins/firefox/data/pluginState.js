@@ -48,7 +48,8 @@ var PluginState = function () {
       Request({
           url: url,
           content: content,
-          onComplete: callback
+          onComplete: callback,
+          contentType: 'application/json'
       }).post();
   };
 
@@ -132,7 +133,8 @@ var PluginState = function () {
           urls: activeTab.url,
           terms: dataItems.toString(),
           minScore: dataItems.length/2,
-          maxNodes: me.maxRancorNodes
+          maxNodes: me.maxRancorNodes,
+          ignoreCache:false
       };
 
       me.restRemotePost(feedRancorUrl, rancorFood,function (res){

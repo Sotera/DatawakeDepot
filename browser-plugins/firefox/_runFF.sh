@@ -5,4 +5,4 @@
 ../../node_modules/jpm/bin/jpm xpi
 mkdir ../../client/app/xpi
 cp @datawakeffplugin-0.0.2.xpi ../../client/app/xpi/datawakePlugin.xpi
-../../node_modules/wget-improved/lib/wget --post-file=@datawakeffplugin-0.0.2.xpi http://localhost:8889/
+

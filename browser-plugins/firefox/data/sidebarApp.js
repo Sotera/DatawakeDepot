@@ -40,7 +40,6 @@ addon.port.on("send-sidebar-current-tab", function(data) {
             $('#btnExtractRefresh').hide();
             $('#widgetOne').replaceWith(divExtractedInactive);
         }
-
         extractionFinished = true;
     }
 
@@ -75,18 +74,18 @@ addon.port.on("send-sidebar-current-tab", function(data) {
 });
 
 function pollForExtractionContents(){
-    if(!extractionFinished){
-        refreshExtractions();
-    }else{
+    if(extractionFinished){
         clearInterval(extractionTimer);
+    }else{
+        refreshExtractions();
     }
 }
 
 function pollForRancorContents(){
-    if(!rancorFinished){
-        refreshRancor();
-    }else{
+    if(rancorFinished){
         clearInterval(rancorTimer);
+    }else{
+        refreshRancor();
     }
 }
 
@@ -123,6 +122,7 @@ function regetExtractions(){
     extractionFinished = false;
 
     //Start checking for sidebar content
+    clearInterval(extractionTimer);
     extractionTimer = setInterval(pollForExtractionContents,1000);
 }
 
@@ -135,6 +135,7 @@ function toggleExtraction(enabled){
         $('#btnExtractionToggleOff').show();
         $('#btnExtractRefresh').hide();
         $('#widgetOne').replaceWith(divExtracted);
+        clearInterval(extractionTimer);
         extractionTimer = setInterval(pollForExtractionContents,1000);
     } else{
         extractionActive = false;
@@ -179,6 +180,7 @@ function rescoreRancor(){
     addon.port.emit('rescoreRancor', pageData);
 
     //Start checking for sidebar content
+    clearInterval(rancorTimer);
     rancorTimer = setInterval(pollForRancorContents,1000);
 }
 
@@ -195,8 +197,12 @@ function toggleRancor(enabled){
         $('#widgetTwo').replaceWith(divRancor);
         $('#popup').text('');
 
-        addon.port.emit('rescoreRancor', {id:pageData.contentScriptKey,url:pageData.pageUrl});
-
+        if(pageData){
+            addon.port.emit('rescoreRancor', {id:pageData.contentScriptKey,url:pageData.pageUrl});
+        }else{
+            addon.port.emit('rescoreRancor', {id:null,url:null});
+        }
+        clearInterval(rancorTimer);
         rancorTimer = setInterval(pollForRancorContents,1000);
     } else{
         rancorActive = false;

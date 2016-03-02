@@ -47,7 +47,7 @@ var PluginState = function () {
   me.restRemotePost = function (url, content, callback) {
       Request({
           url: url,
-          content: content,
+          content: JSON.stringify(content),
           onComplete: callback,
           contentType: 'application/json'
       }).post();

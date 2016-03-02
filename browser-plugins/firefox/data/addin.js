@@ -1,6 +1,8 @@
 var self = require('sdk/self');
-var {setInterval, clearInterval} = require('sdk/timers');
+
+var {setInterval, clearInterval,setTimeout} = require('sdk/timers');
 var {pluginState} = require('./pluginState');
+
 exports.init = function () {
   var tabs = require('sdk/tabs');
   var activeTab = null;
@@ -126,19 +128,59 @@ exports.init = function () {
       onAttach: function (worker) {
           sidebarWorker = worker;
 
-          //Listen for sidebar requests to refresh content
-          worker.port.on("refreshSidebar", function(data) {
-              pluginState.getExtractedEntities(data.pageUrl, function (divHtml){
+          //Listen for sidebar requests to refresh Extractions content
+          worker.port.on("refreshExtractions", function(pageUrl) {
+              var currentUrl = null;
+              if(pageUrl){
+                  currentUrl = pageUrl;
+              }else{
+                  currentUrl = tabs.activeTab.url;
+              }
+
+              pluginState.getExtractedEntities(currentUrl, function (divHtml){
                   if (divHtml) {
                        //send contents to sidebar
-                      sidebarWorker.port.emit("sidebarContent",divHtml);
+                      sidebarWorker.port.emit("sidebarContent",{divHtml:divHtml,url:currentUrl});
                   }
               });
           });
 
+          //Listen for sidebar requests to get Extractoins
+          worker.port.on("toggleExtractionStatus", function(status) {
+              pluginState.extractionActive = status;
+          });
+
+          //Listen for sidebar requests to refresh Rancor content
+          worker.port.on("refreshRancor", function(tabId) {
+              var currentTabId = null;
+              if(tabId){
+                  currentTabId = tabId;
+              }else{
+                  currentTabId = tabs.activeTab.id;
+              }
+
+              //Get the Rancor results
+              getRancorResults(currentTabId,sidebarWorker);
+          });
+
+          //Listen for sidebar requests to rescore Rancor content
+          worker.port.on("rescoreRancor", function(tab) {
+              //Requery for rancor results
+              if(!tab.id || !tab.url){
+                tab.id = tabs.activeTab.id;
+                tab.url = tabs.activeTab.url;
+              }
+              pluginState.postRancor(tab, function () {});
+          });
+
+          //Listen for sidebar requests to set Rancor Status
+          worker.port.on("toggleRancorStatus", function(status) {
+              pluginState.rancorActive = status;
+          });
+
           //Listen for sidebar requests to create Domain Items
-          worker.port.on('addDomainItem-target-addin', function(domainItem) {
-              addDomainItem(domainItem, tabs.activeTab.id);
+          worker.port.on('addDomainItem-target-addin', function(domainItem,tabId) {
+              addDomainItem(domainItem, tabId);
           });
 
           //Listen for sidebar requests to create Domain Types
@@ -160,25 +202,28 @@ exports.init = function () {
       }
   });
 
-
+  //Do this on completion of a new tab load (doesn't have to be active)
   tabs.on('ready', function (tab) {
     if (!pluginState.trailingActive) {
         return;
     }else{
         if(pluginState.panelActive && (tabs.activeTab.url == tab.url)) {
             //Send sidebar the current tab info
-            sidebarWorker.port.emit("send-sidebar-current-tab", {
-                contentScriptKey: tabs.activeTab.id,
-                pageUrl: tabs.activeTab.url
-            });
+            sendTabToSidebar(tab);
+
+            //Request rating for this url if it exists
+            sendRatingToSidebar(tab.url);
 
             //Request fresh sidebar content
-            pluginState.getExtractedEntities(tabs.activeTab.url, function (divHtml) {
-                if (divHtml) {
-                    //send contents to sidebar
-                    sidebarWorker.port.emit("sidebarContent", divHtml);
-                }
-            });
+            sendExtractionsToSidebar(tab.url);
+
+            //If Rancor on request fresh Rancor sidebar content
+            if(pluginState.rancorActive){
+                pluginState.postRancor(tab, function () {});
+            }
+
+            //Then tell the page to refresh its dataitems
+            refreshDataItems(tab.id);
         }
     }
   });
@@ -190,38 +235,85 @@ exports.init = function () {
       //Only if we're trailing
       if(pluginState.panelActive) {
           //Send sidebar the current tab info
-          sidebarWorker.port.emit("send-sidebar-current-tab", {
-              contentScriptKey: tabs.activeTab.id,
-              pageUrl: tabs.activeTab.url
-          });
+          sendTabToSidebar(tab);
 
           //Request rating for this url if it exists
-          pluginState.getPageRating(tabs.activeTab.url, function (rating) {
-              if (rating) {
-                  //send rating to sidebar
-                  sidebarWorker.port.emit("sidebarRating", rating);
-              }else{
-                  sidebarWorker.port.emit("sidebarRating", null);
-              }
-
-          });
+          sendRatingToSidebar(tab.url);
 
           //Request fresh sidebar content
-          pluginState.getExtractedEntities(tabs.activeTab.url, function (divHtml) {
-              if (divHtml) {
-                  //send contents to sidebar
-                  sidebarWorker.port.emit("sidebarContent", divHtml);
-              }
-          });
+          sendExtractionsToSidebar(tab.url);
+
+          //If Rancor on request fresh Rancor sidebar content
+          if(pluginState.rancorActive){
+            pluginState.postRancor(tab, function () {});
+          }
 
           //Then tell the page to refresh its dataitems
-          pluginState.postEventToContentScript(tabs.activeTab.id, 'refresh-data-items-target-content-script', {
-              dataItemsActive: pluginState.dataItemsActive,
-              dataItems: pluginState.currentDomainItems
-          });
+          refreshDataItems(tab.id);
       }
   });
 
+  //We've moved forward or backward in this tab, get its current url's extracted items for the sidebar
+  tabs.on('pageshow', function(tab) {
+      //Only if we're trailing
+      if(pluginState.panelActive && (tabs.activeTab.url == tab.url)) {
+          //Send sidebar the current tab info
+          sendTabToSidebar(tab);
+
+          //Request rating for this url if it exists
+          sendRatingToSidebar(tab.url);
+
+          //Request fresh sidebar content
+          sendExtractionsToSidebar(tab.url);
+
+          //If Rancor on request fresh Rancor sidebar content
+          if(pluginState.rancorActive){
+              pluginState.postRancor(tab, function () {});
+          }
+
+          //Then tell the page to refresh its dataitems
+          refreshDataItems(tab.id);
+      }
+  });
+
+  //Send sidebar the current tab info
+  function sendTabToSidebar (tab) {
+      sidebarWorker.port.emit("send-sidebar-current-tab", {
+          contentScriptKey: tab.id,
+          pageUrl: tab.url,
+          rancorActive: pluginState.rancorActive,
+          extractionActive: pluginState.extractionActive
+      })
+  }
+
+  //Request rating for given tab's url if it exists
+  function sendRatingToSidebar(tabUrl){
+      pluginState.getPageRating(tabUrl, function (rating) {
+          if (rating) {
+              //send rating to sidebar
+              sidebarWorker.port.emit("sidebarRating", rating);
+          }else{
+              sidebarWorker.port.emit("sidebarRating", null);
+          }
+      });
+  }
+
+  //Request extractions for given tab's url if they exists
+  function sendExtractionsToSidebar(tabUrl){
+      pluginState.getExtractedEntities(tabUrl, function (divHtml) {
+          if (divHtml) {
+              //send contents to sidebar
+              sidebarWorker.port.emit("sidebarContent", {divHtml:divHtml,url:tabUrl});
+          }
+      });
+  }
+
+  function refreshDataItems(tabId){
+      pluginState.postEventToContentScript(tabId, 'refresh-data-items-target-content-script', {
+          dataItemsActive: pluginState.dataItemsActive,
+          dataItems: pluginState.currentDomainItems
+      });
+  }
 
   //Here we listen for when the content scripts is fired up and ready.
   pluginState.onAddInModuleEvent('page-content-script-attached-target-addin', function (data) {
@@ -358,12 +450,24 @@ exports.init = function () {
   });
 };
 
+function getRancorResults(activeTabId,sbw){
+    pluginState.getRancor(activeTabId,function(urlRankings){
+        if(!urlRankings){
+          return;
+        }
+        //if we have results, send to sidebar and clear the interval
+        if(urlRankings.edges.length>0 || urlRankings.finished){
+            sbw.port.emit("sidebarRancor", urlRankings);
+        }
+    });
+}
+
 function getExtractedEntities(url){
     //Get panel contents
     pluginState.getExtractedEntities(url, function (divHtml){
         if (divHtml) {
             //send contents to sidebar
-            sidebarWorker.port.emit("sidebarContent",divHtml);
+            sidebarWorker.port.emit("sidebarContent",{divHtml:divHtml,url:url});
         }
     });
 }

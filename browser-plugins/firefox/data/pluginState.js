@@ -20,6 +20,7 @@ var PluginState = function () {
   me.domainItemsUrl = '/api/dwDomainItems';
   me.domainList = '/widget/get-domain-list';
   me.trailExtractedEntities = '/widget/get-url-entities';
+  me.trailUrlRancor = 'http://localhost:3004/api/rank/process';
   me.createTrail = '/api/dwTrails';
   me.createEntityType = '/api/DwDomainEntityTypes';
   me.createDomainItem = '/api/dwDomains/_domainId_/domainItems';
@@ -32,19 +33,31 @@ var PluginState = function () {
   me.trailingActive = false;
   me.panelActive = true;
   me.dataItemsActive = false;
+  me.rancorActive = false;
+  me.extractionActive = true;
   me.toolbarFrameSource = null;
   me.toolbarFrameOrigin = null;
   me.datawakeDepotContentScriptHandle = null;
   me.contentScriptHandles = {};
   me.pageModDatawakeDepotIncludeFilter = null;
+  me.maxRancorNodes = 15;
+  me.sidebarRequester = null;
+
+
+  me.restRemotePost = function (url, content, callback) {
+      Request({
+          url: url,
+          content: JSON.stringify(content),
+          onComplete: callback,
+          contentType: 'application/json'
+      }).post();
+  };
+
   me.restPost = function (url, content, callback) {
     url = me.loginUrl + url;
-    Request({
-      url: url,
-      content: content,
-      onComplete: callback
-    }).post();
+    me.restRemotePost(url,content,callback)
   };
+
   me.restPut = function (url, content, callback) {
       url = me.loginUrl + url;
       Request({
@@ -53,20 +66,25 @@ var PluginState = function () {
           onComplete: callback
       }).put();
   };
-  me.restGet = function (url, queryStringObj, callback) {
-    queryStringObj = queryStringObj || {};
-    if(me.loggedInUser) {
-        queryStringObj.access_token = me.loggedInUser.accessToken;
-    }
-    //TODO: must handle complex querystrings
 
-    var queryStringJson = me.convertObjToQueryString(queryStringObj);
+  me.restRemoteGet = function (url, queryStringObj, callback) {
+      queryStringObj = queryStringObj || {};
+      if(me.loggedInUser) {
+          queryStringObj.access_token = me.loggedInUser.accessToken;
+      }
+      //TODO: must handle complex querystrings
+
+      var queryStringJson = me.convertObjToQueryString(queryStringObj);
+      url += '?' + queryStringJson;
+      Request({
+          url: url,
+          onComplete: callback
+      }).get();
+  };
+
+  me.restGet = function (url, queryStringObj, callback) {
     url = me.loginUrl + url;
-    url += '?' + queryStringJson;
-    Request({
-      url: url,
-      onComplete: callback
-    }).get();
+    me.restRemoteGet(url,queryStringObj,callback);
   };
 
   me.restSimpleGet = function (url, callback) {
@@ -92,6 +110,47 @@ var PluginState = function () {
     me.restGet(url, filter, function (res) {
       cb(res.text);
     });
+  };
+
+  me.postRancor = function(activeTab){
+      if(!me.currentDomainItems){
+          return;
+      }
+      var feedRancorUrl = me.trailUrlRancor;
+      var dataItems = me.currentDomainItems.map(function(di){
+        return di.itemValue;
+      });
+
+      if(!me.sidebarRequester){
+          me.sidebarRequester = me.generateUUID();
+      }
+
+      var sbRequester = me.sidebarRequester + activeTab.id;
+
+      var rancorFood ={
+          dwTrailUrlId: me.currentTrail.id,
+          requester:sbRequester,
+          urls: activeTab.url,
+          terms: dataItems.toString(),
+          minScore: dataItems.length/2,
+          maxNodes: me.maxRancorNodes,
+          ignoreCache:false
+      };
+
+      me.restRemotePost(feedRancorUrl, rancorFood,function (res){
+          console.log(res);
+      });
+  };
+
+
+  me.getRancor = function (activeTabId, cb) {
+      var feedRancorUrl = me.trailUrlRancor;
+      var filter = {
+          "requester": me.sidebarRequester + activeTabId
+      };
+      me.restRemoteGet(feedRancorUrl, filter, function (res) {
+          cb(res.json[0]);
+      });
   };
 
   me.getPageRating = function(trailUrl, cb){
@@ -174,7 +233,7 @@ var PluginState = function () {
   };
   me.addContentScriptEventHandler = function (contentScriptKey, eventName, cb) {
     var contentScriptHandle = me.contentScriptHandles[contentScriptKey];
-    if (!contentScriptHandle) {
+    if (!contentScriptHandle) {getRanc
       return;
     }
     contentScriptHandle.port.on(eventName, cb);

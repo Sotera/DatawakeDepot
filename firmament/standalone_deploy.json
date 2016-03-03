@@ -51,7 +51,7 @@
     "ExpressApps": [
       {
         "GitUrl": "https://github.com/Sotera/DatawakeDepot",
-        "GitSrcBranchName": "57-SuggestedLink",
+        "GitSrcBranchName": "develop",
         "StrongLoopBranchName": "deploy",
         "StrongLoopServerUrl": "http://localhost:8702",
         "ServiceName": "Datawake"

@@ -43,7 +43,7 @@
         ],
         "8701/tcp": [
           {
-            "HostPort": "8702"
+            "HostPort": "8701"
           }
         ]
       }
@@ -53,7 +53,7 @@
         "GitUrl": "https://github.com/Sotera/DatawakeDepot",
         "GitSrcBranchName": "develop",
         "StrongLoopBranchName": "deploy",
-        "StrongLoopServerUrl": "http://localhost:8702",
+        "StrongLoopServerUrl": "http://localhost:8701",
         "ServiceName": "Datawake"
       }
     ]

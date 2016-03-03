@@ -78,7 +78,7 @@
         ],
         "8701/tcp": [
           {
-            "HostPort": "8702"
+            "HostPort": "8704"
           }
         ]
       }
@@ -88,7 +88,7 @@
         "GitUrl": "https://github.com/justinlueders/PageRancor.git",
         "GitSrcBranchName": "master",
         "StrongLoopBranchName": "deploy",
-        "StrongLoopServerUrl": "http://localhost:8702",
+        "StrongLoopServerUrl": "http://localhost:8704",
         "ServiceName": "DatawakeRancor",
         "Scripts":[
           {

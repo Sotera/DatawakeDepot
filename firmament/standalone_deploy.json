@@ -73,12 +73,12 @@
       "PortBindings": {
         "3001/tcp": [
           {
-            "HostPort": "3004"
+            "HostPort": "3002"
           }
         ],
         "8701/tcp": [
           {
-            "HostPort": "8701"
+            "HostPort": "8702"
           }
         ]
       }
@@ -88,7 +88,7 @@
         "GitUrl": "https://github.com/justinlueders/PageRancor.git",
         "GitSrcBranchName": "master",
         "StrongLoopBranchName": "deploy",
-        "StrongLoopServerUrl": "http://localhost:8701",
+        "StrongLoopServerUrl": "http://localhost:8702",
         "ServiceName": "DatawakeRancor",
         "Scripts":[
           {
@@ -112,6 +112,9 @@
       "3001/tcp": {}
     },
     "HostConfig": {
+      "Links": [
+        "mongo:mongo"
+      ],
       "PortBindings": {
         "3001/tcp": [
           {

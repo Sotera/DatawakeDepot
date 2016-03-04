@@ -6,7 +6,7 @@
     "Hostname": "data-container"
   },
   {
-    "name": "mongo",
+    "name": "datawake-mongo",
     "Image": "sotera/datawake-mongo",
     "DockerFilePath": "docker\/mongo\/2.6",
     "Hostname": "mongo",

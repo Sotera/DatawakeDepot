@@ -1,7 +1,7 @@
 {
     "name": "datawake-mongo",
-    "Image": "sotera/datawake-mongo",
-    "DockerFilePath": "docker/datawake-mongo-demo/",
+    "Image": "sotera/datawake-mongo-demo",
+    "DockerFilePath": "docker\/mongo\/2.6",
     "Hostname": "mongo",
     "ExposedPorts": {
       "27017/tcp": {}

@@ -1,4 +1,5 @@
-{
+[
+ {
     "name": "datawake-mongo",
     "Image": "sotera/datawake-mongo-demo",
     "DockerFilePath": "docker\/mongo\/2.6",

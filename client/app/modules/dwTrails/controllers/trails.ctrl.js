@@ -152,6 +152,18 @@ app.controller('TrailsCtrl', function ($scope, $state, $http, $stateParams, DwTe
         );
     };
 
+    $scope.downloadTrail = function (){
+        //alert('x');
+        var elHtml = document.getElementById('preElement').innerHTML;
+        var link = document.createElement('a');
+        var mimeType = 'application/json';
+        var filename = 'test.json'
+
+        link.setAttribute('download', filename);
+        link.setAttribute('href', 'data:' + mimeType + ';charset=utf-8,' + encodeURIComponent(elHtml));
+        link.click();
+    };
+
     $scope.delete = function (trail) {
         if(trail.id){
             TrailsService.deleteTrail(trail, function () {

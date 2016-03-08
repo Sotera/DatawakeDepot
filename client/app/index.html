@@ -1,0 +1,296 @@
+<!doctype html>
+<html ng-app="loopbackApp"
+      ng-controller="LayoutCtrl">
+<head>
+  <meta charset="utf-8">
+  <title>{{ getSetting('appName') }}</title>
+  <meta name="description"
+        content="">
+  <meta name="viewport"
+        content="width=device-width">
+  <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+  <!-- build:css styles/vendor.css -->
+  <!-- bower:css -->
+  <link rel="stylesheet" href="bower_components/ag-grid/dist/angular-grid.css" />
+  <link rel="stylesheet" href="bower_components/ag-grid/dist/theme-fresh.css" />
+  <link rel="stylesheet" href="bower_components/ag-grid/dist/theme-dark.css" />
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+  <link rel="stylesheet" href="bower_components/angular-bootstrap-nav-tree/dist/abn_tree.css" />
+  <link rel="stylesheet" href="bower_components/jqcloud2/dist/jqcloud.css" />
+  <link rel="stylesheet" href="bower_components/angular-loading-bar/build/loading-bar.css" />
+  <link rel="stylesheet" href="bower_components/sweetalert/lib/sweet-alert.css" />
+  <link rel="stylesheet" href="bower_components/angular-toasty/css/ng-toasty.css" />
+  <link rel="stylesheet" href="bower_components/codemirror/lib/codemirror.css" />
+  <link rel="stylesheet" href="bower_components/codemirror/theme/monokai.css" />
+  <link rel="stylesheet" href="bower_components/angular-ui-grid/ui-grid.css" />
+  <link rel="stylesheet" href="bower_components/angular-ui-layout/src/ui-layout.css" />
+  <link rel="stylesheet" href="bower_components/angular-multi-select/isteven-multi-select.css" />
+  <link rel="stylesheet" href="bower_components/jquery-ui/themes/base/jquery-ui.css" />
+  <link rel="stylesheet" href="bower_components/flag-icon-css/css/flag-icon.min.css" />
+  <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
+  <link rel="stylesheet" href="bower_components/ionicons/css/ionicons.css" />
+  <!-- endbower -->
+  <!-- endbuild -->
+  <!-- build:css styles/main.css -->
+  <link rel="stylesheet" href="/css/AdminLTE.css" />
+  <link rel="stylesheet" href="/css/datawake.css" />
+  <link rel="stylesheet" href="/css/main.css" />
+  
+  <!-- endbuild -->
+</head>
+<body class="{{getSetting('appTheme') }} {{ getSetting('appLayout') }} "
+      ng-controller="MainCtrl">
+<!--[if lt IE 7]>
+<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
+  your browser</a> to improve your experience.</p>
+<![endif]-->
+<div ui-view
+     ng-class="{'full-height': noOneLoggedIn}"></div>
+
+<div ng-controller="toasty-controller">
+  <toasty-container toasty-defaults='{"timeout": 3000, "close-button":true, "sound": false}'></toasty-container>
+</div>
+
+<!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
+<!--<script>
+  (function (i, s, o, g, r, a, m) {
+    i['GoogleAnalyticsObject'] = r;
+    i[r] = i[r] || function () {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date();
+    a = s.createElement(o),
+      m = s.getElementsByTagName(o)[0];
+    a.async = 1;
+    a.src = g;
+    m.parentNode.insertBefore(a, m)
+  })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+  ga('create', 'UA-XXXXX-X');
+  ga('send', 'pageview');
+</script>-->
+
+<!-- build:js scripts/oldieshim.js -->
+<!--[if lt IE 9]>
+<script src="bower_components/es5-shim/es5-shim.js"></script>
+<script src="bower_components/json3/lib/json3.js"></script>
+<![endif]-->
+<!-- endbuild -->
+<!-- build:js scripts/vendor.js -->
+<!-- bower:js -->
+<script src="bower_components/jquery/dist/jquery.js"></script>
+<script src="bower_components/Faker/build/build/faker.js"></script>
+<script src="bower_components/ag-grid/dist/angular-grid.js"></script>
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-animate/angular-animate.js"></script>
+<script src="bower_components/angular-autoFields-bootstrap/autofields.min.js"></script>
+<script src="bower_components/angular-autoFields-bootstrap/autofields-bootstrap.min.js"></script>
+<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+<script src="bower_components/angular-bootstrap-nav-tree/dist/abn_tree_directive.js"></script>
+<script src="bower_components/angular-cookies/angular-cookies.js"></script>
+<script src="bower_components/angular-elastic/elastic.js"></script>
+<script src="bower_components/angular-file-upload/angular-file-upload.js"></script>
+<script src="bower_components/angular-filter/dist/angular-filter.js"></script>
+<script src="bower_components/api-check/dist/api-check.js"></script>
+<script src="bower_components/angular-formly/dist/formly.js"></script>
+<script src="bower_components/angular-formly-templates-bootstrap/dist/angular-formly-templates-bootstrap.js"></script>
+<script src="bower_components/angular-gettext/dist/angular-gettext.js"></script>
+<script src="bower_components/angular-gravatar/build/md5.js"></script>
+<script src="bower_components/angular-gravatar/build/angular-gravatar.js"></script>
+<script src="bower_components/jqcloud2/dist/jqcloud.js"></script>
+<script src="bower_components/angular-jqcloud/angular-jqcloud.js"></script>
+<script src="bower_components/angular-loading-bar/build/loading-bar.js"></script>
+<script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+<script src="bower_components/angular-markdown-directive/markdown.js"></script>
+<script src="bower_components/angular-mocks/angular-mocks.js"></script>
+<script src="bower_components/angular-resource/angular-resource.js"></script>
+<script src="bower_components/angular-route/angular-route.js"></script>
+<script src="bower_components/angular-scenario/angular-scenario.js"></script>
+<script src="bower_components/angular-smart-table/dist/smart-table.js"></script>
+<script src="bower_components/sweetalert/lib/sweet-alert.js"></script>
+<script src="bower_components/angular-sweetalert/SweetAlert.js"></script>
+<script src="bower_components/angular-toasty/js/ng-toasty.js"></script>
+<script src="bower_components/angular-touch/angular-touch.js"></script>
+<script src="bower_components/angular-translate/angular-translate.js"></script>
+<script src="bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
+<script src="bower_components/angular-translate-loader-url/angular-translate-loader-url.js"></script>
+<script src="bower_components/codemirror/lib/codemirror.js"></script>
+<script src="bower_components/codemirror/addon/mode/overlay.js"></script>
+<script src="bower_components/codemirror/mode/gfm/gfm.js"></script>
+<script src="bower_components/codemirror/mode/markdown/markdown.js"></script>
+<script src="bower_components/angular-ui-codemirror/ui-codemirror.js"></script>
+<script src="bower_components/angular-ui-grid/ui-grid.js"></script>
+<script src="bower_components/angular-ui-layout/src/ui-layout.js"></script>
+<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+<script src="bower_components/angular-multi-select/isteven-multi-select.js"></script>
+<script src="bower_components/jquery-ui/ui/jquery-ui.custom.js"></script>
+<script src="bower_components/d3/d3.js"></script>
+<script src="bower_components/jszip/dist/jszip.js"></script>
+<!-- endbower -->
+<!-- endbuild -->
+<!-- build:js scripts/scripts.js -->
+<!-- JS -->
+<script src="/js/app.js"></script>
+<script src="/js/config.js"></script>
+<script src="/js/lb-services.js"></script>
+<script src="/js/translations.js"></script>
+<script src="/js/messages/pluginListenerMsg.js"></script>
+<script src="/js/messages/userLoginOrLogoutMsg.js"></script>
+<!-- MODULES -->
+<script src="/modules/about/app.about.js"></script>
+<script src="/modules/about/controllers/about.config.js"></script>
+<script src="/modules/about/controllers/about.controller.js"></script>
+<script src="/modules/about/controllers/about.routes.js"></script>
+<script src="/modules/core/app.core.js"></script>
+<script src="/modules/core/config/core.config.js"></script>
+<script src="/modules/core/config/core.routes.js"></script>
+<script src="/modules/core/controllers/home.ctrl.js"></script>
+<script src="/modules/core/controllers/layout.ctrl.js"></script>
+<script src="/modules/core/controllers/main.ctrl.js"></script>
+<script src="/modules/core/controllers/router.ctrl.js"></script>
+<script src="/modules/core/directives/admin-box.js"></script>
+<script src="/modules/core/directives/admin-form.js"></script>
+<script src="/modules/core/directives/admin-header.js"></script>
+<script src="/modules/core/directives/date.js"></script>
+<script src="/modules/core/directives/home.js"></script>
+<script src="/modules/core/directives/navbar.js"></script>
+<script src="/modules/core/directives/small-box.directive.js"></script>
+<script src="/modules/core/helpers/FormHelper.js"></script>
+<script src="/modules/core/services/api.service.js"></script>
+<script src="/modules/core/services/core.service.js"></script>
+<script src="/modules/dwCrawlTypes/app.dwCrawlTypes.js"></script>
+<script src="/modules/dwCrawlTypes/config/crawlTypes.config.js"></script>
+<script src="/modules/dwCrawlTypes/config/crawlTypes.routes.js"></script>
+<script src="/modules/dwCrawlTypes/controllers/crawlTypes.ctrl.js"></script>
+<script src="/modules/dwCrawlTypes/services/crawlTypes.service.js"></script>
+<script src="/modules/dwDomainEntityTypes/app.dwDomainEntityTypes.js"></script>
+<script src="/modules/dwDomainEntityTypes/config/entityTypes.config.js"></script>
+<script src="/modules/dwDomainEntityTypes/config/entityTypes.routes.js"></script>
+<script src="/modules/dwDomainEntityTypes/controllers/entityTypes.ctrl.js"></script>
+<script src="/modules/dwDomainEntityTypes/services/entityTypes.service.js"></script>
+<script src="/modules/dwDomainItems/app.dwDomainItems.js"></script>
+<script src="/modules/dwDomainItems/config/domainItems.config.js"></script>
+<script src="/modules/dwDomainItems/config/domainItems.routes.js"></script>
+<script src="/modules/dwDomainItems/controllers/domainItems.ctrl.js"></script>
+<script src="/modules/dwDomainItems/services/domainItems.service.js"></script>
+<script src="/modules/dwDomains/app.dwDomains.js"></script>
+<script src="/modules/dwDomains/config/domains.config.js"></script>
+<script src="/modules/dwDomains/config/domains.routes.js"></script>
+<script src="/modules/dwDomains/controllers/domains.ctrl.js"></script>
+<script src="/modules/dwDomains/services/domains.service.js"></script>
+<script src="/modules/dwExtractors/app.dwExtractors.js"></script>
+<script src="/modules/dwExtractors/config/extractors.config.js"></script>
+<script src="/modules/dwExtractors/config/extractors.routes.js"></script>
+<script src="/modules/dwExtractors/controllers/extractors.ctrl.js"></script>
+<script src="/modules/dwExtractors/services/extractors.service.js"></script>
+<script src="/modules/dwFeeds/app.dwFeeds.js"></script>
+<script src="/modules/dwFeeds/config/feeds.config.js"></script>
+<script src="/modules/dwFeeds/config/feeds.routes.js"></script>
+<script src="/modules/dwFeeds/controllers/feeds.ctrl.js"></script>
+<script src="/modules/dwFeeds/services/feeds.service.js"></script>
+<script src="/modules/dwForensic/app.dwForensic.js"></script>
+<script src="/modules/dwForensic/config/forensic.config.js"></script>
+<script src="/modules/dwForensic/config/forensic.routes.js"></script>
+<script src="/modules/dwForensic/controllers/forensic.ctrl.js"></script>
+<script src="/modules/dwForensic/scripts/attribute_graph.js"></script>
+<script src="/modules/dwForensic/scripts/sotera.webgraph.v1.js"></script>
+<script src="/modules/dwForensic/scripts/svgColorLegend.js"></script>
+<script src="/modules/dwForensic/services/forensic.service.js"></script>
+<script src="/modules/dwServiceTypes/app.dwServiceTypes.js"></script>
+<script src="/modules/dwServiceTypes/config/serviceTypes.config.js"></script>
+<script src="/modules/dwServiceTypes/config/serviceTypes.routes.js"></script>
+<script src="/modules/dwServiceTypes/controllers/serviceTypes.ctrl.js"></script>
+<script src="/modules/dwServiceTypes/services/serviceTypes.service.js"></script>
+<script src="/modules/dwSettings/app.dwSettings.js"></script>
+<script src="/modules/dwSettings/config/settings.config.js"></script>
+<script src="/modules/dwSettings/config/settings.routes.js"></script>
+<script src="/modules/dwSettings/controllers/settings.ctrl.js"></script>
+<script src="/modules/dwSettings/services/settings.service.js"></script>
+<script src="/modules/dwTeams/app.dwTeams.js"></script>
+<script src="/modules/dwTeams/config/teams.config.js"></script>
+<script src="/modules/dwTeams/config/teams.routes.js"></script>
+<script src="/modules/dwTeams/controllers/teams.ctrl.js"></script>
+<script src="/modules/dwTeams/services/teams.service.js"></script>
+<script src="/modules/dwTrailUrls/app.dwTrailUrls.js"></script>
+<script src="/modules/dwTrailUrls/config/trailUrls.config.js"></script>
+<script src="/modules/dwTrailUrls/config/trailUrls.routes.js"></script>
+<script src="/modules/dwTrailUrls/controllers/trailUrls.ctrl.js"></script>
+<script src="/modules/dwTrailUrls/services/trailUrls.service.js"></script>
+<script src="/modules/dwTrails/app.dwTrails.js"></script>
+<script src="/modules/dwTrails/config/trails.config.js"></script>
+<script src="/modules/dwTrails/config/trails.routes.js"></script>
+<script src="/modules/dwTrails/controllers/trails.ctrl.js"></script>
+<script src="/modules/dwTrails/services/trails.service.js"></script>
+<script src="/modules/dwTransmissions/app.dwTransmissions.js"></script>
+<script src="/modules/dwTransmissions/config/transmissions.config.js"></script>
+<script src="/modules/dwTransmissions/config/transmissions.routes.js"></script>
+<script src="/modules/dwTransmissions/controllers/transmissions.ctrl.js"></script>
+<script src="/modules/dwTransmissions/services/transmissions.service.js"></script>
+<script src="/modules/dwUrlExtractions/app.dwUrlExtractions.js"></script>
+<script src="/modules/dwUrlExtractions/config/urlExtractions.config.js"></script>
+<script src="/modules/dwUrlExtractions/config/urlExtractions.routes.js"></script>
+<script src="/modules/dwUrlExtractions/controllers/urlExtractions.ctrl.js"></script>
+<script src="/modules/dwUrlExtractions/services/urlExtractions.service.js"></script>
+<script src="/modules/events/app.events.js"></script>
+<script src="/modules/events/config/events.config.js"></script>
+<script src="/modules/events/config/events.routes.js"></script>
+<script src="/modules/events/controllers/events.ctrl.js"></script>
+<script src="/modules/files/app.files.js"></script>
+<script src="/modules/files/config/file.config.js"></script>
+<script src="/modules/files/config/file.routes.js"></script>
+<script src="/modules/files/controllers/files.ctrl.js"></script>
+<script src="/modules/files/controllers/upload.ctrl.js"></script>
+<script src="/modules/notes/app.notes.js"></script>
+<script src="/modules/notes/config/notes.config.js"></script>
+<script src="/modules/notes/config/notes.routes.js"></script>
+<script src="/modules/notes/controllers/notes.ctrl.js"></script>
+<script src="/modules/notes/services/notes.service.js"></script>
+<script src="/modules/pages/app.pages.js"></script>
+<script src="/modules/pages/config/pages.config.js"></script>
+<script src="/modules/pages/config/pages.routes.js"></script>
+<script src="/modules/pages/controllers/pages.ctrl.js"></script>
+<script src="/modules/posts/app.posts.js"></script>
+<script src="/modules/posts/config/posts.config.js"></script>
+<script src="/modules/posts/config/posts.routes.js"></script>
+<script src="/modules/posts/controllers/posts.ctrl.js"></script>
+<script src="/modules/posts/services/posts.service.js"></script>
+<script src="/modules/products/app.products.js"></script>
+<script src="/modules/products/config/products.config.js"></script>
+<script src="/modules/products/config/products.routes.js"></script>
+<script src="/modules/products/controllers/categories.ctrl.js"></script>
+<script src="/modules/products/controllers/products.ctrl.js"></script>
+<script src="/modules/sandbox/app.sandbox.js"></script>
+<script src="/modules/sandbox/config/sandbox.config.js"></script>
+<script src="/modules/sandbox/config/sandbox.routes.js"></script>
+<script src="/modules/sandbox/controllers/sandbox.autofields.ctrl.js"></script>
+<script src="/modules/sandbox/controllers/sandbox.bootstrap.alert.ctrl.js"></script>
+<script src="/modules/sandbox/controllers/sandbox.bootstrap.tabs.ctrl.js"></script>
+<script src="/modules/sandbox/controllers/sandbox.coreservice.ctrl.js"></script>
+<script src="/modules/sandbox/controllers/sandbox.ctrl.js"></script>
+<script src="/modules/sandbox/controllers/sandbox.dashboard.ctrl.js"></script>
+<script src="/modules/sandbox/controllers/sandbox.datepickerdemo.ctrl.js"></script>
+<script src="/modules/sandbox/controllers/sandbox.faker.ctrl.js"></script>
+<script src="/modules/sandbox/controllers/sandbox.forms.ctrl.js"></script>
+<script src="/modules/sandbox/controllers/sandbox.grid.ctrl.js"></script>
+<script src="/modules/sandbox/controllers/sandbox.icons.ctrl.js"></script>
+<script src="/modules/sandbox/controllers/sandbox.trees.ctrl.js"></script>
+<script src="/modules/sandbox/directives/percent-height.js"></script>
+<script src="/modules/settings/app.settings.js"></script>
+<script src="/modules/settings/config/settings.config.js"></script>
+<script src="/modules/settings/config/settings.routes.js"></script>
+<script src="/modules/settings/controllers/settings.ctrl.js"></script>
+<script src="/modules/users/app.users.js"></script>
+<script src="/modules/users/config/users.auth.js"></script>
+<script src="/modules/users/config/users.config.js"></script>
+<script src="/modules/users/config/users.routes.js"></script>
+<script src="/modules/users/controllers/login.ctrl.js"></script>
+<script src="/modules/users/controllers/profile.ctrl.js"></script>
+<script src="/modules/users/controllers/register.ctrl.js"></script>
+<script src="/modules/users/controllers/users.ctrl.js"></script>
+<script src="/modules/users/directives/login.js"></script>
+<script src="/modules/users/directives/register.js"></script>
+<script src="/modules/users/services/appauth.service.js"></script>
+<!-- endbuild -->
+</body>
+</html>

@@ -1,10 +1,7 @@
 'use strict';
 var app = angular.module('com.module.dwServiceTypes');
 
-app.controller('ServiceTypesCtrl', function($scope, $state, $stateParams, DwServiceType, ServiceTypesService, gettextCatalog, AppAuth) {
-
-    //Put the currentUser in $scope for convenience
-    $scope.currentUser = AppAuth.currentUser;
+app.controller('ServiceTypesCtrl', function($scope, $state, $stateParams, ServiceTypesService, gettextCatalog, AppAuth) {
 
     $scope.serviceType = {};
     $scope.formFields = [{
@@ -30,11 +27,15 @@ app.controller('ServiceTypesCtrl', function($scope, $state, $stateParams, DwServ
         }
     }];
 
-    $scope.delete = function(id) {
-        ServiceTypesService.deleteServiceType(id, function() {
-            $scope.safeDisplayedserviceTypes = ServiceTypesService.getServiceTypes();
+    $scope.delete = function(serviceType) {
+        if(serviceType.id){
+            ServiceTypesService.deleteServiceType(serviceType, function() {
+                $scope.safeDisplayedserviceTypes = ServiceTypesService.getServiceTypes();
+                $state.go('^.list');
+            });
+        }else{
             $state.go('^.list');
-        });
+        }
     };
 
     $scope.onSubmit = function() {
@@ -45,23 +46,26 @@ app.controller('ServiceTypesCtrl', function($scope, $state, $stateParams, DwServ
     };
 
     $scope.loading = true;
-    DwServiceType.find({filter: {include: []}}).$promise
-        .then(function (allserviceTypes) {
-            $scope.safeDisplayedserviceTypes = allserviceTypes;
-            $scope.displayedserviceTypes = [].concat($scope.safeDisplayedserviceTypes);
-        })
-        .catch(function (err) {
-            console.log(err);
-        })
-        .then(function () {
-            $scope.loading = false;
-        });
+    AppAuth.getCurrentUser().then(function (currUser) {
+        $scope.currentUser = currUser;
+        if ($stateParams.id) {
+            ServiceTypesService.getServiceType($stateParams.id).$promise.then(function(result){
+                $scope.serviceType = result;
+                $scope.safeDisplayedserviceTypes = {};
+                $scope.displayedserviceTypes = {};
+                $scope.loading = false;
+            })
+        } else {
+            ServiceTypesService.getServiceTypes().$promise.then(function(result){
+                $scope.serviceType = {};
+                $scope.safeDisplayedserviceTypes = result;
+                $scope.displayedserviceTypes = [].concat($scope.safeDisplayedserviceTypes);
+                $scope.loading = false;
+            })
+        }
+    }, function (err) {
+        console.log(err);
+    });
 
-    if ($stateParams.id) {
-        ServiceTypesService.getServiceType($stateParams.id).$promise.then(function(result){
-            $scope.serviceType = result;})
-    } else {
-        $scope.serviceType = {};
-    }
 });
 

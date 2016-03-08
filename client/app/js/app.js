@@ -15,6 +15,7 @@ angular.module('loopbackApp', [
   'angularBootstrapNavTree',
   'angularFileUpload',
   'isteven-multi-select',
+  'angular-jqcloud',
   'btford.markdown',
   'oitozero.ngSweetAlert',
   'config',

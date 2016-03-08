@@ -1,10 +1,7 @@
 'use strict';
 var app = angular.module('com.module.dwCrawlTypes');
 
-app.controller('CrawlTypesCtrl', function($scope, $state, $stateParams, DwCrawlType, CrawlTypesService, gettextCatalog, AppAuth) {
-
-    //Put the currentUser in $scope for convenience
-    $scope.currentUser = AppAuth.currentUser;
+app.controller('CrawlTypesCtrl', function($scope, $state, $stateParams, CrawlTypesService, gettextCatalog, AppAuth) {
 
     $scope.crawlType = {};
     $scope.formFields = [{
@@ -31,11 +28,15 @@ app.controller('CrawlTypesCtrl', function($scope, $state, $stateParams, DwCrawlT
     }];
 
 
-    $scope.delete = function(id) {
-        CrawlTypesService.deleteCrawlType(id, function() {
-            $scope.safeDisplayedcrawlTypes = CrawlTypesService.getCrawlTypes();
+    $scope.delete = function(crawlType) {
+        if(crawlType.id){
+            CrawlTypesService.deleteCrawlType(crawlType, function() {
+                $scope.safeDisplayedcrawlTypes = CrawlTypesService.getCrawlTypes();
+                $state.go('^.list');
+            });
+        }else{
             $state.go('^.list');
-        });
+        }
     };
 
     $scope.onSubmit = function() {
@@ -45,24 +46,26 @@ app.controller('CrawlTypesCtrl', function($scope, $state, $stateParams, DwCrawlT
         });
     };
 
+
     $scope.loading = true;
-    DwCrawlType.find({filter: {include: []}}).$promise
-        .then(function (allCrawlTypes) {
-            $scope.safeDisplayedcrawlTypes = allCrawlTypes;
-            $scope.displayedcrawlTypes = [].concat($scope.safeDisplayedcrawlTypes);
-        })
-        .catch(function (err) {
-            console.log(err);
-        })
-        .then(function () {
-            $scope.loading = false;
-        });
-
-    if ($stateParams.id) {
-        CrawlTypesService.getCrawlType($stateParams.id).$promise.then(function(result){
-            $scope.crawlType = result;})
-    } else {
-        $scope.crawlType = {};
-    }
+    AppAuth.getCurrentUser().then(function (currUser) {
+        $scope.currentUser = currUser;
+        if ($stateParams.id) {
+            CrawlTypesService.getCrawlType($stateParams.id).$promise.then(function(result){
+                $scope.crawlType = result;
+                $scope.safeDisplayedcrawlTypes = {};
+                $scope.displayedcrawlTypes = {};
+                $scope.loading = false;
+            })
+        } else {
+            CrawlTypesService.getCrawlTypes().$promise.then(function(result){
+                $scope.crawlType = {};
+                $scope.safeDisplayedcrawlTypes = result;
+                $scope.displayedcrawlTypes = [].concat($scope.safeDisplayedcrawlTypes);
+                $scope.loading = false;
+            })
+        }
+    }, function (err) {
+        console.log(err);
+    });
 });
-

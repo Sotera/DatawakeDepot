@@ -4,8 +4,8 @@ self.port.on('logout-target-content-script', function (message) {
   //This message is from the content script to the listening page script
   //setup in: browserPlugin.service.js in the datawake-depot app
   var msg = {
-    type: 'logout'
-  }
+    type: 'toolbar-logout'
+  };
   window.postMessage(msg, '*');
 });
 self.port.on('page-attached-target-content-script', function (message) {

@@ -3,14 +3,94 @@ var app = angular.module('com.module.dwTrails');
 
 app.service('TrailsService', ['$state', 'CoreService', 'DwDomain','DwTrail', 'DwTrailUrl', 'DwUrlExtraction', 'DwCrawlType', 'DwDomainEntityType','DwDomainItem', 'DwTeam','gettextCatalog', function($state, CoreService, DwDomain, DwTrail, DwTrailUrl, DwUrlExtraction, DwCrawlType, DwDomainEntityType, DwDomainItem, DwTeam, gettextCatalog) {
 
-  this.getTrails = function() {
-    return DwTrail.find({filter: {include: ['domain','team','users','trailUrls','feeds']}});
+  this.getTrail = function(id) {
+      //return DwTrail.findById({
+      //    id: id
+      //});
+
+      var whereClause = {
+          id: id,
+
+          filter:{
+              include:
+                  [
+                      {relation: 'domain',
+                          scope:{
+                              fields:['name','description','id'],
+                              include:[
+                                  'domainItems',
+                                  'domainEntityTypes'
+                              ]
+                          }
+                      },
+                      {relation:'trailUrls',
+                          scope:{
+                              fields: [
+                                  'url',
+                                  'searchTerms',
+                                  'comments',
+                                  'timestamp',
+                                  'id',
+                                  'dwTrailId',
+                                  'dwTrailUrlId'
+                              ],
+                              include:['urlExtractions']
+                          }
+                      }
+                  ]
+              }
+      };
+
+      return (DwTrail.findById(whereClause));
   };
 
-  this.getTrail = function(id) {
-    return DwTrail.findById({
-      id: id
+  this.getTrails = function() {
+    return DwTrail.find({
+        filter:
+            {include:
+                [
+                    'domain',
+                    'users',
+                    'trailUrls'
+                ]
+            }
     });
+  };
+
+  this.getUserTrails = function(domainList) {
+      return DwTrail.find({
+          filter:{
+            where:{
+                dwDomainId:{inq:domainList}
+            },
+            include:
+              [
+                  'domain',
+                  'users',
+                  'trailUrls'
+              ]
+          }
+      });
+  };
+
+  this.getUserTeamTrails = function(teamList) {
+      var userTeams = [];
+      teamList.forEach(function (team) {
+          userTeams.push(team.id);
+      });
+      return DwTrail.find({
+          filter:{
+              where:{
+                  dwTeamId:{inq:userTeams}
+              },
+              include:
+                  [
+                      'domain',
+                      'users',
+                      'trailUrls'
+                  ]
+          }
+      });
   };
 
   this.upsertTrail = function(trail, cb) {
@@ -27,7 +107,7 @@ app.service('TrailsService', ['$state', 'CoreService', 'DwDomain','DwTrail', 'Dw
                       //success
                   });
               });
-          };
+          }
 
           if (trail.AminoUsers) {
               trail.AminoUsers.forEach(function (user) {
@@ -35,14 +115,14 @@ app.service('TrailsService', ['$state', 'CoreService', 'DwDomain','DwTrail', 'Dw
                       //success
                   });
               });
-          };
+          }
 
           //For other relationships you MUST manually add the items
           if (trail.team) {
               DwTeam.upsert(trail.team, function () {
                   //success
               })
-          };
+          }
 
           if (trail.domain) {
               DwDomain.upsert(trail.domain, function () {
@@ -58,7 +138,7 @@ app.service('TrailsService', ['$state', 'CoreService', 'DwDomain','DwTrail', 'Dw
                           }, function (err) {
                           });
                       });
-                  };
+                  }
                   if (trail.domain.domainItems) {
                       trail.domain.domainItems.forEach(function (di) {
                           DwDomainItem.upsert(di, function () {
@@ -66,9 +146,9 @@ app.service('TrailsService', ['$state', 'CoreService', 'DwDomain','DwTrail', 'Dw
                           }, function (err) {
                           });
                       });
-                  };
+                  }
               })
-          };
+          }
 
           if (trail.trailUrls) {
               trail.trailUrls.forEach(function (tu) {
@@ -81,20 +161,20 @@ app.service('TrailsService', ['$state', 'CoreService', 'DwDomain','DwTrail', 'Dw
                               }, function (err) {
                               });
                           });
-                      };
+                      }
                       if (trail.crawlType) {
                           DwCrawlType.upsert(trail.crawlType, function () {
                               //success
                           });
-                      };
+                      }
                   });
               });
-          };
+          }
           cb();
       }, function (err) {
           CoreService.toastSuccess(gettextCatalog.getString(
               'Error saving trail '), gettextCatalog.getString(
-                  'This trail could no be saved: ') + err);
+                  'This trail could not be saved: ') + err);
       });
   };
 
@@ -109,14 +189,14 @@ app.service('TrailsService', ['$state', 'CoreService', 'DwDomain','DwTrail', 'Dw
                     //success
                 });
             });
-        };
+        }
         if(trail.id.feeds) {
             trail.id.feeds.forEach(function (feed) {
                 DwTrail.feeds.unlink({id: trail.id, fk: feed}, null, function (value, header) {
                     //success
                 });
             });
-        };
+        }
 
         //Now delete the Trail
         DwTrail.deleteById(trail.id, function() {
@@ -132,10 +212,10 @@ app.service('TrailsService', ['$state', 'CoreService', 'DwDomain','DwTrail', 'Dw
                               }, function (err) {
                               });
                           });
-                      };
+                      }
                   });
               });
-          };
+          }
 
           cb();
         }, function(err) {

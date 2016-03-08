@@ -1,14 +1,14 @@
 'use strict';
 var app = angular.module('com.module.dwDomainItems');
 
-app.controller('DomainItemsCtrl', function($scope, $state, $stateParams, DwDomain, DwDomainItem, DwDomainEntityType, DomainItemsService, gettextCatalog, AppAuth) {
-
-    //Put the currentUser in $scope for convenience
-    $scope.currentUser = AppAuth.currentUser;
+app.controller('DomainItemsCtrl', function($scope, $state, $stateParams, DwDomain, DomainItemsService, gettextCatalog, AppAuth) {
     $scope.domains = [];
-    $scope.entityTypes = [];
-
+    $scope.currentDomainId= '';
     $scope.domainItem = {};
+
+    $scope.itemIndex = 0;
+    $scope.itemsPerPage = 15;
+
     $scope.formFields = [{
         key: 'id',
         type: 'input',
@@ -24,28 +24,11 @@ app.controller('DomainItemsCtrl', function($scope, $state, $stateParams, DwDomai
             options: $scope.domains,
             valueProp: 'id',
             labelProp: 'name',
-            required: true,
-            disabled: false,
-            onChange: function($viewValue){
-                $scope.loadEntityTypes($viewValue);
-            }
+            required: true
         }
-    }, {
-        key: 'dwDomainEntityTypeId',
-        type: 'select',
-        expressionProperties: {
-            // This watches for form changes and enables/disables the entity type dropdown as necessary
-            'templateOptions.disabled': function () {
-                return $scope.entityTypes.length<=0;
-            }
-        },
-        templateOptions: {
-            label: gettextCatalog.getString('Domain Entity TYpe'),
-            options: $scope.entityTypes,
-            valueProp: 'id',
-            labelProp: 'name',
-            required: true,
-            disabled: false
+        ,
+        expressionProperties:{
+            'templateOptions.disabled': 'model.id'
         }
     },{
         key: 'itemValue',
@@ -63,95 +46,133 @@ app.controller('DomainItemsCtrl', function($scope, $state, $stateParams, DwDomai
         }
     }];
 
-    $scope.loadEntityTypes = function(domainId){
-        //Populate entityTypes from the domains for the given domain
-        $scope.entityTypes.length=0;
-        $scope.domains.forEach(function (domain){
-            if (domain.id == domainId){
-                if( domain.domainEntityTypes) {
-                    for (var i = 0; i < domain.domainEntityTypes.length; ++i) {
-                        $scope.entityTypes.push({
-                            value: domain.domainEntityTypes[i].name,
-                            name: domain.domainEntityTypes[i].name,
-                            id: domain.domainEntityTypes[i].id
-                        });
-                    }
-                } else {
-                    $scope.entityTypes.length =0;
-                }
-            }
-        });
-    };
-
-    $scope.delete = function(id) {
-        DomainItemsService.deleteDomainItem(id, function() {
-            $scope.safeDisplayeddomainItems = DomainItemsService.getDomainItems();
+    $scope.delete = function(domainItem) {
+        if(domainItem.id){
+            DomainItemsService.deleteDomainItem(domainItem, function() {
+                $scope.safeDisplayeddomainItems = DomainItemsService.getFilteredDomainItems($scope.currentDomainId);
+                $state.go('^.list');
+            });
+        }else{
             $state.go('^.list');
-        });
+        }
     };
 
     $scope.onSubmit = function() {
         DomainItemsService.upsertDomainItem($scope.domainItem, function() {
-            $scope.safeDisplayeddomainItems = DomainItemsService.getDomainItems();
+            $scope.safeDisplayeddomainItems = DomainItemsService.getFilteredDomainItems($scope.currentDomainId);
             $state.go('^.list');
         });
     };
 
-    $scope.loading = true;
-    DwDomainItem.find({filter: {include: ['domain','domainEntityType']}}).$promise
-        .then(function (allDomainItems) {
-            $scope.safeDisplayeddomainItems = allDomainItems;
-            $scope.displayedDomainItems = [].concat($scope.safeDisplayeddomainItems);
-        })
-        .catch(function (err) {
-            console.log(err);
-        })
-        .then(function () {
+    $scope.loadPicklists = function () {
+        DwDomain.find({filter: {include: []}}).$promise
+            .then(function (allDomains) {
+                $scope.domains.length=0;
+                for (var i = 0; i < allDomains.length; ++i) {
+                    $scope.domains.push({
+                        value: allDomains[i].name,
+                        name: allDomains[i].name + " - " + allDomains[i].description,
+                        id: allDomains[i].id
+                    });
+                }
+            })
+            .catch(function (err) {
+                console.log(err);
+            })
+            .then(function () {
+            }
+        );
+    };
+
+    $scope.setPageButtons = function(resultLen){
+        var pageState =  '';
+        var fwd = false;
+        var back = false;
+
+        //figure out if we have more than one page of results to see if we enable Fwd
+        if(resultLen >= $scope.itemsPerPage){
+            fwd = true;
+        }
+        //figure out if we're on page greater than page 1 to enable Back
+        if($scope.itemIndex >= $scope.itemsPerPage){
+            back = true;
+        }
+        if(fwd && back){
+            pageState = 'both';
+        }else if (!fwd && back){
+            pageState = 'backwardOnly';
+        }else if (fwd && !back){
+            pageState = 'forwardOnly';
+        }
+
+        switch (pageState){
+            case 'forwardOnly':
+                $('#pageBack').attr('disabled', 'disabled');
+                $('#pageFwd').removeAttr('disabled');
+                break;
+            case 'backwardOnly':
+                $('#pageFwd').attr('disabled', 'disabled');
+                $('#pageBack').removeAttr('disabled');
+                break;
+            case 'both':
+                $('#pageBack').removeAttr('disabled');
+                $('#pageFwd').removeAttr('disabled');
+                break;
+            default: //disabled
+                $('#pageBack').attr('disabled', 'disabled');
+                $('#pageFwd').attr('disabled', 'disabled');
+        }
+    };
+
+    $scope.nextPage = function(){
+        $scope.itemIndex = $scope.itemIndex + $scope.itemsPerPage;
+        $scope.getFilteredPagedResults($scope.currentDomainId, $scope.itemIndex,  $scope.itemsPerPage);
+    };
+
+    $scope.prevPage = function(){
+        $scope.itemIndex = $scope.itemIndex - $scope.itemsPerPage;
+        $scope.getFilteredPagedResults($scope.currentDomainId, $scope.itemIndex,  $scope.itemsPerPage);
+    };
+
+    $scope.getFilteredPagedResults = function(domainId, itemIndex, itemsPer) {
+        $scope.loading = true;
+
+        DomainItemsService.getFilteredPagedDomainItems(domainId, itemIndex, itemsPer).$promise.then(function(result){
+            $scope.currentDomainId = domainId;
+            $scope.domainItem = {};
+            $scope.safeDisplayeddomainItems = result;
+            $scope.displayedDomainItems = [].concat($scope.displayedDomainItems);
+
+            $scope.setPageButtons(result.length);
             $scope.loading = false;
         });
+    };
 
-    DwDomain.find({filter: {include: ['domainEntityTypes']}}).$promise
-        .then(function (allDomains) {
-            $scope.domains.length=0;
-            for (var i = 0; i < allDomains.length; ++i) {
-                $scope.domains.push({
-                    value: allDomains[i].name,
-                    name: allDomains[i].name + " - " + allDomains[i].description,
-                    id: allDomains[i].id,
-                    domainEntityTypes: allDomains[i].domainEntityTypes
-                });
-            }
-        })
-        .catch(function (err) {
-            console.log(err);
-        })
-        .then(function () {
-        }
-    );
-
-    if ($stateParams.id) {
-        $scope.loading = true;
-        DwDomainItem.findOne({
-            filter: {
-                where: {
-                    id: $stateParams.id
-                },
-                include: ['domain','domainEntityType']
-            }
-        }).$promise
-            .then(function (domain) {
-                $scope.domainItem = domain;
-
-                $scope.entityTypes.push({
-                    value: domain.domainEntityType.name,
-                    name: domain.domainEntityType.name,
-                    id: domain.domainEntityType.id
-                });
+    $scope.loading = true;
+    AppAuth.getCurrentUser().then(function (currUser) {
+        $scope.currentUser = currUser;
+        $scope.loadPicklists(currUser);
+        if ($stateParams.id && $stateParams.domainId) {
+            DomainItemsService.getDomainItem($stateParams.id).$promise.then(function(result) {
+                $scope.currentDomainId = $stateParams.domainId;
+                $scope.domainItem = result;
+                $scope.safeDisplayeddomainItems = {};
+                $scope.displayedDomainItems = {};
+                $scope.loading = false;
+            })
+        } else if ($stateParams.domainId){
+            $scope.getFilteredPagedResults($stateParams.domainId, $scope.itemIndex, $scope.itemsPerPage);
+        } else {
+            DomainItemsService.getDomainItems().$promise.then(function(result){
+                $scope.currentDomainId = '';
+                $scope.domainItem = {};
+                $scope.safeDisplayeddomainItems = result;
+                $scope.displayedDomainItems = [].concat($scope.displayedDomainItems);
+                $scope.loading = false;
             });
-        $scope.loading = false;
-    } else {
-        $scope.domainItem = {};
-    }
-
+        }
+    }, function (err) {
+        console.log(err);
+    });
 });
 

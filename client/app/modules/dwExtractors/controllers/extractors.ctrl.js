@@ -1,10 +1,8 @@
 'use strict';
 var app = angular.module('com.module.dwExtractors');
 
-app.controller('ExtractorsCtrl', function($scope, $state, $stateParams, DwDomain, DwExtractor, DwServiceType, ExtractorsService, gettextCatalog, AppAuth) {
+app.controller('ExtractorsCtrl', function($scope, $state, $stateParams, DwDomain, DwServiceType, ExtractorsService, gettextCatalog, AppAuth) {
 
-    //Put the currentUser in $scope for convenience
-    $scope.currentUser = AppAuth.currentUser;
     $scope.plProtocols = [
         {"name": "http","description": "http://"},
         {"name": "https","description": "https://" }
@@ -96,10 +94,14 @@ app.controller('ExtractorsCtrl', function($scope, $state, $stateParams, DwDomain
     }];
 
     $scope.delete = function(extractor) {
-        ExtractorsService.deleteExtractor(extractor, function() {
-            $scope.safeDisplayedextractors = ExtractorsService.getExtractors();
+        if(extractor.id){
+            ExtractorsService.deleteExtractor(extractor, function() {
+                $scope.safeDisplayedextractors = ExtractorsService.getExtractors();
+                $state.go('^.list');
+            });
+        }else{
             $state.go('^.list');
-        });
+        }
     };
 
     $scope.onSubmit = function() {
@@ -109,59 +111,64 @@ app.controller('ExtractorsCtrl', function($scope, $state, $stateParams, DwDomain
         });
     };
 
-    $scope.loading = true;
-    DwExtractor.find({filter: {include: ['serviceType','domains']}}).$promise
-        .then(function (allExtractors) {
-            $scope.safeDisplayedextractors = allExtractors;
-            $scope.displayedextractors = [].concat($scope.safeDisplayedextractors);
-        })
-        .catch(function (err) {
-            console.log(err);
-        })
-        .then(function () {
-            $scope.loading = false;
-        }
-    );
-
-    DwServiceType.find({filter: {include: []}}).$promise
-        .then(function (allServiceTypes) {
-            for (var i = 0; i < allServiceTypes.length; ++i) {
-                $scope.plServiceTypes.push({
-                    value: allServiceTypes[i].name,
-                    name: allServiceTypes[i].name + " - " + allServiceTypes[i].description,
-                    id: allServiceTypes[i].id
-                });
+    $scope.loadPicklists = function () {
+        DwServiceType.find({filter: {include: []}}).$promise
+            .then(function (allServiceTypes) {
+                for (var i = 0; i < allServiceTypes.length; ++i) {
+                    $scope.plServiceTypes.push({
+                        value: allServiceTypes[i].name,
+                        name: allServiceTypes[i].name + " - " + allServiceTypes[i].description,
+                        id: allServiceTypes[i].id
+                    });
+                }
+            })
+            .catch(function (err) {
+                console.log(err);
+            })
+            .then(function () {
             }
-        })
-        .catch(function (err) {
-            console.log(err);
-        })
-        .then(function () {
-        }
-    );
+        );
 
-    DwDomain.find({filter: {include: []}}).$promise
-        .then(function (allDomains) {
-            for (var i = 0; i < allDomains.length; ++i) {
-                $scope.plDomains.push({
-                    value: allDomains[i].name,
-                    name: allDomains[i].name,
-                    id: allDomains[i].id
-                });
+        DwDomain.find({filter: {include: []}}).$promise
+            .then(function (allDomains) {
+                for (var i = 0; i < allDomains.length; ++i) {
+                    $scope.plDomains.push({
+                        value: allDomains[i].name,
+                        name: allDomains[i].name,
+                        id: allDomains[i].id
+                    });
+                }
+            })
+            .catch(function (err) {
+                console.log(err);
+            })
+            .then(function () {
             }
-        })
-        .catch(function (err) {
-            console.log(err);
-        })
-        .then(function () {
-        }
-    );
-
-    if ($stateParams.id) {
-        ExtractorsService.getExtractor($stateParams.id).$promise.then(function(result){
-            $scope.extractor = result;})
-    } else {
-        $scope.extractor = {};
+        );
     };
+
+    $scope.loading = true;
+    AppAuth.getCurrentUser().then(function (currUser) {
+        $scope.currentUser = currUser;
+        $scope.loadPicklists();
+        if ($stateParams.id) {
+            ExtractorsService.getExtractor($stateParams.id).$promise.then(function(result){
+                $scope.extractor = result;
+                $scope.safeDisplayedextractors = {};
+                $scope.displayedextractors = {};
+                $scope.loading = false;
+            })
+        } else {
+            ExtractorsService.getExtractors().$promise.then(function(result) {
+                $scope.extractor = {};
+                $scope.safeDisplayedextractors = result;
+                $scope.displayedextractors = [].concat($scope.safeDisplayedextractors);
+                $scope.loading = false;
+            })
+        }
+    }, function (err) {
+        console.log(err);
+    });
+
 });
 

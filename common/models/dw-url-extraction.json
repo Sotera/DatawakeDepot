@@ -18,6 +18,17 @@
       "type": [
         "string"
       ]
+    },
+    "extractor": {
+      "type": "string"
+    },
+    "requester": {
+      "type": "string",
+      "required": true
+    },
+    "created":{
+      "type": "date",
+      "defaultFn": "now"
     }
   },
   "validations": [],
@@ -26,11 +37,6 @@
       "type": "belongsTo",
       "model": "DwTrailUrl",
       "foreignKey": "dwTrailUrlId"
-    },
-    "domainEntityType": {
-      "type": "belongsTo",
-      "model": "DwDomainEntityType",
-      "foreignKey": "dwDomainEntityTypeId"
     }
   },
   "acls": [],

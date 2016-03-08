@@ -1,10 +1,18 @@
 'use strict';
 var app = angular.module('com.module.dwDomainEntityTypes');
 
-app.service('EntityTypesService', ['$state', 'CoreService', 'DwDomainEntityType', 'gettextCatalog','DwDomainItem', function($state, CoreService, DwDomainEntityType, gettextCatalog, DwDomainItem) {
+app.service('EntityTypesService', ['$state', 'CoreService', 'DwDomainEntityType', 'gettextCatalog', function($state, CoreService, DwDomainEntityType, gettextCatalog) {
 
   this.getEntityTypes = function() {
-    return DwDomainEntityType.find({filter: {include: ['domain','domainItems']}});
+    var whereClause={
+      filter:{
+        order:"name DESC",
+        include:[
+          'domain'
+        ]
+      }
+    };
+    return (DwDomainEntityType.find(whereClause));
   };
 
   this.getEntityType = function(id) {
@@ -12,6 +20,22 @@ app.service('EntityTypesService', ['$state', 'CoreService', 'DwDomainEntityType'
       id: id
     });
   };
+
+  this.getFilteredEntityTypes = function(domainId) {
+    var whereClause={
+      filter:{
+        order:"name DESC",
+        where:{
+            dwDomainId:domainId
+        },
+        include:[
+          'domain'
+        ]
+      }
+    };
+    return (DwDomainEntityType.find(whereClause));
+  };
+
 
   this.upsertEntityType = function(entityType, cb) {
     DwDomainEntityType.upsert(entityType, function() {
@@ -22,7 +46,7 @@ app.service('EntityTypesService', ['$state', 'CoreService', 'DwDomainEntityType'
     }, function(err) {
       CoreService.toastSuccess(gettextCatalog.getString(
         'Error saving entityType '), gettextCatalog.getString(
-        'This entityType could no be saved: ') + err);
+        'This entityType could not be saved: ') + err);
     });
   };
 
@@ -34,14 +58,6 @@ app.service('EntityTypesService', ['$state', 'CoreService', 'DwDomainEntityType'
           CoreService.toastSuccess(gettextCatalog.getString(
             'EntityType deleted'), gettextCatalog.getString(
             'Your entityType is deleted!'));
-          if(entityType.id.domainItems) {
-            entityType.id.domainItems.forEach(function (di) {
-              DwDomainItem.delete(di, function() {
-                //success
-              }, function(err) {
-              });
-            });
-          };
           cb();
         }, function(err) {
           CoreService.toastError(gettextCatalog.getString(

@@ -13,13 +13,13 @@ app.run(function ($rootScope, Setting, gettextCatalog, $window, UserLoginOrLogou
         return;
       }
       var msg = event.data;
-      if (msg.type == 'logout') {
+      if (msg.type == 'toolbar-logout') {
         UserLoginOrLogoutMsg.broadcast({action: 'initiate-logout'});
       } else if (msg.type == 'handshake') {
         browserPluginService.pluginOrigin = event.origin;
         var msg = {
           type: 'handshake-ack'
-        }
+        };
         $window.postMessage(msg, event.origin);
       }
     }

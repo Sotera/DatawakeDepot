@@ -209,6 +209,7 @@ app.service('TrailsService', ['$state', 'CoreService', 'DwDomain','DwTrail', 'Dw
             trail.id.AminoUsers.forEach(function (user) {
                 DwTrail.users.unlink({id: trail.id.id, fk: user}, null, function (value, header) {
                     //success
+                    var x = value;
                 });
             });
         }
@@ -216,28 +217,14 @@ app.service('TrailsService', ['$state', 'CoreService', 'DwDomain','DwTrail', 'Dw
             trail.id.feeds.forEach(function (feed) {
                 DwTrail.feeds.unlink({id: trail.id, fk: feed}, null, function (value, header) {
                     //success
+                    var y = value;
                 });
             });
         }
 
-        //Now delete the Trail
+        //Now delete the Trail (cascading deletes provide in dw-trail.js for TrailUrls and dw-trail-url.js for UrlExtractions)
         DwTrail.deleteById(trail.id, function() {
           CoreService.toastSuccess(gettextCatalog.getString('Trail deleted'), gettextCatalog.getString('Your trail is deleted!'));
-          if(trail.id.trailUrls) {
-              trail.id.trailUrls.forEach(function (tu) {
-                  DwTrailUrl.delete(tu, function() {
-                      //success
-                      if (tu.urlExtractions) {
-                          tu.urlExtractions.forEach(function (ex) {
-                              DwUrlExtraction.delete(ex, function () {
-                                  //success
-                              }, function (err) {
-                              });
-                          });
-                      }
-                  });
-              });
-          }
 
           cb();
         }, function(err) {

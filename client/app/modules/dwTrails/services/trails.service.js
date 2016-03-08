@@ -65,6 +65,29 @@ app.service('TrailsService', ['$state', 'CoreService', 'DwDomain','DwTrail', 'Dw
     });
   };
 
+  this.getPagedTrails = function(start,number) {
+      return DwTrail.find({
+          filter: {
+              limit: number,
+              skip: start,
+              order:"name DESC",
+              include:
+                  [
+                      {relation:'domain',
+                          scope:{
+                              fields:['name','id']
+                          }
+                      },
+                      {relation:'trailUrls',
+                          scope:{
+                              fields:['url']
+                          }
+                      }
+                  ]
+          }
+      });
+  };
+
   this.getUserTrails = function(domainList) {
       return DwTrail.find({
           filter:{
@@ -113,6 +136,36 @@ app.service('TrailsService', ['$state', 'CoreService', 'DwDomain','DwTrail', 'Dw
                   ]
           }
       });
+  };
+
+  this.getUserPagedTeamTrails = function(teamList,start,number) {
+      var userTeams = [];
+      teamList.forEach(function (team) {
+          userTeams.push(team.id);
+      });
+      var whereClause={
+          filter:{
+              limit: number,
+              skip: start,
+              where: {
+                  id: {inq:userTeams}
+              },
+              include:
+                  [
+                      {relation:'domain',
+                          scope:{
+                              fields:['name','id']
+                          }
+                      },
+                      {relation:'trailUrls',
+                          scope:{
+                              fields:['url']
+                          }
+                      }
+                  ]
+          }
+      };
+      return (DwTeam.find(whereClause));
   };
 
   this.upsertTrail = function(trail, cb) {

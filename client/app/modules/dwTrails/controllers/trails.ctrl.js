@@ -7,6 +7,9 @@ app.controller('TrailsCtrl', function ($scope, $state, $http, $stateParams, DwTe
     $scope.trail = {};
     $scope.defaultDomains = true;
 
+    $scope.itemIndex = 0;
+    $scope.itemsPerPage = 15;
+
     $scope.formFields = [{
         key: 'id',
         type: 'input',
@@ -157,7 +160,7 @@ app.controller('TrailsCtrl', function ($scope, $state, $http, $stateParams, DwTe
         var elHtml = document.getElementById('preElement').innerHTML;
         var link = document.createElement('a');
         var mimeType = 'application/json';
-        var filename = 'test.json'
+        var filename = 'test.json';
 
         link.setAttribute('download', filename);
         link.setAttribute('href', 'data:' + mimeType + ';charset=utf-8,' + encodeURIComponent(elHtml));
@@ -167,18 +170,127 @@ app.controller('TrailsCtrl', function ($scope, $state, $http, $stateParams, DwTe
     $scope.delete = function (trail) {
         if(trail.id){
             TrailsService.deleteTrail(trail, function () {
-                $scope.safeDisplayedtrails = TrailsService.getTrails();
+                $scope.getPagedResults($scope.itemIndex, $scope.itemsPerPage);
                 $state.go('^.list');
             });
-        }else{
-            $state.go('^.list');
         }
+        $state.go('^.list');
+
     };
 
     $scope.onSubmit = function () {
         TrailsService.upsertTrail($scope.trail, function () {
-            $scope.safeDisplayedtrails = TrailsService.getTrails();
+            $scope.getPagedResults($scope.itemIndex, $scope.itemsPerPage);
             $state.go('^.list');
+        });
+    };
+
+    $scope.setPageButtons = function(resultLen){
+        var pageState =  '';
+        var fwd = false;
+        var back = false;
+
+        //figure out if we have more than one page of results to see if we enable Fwd
+        if(resultLen >= $scope.itemsPerPage){
+            fwd = true;
+        }
+        //figure out if we're on page greater than page 1 to enable Back
+        if($scope.itemIndex >= $scope.itemsPerPage){
+            back = true;
+        }
+        if(fwd && back){
+            pageState = 'both';
+        }else if (!fwd && back){
+            pageState = 'backwardOnly';
+        }else if (fwd && !back){
+            pageState = 'forwardOnly';
+        }
+
+        switch (pageState){
+            case 'forwardOnly':
+                $('#pageBack').attr('disabled', 'disabled');
+                $('#pageFwd').removeAttr('disabled');
+                break;
+            case 'backwardOnly':
+                $('#pageFwd').attr('disabled', 'disabled');
+                $('#pageBack').removeAttr('disabled');
+                break;
+            case 'both':
+                $('#pageBack').removeAttr('disabled');
+                $('#pageFwd').removeAttr('disabled');
+                break;
+            default: //disabled
+                $('#pageBack').attr('disabled', 'disabled');
+                $('#pageFwd').attr('disabled', 'disabled');
+        }
+    };
+
+    $scope.nextPage = function(){
+        $scope.itemIndex = $scope.itemIndex + $scope.itemsPerPage;
+        if(!$scope.currentUser.isAdmin) {
+            $scope.getFilteredPagedResults($scope.currentUser.teams, $scope.itemIndex, $scope.itemsPerPage);
+        }else{
+            $scope.getPagedResults($scope.itemIndex, $scope.itemsPerPage);
+        }
+    };
+
+    $scope.prevPage = function(){
+        $scope.itemIndex = $scope.itemIndex - $scope.itemsPerPage;
+        if(!$scope.currentUser.isAdmin) {
+            $scope.getFilteredPagedResults($scope.currentUser.teams, $scope.itemIndex, $scope.itemsPerPage);
+        }else{
+            $scope.getPagedResults($scope.itemIndex, $scope.itemsPerPage);
+        }
+    };
+
+    $scope.getFilteredPagedResults = function(teams, itemIndex, itemsPer) {
+        $scope.loading = true;
+
+        TrailsService.getUserPagedTeamTrails(teams, itemIndex, itemsPer).$promise.then(function (result) {
+            var trails = [];
+            result.forEach(function (team) {
+                if(team.trails){
+
+                    team.trails.forEach(function (trail){
+                        trails.push({
+                            name: trail.name,
+                            description: trail.description,
+                            id: trail.id,
+                            scrape: trail.scrape,
+                            timestamp: trail.timestamp,
+                            dwDomainId: trail.dwDomainId,
+                            teams: trail.teams,
+                            trailUrls: trail.trailUrls,
+                            trailUrlRatings: trail.trailUrlRatings
+                        });
+                        //filter duplicates
+                        if(trails.indexOf(trail)!=-1){
+                            trails.push(trail);
+                        }
+                    });
+                }
+            });
+            $scope.trail = {};
+            $scope.trailUrl = {};
+            $scope.safeDisplayedtrails = trails;
+            $scope.displayedTrails = [].concat($scope.safeDisplayedtrails);
+
+            $scope.setPageButtons(result.length);
+            $scope.loading = false;
+        });
+    };
+
+    $scope.getPagedResults = function(itemIndex, itemsPer) {
+        $scope.loading = true;
+
+        TrailsService.getPagedTrails(itemIndex, itemsPer).$promise.then(function (result) {
+            $scope.trail = {};
+            $scope.trailUrl = {};
+            $scope.safeDisplayedtrails = result;
+            $scope.displayedTrails = [].concat($scope.safeDisplayedtrails);
+
+            $scope.setPageButtons(result.length);
+            $scope.loading = false;
         });
     };
 
@@ -187,34 +299,20 @@ app.controller('TrailsCtrl', function ($scope, $state, $http, $stateParams, DwTe
         $scope.currentUser = currUser;
         $scope.loadPicklists(currUser);
         if ($stateParams.id) {
-            TrailsService.getTrail($stateParams.id).$promise.then(function (result) {
-                $scope.currentId = $stateParams.id;
-                $scope.trail = result;
-                $scope.safeDisplayedtrails = {};
-                $scope.displayedTrails = {};
+            DomainsService.getDomain($stateParams.id).$promise.then(function (result) {
+                $scope.domain = result;
+                $scope.safeDisplayedDomains = {};
+                $scope.displayedDomains = {};
                 $scope.loading = false;
             })
         } else {
             if(!currUser.isAdmin){
-                //get trail info for the given user based on user's teams
+                //get domain info for the given user based on user's teams
                 if (currUser.teams) {
-                    TrailsService.getUserTeamTrails(currUser.teams).$promise.then(function (result) {
-                        $scope.trail = {};
-                        $scope.trailUrl = {};
-                        $scope.safeDisplayedtrails = result;
-                        $scope.displayedTrails = [].concat($scope.safeDisplayedtrails);
-                        $scope.loading = false;
-                    });
+                    $scope.getFilteredPagedResults(currUser.teams, $scope.itemIndex, $scope.itemsPerPage);
                 }
             }else{
-                //get all trails for Admin
-                TrailsService.getTrails().$promise.then(function (result) {
-                    $scope.trail = {};
-                    $scope.trailUrl = {};
-                    $scope.safeDisplayedtrails = result;
-                    $scope.displayedTrails = [].concat($scope.safeDisplayedtrails);
-                    $scope.loading = false;
-                });
+                $scope.getPagedResults($scope.itemIndex, $scope.itemsPerPage);
             }
         }
     }, function (err) {

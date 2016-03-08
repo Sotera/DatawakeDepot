@@ -50,12 +50,10 @@ app.controller('DomainsCtrl', function($scope, $state, $http, $stateParams, File
     $scope.delete = function(domain) {
         if(domain.id) {
             DomainsService.deleteDomain(domain, function () {
-                $scope.safeDisplayedDomains = DomainsService.getDomains();
-                $state.go('^.list');
+                $scope.getPagedResults($scope.itemIndex, $scope.itemsPerPage);
             });
-        }else{
-            $state.go('^.list');
         }
+        $state.go('^.list');
     };
 
     $scope.deleteFile = function(index, id) {
@@ -183,7 +181,7 @@ app.controller('DomainsCtrl', function($scope, $state, $http, $stateParams, File
 
     $scope.onSubmit = function() {
         DomainsService.upsertDomain($scope.domain, function() {
-            $scope.safeDisplayedDomains = DomainsService.getDomains();
+            $scope.getPagedResults($scope.itemIndex, $scope.itemsPerPage);
             $state.go('^.list');
         });
     };

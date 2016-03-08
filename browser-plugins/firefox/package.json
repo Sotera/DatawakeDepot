@@ -1,14 +1,15 @@
 {
   "title": "DatawakeFFPlugin",
   "name": "datawakeffplugin",
-  "version": "0.0.2",
+  "version": "2.1.0",
   "description": "Datawake Firefox Browser Plugin",
   "main": "index.js",
-  "author": "John Reeme",
+  "author": "Sotera",
   "engines": {
     "firefox": ">=38.0a1",
     "fennec": ">=38.0a1"
   },
   "icon": "resource://@datawakeffplugin/icon.png",
-  "license": "MIT"
+  "license": "MIT",
+  "permissions": {"private-browsing": true}
 }

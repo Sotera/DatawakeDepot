@@ -30,15 +30,16 @@ app.controller('UsersCtrl', function ($scope, $stateParams, $state, CoreService,
     };
     $scope.onSubmit = function () {
         var newUser = {
+            id: $scope.user.id,
             email: $scope.user.email,
             firstName: $scope.user.firstName,
             lastName: $scope.user.lastName,
             username: $scope.user.email,
             password: $scope.user.password
         };
-        AminoUser.create(newUser).$promise
+        AminoUser.upsert(newUser).$promise
             .then(function (newUser) {
-                CoreService.toastSuccess('New user created.', newUser.username);
+                CoreService.toastSuccess('User saved.', newUser.username);
                 $scope.user.memberRoles.forEach(function (memberRole) {
                     $scope.displayRoles.forEach(function (displayRole) {
                         if (memberRole === displayRole.name) {
@@ -52,7 +53,7 @@ app.controller('UsersCtrl', function ($scope, $stateParams, $state, CoreService,
                     $scope.displayTeams.forEach(function (displayTeam) {
                         if (memberTeam === displayTeam.id) {
                             AminoUser.teams.link({id: newUser.id, fk: displayTeam.id}, null, function (value, header) {
-                                CoreService.toastSuccess('Team added: ' + display.name);
+                                CoreService.toastSuccess('Team added: ' + value.name);
                             });
                         }
                     });
@@ -61,7 +62,7 @@ app.controller('UsersCtrl', function ($scope, $stateParams, $state, CoreService,
             })
             .catch(function (err) {
                 console.log(err);
-                CoreService.toastError('Error creating user: ' + newUser.username, err);
+                CoreService.toastError('Error saving user: ' + newUser.username, err);
                 $state.go('^.list');
             });
     };
@@ -109,8 +110,7 @@ app.controller('UsersCtrl', function ($scope, $stateParams, $state, CoreService,
         type: 'input',
         templateOptions: {
             type: 'password',
-            label: 'Password',
-            required: true
+            label: 'Change Password'
         }
     }, {
         key: 'memberRoles',
@@ -127,6 +127,8 @@ app.controller('UsersCtrl', function ($scope, $stateParams, $state, CoreService,
             options: $scope.displayTeams
         }
     }];
+
+
     Role.find().$promise
         .then(function (allRoles) {
             for (var i = 0; i < allRoles.length; ++i) {

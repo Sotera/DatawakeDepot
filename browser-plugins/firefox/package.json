@@ -10,5 +10,6 @@
     "fennec": ">=38.0a1"
   },
   "icon": "resource://@datawakeffplugin/icon.png",
-  "license": "MIT"
+  "license": "MIT",
+  "permissions": {"private-browsing": true}
 }

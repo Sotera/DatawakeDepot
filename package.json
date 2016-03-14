@@ -79,7 +79,7 @@
     "loopback-component-storage": "1.5.1",
     "loopback-connector-mongodb": "^1.13.0",
     "loopback-datasource-juggler": "2.41.0",
-    "mongo-express": "^0.23.3",
+    "mongo-express": "*",
     "nodemon": "1.7.3",
     "passport": "0.3.0",
     "passport-facebook": "2.0.0",

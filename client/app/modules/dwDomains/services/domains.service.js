@@ -122,7 +122,11 @@ app.service('DomainsService', ['$state', 'CoreService', 'DwDomain','gettextCatal
                                 'itemValue',
                                 'type',
                                 'source',
+                                'userID',
                                 {'dwDomainId': false}
+                            ],
+                            include:[
+                                {relation:'user',scope:{fields: ['userName']}}
                             ]
                         }
                     }

@@ -17,6 +17,6 @@ docker rm dw-rancor
 #comment out next line to persist data between restarts
 docker run -dt --name dw-data -h dw-data sotera/data-container
 docker run -dt --volumes-from dw-data --name dw-mongo -h mongo sotera/datawake-mongo
-docker run -dt --name datawake -h datawake --link dw-mongo:mongo -p 8701:8701 -p 3000:3001 sotera/datawake-strongloop
+docker run -dt --name datawake -h datawake --link dw-mongo:mongo --link dw-stanNER:dw-stanNER --link dw-rancor:dw-rancor -p 8701:8701 -p 3000:3001 sotera/datawake-strongloop
 docker run -dt --name dw-stanNER -h dw-stanNER --link dw-mongo:mongo -p 8703:8701 -p 3003:3001 sotera/datawake-stanner
 docker run -dt --name dw-rancor -h dw-rancor --link dw-mongo:mongo -p 8704:8701 -p 3004:3001 sotera/datawake-rancor

@@ -1,19 +1,8 @@
 [
   {
-    "name": "datawake-mongo",
-    "Image": "sotera/datawake-mongo-demo",
-    "DockerFilePath": "docker\/mongo\/2.6",
-    "Hostname": "mongo",
-    "ExposedPorts": {
-      "27017/tcp": {}
-    },
-    "HostConfig": {
-    }
-  },
-  {
     "name": "datawake_all",
-    "Image": "jreeme/sljava",
-    "DockerFilePath": "docker/strong-pm-java8",
+    "Image": "jreeme/datawake:18-MAY-2016",
+    "DockerFilePath": "",
     "Hostname": "datawake_all",
     "ExposedPorts": {
       "27017/tcp": {},
@@ -22,9 +11,6 @@
       "8701/tcp": {}
     },
     "HostConfig": {
-      "Links": [
-        "datawake-mongo:mongo"
-      ],
       "PortBindings": {
         "3001/tcp": [
           {
@@ -73,6 +59,17 @@
             "Args": [
               "_runFF.sh"
             ]
+          },
+          {
+            "RelativeWorkingDir": ".",
+            "Command": "slc",
+            "Args": [
+              "ctl",
+              "-C",
+              "http://localhost:8701",
+              "create",
+              "Datawake"
+            ]
           }
         ]
       },
@@ -85,10 +82,25 @@
         "Scripts": [
           {
             "RelativeWorkingDir": ".",
-            "Command": "bower",
+            "Command": "slc",
             "Args": [
-              "install",
-              "--config.interactive=false"
+              "ctl",
+              "-C",
+              "http://localhost:8701",
+              "create",
+              "DatawakeStanfordNerExtractor"
+            ]
+          },
+          {
+            "RelativeWorkingDir": ".",
+            "Command": "slc",
+            "Args": [
+              "ctl",
+              "-C",
+              "http://localhost:8702",
+              "set-size",
+              "DatawakeStanfordNerExtractor",
+              "1"
             ]
           }
         ]

@@ -1,0 +1,84 @@
+[
+  {
+    "name": "datawake-mongo",
+    "Image": "sotera/datawake-mongo-demo",
+    "DockerFilePath": "docker\/mongo\/2.6",
+    "Hostname": "mongo",
+    "ExposedPorts": {
+      "27017/tcp": {}
+    },
+    "HostConfig": {
+    }
+  },
+  {
+    "name": "datawake_all",
+    "Image": "jreeme/sljava",
+    "DockerFilePath": "docker/strong-pm-java8",
+    "Hostname": "datawake_all",
+    "ExposedPorts": {
+      "27017/tcp": {},
+      "3001/tcp": {},
+      "3002/tcp": {},
+      "8701/tcp": {}
+    },
+    "HostConfig": {
+      "Links": [
+        "datawake-mongo:mongo"
+      ],
+      "PortBindings": {
+        "3001/tcp": [
+          {
+            "HostPort": "3001"
+          }
+        ],
+        "3002/tcp": [
+          {
+            "HostPort": "3002"
+          }
+        ],
+        "8701/tcp": [
+          {
+            "HostPort": "8701"
+          }
+        ],
+        "ExpressApps": [
+          {
+            "GitUrl": "https://github.com/Sotera/DatawakeDepot",
+            "GitSrcBranchName": "develop",
+            "StrongLoopBranchName": "deploy",
+            "StrongLoopServerUrl": "http://localhost:8701",
+            "ServiceName": "Datawake",
+            "Scripts": [
+              {
+                "RelativeWorkingDir": ".",
+                "Command": "bower",
+                "Args": [
+                  "install",
+                  "--config.interactive=false"
+                ]
+              }
+            ]
+          },
+          {
+            "GitUrl": "https://github.com/Sotera/DatawakeSampleExtractor",
+            "GitSrcBranchName": "stanford-ner",
+            "StrongLoopBranchName": "deploy",
+            "StrongLoopServerUrl": "http://localhost:8701",
+            "ServiceName": "DatawakeStanfordNerExtractor",
+            "Scripts": [
+              {
+                "RelativeWorkingDir": ".",
+                "Command": "bower",
+                "Args": [
+                  "install",
+                  "--config.interactive=false"
+                ]
+              }
+            ]
+          }
+        ]
+
+      }
+    }
+  }
+]

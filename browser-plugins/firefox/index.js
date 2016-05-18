@@ -3,8 +3,8 @@ var {pluginState} = require('./data/pluginState');
 //pluginState.pageModDatawakeDepotIncludeFilter = '*.datawake-depot.org';
 //pluginState.loginUrl = 'http://datawake-depot.org';
 
-pluginState.pageModDatawakeDepotIncludeFilter = 'http://localhost:3000/*';
-pluginState.loginUrl = 'http://localhost:3000';
+pluginState.pageModDatawakeDepotIncludeFilter = 'http://localhost:3001/*';
+pluginState.loginUrl = 'http://localhost:3001';
 //Edit this to be a valid Rancor instance
 pluginState.trailUrlRancor = 'http://localhost:3004/api/rank/process';
 

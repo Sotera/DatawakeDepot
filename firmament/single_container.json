@@ -40,45 +40,59 @@
           {
             "HostPort": "8701"
           }
-        ],
-        "ExpressApps": [
+        ]
+      }
+    },
+    "ExpressApps": [
+      {
+        "GitUrl": "https://github.com/Sotera/DatawakeDepot",
+        "GitSrcBranchName": "MayDemoNoRancor",
+        "StrongLoopBranchName": "deploy",
+        "StrongLoopServerUrl": "http://localhost:8701",
+        "ServiceName": "Datawake",
+        "Scripts": [
           {
-            "GitUrl": "https://github.com/Sotera/DatawakeDepot",
-            "GitSrcBranchName": "develop",
-            "StrongLoopBranchName": "deploy",
-            "StrongLoopServerUrl": "http://localhost:8701",
-            "ServiceName": "Datawake",
-            "Scripts": [
-              {
-                "RelativeWorkingDir": ".",
-                "Command": "bower",
-                "Args": [
-                  "install",
-                  "--config.interactive=false"
-                ]
-              }
+            "RelativeWorkingDir": ".",
+            "Command": "bower",
+            "Args": [
+              "install",
+              "--config.interactive=false"
             ]
           },
           {
-            "GitUrl": "https://github.com/Sotera/DatawakeSampleExtractor",
-            "GitSrcBranchName": "stanford-ner",
-            "StrongLoopBranchName": "deploy",
-            "StrongLoopServerUrl": "http://localhost:8701",
-            "ServiceName": "DatawakeStanfordNerExtractor",
-            "Scripts": [
-              {
-                "RelativeWorkingDir": ".",
-                "Command": "bower",
-                "Args": [
-                  "install",
-                  "--config.interactive=false"
-                ]
-              }
+            "RelativeWorkingDir": ".",
+            "Command": "npm",
+            "Args": [
+              "install",
+              "--ignore-scripts"
+            ]
+          },
+          {
+            "RelativeWorkingDir": "./browser-plugins/firefox/",
+            "Command": "sh",
+            "Args": [
+              "_runFF.sh"
             ]
           }
         ]
-
+      },
+      {
+        "GitUrl": "https://github.com/Sotera/DatawakeSampleExtractor",
+        "GitSrcBranchName": "stanford-ner",
+        "StrongLoopBranchName": "deploy",
+        "StrongLoopServerUrl": "http://localhost:8701",
+        "ServiceName": "DatawakeStanfordNerExtractor",
+        "Scripts": [
+          {
+            "RelativeWorkingDir": ".",
+            "Command": "bower",
+            "Args": [
+              "install",
+              "--config.interactive=false"
+            ]
+          }
+        ]
       }
-    }
+    ]
   }
 ]

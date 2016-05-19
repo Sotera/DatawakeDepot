@@ -14,7 +14,7 @@
       "PortBindings": {
         "3001/tcp": [
           {
-            "HostPort": "3001"
+            "HostPort": "8082"
           }
         ],
         "3002/tcp": [

@@ -8,6 +8,8 @@
       "27017/tcp": {},
       "3001/tcp": {},
       "3002/tcp": {},
+      "3003/tcp": {},
+      "8182/tcp": {},
       "8701/tcp": {}
     },
     "HostConfig": {
@@ -20,6 +22,11 @@
         "3002/tcp": [
           {
             "HostPort": "3002"
+          }
+        ],
+        "8182/tcp": [
+          {
+            "HostPort": "8182"
           }
         ],
         "8701/tcp": [
@@ -97,10 +104,62 @@
             "Args": [
               "ctl",
               "-C",
-              "http://localhost:8702",
+              "http://localhost:8701",
               "set-size",
               "DatawakeStanfordNerExtractor",
               "1"
+            ]
+          }
+        ]
+      },
+      {
+        "GitUrl": "https://github.com/justinlueders/PageRancor.git",
+        "GitSrcBranchName": "master",
+        "StrongLoopBranchName": "deploy",
+        "StrongLoopServerUrl": "http://localhost:8701",
+        "ServiceName": "DatawakeRancor",
+        "Scripts":[
+          {
+            "RelativeWorkingDir":".",
+            "Command": "bower",
+            "Args":[
+              "install",
+              "--config.interactive=false"
+            ]
+          },
+          {
+            "RelativeWorkingDir": ".",
+            "Command": "slc",
+            "Args": [
+              "ctl",
+              "-C",
+              "http://localhost:8701",
+              "create",
+              "DatawakeRancor"
+            ]
+          },
+          {
+            "RelativeWorkingDir": ".",
+            "Command": "slc",
+            "Args": [
+              "ctl",
+              "-C",
+              "http://localhost:8701",
+              "set-size",
+              "DatawakeRancor",
+              "1"
+            ]
+          },
+          {
+            "RelativeWorkingDir": ".",
+            "Command": "slc",
+            "Args": [
+              "ctl",
+              "-C",
+              "http://localhost:8701",
+              "env-set",
+              "DatawakeRancor",
+              "PORT=8182"
             ]
           }
         ]

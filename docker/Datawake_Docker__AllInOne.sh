@@ -3,4 +3,4 @@
 docker stop datawake
 docker rm datawake
 
-docker run -dt --name datawake -h datawake jreeme/datawake:18-MAY-2016
+docker run -dt --name datawake -h datawake jreeme/datawake:19-MAY-2016

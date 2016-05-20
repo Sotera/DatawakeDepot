@@ -4,7 +4,10 @@ var async = require('async');
 var cluster = require('cluster');
 
 var log = require('debug')('boot:02-load-users');
+
 module.exports = function (app) {
+
+  delete app.models.AminoUser.validations.email;
 
   //JReeme sez: setMaxListeners so we don't have to see that ridiculous memory leak warning
   app.models.AminoUser.getDataSource().setMaxListeners(0);

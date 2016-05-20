@@ -88,7 +88,7 @@ app.controller('UsersCtrl', function ($scope, $stateParams, $state, CoreService,
         type: 'input',
         templateOptions: {
             label: gettextCatalog.getString('E-mail'),
-            type: 'email',
+            type: 'text',
             required: true
         }
     }, {

@@ -48,18 +48,18 @@ angular.module('com.module.users')
       }, {
         label: '',
         property: 'email',
-        placeholder: gettextCatalog.getString('Email'),
-        type: 'email',
+        placeholder: gettextCatalog.getString('User Name'),
+        type: 'text',
         help: gettextCatalog.getString(
-          'Don\'t worry we won\'t spam your inbox'),
+          'Must be at least 4 characters long'),
         attr: {
           required: true,
           ngMinlength: 4
         },
         msgs: {
-          required: gettextCatalog.getString('You need an email address'),
-          email: gettextCatalog.getString('Email address needs to be valid'),
-          valid: gettextCatalog.getString('Nice email address!')
+          required: gettextCatalog.getString('You need a user name'),
+          email: gettextCatalog.getString('User name needs to be valid'),
+          valid: gettextCatalog.getString('Nice user name!')
         }
       },
 
@@ -72,7 +72,7 @@ angular.module('com.module.users')
           type: 'password',
           attr: {
             required: true,
-            ngMinlength: 6
+            ngMinlength: 4
           }
         }, {
           label: '',
@@ -82,7 +82,7 @@ angular.module('com.module.users')
           attr: {
             confirmPassword: 'user.password',
             required: true,
-            ngMinlength: 6
+            ngMinlength: 4
           },
           msgs: {
             match: gettextCatalog.getString(

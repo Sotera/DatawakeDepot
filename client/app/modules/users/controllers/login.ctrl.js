@@ -32,16 +32,16 @@ angular.module('com.module.users')
     $scope.schema = [{
       label: '',
       property: 'email',
-      placeholder: gettextCatalog.getString('Email'),
-      type: 'email',
+      placeholder: gettextCatalog.getString('User Name'),
+      type: 'text',
       attr: {
         required: true,
         ngMinlength: 4
       },
       msgs: {
-        required: gettextCatalog.getString('You need an email address'),
-        email: gettextCatalog.getString('Email address needs to be valid'),
-        valid: gettextCatalog.getString('Nice email address!')
+        required: gettextCatalog.getString('You need a user name'),
+        email: gettextCatalog.getString('User name needs to be valid'),
+        valid: gettextCatalog.getString('Nice user name!')
       }
     }, {
       label: '',
@@ -60,7 +60,7 @@ angular.module('com.module.users')
     ];
     $scope.options = {
       validation: {
-        enabled: true,
+        enabled: false,
         showMessages: false
       },
       layout: {

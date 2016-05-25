@@ -6,15 +6,19 @@
     "Hostname": "datawake_all",
     "ExposedPorts": {
       "27017/tcp": {},
-      "3001/tcp": {},
       "3002/tcp": {},
-      "3003/tcp": {},
       "8182/tcp": {},
+      "8082/tcp": {},
       "8701/tcp": {}
     },
     "HostConfig": {
       "PortBindings": {
-        "3001/tcp": [
+        "8182/tcp": [
+          {
+            "HostPort": "8182"
+          }
+        ],
+        "8082/tcp": [
           {
             "HostPort": "8082"
           }
@@ -22,11 +26,6 @@
         "3002/tcp": [
           {
             "HostPort": "3002"
-          }
-        ],
-        "8182/tcp": [
-          {
-            "HostPort": "8182"
           }
         ],
         "8701/tcp": [
@@ -43,39 +42,15 @@
         "StrongLoopBranchName": "deploy",
         "StrongLoopServerUrl": "http://localhost:8701",
         "ServiceName": "Datawake",
+        "DoBowerInstall": true,
+        "ClusterSize": 1,
+        "ServicePort": 8082,
         "Scripts": [
           {
-            "RelativeWorkingDir": ".",
-            "Command": "bower",
-            "Args": [
-              "install",
-              "--config.interactive=false"
-            ]
-          },
-          {
-            "RelativeWorkingDir": ".",
-            "Command": "npm",
-            "Args": [
-              "install",
-              "--ignore-scripts"
-            ]
-          },
-          {
             "RelativeWorkingDir": "./browser-plugins/firefox/",
-            "Command": "sh",
+            "Command": "/bin/sh",
             "Args": [
               "_runFF.sh"
-            ]
-          },
-          {
-            "RelativeWorkingDir": ".",
-            "Command": "slc",
-            "Args": [
-              "ctl",
-              "-C",
-              "http://localhost:8701",
-              "create",
-              "Datawake"
             ]
           }
         ]
@@ -86,30 +61,9 @@
         "StrongLoopBranchName": "deploy",
         "StrongLoopServerUrl": "http://localhost:8701",
         "ServiceName": "DatawakeStanfordNerExtractor",
+        "ServicePort": 3002,
+        "ClusterSize": 1,
         "Scripts": [
-          {
-            "RelativeWorkingDir": ".",
-            "Command": "slc",
-            "Args": [
-              "ctl",
-              "-C",
-              "http://localhost:8701",
-              "create",
-              "DatawakeStanfordNerExtractor"
-            ]
-          },
-          {
-            "RelativeWorkingDir": ".",
-            "Command": "slc",
-            "Args": [
-              "ctl",
-              "-C",
-              "http://localhost:8701",
-              "set-size",
-              "DatawakeStanfordNerExtractor",
-              "1"
-            ]
-          }
         ]
       },
       {
@@ -118,50 +72,10 @@
         "StrongLoopBranchName": "deploy",
         "StrongLoopServerUrl": "http://localhost:8701",
         "ServiceName": "DatawakeRancor",
-        "Scripts":[
-          {
-            "RelativeWorkingDir":".",
-            "Command": "bower",
-            "Args":[
-              "install",
-              "--config.interactive=false"
-            ]
-          },
-          {
-            "RelativeWorkingDir": ".",
-            "Command": "slc",
-            "Args": [
-              "ctl",
-              "-C",
-              "http://localhost:8701",
-              "create",
-              "DatawakeRancor"
-            ]
-          },
-          {
-            "RelativeWorkingDir": ".",
-            "Command": "slc",
-            "Args": [
-              "ctl",
-              "-C",
-              "http://localhost:8701",
-              "set-size",
-              "DatawakeRancor",
-              "1"
-            ]
-          },
-          {
-            "RelativeWorkingDir": ".",
-            "Command": "slc",
-            "Args": [
-              "ctl",
-              "-C",
-              "http://localhost:8701",
-              "env-set",
-              "DatawakeRancor",
-              "PORT=8182"
-            ]
-          }
+        "ServicePort": 8182,
+        "ClusterSize": 1,
+        "DoBowerInstall": true,
+        "Scripts": [
         ]
       }
     ]

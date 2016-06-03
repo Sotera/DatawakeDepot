@@ -1,0 +1,15 @@
+div.list-group
+  div(ng-repeat="item in settings.data").list-group-item
+    span.pull-right.btn-group(style="margin-top: 7px;")
+      a.btn.btn-sm.btn-default(href=""  ui-sref="app.settings.edit({id: item.id})")
+        i.fa.fa-pencil
+      a.btn.btn-sm.btn-default(href="" ng-click="delete({id: item.id})")
+        i.fa.fa-trash-o
+    h4.list-group-item-heading
+      a(href="" ui-sref="^.view({id: item.id})") {{item.key}}
+    p.list-group-item-text {{item.value}}
+  div(ng-show="!settings.data.length").list-group-item
+    h4.list-group-item-heading(translate) There are no settings
+    p.list-group-item-text(translate) Click
+      a(href="" ui-sref="^.add") here
+      |to add a setting!

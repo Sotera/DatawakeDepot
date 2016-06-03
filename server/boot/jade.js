@@ -158,6 +158,20 @@ module.exports = function (app) {
     res.render('dwSettings/views/view', {title: 'Datawake Settings'});
   });
 
+  /* settings */
+  app.get('/modules/settings/views/main', function (req, res) {
+    res.render('settings/views/main', {title: 'Settings'});
+  });
+  app.get('/modules/settings/views/list', function (req, res) {
+    res.render('settings/views/list', {title: 'Settings'});
+  });
+  app.get('/modules/settings/views/form', function (req, res) {
+    res.render('settings/views/form', {title: 'Settings'});
+  });
+  app.get('/modules/settings/views/view', function (req, res) {
+    res.render('settings/views/view', {title: 'Settings'});
+  });
+
   /* dwTeams */
   app.get('/modules/dwTeams/views/main', function (req, res) {
     res.render('dwTeams/views/main', {title: 'Datawake Domain Teams'});

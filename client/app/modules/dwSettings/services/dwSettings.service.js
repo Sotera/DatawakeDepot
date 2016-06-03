@@ -1,7 +1,7 @@
 'use strict';
 var app = angular.module('com.module.dwSettings');
 
-app.service('SettingsService', ['$state', 'CoreService', 'DwSetting', 'gettextCatalog', function($state, CoreService, DwSetting, gettextCatalog) {
+app.service('DwSettingsService', ['$state', 'CoreService', 'DwSetting', 'gettextCatalog', function($state, CoreService, DwSetting, gettextCatalog) {
 
   this.getSettings = function() {
     return DwSetting.find();

@@ -1,0 +1,13 @@
+
+h4
+  a(href="" ui-sref="^.list").btn.btn-default
+    i.fa.fa-arrow-left
+  |{{setting.title}}
+
+  span.pull-right.btn-group(style="margin-top: 7px;")
+    a.btn.btn-sm.btn-default(href="" ui-sref="^.edit({id: setting.id})")
+      i.fa.fa-pencil
+    a.btn.btn-sm.btn-default(href="" ng-click="delete({id: setting.id})")
+      i.fa.fa-trash-o
+hr
+pre {{setting | json}}

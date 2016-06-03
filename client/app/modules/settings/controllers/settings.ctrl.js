@@ -71,7 +71,7 @@ angular.module('com.module.settings')
         minlength: gettextCatalog.getString(
           'Needs to have at least 4 characters')
       }
-    }, ];
+    } ];
 
     $scope.options = {
       validation: {

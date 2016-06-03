@@ -1,7 +1,7 @@
 'use strict';
 var app = angular.module('com.module.dwSettings');
 
-app.controller('SettingsCtrl', function($scope, $state, $stateParams, DwSetting, SettingsService, gettextCatalog, AppAuth) {
+app.controller('DwSettingsCtrl', function($scope, $state, $stateParams, DwSetting, SettingsService, gettextCatalog, AppAuth) {
 
 
   $scope.setting = {};

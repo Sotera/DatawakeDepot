@@ -9,18 +9,18 @@ app.config(function($stateProvider) {
   }).state('app.dwSettings.list', {
     url: '',
     templateUrl: 'modules/dwSettings/views/list',
-    controller: 'SettingsCtrl'
+    controller: 'DwSettingsCtrl'
   }).state('app.dwSettings.add', {
     url: '/add',
     templateUrl: 'modules/dwSettings/views/form',
-    controller: 'SettingsCtrl'
+    controller: 'DwSettingsCtrl'
   }).state('app.dwSettings.edit', {
     url: '/:id/edit',
     templateUrl: 'modules/dwSettings/views/form',
-    controller: 'SettingsCtrl'
+    controller: 'DwSettingsCtrl'
   }).state('app.dwSettings.view', {
     url: '/:id',
     templateUrl: 'modules/dwSettings/views/view',
-    controller: 'SettingsCtrl'
+    controller: 'DwSettingsCtrl'
   });
 });

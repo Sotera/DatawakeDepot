@@ -1,0 +1,16 @@
+h4
+  a(href="" ui-sref="^.list").btn.btn-default
+    i.fa.fa-arrow-left
+
+  span(ng-show="!setting.id" translate) Add a new setting
+  span(ng-show="setting.id" translate) Edit setting
+
+div.row
+  div.col-md-4
+    div.alert.alert-danger(ng-if="addError" translate) Could not add setting!
+
+    form(action="" ng-submit="onSubmit()")
+      auto:fields(fields="schema" data="setting" options="options")
+
+div.controls
+  button.btn.btn-primary.btn-success(ng-click="onSubmit()" translate) Submit

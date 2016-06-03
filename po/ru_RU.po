@@ -87,7 +87,7 @@ msgstr "Добавить продукт в категории"
 #: client/app/modules/pages/controllers/pages.ctrl.js:33
 #: client/app/modules/posts/controllers/posts.ctrl.js:25
 #: client/app/modules/products/controllers/products.ctrl.js:37
-#: client/app/modules/settings/controllers/settings.ctrl.js:28
+#: client/app/modules/settings/controllers/dwSettings.ctrl.js:28
 #: client/app/modules/users/controllers/users.ctrl.js:25
 msgid "Are you sure?"
 msgstr "Вы уверены?"
@@ -232,7 +232,7 @@ msgstr "Удалить категорию"
 #: client/app/modules/pages/controllers/pages.ctrl.js:33
 #: client/app/modules/posts/controllers/posts.ctrl.js:25
 #: client/app/modules/products/controllers/products.ctrl.js:37
-#: client/app/modules/settings/controllers/settings.ctrl.js:28
+#: client/app/modules/settings/controllers/dwSettings.ctrl.js:28
 #: client/app/modules/users/controllers/users.ctrl.js:25
 msgid "Deleting this cannot be undone"
 msgstr "Удаление этого не может быть отменено"
@@ -317,7 +317,7 @@ msgstr "Ошибка удаления поста"
 msgid "Error deleting product"
 msgstr "Ошибка удаления продукта"
 
-#: client/app/modules/settings/controllers/settings.ctrl.js:34
+#: client/app/modules/settings/controllers/dwSettings.ctrl.js:34
 msgid "Error deleting setting"
 msgstr "Ошибка удаления параметра"
 
@@ -390,7 +390,7 @@ msgstr "Привет,"
 msgid "Home"
 msgstr "Главная"
 
-#: client/app/modules/settings/controllers/settings.ctrl.js:45
+#: client/app/modules/settings/controllers/dwSettings.ctrl.js:45
 msgid "Key"
 msgstr "Key"
 
@@ -450,8 +450,8 @@ msgstr "Подробнее"
 msgid "Name"
 msgstr "Name"
 
-#: client/app/modules/settings/controllers/settings.ctrl.js:48
-#: client/app/modules/settings/controllers/settings.ctrl.js:56
+#: client/app/modules/settings/controllers/dwSettings.ctrl.js:48
+#: client/app/modules/settings/controllers/dwSettings.ctrl.js:56
 #: client/app/modules/users/controllers/register.ctrl.js:28
 #: client/app/modules/users/controllers/register.ctrl.js:36
 msgid "Needs to have at least 4 characters"
@@ -590,16 +590,16 @@ msgstr "Роли"
 msgid "Save"
 msgstr "Сохранить"
 
-#: client/app/modules/settings/controllers/settings.ctrl.js:30
+#: client/app/modules/settings/controllers/dwSettings.ctrl.js:30
 msgid "Setting deleted"
 msgstr "Параметр удален"
 
-#: client/app/modules/settings/controllers/settings.ctrl.js:75
+#: client/app/modules/settings/controllers/dwSettings.ctrl.js:75
 msgid "Setting saved"
 msgstr "Параметр сохранен"
 
 #: client/app/modules/core/views/home.html:28
-#: client/app/modules/settings/config/settings.config.js:4
+#: client/app/modules/settings/config/dwSettings.config.js:4
 #: client/app/modules/settings/views/main.html:1
 msgid "Settings"
 msgstr "Настройки"
@@ -734,7 +734,7 @@ msgstr "Ваш логин"
 msgid "Users"
 msgstr "Пользователи"
 
-#: client/app/modules/settings/controllers/settings.ctrl.js:53
+#: client/app/modules/settings/controllers/dwSettings.ctrl.js:53
 msgid "Value"
 msgstr "Значение"
 
@@ -859,15 +859,15 @@ msgstr "Ваш профиль"
 msgid "Your profile is not saved:"
 msgstr "Ваш профиль не сохранен:"
 
-#: client/app/modules/settings/controllers/settings.ctrl.js:30
+#: client/app/modules/settings/controllers/dwSettings.ctrl.js:30
 msgid "Your setting is deleted!"
 msgstr "Ваш параметр удален!"
 
-#: client/app/modules/settings/controllers/settings.ctrl.js:34
+#: client/app/modules/settings/controllers/dwSettings.ctrl.js:34
 msgid "Your setting is not deleted:"
 msgstr "Ваш параметр не удален:"
 
-#: client/app/modules/settings/controllers/settings.ctrl.js:75
+#: client/app/modules/settings/controllers/dwSettings.ctrl.js:75
 msgid "Your setting is safe with us!"
 msgstr "Your setting is safe with us!"
 

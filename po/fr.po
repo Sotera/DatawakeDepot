@@ -87,7 +87,7 @@ msgstr "Ajoutez une produit à la catégorie"
 #: client/app/modules/pages/controllers/pages.ctrl.js:33
 #: client/app/modules/posts/controllers/posts.ctrl.js:25
 #: client/app/modules/products/controllers/products.ctrl.js:37
-#: client/app/modules/settings/controllers/settings.ctrl.js:28
+#: client/app/modules/settings/controllers/dwSettings.ctrl.js:28
 #: client/app/modules/users/controllers/users.ctrl.js:25
 msgid "Are you sure?"
 msgstr "Êtes vous sûr ?"
@@ -229,7 +229,7 @@ msgstr "Détruire la catégorie"
 #: client/app/modules/pages/controllers/pages.ctrl.js:33
 #: client/app/modules/posts/controllers/posts.ctrl.js:25
 #: client/app/modules/products/controllers/products.ctrl.js:37
-#: client/app/modules/settings/controllers/settings.ctrl.js:28
+#: client/app/modules/settings/controllers/dwSettings.ctrl.js:28
 #: client/app/modules/users/controllers/users.ctrl.js:25
 msgid "Deleting this cannot be undone"
 msgstr "Cette opération ne peux être annulée"
@@ -314,7 +314,7 @@ msgstr "Le post ne peux être effacé"
 msgid "Error deleting product"
 msgstr "Le produit ne peux être éffacé"
 
-#: client/app/modules/settings/controllers/settings.ctrl.js:34
+#: client/app/modules/settings/controllers/dwSettings.ctrl.js:34
 msgid "Error deleting setting"
 msgstr "Le paramètre ne peut être effacé"
 
@@ -389,7 +389,7 @@ msgstr "Bonjour,"
 msgid "Home"
 msgstr "Accueil"
 
-#: client/app/modules/settings/controllers/settings.ctrl.js:45
+#: client/app/modules/settings/controllers/dwSettings.ctrl.js:45
 msgid "Key"
 msgstr "Clé"
 
@@ -449,8 +449,8 @@ msgstr "Plus d'infos"
 msgid "Name"
 msgstr "Nom"
 
-#: client/app/modules/settings/controllers/settings.ctrl.js:48
-#: client/app/modules/settings/controllers/settings.ctrl.js:56
+#: client/app/modules/settings/controllers/dwSettings.ctrl.js:48
+#: client/app/modules/settings/controllers/dwSettings.ctrl.js:56
 #: client/app/modules/users/controllers/register.ctrl.js:28
 #: client/app/modules/users/controllers/register.ctrl.js:36
 msgid "Needs to have at least 4 characters"
@@ -589,16 +589,16 @@ msgstr "Rôles"
 msgid "Save"
 msgstr "Enregistrer"
 
-#: client/app/modules/settings/controllers/settings.ctrl.js:30
+#: client/app/modules/settings/controllers/dwSettings.ctrl.js:30
 msgid "Setting deleted"
 msgstr "Paramètre effacé"
 
-#: client/app/modules/settings/controllers/settings.ctrl.js:75
+#: client/app/modules/settings/controllers/dwSettings.ctrl.js:75
 msgid "Setting saved"
 msgstr "Paramètre enregistré"
 
 #: client/app/modules/core/views/home.html:28
-#: client/app/modules/settings/config/settings.config.js:4
+#: client/app/modules/settings/config/dwSettings.config.js:4
 #: client/app/modules/settings/views/main.html:1
 msgid "Settings"
 msgstr "Paramètres"
@@ -733,7 +733,7 @@ msgstr "Code utilisateur"
 msgid "Users"
 msgstr "Utilisateurs"
 
-#: client/app/modules/settings/controllers/settings.ctrl.js:53
+#: client/app/modules/settings/controllers/dwSettings.ctrl.js:53
 msgid "Value"
 msgstr "Valeur"
 
@@ -858,15 +858,15 @@ msgstr "Votre profil"
 msgid "Your profile is not saved:"
 msgstr "Votre profil n'est pas enregistré:"
 
-#: client/app/modules/settings/controllers/settings.ctrl.js:30
+#: client/app/modules/settings/controllers/dwSettings.ctrl.js:30
 msgid "Your setting is deleted!"
 msgstr "Le paramètre est effacé!"
 
-#: client/app/modules/settings/controllers/settings.ctrl.js:34
+#: client/app/modules/settings/controllers/dwSettings.ctrl.js:34
 msgid "Your setting is not deleted:"
 msgstr "Le paramètre n'a pu être effacé:"
 
-#: client/app/modules/settings/controllers/settings.ctrl.js:75
+#: client/app/modules/settings/controllers/dwSettings.ctrl.js:75
 msgid "Your setting is safe with us!"
 msgstr "Le paramètre est effacé!"
 

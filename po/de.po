@@ -40,7 +40,7 @@ msgstr "Einstellung hinzufügen"
 #: client/app/modules/pages/controllers/pages.ctrl.js:33
 #: client/app/modules/posts/controllers/posts.ctrl.js:25
 #: client/app/modules/products/controllers/products.ctrl.js:37
-#: client/app/modules/settings/controllers/settings.ctrl.js:28
+#: client/app/modules/settings/controllers/dwSettings.ctrl.js:28
 #: client/app/modules/users/controllers/users.ctrl.js:25
 msgid "Are you sure?"
 msgstr "Bist du sicher ?"
@@ -99,7 +99,7 @@ msgstr "Instrumententafel"
 #: client/app/modules/pages/controllers/pages.ctrl.js:33
 #: client/app/modules/posts/controllers/posts.ctrl.js:25
 #: client/app/modules/products/controllers/products.ctrl.js:37
-#: client/app/modules/settings/controllers/settings.ctrl.js:28
+#: client/app/modules/settings/controllers/dwSettings.ctrl.js:28
 #: client/app/modules/users/controllers/users.ctrl.js:25
 msgid "Deleting this cannot be undone"
 msgstr "Löschen kann nicht wiederufen werden"
@@ -144,7 +144,7 @@ msgstr "Fehler beim löschen des Beitrags"
 msgid "Error deleting product"
 msgstr "Fehler beim löschen des Produkts"
 
-#: client/app/modules/settings/controllers/settings.ctrl.js:34
+#: client/app/modules/settings/controllers/dwSettings.ctrl.js:34
 msgid "Error deleting setting"
 msgstr "Fehler beim löschen der Einstellung"
 
@@ -203,7 +203,7 @@ msgstr "Vorname"
 msgid "Home"
 msgstr "Ausgangsposition"
 
-#: client/app/modules/settings/controllers/settings.ctrl.js:45
+#: client/app/modules/settings/controllers/dwSettings.ctrl.js:45
 msgid "Key"
 msgstr "Schlüssel"
 
@@ -243,8 +243,8 @@ msgstr "Mehr Information"
 msgid "Name"
 msgstr "Name"
 
-#: client/app/modules/settings/controllers/settings.ctrl.js:48
-#: client/app/modules/settings/controllers/settings.ctrl.js:56
+#: client/app/modules/settings/controllers/dwSettings.ctrl.js:48
+#: client/app/modules/settings/controllers/dwSettings.ctrl.js:56
 msgid "Needs to have at least 4 characters"
 msgstr "Muss aus mindestens 4 Zeichen bestehen"
 
@@ -330,11 +330,11 @@ msgstr "Registriert"
 msgid "Remove all"
 msgstr "Alles Entfernen"
 
-#: client/app/modules/settings/controllers/settings.ctrl.js:30
+#: client/app/modules/settings/controllers/dwSettings.ctrl.js:30
 msgid "Setting deleted"
 msgstr "Einstellung gelöscht"
 
-#: client/app/modules/settings/controllers/settings.ctrl.js:75
+#: client/app/modules/settings/controllers/dwSettings.ctrl.js:75
 msgid "Setting saved"
 msgstr "Einstellung gespeichert"
 
@@ -431,7 +431,7 @@ msgstr "Nutzer gespeichert"
 msgid "Users"
 msgstr "Nutzer"
 
-#: client/app/modules/settings/controllers/settings.ctrl.js:53
+#: client/app/modules/settings/controllers/dwSettings.ctrl.js:53
 msgid "Value"
 msgstr "Wert"
 
@@ -539,15 +539,15 @@ msgstr "Dein Profil"
 msgid "Your profile is not saved:"
 msgstr "Dein Profil ist nicht gespeichert"
 
-#: client/app/modules/settings/controllers/settings.ctrl.js:30
+#: client/app/modules/settings/controllers/dwSettings.ctrl.js:30
 msgid "Your setting is deleted!"
 msgstr "Deine Einstellungen sind gespeichert!"
 
-#: client/app/modules/settings/controllers/settings.ctrl.js:34
+#: client/app/modules/settings/controllers/dwSettings.ctrl.js:34
 msgid "Your setting is not deleted:"
 msgstr "Deine Einstellungen sind nicht gelöscht:"
 
-#: client/app/modules/settings/controllers/settings.ctrl.js:75
+#: client/app/modules/settings/controllers/dwSettings.ctrl.js:75
 msgid "Your setting is safe with us!"
 msgstr "Deine Einstellungen sind sicher bei uns!"
 

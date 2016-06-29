@@ -45,6 +45,25 @@ app.service('TrailsService', ['$state', 'CoreService', 'DwDomain','DwTrail', 'Dw
       return (DwTrail.findById(whereClause));
   };
 
+  this.getNewmanTrail = function(id) {
+      var whereClause = {
+          id: id,
+
+          filter:{
+              include:
+                  [
+                      {relation:'trailUrls',
+                          scope:{
+                              include:['urlExtractions']
+                          }
+                      }
+                  ]
+          }
+      };
+
+      return (DwTrail.findById(whereClause));
+  };
+
   this.getTrails = function() {
     return DwTrail.find({
         filter:

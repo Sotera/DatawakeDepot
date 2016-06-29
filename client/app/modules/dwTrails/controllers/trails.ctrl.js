@@ -418,18 +418,63 @@ app.controller('TrailsCtrl', function ($scope, $state, $http, $stateParams, DwTe
         };
         var constructedTrailUrl = {};
         var constructedTrailUrls = [];
-        var constructedTrailUrlExtractions = [];
         var trailSource = {};
-
+        var bodyEntities = {};
 
         trail.trailUrls.forEach(function(trailUrl){
             constructedTrailUrl = {};
-            constructedTrailUrlExtractions.length = 0;
 
             constructedTrailUrl['_id'] = trailUrl.id;
             constructedTrailUrl['_index'] = 'newman-shiavo';
             constructedTrailUrl['_type'] = 'emails';
             constructedTrailUrl['_score'] = .5;
+
+            var fullEnt = [];
+            var entityFull = [];
+            var entityAll = [];
+            var entityLoc = [];
+            var entityMisc = [];
+            var entityOrg = [];
+            var entityPer = [];
+
+            if(trailUrl.urlExtractions.length>0){
+                trailUrl.urlExtractions.forEach(function(extraction){
+
+                    fullEnt = [
+                        extraction.extractorTypes[0],
+                        extraction.value,
+                        '135',
+                        '.92'
+                    ];
+
+                    entityFull.push(fullEnt);
+
+                    entityAll.push(extraction.value);
+
+                    switch (extraction.extractorTypes[0]){
+                        case 'PERSON':
+                            entityPer.push(extraction.value);
+                            break;
+                        case 'LOCATION':
+                            entityLoc.push(extraction.value);
+                            break;
+                        case 'ORGANIZATION':
+                            entityOrg.push(extraction.value);
+                            break;
+                        default: //Date, Money
+                            entityMisc.push(extraction.value);
+                    }
+                });
+
+                bodyEntities = {
+                    entity_full: entityFull,
+                    entity_all: entityAll,
+                    entity_location: entityLoc,
+                    entity_misc: entityMisc,
+                    entity_organization:entityOrg,
+                    entity_person: entityPer
+                };
+            }
 
             trailSource = {
                 body: trailUrl.scrapedContent,
@@ -438,7 +483,7 @@ app.controller('TrailsCtrl', function ($scope, $state, $http, $stateParams, DwTe
                 attachments: [],
                 senders: trailUrl.url,
                 senders_line: trailUrl.url,
-                tos_line: [], //[nextUrl],
+                tos_line: [trailUrl.url], //[nextUrl],
                 ccs_line: [],
                 datetime: trailUrl.timestamp,
                 case_id: trailUrl.url,
@@ -457,7 +502,7 @@ app.controller('TrailsCtrl', function ($scope, $state, $http, $stateParams, DwTe
                 subject: trailUrl.url,
                 alt_ref_id: trailUrl.url,
                 originating_ips: [],
-                tos: [], //[nextUrl],
+                tos: [trailUrl.url], //[nextUrl],
                 originating_locations: [],
                 ccs: [],
                 bccs: [],
@@ -468,11 +513,10 @@ app.controller('TrailsCtrl', function ($scope, $state, $http, $stateParams, DwTe
                 },
                 entities: {
                     original_lang: 'en',
-                    body_entities: {},
+                    body_entities: bodyEntities,
                     body_entities_translated: {}
                 }
             };
-
             constructedTrailUrl['_source'] = trailSource;
 
             constructedTrailUrls.push(constructedTrailUrl);

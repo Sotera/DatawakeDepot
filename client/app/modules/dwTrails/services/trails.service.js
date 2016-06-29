@@ -54,6 +54,16 @@ app.service('TrailsService', ['$state', 'CoreService', 'DwDomain','DwTrail', 'Dw
                   [
                       {relation:'trailUrls',
                           scope:{
+                              fields: [
+                                  'url',
+                                  'searchTerms',
+                                  'comments',
+                                  'timestamp',
+                                  'id',
+                                  'dwTrailId',
+                                  'dwTrailUrlId',
+                                  'scrapedContent'
+                              ],
                               include:['urlExtractions']
                           }
                       }

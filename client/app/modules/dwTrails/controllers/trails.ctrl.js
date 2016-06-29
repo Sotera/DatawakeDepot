@@ -1,7 +1,7 @@
 'use strict';
 var app = angular.module('com.module.dwTrails');
 
-app.controller('TrailsCtrl', function ($scope, $state, $http, $stateParams, DwTeam, DwDomain, TrailsService, gettextCatalog, AppAuth, FileUploader, CoreService) {
+app.controller('TrailsCtrl', function ($scope, $state, $http, $stateParams, DwTeam, DwDomain, TrailsService, gettextCatalog, AppAuth, FileUploader, CoreService, lodash) {
     $scope.plDomains = [];
     $scope.plTeams = [];
     $scope.trail = {};
@@ -298,7 +298,14 @@ app.controller('TrailsCtrl', function ($scope, $state, $http, $stateParams, DwTe
     AppAuth.getCurrentUser().then(function (currUser) {
         $scope.currentUser = currUser;
         $scope.loadPicklists(currUser);
-        if ($stateParams.id) {
+        if ($stateParams.trailId) {
+            TrailsService.getTrail($stateParams.trailId).$promise.then(function (result) {
+                $scope.trail = $scope.newmanize(result);
+                $scope.safeDisplayedtrails = {};
+                $scope.displayedtrails = {};
+                $scope.loading = false;
+            })
+        }else if ($stateParams.id) {
             TrailsService.getTrail($stateParams.id).$promise.then(function (result) {
                 $scope.trail = result;
                 $scope.safeDisplayedtrails = {};
@@ -399,6 +406,80 @@ app.controller('TrailsCtrl', function ($scope, $state, $http, $stateParams, DwTe
                 // or server returns response with an error status.
                 alert("error");
             });
+    };
+
+    $scope.newmanize = function(trail){
+
+        var constructedTrail = {};
+        var trailUrls = [];
+
+        trail.trailUrls.forEach(function(trailUrl){
+            trailUrls.push(trailUrl.url);
+        });
+
+        constructedTrail['name'] = trail.name;
+        constructedTrail['urls'] = lodash.uniq(trailUrls); //Deduped
+
+        return constructedTrail;
+
+        //DomainsService.getPrettyDomain(domain.id).$promise.then(function(foundDomain){
+        //    var domainItems = [];
+        //    var domainTypes = [];
+        //    DomainsService.getDomainUrls(domain.id).$promise.then(function(trails){
+        //        var constructedDomain = {};
+        //        var domainUrls = [];
+        //        var domainSearchTerms = [];
+        //        var domainExtractions = [];
+
+            //    trails.forEach(function(trail){
+            //        if(trail.trailUrls){
+            //            trail.trailUrls.forEach(function (trailUrl){
+            //                domainUrls.push(trailUrl.url);
+            //
+            //                if(trailUrl.searchTerms){
+            //                    //Don't get duplicate searchTerms
+            //                    if(domainSearchTerms.indexOf(trailUrl.searchTerms[0])==-1){
+            //                        domainSearchTerms.push(trailUrl.searchTerms[0]);
+            //                    }
+            //                }
+            //
+            //                if(trailUrl.urlExtractions){
+            //                    trailUrl.urlExtractions.forEach(function(extraction){
+            //                        domainExtractions.push(extraction.extractorTypes.toString() +':' +extraction.value);
+            //                    })
+            //                }
+            //            });
+            //        }
+            //    });
+            //
+            //    if(foundDomain.domainItems){
+            //        foundDomain.domainItems.forEach(function(domainItem){
+            //            var newDomainItem = {value:domainItem.itemValue,type:domainItem.type,source:domainItem.source};
+            //            domainItems.push(newDomainItem);
+            //        });
+            //    }
+            //
+            //    if(foundDomain.domainEntityTypes){
+            //        foundDomain.domainEntityTypes.forEach(function(domainType){
+            //            var newDomainType = {name:domainType.name,source:domainType.source};
+            //            domainTypes.push(newDomainType);
+            //        });
+            //    }
+            //
+            //    var domainTop50Extractions = DomainsService.getTopExtractions(domainExtractions,50);
+            //    var domainTop25 = DomainsService.getTopLevels(domainUrls,25);
+            //
+            //    constructedDomain['domainName'] = foundDomain.name;
+            //    constructedDomain['urls'] = lodash.uniq(domainUrls); //Deduped
+            //    constructedDomain['searchTerms'] = domainSearchTerms; //no need to Dedupe
+            //    constructedDomain['top25Urls'] = domainTop25; //contains counts
+            //    constructedDomain['top50ExtractedTerms'] = domainTop50Extractions; //contains counts
+            //    constructedDomain['domainEntities'] = lodash.uniqBy(domainItems,'value'); //Deduped
+            //    constructedDomain['domainEntityTypes'] = lodash.uniqBy(domainTypes,'name'); //Deduped
+            //
+            //    $scope.saveFile(foundDomain.name + '.json',JSON.stringify(constructedDomain));
+            //});
+    //    });
     };
 
 

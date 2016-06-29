@@ -15,15 +15,15 @@ app.service('TrailsService', ['$state', 'CoreService', 'DwDomain','DwTrail', 'Dw
                             fields:['url','pageRating']
                         }
                       },
-                      {relation: 'domain',
-                          scope:{
-                              fields:['name','description','id'],
-                              include:[
-                                  'domainItems',
-                                  'domainEntityTypes'
-                              ]
-                          }
-                      },
+                      //{relation: 'domain',
+                      //    scope:{
+                      //        fields:['name','description','id'],
+                      //        include:[
+                      //            'domainItems',
+                      //            'domainEntityTypes'
+                      //        ]
+                      //    }
+                      //},
                       {relation:'trailUrls',
                           scope:{
                               fields: [

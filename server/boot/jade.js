@@ -199,6 +199,9 @@ module.exports = function (app) {
   app.get('/modules/dwTrails/views/view', function (req, res) {
     res.render('dwTrails/views/view', {title: 'Datawake Trails'});
   });
+  app.get('/modules/dwTrails/views/newman', function (req, res) {
+    res.render('dwTrails/views/newman', {title: 'Datawake Trails'});
+  });
   app.get('/modules/dwTrails/views/upload', function (req, res) {
     res.render('dwTrails/views/upload', {title: 'Datawake Trails'});
   });

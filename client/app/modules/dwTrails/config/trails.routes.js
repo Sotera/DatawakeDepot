@@ -26,6 +26,10 @@ app.config(function($stateProvider) {
     url: '/:id/edit',
     templateUrl: 'modules/dwTrails/views/form',
     controller: 'TrailsCtrl'
+  }).state('app.dwTrails.newman', {
+    url: '/:trailId/newman',
+    templateUrl: 'modules/dwTrails/views/newman',
+    controller: 'TrailsCtrl'
   }).state('app.dwTrails.view', {
     url: '/:id',
     templateUrl: 'modules/dwTrails/views/view',

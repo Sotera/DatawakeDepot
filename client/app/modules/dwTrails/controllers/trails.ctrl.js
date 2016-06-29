@@ -299,15 +299,15 @@ app.controller('TrailsCtrl', function ($scope, $state, $http, $stateParams, DwTe
         $scope.currentUser = currUser;
         $scope.loadPicklists(currUser);
         if ($stateParams.id) {
-            DomainsService.getDomain($stateParams.id).$promise.then(function (result) {
-                $scope.domain = result;
-                $scope.safeDisplayedDomains = {};
-                $scope.displayedDomains = {};
+            TrailsService.getTrail($stateParams.id).$promise.then(function (result) {
+                $scope.trail = result;
+                $scope.safeDisplayedtrails = {};
+                $scope.displayedtrails = {};
                 $scope.loading = false;
             })
         } else {
             if(!currUser.isAdmin){
-                //get domain info for the given user based on user's teams
+                //get trail info for the given user based on user's teams
                 if (currUser.teams) {
                     $scope.getFilteredPagedResults(currUser.teams, $scope.itemIndex, $scope.itemsPerPage);
                 }

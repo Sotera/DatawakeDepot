@@ -408,6 +408,10 @@ app.controller('TrailsCtrl', function ($scope, $state, $http, $stateParams, DwTe
             });
     };
 
+    $scope.htmlToPlaintext = function(text) {
+        return String(text).replace(/<[^>]+>/gm, '');
+    };
+
     $scope.newmanize = function(trail){
 
         //trail urls have to be ordered by timestamp
@@ -477,7 +481,7 @@ app.controller('TrailsCtrl', function ($scope, $state, $http, $stateParams, DwTe
             }
 
             trailSource = {
-                body: trailUrl.scrapedContent,
+                body: $scope.htmlToPlaintext(trailUrl.scrapedContent),
                 inreplyto: [],
                 communities_count: 1,
                 attachments: [],

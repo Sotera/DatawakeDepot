@@ -37,6 +37,8 @@
             .btn-toolbar
                 button.btn.btn-sm.btn-default(ui-sref='app.dwTrails.edit({id:trail.id})',ng-disabled='!currentUser.isAdmin', title='Edit Trail')
                     i.fa.fa-pencil
+                button.btn.btn-sm.btn-warning(ui-sref='^.newman({trailId:trail.id})', title='Newman Trail')
+                    i.fa.fa-save
                 button.btn.btn-sm.btn-danger(ng-click='delete({id:trail})',ng-disabled='!currentUser.isAdmin', title='Delete Trail')
                     i.fa.fa-trash-o
                   tr

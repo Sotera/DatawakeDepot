@@ -1,0 +1,83 @@
+[
+  {
+    "name": "datawake_all",
+    "Image": "jreeme/datawake:18-MAY-2016",
+    "DockerFilePath": "",
+    "Hostname": "datawake_all",
+    "ExposedPorts": {
+      "27017/tcp": {},
+      "3002/tcp": {},
+      "8182/tcp": {},
+      "8082/tcp": {},
+      "8701/tcp": {}
+    },
+    "HostConfig": {
+      "PortBindings": {
+        "8182/tcp": [
+          {
+            "HostPort": "8182"
+          }
+        ],
+        "8082/tcp": [
+          {
+            "HostPort": "8082"
+          }
+        ],
+        "3002/tcp": [
+          {
+            "HostPort": "3002"
+          }
+        ],
+        "8701/tcp": [
+          {
+            "HostPort": "8701"
+          }
+        ]
+      }
+    },
+    "ExpressApps": [
+      {
+        "GitUrl": "https://github.com/Sotera/DatawakeDepot",
+        "GitSrcBranchName": "newman",
+        "StrongLoopBranchName": "deploy",
+        "StrongLoopServerUrl": "http://localhost:8701",
+        "ServiceName": "Datawake",
+        "DoBowerInstall": true,
+        "ClusterSize": 1,
+        "ServicePort": 8082,
+        "Scripts": [
+          {
+            "RelativeWorkingDir": "./browser-plugins/firefox/",
+            "Command": "/bin/sh",
+            "Args": [
+              "_runFF.sh"
+            ]
+          }
+        ]
+      },
+      {
+        "GitUrl": "https://github.com/Sotera/DatawakeSampleExtractor",
+        "GitSrcBranchName": "stanford-ner",
+        "StrongLoopBranchName": "deploy",
+        "StrongLoopServerUrl": "http://localhost:8701",
+        "ServiceName": "DatawakeStanfordNerExtractor",
+        "ServicePort": 3002,
+        "ClusterSize": 1,
+        "Scripts": [
+        ]
+      },
+      {
+        "GitUrl": "https://github.com/justinlueders/PageRancor.git",
+        "GitSrcBranchName": "master",
+        "StrongLoopBranchName": "deploy",
+        "StrongLoopServerUrl": "http://localhost:8701",
+        "ServiceName": "DatawakeRancor",
+        "ServicePort": 8182,
+        "ClusterSize": 1,
+        "DoBowerInstall": true,
+        "Scripts": [
+        ]
+      }
+    ]
+  }
+]

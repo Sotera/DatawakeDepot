@@ -164,7 +164,13 @@ app.controller('TrailsCtrl', function ($scope, $state, $http, $stateParams, DwTe
 
         link.setAttribute('download', filename);
         link.setAttribute('href', 'data:' + mimeType + ';charset=utf-8,' + encodeURIComponent(elHtml));
+        link.style.cssText = "position: absolute !important; left: -9999px; visibility: hidden;";//hide element
+        link.innerHTML = "text";
+        document.body.appendChild(link);
         link.click();
+        setTimeout(function(){
+            document.body.removeChild(link);//remove element
+        }, 1);
     };
 
     $scope.delete = function (trail) {

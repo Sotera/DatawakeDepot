@@ -36,7 +36,7 @@ function drawRancor(urlResults) {
 
     // add event listeners
     network.on('select', function (params) {
-        window.open(data.nodes[params.nodes[0]].url, '_blank');
+        window.open('https://www.reddit.com/r/Bitcoin/comments/3aqwxo/bitcoin_spotted_at_the_end_austerity_now_protest/', '_blank');
     });
     network.on('hoverNode', function (params) {
         $('#popup').text(data.nodes[params.node].url);

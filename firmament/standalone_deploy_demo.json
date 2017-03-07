@@ -8,6 +8,13 @@
       "27017/tcp": {}
     },
     "HostConfig": {
+      "PortBindings": {
+        "27017/tcp": [
+          {
+            "HostPort": "27017"
+          }
+        ]
+      }
     }
   },
   {
@@ -26,7 +33,7 @@
       "PortBindings": {
         "3001/tcp": [
           {
-            "HostPort": "3000"
+            "HostPort": "3001"
           }
         ],
         "8701/tcp": [

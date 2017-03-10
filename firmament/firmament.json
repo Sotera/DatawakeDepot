@@ -1,0 +1,85 @@
+[
+  {
+    "name"          : "datawake_all",
+    "Image"         : "jreeme/datawake:18-MAY-2016",
+    "DockerFilePath": "",
+    "Hostname"      : "datawake_all",
+    "ExposedPorts"  : {
+      "27017/tcp": {},
+      "3002/tcp" : {},
+      "8182/tcp" : {},
+      "8082/tcp" : {},
+      "8701/tcp" : {}
+    },
+    "HostConfig"    : {
+      "PortBindings": {
+        "8182/tcp": [
+          {
+            "HostPort": "8182"
+          }
+        ],
+        "8082/tcp": [
+          {
+            "HostPort": "8082"
+          }
+        ],
+        "3002/tcp": [
+          {
+            "HostPort": "3002"
+          }
+        ],
+        "8701/tcp": [
+          {
+            "HostPort": "8701"
+          }
+        ]
+      }
+    },
+    "ExpressApps"   : [
+      {
+        "GitUrl"              : "https://github.com/Sotera/DatawakeSampleExtractor",
+        "GitSrcBranchName"    : "stanford-ner",
+        "StrongLoopBranchName": "deploy",
+        "StrongLoopServerUrl" : "http://localhost:8701",
+        "ServiceName"         : "DatawakeStanfordNerExtractor",
+        "ClusterSize"         : 1,
+        "EnvironmentVariables": {
+          "PORT"    : 3002,
+          "NODE_ENV": "development"
+        },
+        "Scripts"             : [
+        ]
+      },
+      {
+        "GitUrl"              : "https://github.com/justinlueders/PageRancor.git",
+        "GitSrcBranchName"    : "master",
+        "StrongLoopBranchName": "deploy",
+        "StrongLoopServerUrl" : "http://localhost:8701",
+        "ServiceName"         : "DatawakeRancor",
+        "ClusterSize"         : 1,
+        "DoBowerInstall"      : true,
+        "EnvironmentVariables": {
+          "PORT"    : 8182,
+          "NODE_ENV": "development"
+        },
+        "Scripts"             : [
+        ]
+      },
+      {
+        "GitUrl"              : "https://github.com/Sotera/DatawakeDepot",
+        "GitSrcBranchName"    : "centcom",
+        "StrongLoopBranchName": "deploy",
+        "StrongLoopServerUrl" : "http://localhost:8701",
+        "ServiceName"         : "Datawake",
+        "DoBowerInstall"      : true,
+        "ClusterSize"         : 1,
+        "EnvironmentVariables": {
+          "PORT"    : 8082,
+          "NODE_ENV": "development"
+        },
+        "Scripts"             : [
+        ]
+      }
+    ]
+  }
+]

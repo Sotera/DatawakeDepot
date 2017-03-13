@@ -8,7 +8,7 @@ exports.init = function () {
       contentScriptFile: [
         './vendor/jszip/jszip.min.js',
         './vendor/jquery/jquery-2.1.4.min.js',
-        './vendor/jquery/jquery.highlight.js',
+        './vendor/jquery/jquery.highlight-jreeme.js',
         //'./vendor/highlightRegex/highlightRegex.min.js',
         './injectedPageScripts/datawake-analysis.js',
         './injectedPageScripts/scraper.js'],

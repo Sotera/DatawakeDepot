@@ -1,9 +1,9 @@
 [
   {
-    "name"          : "datawake_all",
+    "name"          : "datawake-stanner-rancor",
     "Image"         : "jreeme/datawake:18-MAY-2016",
     "DockerFilePath": "",
-    "Hostname"      : "datawake_all",
+    "Hostname"      : "datawake-stanner-rancor",
     "ExposedPorts"  : {
       "27017/tcp": {},
       "3002/tcp" : {},
@@ -13,6 +13,11 @@
     },
     "HostConfig"    : {
       "PortBindings": {
+        "27017/tcp": [
+          {
+            "HostPort": "27017"
+          }
+        ],
         "8182/tcp": [
           {
             "HostPort": "8182"

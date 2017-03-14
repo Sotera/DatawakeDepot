@@ -1,9 +1,9 @@
 [
   {
-    "name"          : "datawake_all",
+    "name"          : "datawake",
     "Image"         : "jreeme/datawake:rancor-stanner",
     "DockerFilePath": "",
-    "Hostname"      : "datawake_all",
+    "Hostname"      : "datawake",
     "ExposedPorts"  : {
       "27017/tcp": {},
       "3002/tcp" : {},

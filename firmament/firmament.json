@@ -1,9 +1,9 @@
 [
   {
-    "name"          : "datawake_all",
+    "name"          : "datawake",
     "Image"         : "jreeme/datawake:18-MAY-2016",
     "DockerFilePath": "",
-    "Hostname"      : "datawake_all",
+    "Hostname"      : "datawake",
     "ExposedPorts"  : {
       "27017/tcp": {},
       "3002/tcp" : {},
@@ -78,8 +78,17 @@
           "NODE_ENV": "development"
         },
         "Scripts"             : [
+          {
+            "StopDeployOnFailure": false,
+            "RelativeWorkingDir" : "./browser-plugins/firefox/",
+            "Command"            : "/bin/sh",
+            "Args"               : [
+              "_runFF.sh"
+            ]
+          }
         ]
       }
     ]
   }
 ]
+

@@ -1,10 +1,11 @@
-var {pluginState} = require('./data/pluginState');
+let {pluginState} = require('./data/pluginState');
 //When running locally comment out the datawake-depot.org settings and use the localhost ones
 //pluginState.pageModDatawakeDepotIncludeFilter = '*.datawake-depot.org';
 //pluginState.loginUrl = 'http://datawake-depot.org';
 
-pluginState.pageModDatawakeDepotIncludeFilter = 'http://localhost:3000/*';
-pluginState.loginUrl = 'http://localhost:3000';
+let port = '8082';
+pluginState.pageModDatawakeDepotIncludeFilter = `http://localhost:${port}/*`;
+pluginState.loginUrl = `http://localhost:${port}`;
 //Edit this to be a valid Rancor instance
 pluginState.trailUrlRancor = 'http://localhost:8182/api/rank/process';
 

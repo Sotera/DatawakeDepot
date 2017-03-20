@@ -1,9 +1,9 @@
 [
   {
-    "name"          : "datawake-stanner-rancor",
-    "Image"         : "jreeme/datawake:18-MAY-2016",
+    "name"          : "datawake-stanner-rancor-with-data",
+    "Image"         : "sotera/datawake_all_in_one:BASE_HT_3_CHERRY",
     "DockerFilePath": "",
-    "Hostname"      : "datawake-stanner-rancor",
+    "Hostname"      : "datawake-stanner-rancor-with-data",
     "ExposedPorts"  : {
       "27017/tcp": {},
       "3002/tcp" : {},

@@ -1,10 +1,10 @@
 'use strict';
 var app = angular.module('com.module.dwDomainItems');
 
-app.controller('DomainItemsCtrl', function($scope, $state, $stateParams, AminoUser, DwDomain, DomainItemsService, gettextCatalog, AppAuth) {
+app.controller('DomainItemsCtrl', function ($scope, $state, $stateParams, AminoUser, DwDomain, DomainItemsService, gettextCatalog, AppAuth) {
     $scope.domains = [];
     $scope.plUsers = [];
-    $scope.currentDomainId= '';
+    $scope.currentDomainId = '';
     $scope.domainItem = {};
 
     $scope.itemIndex = 0;
@@ -28,10 +28,10 @@ app.controller('DomainItemsCtrl', function($scope, $state, $stateParams, AminoUs
             required: true
         }
         ,
-        expressionProperties:{
+        expressionProperties: {
             'templateOptions.disabled': 'model.id'
         }
-    },{
+    }, {
         key: 'itemValue',
         type: 'input',
         templateOptions: {
@@ -49,7 +49,7 @@ app.controller('DomainItemsCtrl', function($scope, $state, $stateParams, AminoUs
             required: false,
             disabled: true
         }
-    },{
+    }, {
         key: 'coreItem',
         type: 'checkbox',
         templateOptions: {
@@ -58,19 +58,30 @@ app.controller('DomainItemsCtrl', function($scope, $state, $stateParams, AminoUs
         }
     }];
 
-    $scope.delete = function(domainItem) {
-        if(domainItem.id){
-            DomainItemsService.deleteDomainItem(domainItem, function() {
+
+    $scope.delete = function (domainItem) {
+        if (domainItem.id) {
+            DomainItemsService.deleteDomainItem(domainItem, function () {
                 $scope.safeDisplayeddomainItems = DomainItemsService.getFilteredDomainItems($scope.currentDomainId);
                 $state.go('^.list');
             });
-        }else{
+        } else {
             $state.go('^.list');
         }
     };
 
-    $scope.onSubmit = function() {
-        DomainItemsService.upsertDomainItem($scope.domainItem, function() {
+    $('#fileupload').fileupload({
+        dataType: 'json',
+        done: function (e, data) {
+            //Redisplay domain items
+/*            $.each(data.result.files, function (index, file) {
+                $('<p/>').text(file.name).appendTo(document.body);
+            });*/
+        }
+    });
+
+    $scope.onSubmit = function () {
+        DomainItemsService.upsertDomainItem($scope.domainItem, function () {
             $scope.safeDisplayeddomainItems = DomainItemsService.getFilteredDomainItems($scope.currentDomainId);
             $state.go('^.list');
         });
@@ -79,7 +90,7 @@ app.controller('DomainItemsCtrl', function($scope, $state, $stateParams, AminoUs
     $scope.loadPicklists = function () {
         DwDomain.find({filter: {include: []}}).$promise
             .then(function (allDomains) {
-                $scope.domains.length=0;
+                $scope.domains.length = 0;
                 for (var i = 0; i < allDomains.length; ++i) {
                     $scope.domains.push({
                         value: allDomains[i].name,
@@ -92,8 +103,8 @@ app.controller('DomainItemsCtrl', function($scope, $state, $stateParams, AminoUs
                 console.log(err);
             })
             .then(function () {
-            }
-        );
+                }
+            );
 
         AminoUser.find({filter: {include: []}}).$promise
             .then(function (allUsers) {
@@ -109,32 +120,32 @@ app.controller('DomainItemsCtrl', function($scope, $state, $stateParams, AminoUs
                 console.log(err);
             })
             .then(function () {
-            }
-        );
+                }
+            );
     };
 
-    $scope.setPageButtons = function(resultLen){
-        var pageState =  '';
+    $scope.setPageButtons = function (resultLen) {
+        var pageState = '';
         var fwd = false;
         var back = false;
 
         //figure out if we have more than one page of results to see if we enable Fwd
-        if(resultLen >= $scope.itemsPerPage){
+        if (resultLen >= $scope.itemsPerPage) {
             fwd = true;
         }
         //figure out if we're on page greater than page 1 to enable Back
-        if($scope.itemIndex >= $scope.itemsPerPage){
+        if ($scope.itemIndex >= $scope.itemsPerPage) {
             back = true;
         }
-        if(fwd && back){
+        if (fwd && back) {
             pageState = 'both';
-        }else if (!fwd && back){
+        } else if (!fwd && back) {
             pageState = 'backwardOnly';
-        }else if (fwd && !back){
+        } else if (fwd && !back) {
             pageState = 'forwardOnly';
         }
 
-        switch (pageState){
+        switch (pageState) {
             case 'forwardOnly':
                 $('#pageBack').attr('disabled', 'disabled');
                 $('#pageFwd').removeAttr('disabled');
@@ -153,20 +164,20 @@ app.controller('DomainItemsCtrl', function($scope, $state, $stateParams, AminoUs
         }
     };
 
-    $scope.nextPage = function(){
+    $scope.nextPage = function () {
         $scope.itemIndex = $scope.itemIndex + $scope.itemsPerPage;
-        $scope.getFilteredPagedResults($scope.currentDomainId, $scope.itemIndex,  $scope.itemsPerPage);
+        $scope.getFilteredPagedResults($scope.currentDomainId, $scope.itemIndex, $scope.itemsPerPage);
     };
 
-    $scope.prevPage = function(){
+    $scope.prevPage = function () {
         $scope.itemIndex = $scope.itemIndex - $scope.itemsPerPage;
-        $scope.getFilteredPagedResults($scope.currentDomainId, $scope.itemIndex,  $scope.itemsPerPage);
+        $scope.getFilteredPagedResults($scope.currentDomainId, $scope.itemIndex, $scope.itemsPerPage);
     };
 
-    $scope.getFilteredPagedResults = function(domainId, itemIndex, itemsPer) {
+    $scope.getFilteredPagedResults = function (domainId, itemIndex, itemsPer) {
         $scope.loading = true;
 
-        DomainItemsService.getFilteredPagedDomainItems(domainId, itemIndex, itemsPer).$promise.then(function(result){
+        DomainItemsService.getFilteredPagedDomainItems(domainId, itemIndex, itemsPer).$promise.then(function (result) {
             $scope.currentDomainId = domainId;
             $scope.domainItem = {};
             $scope.safeDisplayeddomainItems = result;
@@ -182,17 +193,17 @@ app.controller('DomainItemsCtrl', function($scope, $state, $stateParams, AminoUs
         $scope.currentUser = currUser;
         $scope.loadPicklists(currUser);
         if ($stateParams.id && $stateParams.domainId) {
-            DomainItemsService.getDomainItem($stateParams.id).$promise.then(function(result) {
+            DomainItemsService.getDomainItem($stateParams.id).$promise.then(function (result) {
                 $scope.currentDomainId = $stateParams.domainId;
                 $scope.domainItem = result;
                 $scope.safeDisplayeddomainItems = {};
                 $scope.displayedDomainItems = {};
                 $scope.loading = false;
             })
-        } else if ($stateParams.domainId){
+        } else if ($stateParams.domainId) {
             $scope.getFilteredPagedResults($stateParams.domainId, $scope.itemIndex, $scope.itemsPerPage);
         } else {
-            DomainItemsService.getDomainItems().$promise.then(function(result){
+            DomainItemsService.getDomainItems().$promise.then(function (result) {
                 $scope.currentDomainId = '';
                 $scope.domainItem = {};
                 $scope.safeDisplayeddomainItems = result;

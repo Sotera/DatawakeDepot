@@ -12,6 +12,9 @@
       "8701/tcp" : {}
     },
     "HostConfig"    : {
+      "Binds": [
+        "/tmp:/tmp"
+      ],
       "PortBindings": {
         "8182/tcp": [
           {
@@ -42,7 +45,7 @@
         "StrongLoopBranchName": "deploy",
         "StrongLoopServerUrl" : "http://localhost:8701",
         "ServiceName"         : "Datawake",
-        "DoBowerInstall"      : false,
+        "DoBowerInstall"      : true,
         "ClusterSize"         : 1,
         "EnvironmentVariables": {
           "PORT"    : 8082,

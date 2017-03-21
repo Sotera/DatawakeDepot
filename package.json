@@ -24,7 +24,7 @@
   },
   "main": "server/server.js",
   "dependencies": {
-    "async": "^1.4.2",
+    "async": "https://registry.npmjs.org/async/-/async-1.5.2.tgz",
     "body-parser": "1.14.1",
     "bower": "1.6.3",
     "cheerio": "^0.19.0",
@@ -70,6 +70,7 @@
     "jpm": "^1.0.5",
     "jshint": "2.8.0",
     "jshint-stylish": "2.0.1",
+    "jsonfile": "https://registry.npmjs.org/jsonfile/-/jsonfile-2.4.0.tgz",
     "jszip": "^2.5.0",
     "load-grunt-tasks": "3.3.0",
     "lodash": "3.10.1",

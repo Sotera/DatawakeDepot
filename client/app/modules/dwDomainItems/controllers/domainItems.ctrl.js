@@ -81,8 +81,8 @@ app.controller('DomainItemsCtrl', function ($scope, $state, $stateParams, AminoU
       return true;
     },
     done: function (e, data) {
-      var gloon = e;
       //Redisplay domain items
+      $scope.safeDisplayeddomainItems = DomainItemsService.getFilteredDomainItems($scope.currentDomainId);
       /*            $.each(data.result.files, function (index, file) {
        $('<p/>').text(file.name).appendTo(document.body);
        });*/

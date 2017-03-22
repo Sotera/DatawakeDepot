@@ -1,6 +1,7 @@
 let path = require('path');
 let fs = require('fs');
 let jsonFile = require('jsonfile');
+let async = require('async');
 let options = {
   tmpDir: __dirname + '/../public/uploaded/tmp',
   uploadDir: __dirname + '/../public/uploaded/files',
@@ -18,28 +19,32 @@ module.exports = function (app) {
       res.send(JSON.stringify(obj, 2));
     });
   });
+  //TODO: Check for errors ...
   app.post('/upload', function (req, res) {
     uploader.post(req, res, function (err, obj) {
-      let fileInfo = obj.files[0];
-      let filePath = path.resolve(fileInfo.options.uploadDir, fileInfo.name);
-      jsonFile.readFile(filePath, (err, domainItemArray) => {
-        fs.unlink(filePath);
-        if (err) {
-          return res.status(200).json(err);
-        }
-        //Add domain item to DB
-        app.models.DwDomain.find({where: {id: fileInfo.fields.domainId}}, (err, dwDomains) => {
-          dwDomains[0].domainItems.create({itemValue: domainItemArray[0]}, (err, domainItem)=>{
-            app.models.AminoUser.find({where:{id:fileInfo.fields.userId}},(err,aminoUsers)=>{
-              domainItem.user(aminoUsers[0]);
-              domainItem.save((err,instance)=>{
-                var e = err;
+      async.each(obj.files,
+        (fileInfo, cb) => {
+          let filePath = path.resolve(fileInfo.options.uploadDir, fileInfo.name);
+          jsonFile.readFile(filePath, (err, domainItems) => {
+            fs.unlink(filePath);
+            //Add domain items to DB
+            app.models.DwDomain.find({where: {id: fileInfo.fields.domainId}}, (err, dwDomains) => {
+              app.models.AminoUser.find({where: {id: fileInfo.fields.userId}}, (err, aminoUsers) => {
+                let aminoUser = aminoUsers[0];
+                async.each(domainItems,
+                  (domainItem, cb) => {
+                    dwDomains[0].domainItems.create({itemValue: domainItem}, (err, domainItem) => {
+                      domainItem.user(aminoUser);
+                      domainItem.save(cb);
+                    });
+                  }, cb);
               });
             });
           });
+        },
+        (err) => {
+          return res.status(200).json(err);
         });
-        return res.status(200).json(obj);
-      });
     });
   });
   app.delete('/uploaded/files/:name', function (req, res) {

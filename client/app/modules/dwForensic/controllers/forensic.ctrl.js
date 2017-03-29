@@ -1,6 +1,51 @@
 'use strict';
 var app = angular.module('com.module.dwForensic');
 
+function cullNodesWithNoOutboundLinks(graph) {
+    let links = graph.links.slice(0);
+    let nodes = graph.nodes.slice(0);
+    let newNodes = [];
+    let newLinks = [];
+    for (let i = 0; i < nodes.length; ++i) {
+        for (let j = 0; j < links.length; ++j) {
+            if (links[j].source === i && !nodes[i].included) {
+                //keep it
+                nodes[i].included = true;
+                nodes[i].newIndex = newNodes.length;
+                nodes[i].oldIndex = i;
+                newNodes.push(nodes[i]);
+                links.splice(j, 1);
+                break;
+            }
+        }
+    }
+    links = graph.links.slice(0);
+    for (let i = 0; i < newNodes.length; ++i) {
+        delete newNodes[i].included;
+        for (let j = 0; j < links.length; ++j) {
+            let include = false;
+            if (newNodes[i].oldIndex === links[j].source) {
+                links[j].source = newNodes[i].newIndex;
+                include = true;
+            }
+            if (newNodes[i].oldIndex === links[j].target) {
+                links[j].target = newNodes[i].newIndex;
+                include = true;
+            }
+            if (include && !links[j].included) {
+                links[j].included = true;
+                newLinks.push({
+                    source:links[j].source,
+                    target:links[j].target,
+                    value:links[j].value
+                });
+            }
+        }
+    }
+    graph.nodes = newNodes;
+    graph.links = newLinks;
+}
+
 app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser, DwTeam, DwTrail, DwDomainEntityType, ForensicService, gettextCatalog, AppAuth) {
     $scope.trail = {};
 
@@ -19,7 +64,6 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser
     $scope.views = [];
     //$scope.viewSettings = {buttonClasses: 'btn btn-primary btn-sm', displayProp: 'name'};
     //$scope.viewCustomText = {buttonDefaultText: 'Select Views'};
-
 
 
     $scope.teamChanged = function (team) {
@@ -104,9 +148,10 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser
             DwTrail.findOne(filter).$promise
                 .then(function (trail) {
                     var graph = ForensicService.getBrowsePathEdgesWithInfo(trail, $scope.selectedViews);
+                    cullNodesWithNoOutboundLinks(graph);
                     try {
                         change_graph(graph);
-                    } catch (e){
+                    } catch (e) {
                         console.log(e);
                     }
                     $scope.visitedGrid = trail.trailUrls;
@@ -123,7 +168,7 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser
     $scope.loading = true;
     AppAuth.getCurrentUser().then(function (currUser) {
 
-        if(!currUser.isAdmin){
+        if (!currUser.isAdmin) {
             var userFilter = {
                 filter: {
                     where: {
@@ -147,13 +192,14 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser
                     console.log(err);
                 });
             $scope.loading = false;
-        }else{
+        } else {
             var teamFilter = {
                 filter: {
                     "include": [{
                         "relation": "domains",
-                        "scope": {"include": [{"relation": "trails"}]}}]
-                    }
+                        "scope": {"include": [{"relation": "trails"}]}
+                    }]
+                }
             };
 
             console.log("teamFilter");

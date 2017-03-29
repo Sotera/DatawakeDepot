@@ -3,7 +3,7 @@ let {pluginState} = require('./data/pluginState');
 //pluginState.pageModDatawakeDepotIncludeFilter = '*.datawake-depot.org';
 //pluginState.loginUrl = 'http://datawake-depot.org';
 
-let port = '8082';
+let port = '3000';
 pluginState.pageModDatawakeDepotIncludeFilter = `http://localhost:${port}/*`;
 pluginState.loginUrl = `http://localhost:${port}`;
 //Edit this to be a valid Rancor instance

@@ -1,8 +1,9 @@
 'use strict';
 var app = angular.module('com.module.dwForensic');
-
 function cullNodesWithNoOutboundLinks(graph) {
-    let links = graph.links.slice(0);
+    let links = graph.links.slice(0).sort((a, b) => {
+        return a.source - b.source;
+    });
     let nodes = graph.nodes.slice(0);
     let newNodes = [];
     let newLinks = [];
@@ -11,34 +12,34 @@ function cullNodesWithNoOutboundLinks(graph) {
             if (links[j].source === i && !nodes[i].included) {
                 //keep it
                 nodes[i].included = true;
-                nodes[i].newIndex = newNodes.length;
                 nodes[i].oldIndex = i;
                 newNodes.push(nodes[i]);
-                links.splice(j, 1);
+                while (links.length && links[j].source === i) {
+                    links.splice(j, 1);
+                }
                 break;
             }
         }
     }
     links = graph.links.slice(0);
+    //If a link has a target node that still exists, add it to newLinks
+    for (let j = 0; j < links.length; ++j) {
+        for (let i = 0; i < newNodes.length; ++i) {
+            newNodes[i].index = i;
+            if (links[j].target === newNodes[i].oldIndex) {
+                newLinks.push(links[j]);
+                break;
+            }
+        }
+    }
+
     for (let i = 0; i < newNodes.length; ++i) {
-        delete newNodes[i].included;
-        for (let j = 0; j < links.length; ++j) {
-            let include = false;
-            if (newNodes[i].oldIndex === links[j].source) {
-                links[j].source = newNodes[i].newIndex;
-                include = true;
+        for (let j = 0; j < newLinks.length; ++j) {
+            if (newNodes[i].oldIndex === newLinks[j].source) {
+                newLinks[j].source = i;
             }
-            if (newNodes[i].oldIndex === links[j].target) {
-                links[j].target = newNodes[i].newIndex;
-                include = true;
-            }
-            if (include && !links[j].included) {
-                links[j].included = true;
-                newLinks.push({
-                    source:links[j].source,
-                    target:links[j].target,
-                    value:links[j].value
-                });
+            if (newNodes[i].oldIndex === newLinks[j].target) {
+                newLinks[j].target = i;
             }
         }
     }
@@ -58,6 +59,7 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser
     $scope.selectedTrail = null;
     $scope.selectedViews = [];
     $scope.entitiesGrid = [];
+    $scope.cullLeaves = false;
 
 
     //Setup the view dropdown menu
@@ -124,6 +126,7 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser
     };
 
     $scope.drawGraph = function () {
+
         if ($scope.selectedTrail) {
 
             var graphViews = ForensicService.buildGraphViews($scope.selectedViews);
@@ -148,7 +151,9 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser
             DwTrail.findOne(filter).$promise
                 .then(function (trail) {
                     var graph = ForensicService.getBrowsePathEdgesWithInfo(trail, $scope.selectedViews);
-                    cullNodesWithNoOutboundLinks(graph);
+                    if($scope.cullLeaves){
+                        cullNodesWithNoOutboundLinks(graph);
+                    }
                     try {
                         change_graph(graph);
                     } catch (e) {

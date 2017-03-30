@@ -224,6 +224,7 @@ var SWG = (function() {
 
 
         // render node labels if requested
+        render_labels = true;
         if (render_labels){
             node.append("svg:text")
                 .text(pubs.node_text_func)

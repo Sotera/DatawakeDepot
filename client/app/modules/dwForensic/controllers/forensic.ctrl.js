@@ -60,6 +60,7 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser
     $scope.selectedViews = [];
     $scope.entitiesGrid = [];
     $scope.cullLeaves = false;
+    $scope.drawAllLabels = false;
 
 
     //Setup the view dropdown menu
@@ -151,10 +152,12 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser
             DwTrail.findOne(filter).$promise
                 .then(function (trail) {
                     var graph = ForensicService.getBrowsePathEdgesWithInfo(trail, $scope.selectedViews);
-                    if($scope.cullLeaves){
+                    if ($scope.cullLeaves) {
                         cullNodesWithNoOutboundLinks(graph);
                     }
                     try {
+
+                        graph.drawAllLabels = $scope.drawAllLabels;
                         change_graph(graph);
                     } catch (e) {
                         console.log(e);

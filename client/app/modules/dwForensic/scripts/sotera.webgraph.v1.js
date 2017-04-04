@@ -13,7 +13,7 @@
 
 'use strict';
 var app = angular.module('com.module.dwForensic');
-var SWG = (function() {
+var SWG = (function () {
 
     // container for all public functions and objects
     var pubs = {}
@@ -33,7 +33,42 @@ var SWG = (function() {
      * covert node data to text for display
      * applications should override this to display more specific information
      */
-    pubs.node_text_func = function(d) { return d.name}
+    pubs.node_text_func = function (d) {
+        //return d.name;
+        return pubs.short_node_text_func(d);
+    };
+
+    /*
+     Pare node text by removing entity type and query string of URLs
+     */
+    pubs.short_node_text_func = function (d) {
+        var tmpText = d.name;
+        //The URL test - BEGIN
+        if (pubs.validURL(tmpText)) {
+            var entityTypeDelimiter = '?';
+            var idx = tmpText.indexOf(entityTypeDelimiter);
+            if (-1 !== idx) {
+                tmpText = tmpText.substring(0, idx);
+            }
+        }
+        //The URL test - END
+        //The entityName test - BEGIN
+        var entityTypeDelimiter = '->';
+        var idx = tmpText.indexOf(entityTypeDelimiter);
+        if (-1 !== idx) {
+            tmpText = tmpText.substring(idx + entityTypeDelimiter.length);
+        }
+        //The entityName test - END
+        return tmpText;
+    };
+    pubs.validURL = function (str) {
+        var regex = /^(https?:\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3}))(\:\d+)?(\/[-a-z\d%_.~+]*)*(\?[;&a-z\d%_.~+=-]*)?(\#.*)?$/i;
+        if (!regex.test(str)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 
     var width = 960
     var height = 500
@@ -48,25 +83,28 @@ var SWG = (function() {
     var links = force.links();
     var bilinks = [];
     var Graph;
-    function setLengthStrength(strength){
-        if (strength > 1){
+
+    function setLengthStrength(strength) {
+        if (strength > 1) {
             strength = 1
         }
         force.linkStrength(strength)
         force.stop()
         force.start()
     }
-    function setChargeStrength(strength){
+
+    function setChargeStrength(strength) {
         force.charge(strength)
         force.stop()
         force.start()
     }
+
     pubs.setLengthStrength = setLengthStrength
     pubs.setChargeStrength = setChargeStrength
 
-    function getIdx(name){
-        for (var i in nodes){
-            if (nodes[i]['id'] === name){
+    function getIdx(name) {
+        for (var i in nodes) {
+            if (nodes[i]['id'] === name) {
                 return i;
             }
         }
@@ -81,27 +119,27 @@ var SWG = (function() {
    *                                'links':[{'source':source node index,'target':target node index},..]}
      *
      */
-    function drawGraph(containerId,graph){
+    function drawGraph(containerId, graph) {
         var scale = 1;
         Graph = graph;
         pubs.graph = Graph;
-        nodes.splice(0,nodes.length);
-        links.splice(0,links.length);
+        nodes.splice(0, nodes.length);
+        links.splice(0, links.length);
         bilinks = [];
-        d3.select('#'+containerId).selectAll("svg").remove()
-        svg = d3.select('#'+containerId).append("svg")
+        d3.select('#' + containerId).selectAll("svg").remove()
+        svg = d3.select('#' + containerId).append("svg")
             .attr({
                 "width": "100%",
                 "height": "100%"
             })
-            .attr("viewBox", "0 0 " + width + " " + height )
+            .attr("viewBox", "0 0 " + width + " " + height)
             .attr("preserveAspectRatio", "xMidYMid meet")
             .attr("pointer-events", "all")
-            .call(d3.behavior.zoom().on("zoom", function(){
+            .call(d3.behavior.zoom().on("zoom", function () {
                 scale = d3.event.scale;
                 viz.attr("transform",
-                        "translate(" + d3.event.translate + ")"
-                        + " scale(" + d3.event.scale + ")");
+                    "translate(" + d3.event.translate + ")"
+                    + " scale(" + d3.event.scale + ")");
             }));
         svg.append("defs").append("marker")
             .attr("id", "arrowhead")
@@ -116,32 +154,32 @@ var SWG = (function() {
         viz = svg.append('svg:g');
         pubs.viz = viz
 
-        graph.nodes.forEach(function(node) {
+        graph.nodes.forEach(function (node) {
             nodes.push(node);
-        } );
+        });
         //var nodes = graph.nodes.slice()
         //var links = []
         //var bilinks = []
 
         // iterate over nodes to collect type information
         pubs.node_types = {};
-        for (var i in nodes){
+        for (var i in nodes) {
             var node = nodes[i];
-            if (node.name){
+            if (node.name) {
                 var nodetext = node.name.toLowerCase()
-                if (node.hasOwnProperty('groupName')){
+                if (node.hasOwnProperty('groupName')) {
                     var type = node.groupName;
 
                     if (type.length > 0) {
                         if (type in pubs.node_types) pubs.node_types[type]['count'] += 1
-                        else pubs.node_types[type] = {'count':1 ,'group':node.group}
+                        else pubs.node_types[type] = {'count': 1, 'group': node.group}
 
                     }
                 }
             }
         }
 
-        graph.links.forEach(function(link) {
+        graph.links.forEach(function (link) {
             var s = nodes[link.source],
                 t = nodes[link.target],
                 i = {}; // intermediate node
@@ -165,81 +203,81 @@ var SWG = (function() {
             .attr("class", "node");
 
         node.append("svg:circle")
-            .attr("r", function(d) {
+            .attr("r", function (d) {
                 if (d.size) return d.size
                 else return 5
             })
-            .style("fill", function(d) { return color(d.group); })
+            .style("fill", function (d) {
+                return color(d.group);
+            })
             .call(force.drag);
 
         //node.exit().remove();
 
         // on click show text clicked node and neighbors
-        node.on("click", function(d){
+        node.on("click", function (d) {
             pubs.selected_node = d
             if (!d.clicked) d.clicked = true
             else d.clicked = !d.clicked
             connected = [d.index]
-            for (var i in bilinks){
+            for (var i in bilinks) {
                 var curr = bilinks[i]
-                if ( curr[0].index == d.index)  connected.push(curr[2].index)
+                if (curr[0].index == d.index) connected.push(curr[2].index)
                 else if (curr[2].index == d.index) connected.push(curr[0].index)
             }
             viz.selectAll(".node").selectAll("svg text").remove()
-            if (d.clicked){
+            if (d.clicked) {
                 d3.select(this).append("svg:text")
-                    .text(pubs.node_text_func)
-                    .attr("fill","black")
-                    .attr("stroke","black")
-                    .attr("font-size","5pt")
-                    .attr("stroke-width","0.5px")
-                viz.selectAll(".node").each(function(d){
+                    .text(pubs.short_node_text_func)
+                    .attr("fill", "black")
+                    .attr("stroke", "black")
+                    .attr("font-size", "5pt")
+                    .attr("stroke-width", "0.5px")
+                viz.selectAll(".node").each(function (d) {
                     if (connected.indexOf(d.index) != -1) {
                         d3.select(this).append("svg:text")
-                            .text(pubs.node_text_func)
-                            .attr("fill","black")
-                            .attr("stroke","black")
-                            .attr("font-size","5pt")
-                            .attr("stroke-width","0.5px")
+                            .text(pubs.short_node_text_func)
+                            .attr("fill", "black")
+                            .attr("stroke", "black")
+                            .attr("font-size", "5pt")
+                            .attr("stroke-width", "0.5px")
                     }
                 })
             }
         });
 
         // show detailed label on mouseover
-        node.on("mouseover", function(d) {
+        node.on("mouseover", function (d) {
             d3.select(this).append("svg:text")
-                .text(pubs.node_text_func)
-                .attr("transform","scale("+(1/scale)+")")
-                .attr("fill","black")
-                .attr("stroke","black")
-                .attr("font-size","8pt")
-                .attr("stroke-width","0.5px")
+                .text(pubs.short_node_text_func)
+                .attr("transform", "scale(" + (1 / scale) + ")")
+                .attr("fill", "black")
+                .attr("stroke", "black")
+                .attr("font-size", "8pt")
+                .attr("stroke-width", "0.5px")
         })
 
         // remove text on mouse out
-        node.on("mouseout", function() {
+        node.on("mouseout", function () {
             d3.select(this).select("svg text").remove()
         })
 
-
         // render node labels if requested
-        render_labels = true;
-        if (render_labels){
+        if (render_labels || graph.drawAllLabels) {
             node.append("svg:text")
-                .text(pubs.node_text_func)
-                .attr("fill","black")
-                .attr("stroke","black")
-                .attr("font-size","5pt")
-                .attr("stroke-width","0.5px")
+                .text(pubs.short_node_text_func)
+                .attr("fill", "black")
+                .attr("stroke", "black")
+                .attr("font-size", "5pt")
+                .attr("stroke-width", "0.5px")
         }
 
         // force layout
-        force.on("tick", function() {
-            link.attr("d", function(d) {
+        force.on("tick", function () {
+            link.attr("d", function (d) {
                 return "M" + d[0].x + "," + d[0].y + "S" + d[1].x + "," + d[1].y + " " + d[2].x + "," + d[2].y;
             });
-            node.attr("transform", function(d) {
+            node.attr("transform", function (d) {
                 return "translate(" + d.x + "," + d.y + ")";
             });
         });
@@ -247,7 +285,7 @@ var SWG = (function() {
         force.start();
     } // end draw graph
 
-    function updateGraph(response){
+    function updateGraph(response) {
         //console.log(response);
         var scale = 1;
         var addgraph = {};
@@ -257,63 +295,75 @@ var SWG = (function() {
         var start_num = 3;
         var addsj = {};
         var j = nodes.length;
-        for (i in response.hits ) {
+        for (i in response.hits) {
             var guy = response.hits[i];
             var add = true;
-            for ( x in Graph.nodes )
-            {
-                if (Graph.nodes[x].name == 'domain search -'+ guy.itype + ': ' + guy.eid) add = false;
+            for (x in Graph.nodes) {
+                if (Graph.nodes[x].name == 'domain search -' + guy.itype + ': ' + guy.eid) add = false;
             }
 
-            if (add && addsj['domain search -'+ guy.itype + ': ' + guy.eid] == null )
-            {
+            if (add && addsj['domain search -' + guy.itype + ': ' + guy.eid] == null) {
                 var groupval;
-                if ( type_map[guy.itype] == undefined ) { type_map[guy.itype] = ++start_num; groupval = start_num;}
-                else { groupval = type_map[guy.itype];}
-                var node_to_add = {'name':'domain search: ' + guy.itype + ' ' + guy.eid,
-                    'search_url':guy.url,
-                    'id':guy.eid,
+                if (type_map[guy.itype] == undefined) {
+                    type_map[guy.itype] = ++start_num;
+                    groupval = start_num;
+                }
+                else {
+                    groupval = type_map[guy.itype];
+                }
+                var node_to_add = {
+                    'name': 'domain search: ' + guy.itype + ' ' + guy.eid,
+                    'search_url': guy.url,
+                    'id': guy.eid,
                     //'postIds':[5],
-                    'size':10,
+                    'size': 10,
                     //'timestamps':[1412436873],
                     //'trails':["good"],
-                    'type':'domain search',
-                    'nid':guy.nid,
-                    'search_term':guy.search_term,
-                    'jindex':guy.jindex
+                    'type': 'domain search',
+                    'nid': guy.nid,
+                    'search_term': guy.search_term,
+                    'jindex': guy.jindex
                     //'userIds':["0"],
                     //'userNames':["John Doe"],
                     //'weight':1
                 };
                 if (guy._source) node_to_add._source = guy._source;
                 addgraph.nodes.push(node_to_add);
-                addsj['domain search -'+ guy.itype + ' ' + guy.eid] = j;
+                addsj['domain search -' + guy.itype + ' ' + guy.eid] = j;
                 //console.log(nodes.length);
-                addgraph.links.push({'source':j++,'target':getIdx(guy.nid), 'value':1});
+                addgraph.links.push({'source': j++, 'target': getIdx(guy.nid), 'value': 1});
             }
-            else if (!add){addgraph.links.push({'source':getIdx(guy.eid),'target':getIdx(guy.nid), 'value':1}); }
-            else {addgraph.links.push({'source':addsj['domain search -'+ guy.itype + ' ' + guy.eid],'target':getIdx(guy.nid), 'value':1});}
+            else if (!add) {
+                addgraph.links.push({'source': getIdx(guy.eid), 'target': getIdx(guy.nid), 'value': 1});
+            }
+            else {
+                addgraph.links.push({
+                    'source': addsj['domain search -' + guy.itype + ' ' + guy.eid],
+                    'target': getIdx(guy.nid),
+                    'value': 1
+                });
+            }
         }
 
         var newnodes = addgraph.nodes.slice()
 
         // iterate over nodes to collect type information
         //pubs.node_types = {}
-        for (var i in newnodes){
+        for (var i in newnodes) {
             var node = newnodes[i]
             Graph.nodes.push(node);
             nodes.push(node);
-            if (node.name){
+            if (node.name) {
                 var nodetext = node.name.toLowerCase()
-                var type = nodetext.substring(0,nodetext.indexOf(":"))
+                var type = nodetext.substring(0, nodetext.indexOf(":"))
                 if (type.length > 0) {
                     if (type in pubs.node_types) pubs.node_types[type]['count'] += 1
-                    else pubs.node_types[type] = {'count':1 ,'group':node.group}
+                    else pubs.node_types[type] = {'count': 1, 'group': node.group}
                 }
             }
         }
 
-        addgraph.links.forEach(function(link) {
+        addgraph.links.forEach(function (link) {
             var s = nodes[link.source],
                 t = nodes[link.target],
                 i = {}; // intermediate node
@@ -328,7 +378,6 @@ var SWG = (function() {
         // TODO look for css like .node and .link, that will need to be pulled into a sotera.webgraph.css file
 
 
-
         n = Graph.nodes.slice();
 
         var node = viz.selectAll(".node")
@@ -339,13 +388,13 @@ var SWG = (function() {
         node.append("svg:circle")
 
 
-            .attr("r", function(d) {
+            .attr("r", function (d) {
                 console.log(d.type);
                 if (d.type == 'domain search') return 3;
                 else if (d.size) return d.size;
                 else return 5;
             })
-            .style("fill", function(d) {
+            .style("fill", function (d) {
                 if (d.type == 'domain search') return 'RED';
                 else return color(d.group);
             })
@@ -357,30 +406,30 @@ var SWG = (function() {
         //});
 
         // show detailed label on mouseover
-        node.on("mouseover", function(d) {
+        node.on("mouseover", function (d) {
             d3.select(this).append("svg:text")
-                .text(pubs.node_text_func)
-                .attr("transform","scale("+(1/scale)+")")
-                .attr("fill","black")
-                .attr("stroke","black")
-                .attr("font-size","8pt")
-                .attr("stroke-width","0.5px")
+                .text(pubs.short_node_text_func)
+                .attr("transform", "scale(" + (1 / scale) + ")")
+                .attr("fill", "black")
+                .attr("stroke", "black")
+                .attr("font-size", "8pt")
+                .attr("stroke-width", "0.5px")
         })
 
         // remove text on mouse out
-        node.on("mouseout", function() {
+        node.on("mouseout", function () {
             d3.select(this).select("svg text").remove()
         })
 
 
         // render node labels if requested
-        if (render_labels){
+        if (render_labels) {
             node.append("svg:text")
-                .text(pubs.node_text_func)
-                .attr("fill","black")
-                .attr("stroke","black")
-                .attr("font-size","5pt")
-                .attr("stroke-width","0.5px")
+                .text(pubs.short_node_text_func)
+                .attr("fill", "black")
+                .attr("stroke", "black")
+                .attr("font-size", "5pt")
+                .attr("stroke-width", "0.5px")
         }
 
         var link = viz.selectAll(".link")
@@ -392,11 +441,11 @@ var SWG = (function() {
         link.exit().remove();
 
         // force layout
-        force.on("tick", function() {
-            link.attr("d", function(d) {
+        force.on("tick", function () {
+            link.attr("d", function (d) {
                 return "M" + d[0].x + "," + d[0].y + "S" + d[1].x + "," + d[1].y + " " + d[2].x + "," + d[2].y;
             });
-            node.attr("transform", function(d) {
+            node.attr("transform", function (d) {
                 return "translate(" + d.x + "," + d.y + ")";
             });
         });
@@ -412,22 +461,23 @@ var SWG = (function() {
     /*
      * Toggle on / off all node labels
      */
-    function toggleLabels(){
+    function toggleLabels() {
         if (viz && render_labels) {
             viz.selectAll(".node").selectAll("svg text").remove()
         }
-        else if (viz){
+        else if (viz) {
             viz.selectAll(".node")
                 .append("svg:text")
-                .text(pubs.node_text_func)
-                .attr("fill","black")
-                .attr("stroke","black")
-                .attr("font-size","5pt")
-                .attr("stroke-width","0.5px")
+                .text(pubs.short_node_text_func)
+                .attr("fill", "black")
+                .attr("stroke", "black")
+                .attr("font-size", "5pt")
+                .attr("stroke-width", "0.5px")
         }
-        render_labels = ! render_labels
+        render_labels = !render_labels
 
     }
+
     pubs.toggleLabels = toggleLabels
 
 
@@ -435,15 +485,19 @@ var SWG = (function() {
         d3.select('#legend').selectAll("svg text").remove()
         d3.select('#legend').selectAll("svg rect").remove()
     }
+
     pubs.clear_legend = clear_legend
 
 
-    function show_base_legend(){
-        show_legend(Object.keys(pubs.node_types),function(d) { return color(pubs.node_types[d]['group'])})
+    function show_base_legend() {
+        show_legend(Object.keys(pubs.node_types), function (d) {
+            return color(pubs.node_types[d]['group'])
+        })
     }
+
     pubs.show_base_legend = show_base_legend
 
-    function show_legend(keys,colorFunc){
+    function show_legend(keys, colorFunc) {
         //// Construct a color legend.
         $("#legend").svgColorLegend({
             cmapFunc: colorFunc,
@@ -457,75 +511,88 @@ var SWG = (function() {
             clear: true
         });
     }
+
     pubs.show_legend = show_legend
 
 
-    function defaultColors(){
+    function defaultColors() {
         show_base_legend()
         viz.selectAll("svg circle")
-            .attr("r", function(d) {
+            .attr("r", function (d) {
                 if (d.size) return d.size
                 else return 5
             })
-            .style("fill", function(d) { return color(d.group)})
+            .style("fill", function (d) {
+                return color(d.group)
+            })
     }
+
     pubs.defaultColors = defaultColors
 
-    function highlightType(type){
-        console.log("highlight nodes of type: "+type)
-        var colorFunc = function(d) {
+    function highlightType(type) {
+        console.log("highlight nodes of type: " + type)
+        var colorFunc = function (d) {
             if (d == 'other') return "grey"
             return color(SWG.node_types[d]['group'])
         }
-        show_legend([type,'other'],colorFunc)
+        show_legend([type, 'other'], colorFunc)
         viz.selectAll("svg circle")
-            .attr("r", function(d) {
-                if (d.name.toLowerCase().indexOf(type) == 0){
+            .attr("r", function (d) {
+                if (d.name.toLowerCase().indexOf(type) == 0) {
                     return 8
                 }
-                else {return 5}
+                else {
+                    return 5
+                }
             })
-            .style("fill", function(d) {
-                if (d.name.toLowerCase().indexOf(type) == 0){ return color(d.group) }
-                else { return "grey" }
+            .style("fill", function (d) {
+                if (d.name.toLowerCase().indexOf(type) == 0) {
+                    return color(d.group)
+                }
+                else {
+                    return "grey"
+                }
             })
     }
+
     pubs.hightlightType = highlightType
 
 
-
-    function showTypeDialog(type){
+    function showTypeDialog(type) {
         data = []
         var nodes = Graph.nodes.slice()
-        for (i in nodes){
+        for (i in nodes) {
             var node = nodes[i]
-            if (node.name.toLowerCase().indexOf(type) == 0){
-                data.push(pubs.node_text_func(node))
+            if (node.name.toLowerCase().indexOf(type) == 0) {
+                data.push(pubs.short_node_text_func(node))
             }
         }
 
         $("#dialog").dialog().dialog("close")
         d3.select("#dialog").selectAll("div").remove()
-        $("#dialog").dialog().dialog('option','position',[100,100])
+        $("#dialog").dialog().dialog('option', 'position', [100, 100])
         var rows = d3.select("#dialog")
             .append("div")
-            .attr("class","highlighed_verts_dialog")
+            .attr("class", "highlighed_verts_dialog")
             .append("table")
-            .attr("border","1")
+            .attr("border", "1")
             .selectAll("tr")
             .data(data).enter()
             .append("tr")
             .append("td")
-            .attr("padding-left","5px")
-            .text(function(d){ return d})
+            .attr("padding-left", "5px")
+            .text(function (d) {
+                return d
+            })
             .style("border", "1px black solid")
             .style("padding", "5px")
-            .style("font-size","10px")
-            .style("font-weight","bold")
+            .style("font-size", "10px")
+            .style("font-weight", "bold")
 
-        $("#dialog").dialog().dialog("option","height","auto")
-        $("#dialog").dialog().dialog("option","width","auto")
+        $("#dialog").dialog().dialog("option", "height", "auto")
+        $("#dialog").dialog().dialog("option", "width", "auto")
     }
+
     pubs.showTypeDialog = showTypeDialog
 
 

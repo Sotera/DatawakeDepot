@@ -1,4 +1,5 @@
 'use strict';
+return;
 //********************--> Factor this memstream code out (BEGIN)
 var stream = require('stream');
 var util = require('util');

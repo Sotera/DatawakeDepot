@@ -55,7 +55,102 @@ function formatDuartion(start, end) {
  Called whenever a graph is selected to load and draw
  the new graph.
  */
-function change_graph(graph) {
+function change_domain_items_graph(graph) {
+
+    // $("#dialog").dialog().dialog("close");
+    console.log("GRAPH")
+    console.log(graph)
+
+    communities = {};
+    var nodes = graph.nodes.slice();
+    var repulsion = 30;
+    if (nodes.length < 50) {
+        repulsion = parseInt(repulsion_scale(nodes.length));
+    }
+    console.log("default repulsion = " + repulsion);
+    // $("#forceslider").slider("value", repulsion);
+
+
+    min_timestamp = -1;
+    max_timestamp = -1;
+    min_hits = -1;
+    max_hits = -1;
+
+    USERS.all = {};
+    USERS.max = 1;
+    for (var i in nodes) {
+        var node = nodes[i];
+
+        for (var j in node.userNames) {
+            var username = node.userNames[j];
+            if (!(username in USERS.all)) {
+                USERS.all[username] = USERS.max;
+                USERS.max = USERS.max + 1
+            }
+        }
+
+        if (node.timestamps) {
+            var ts = node.timestamps[node.timestamps.length - 1];
+            if (min_timestamp == -1 || ts < min_timestamp)
+                min_timestamp = ts;
+            if (ts > max_timestamp)
+                max_timestamp = ts;
+        }
+        if (node.hits) {
+            if (node.hits > max_hits)
+                max_hits = node.hits;
+            if (min_hits == -1 || node.hits < min_hits)
+                min_hits = node.hits;
+        }
+        if (node.community) {
+            communities[node.community] = node.community;
+        }
+    }
+
+    SWG.drawGraph('domain_items_graph', graph);
+    SWG.show_base_legend();
+
+    SWG.viz.selectAll(".node").on('click', function(d) {
+        console.log("selected: " + JSON.stringify(d));
+        selected_data = d;
+    });
+
+    SWG.viz.selectAll(".node").on('click', function(d) {
+        showLinkDialog(d);
+        SWG.viz.selectAll(".node").style("stroke-width", function(d) {
+            return 0;
+        });
+        d3.select(this).style("stroke", function(d) {
+            return 'yellow';
+        }).style("stroke-width", function(d) {
+            return 4;
+        });
+    });
+
+    SWG.viz.selectAll(".link")
+        .attr("class", function(d) {
+            if (d[0].name && d[2].name) {
+                var type1 = d[0].name.substring(0, d[0].name.indexOf(":"));
+                var type2 = d[2].name.substring(0, d[2].name.indexOf(":"));
+                if (type1.indexOf('browse path') == 0 && type2.indexOf('browse path') == 0) {
+                    return "link boldlink";
+                }
+            }
+            return "link";
+        })
+        .attr("marker-end", function(d) {
+            if (d[0].name && d[2].name) {
+                var type1 = d[0].name.substring(0, d[0].name.indexOf(":"));
+                var type2 = d[2].name.substring(0, d[2].name.indexOf(":"));
+                if (type1.indexOf('browse path') == 0 && type2.indexOf('browse path') == 0) {
+                    return "url(#arrowhead)";
+                }
+            }
+            return "";
+        });
+}
+
+function change_extracted_entities_graph(graph) {
 
   // $("#dialog").dialog().dialog("close");
   console.log("GRAPH")
@@ -107,7 +202,7 @@ function change_graph(graph) {
     }
   }
 
-  SWG.drawGraph('node_graph', graph);
+  SWG.drawGraph('extracted_entities_graph', graph);
   SWG.show_base_legend();
 
   SWG.viz.selectAll(".node").on('click', function(d) {
@@ -234,7 +329,7 @@ function change_highlight(colorOption) {
 
 function refreshForensicView() {
   SWG.clear_legend();
-  d3.select('#node_graph').selectAll("svg").remove();
+  d3.select('#extracted_entities_graph').selectAll("svg").remove();
 }
 
 

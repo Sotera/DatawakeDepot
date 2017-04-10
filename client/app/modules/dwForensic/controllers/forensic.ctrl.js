@@ -126,7 +126,7 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser
         });
     };
 
-    $scope.drawGraph = function () {
+    $scope.drawDomainItemsGraph = function () {
 
         if ($scope.selectedTrail) {
 
@@ -158,7 +158,54 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser
                     try {
 
                         graph.drawAllLabels = $scope.drawAllLabels;
-                        change_graph(graph);
+                        change_domain_items_graph(graph);
+                    } catch (e) {
+                        console.log(e);
+                    }
+                    $scope.visitedGrid = trail.trailUrls;
+                    $scope.entitiesGrid = ForensicService.getEntities(trail, $scope.selectedViews);
+                    $scope.words = ForensicService.getWords($scope.entitiesGrid);
+                })
+                .catch(function (err) {
+                    console.log("Error getting trail: " + $scope.selectedTrail.id);
+                    console.log(err);
+                });
+        }
+    };
+
+    $scope.drawExtractedEntitiesGraph = function () {
+
+        if ($scope.selectedTrail) {
+
+            var graphViews = ForensicService.buildGraphViews($scope.selectedViews);
+            var filter = {
+                filter: {
+                    "where": {
+                        "id": $scope.selectedTrail.id
+                    },
+                    "include": ["domain", "team", {
+                        "relation": "trailUrls",
+                        "scope": {
+                            "include": [{
+                                "relation": "urlExtractions",
+                                "scope": {"where": {"extractorTypes": {"inq": graphViews}}}
+                            }]
+                        }
+                    }]
+                }
+            };
+            console.log("Trail Filter");
+            console.log(JSON.stringify(filter));
+            DwTrail.findOne(filter).$promise
+                .then(function (trail) {
+                    var graph = ForensicService.getBrowsePathEdgesWithInfo(trail, $scope.selectedViews);
+                    if ($scope.cullLeaves) {
+                        cullNodesWithNoOutboundLinks(graph);
+                    }
+                    try {
+
+                        graph.drawAllLabels = $scope.drawAllLabels;
+                        change_extracted_entities_graph(graph);
                     } catch (e) {
                         console.log(e);
                     }

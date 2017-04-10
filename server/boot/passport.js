@@ -1,7 +1,6 @@
 'use strict';
 
 module.exports = function(app) {
-  //return;
 
   var bodyParser = require('body-parser');
   var loopback = require('loopback');

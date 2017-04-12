@@ -62,7 +62,7 @@ var SWG = (function () {
         return tmpText;
     };
     pubs.validURL = function (str) {
-        var regex = /^(https?:\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3}))(\:\d+)?(\/[-a-z\d%_.~+]*)*(\?[;&a-z\d%_.~+=-]*)?(\#.*)?$/i;
+        var regex = /^(ftp|http|https):\/\/[^ "]+$/i;
         if (!regex.test(str)) {
             return false;
         } else {

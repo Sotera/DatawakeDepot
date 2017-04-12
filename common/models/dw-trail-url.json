@@ -19,6 +19,9 @@
         "string"
       ]
     },
+    "domainItemsJson": {
+      "type": "string"
+    },
     "comments": {
       "type": "string"
     },

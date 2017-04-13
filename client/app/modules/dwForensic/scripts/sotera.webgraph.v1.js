@@ -62,12 +62,7 @@ var SWG = (function () {
         return tmpText;
     };
     pubs.validURL = function (str) {
-        var regex = /^(ftp|http|https):\/\/[^ "]+$/i;
-        if (!regex.test(str)) {
-            return false;
-        } else {
-            return true;
-        }
+        return /^(ftp|http|https):\/\/[^ "]+$/i.test(str);
     }
 
     var width = 960

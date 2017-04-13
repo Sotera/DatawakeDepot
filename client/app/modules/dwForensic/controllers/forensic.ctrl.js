@@ -126,55 +126,61 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser
         });
     };
 
+    $scope.currentTab = null;
+    $scope.extractedEntityGraphTabSelected = function () {
+        $scope.currentTab = 'ExtractedEntityGraph';
+        $scope.drawExtractedEntitiesGraph();
+    };
+
+    $scope.domainItemGraphTabSelected = function () {
+        $scope.currentTab = 'DomainItemGraph';
+        $scope.drawDomainItemsGraph();
+    };
+
+    $scope.visitedLinksTabSelected = function () {
+        $scope.currentTab = 'VisitedLinks';
+    };
+
+    $scope.entitiesTabSelected = function () {
+        $scope.currentTab = 'Entities';
+    };
+
+    $scope.wordCloudTabSelected = function () {
+        $scope.currentTab = 'WordCloud';
+        $scope.drawExtractedEntitiesGraph();
+    };
+
+    $scope.drawGraphs = function () {
+        $scope.drawExtractedEntitiesGraph();
+        $scope.drawDomainItemsGraph();
+    };
+
     $scope.drawDomainItemsGraph = function () {
-
-        if ($scope.selectedTrail) {
-
-            var graphViews = ForensicService.buildGraphViews($scope.selectedViews);
-            var filter = {
-                filter: {
-                    "where": {
-                        "id": $scope.selectedTrail.id
-                    },
-                    "include": ["domain", "team", {
-                        "relation": "trailUrls",
-                        "scope": {
-                            "include": [{
-                                "relation": "urlExtractions",
-                                "scope": {"where": {"extractorTypes": {"inq": graphViews}}}
-                            }]
-                        }
-                    }]
-                }
-            };
-            console.log("Trail Filter");
-            console.log(JSON.stringify(filter));
-            DwTrail.findOne(filter).$promise
-                .then(function (trail) {
-                    var graph = ForensicService.getBrowsePathEdgesWithInfo(trail, $scope.selectedViews);
-                    if ($scope.cullLeaves) {
-                        cullNodesWithNoOutboundLinks(graph);
-                    }
-                    try {
-
-                        graph.drawAllLabels = $scope.drawAllLabels;
-                        change_domain_items_graph(graph);
-                    } catch (e) {
-                        console.log(e);
-                    }
-                    $scope.visitedGrid = trail.trailUrls;
-                    $scope.entitiesGrid = ForensicService.getEntities(trail, $scope.selectedViews);
-                    $scope.words = ForensicService.getWords($scope.entitiesGrid);
-                })
-                .catch(function (err) {
-                    console.log("Error getting trail: " + $scope.selectedTrail.id);
-                    console.log(err);
-                });
+        if ($scope.currentTab !== 'DomainItemGraph' || !$scope.selectedTrail) {
+            return;
         }
+        DwTrail.findOne({
+            filter: {
+                where: {
+                    id: $scope.selectedTrail.id
+                },
+                include: 'trailUrls'
+            }
+        }).$promise
+            .then(function (trail) {
+                var graph = ForensicService.getBrowsePathEdgesWithInfo(trail,[]);
+                for (var i = 0; i < trail.trailUrls.length; ++i) {
+                    var trailUrl = trail.trailUrls[i];
+                    var domainItems = JSON.parse(trailUrl.domainItemsJson);
+                }
+                change_domain_items_graph(graph);
+            });
     };
 
     $scope.drawExtractedEntitiesGraph = function () {
-
+        if ($scope.currentTab !== 'ExtractedEntityGraph') {
+            return;
+        }
         if ($scope.selectedTrail) {
 
             var graphViews = ForensicService.buildGraphViews($scope.selectedViews);

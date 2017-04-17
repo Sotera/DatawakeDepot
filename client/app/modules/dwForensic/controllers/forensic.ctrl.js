@@ -168,11 +168,44 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser
             }
         }).$promise
             .then(function (trail) {
-                var graph = ForensicService.getBrowsePathEdgesWithInfo(trail,[]);
+                var graph = ForensicService.getBrowsePathEdgesWithInfo(trail, []);
+                var trailUrlCache = {};
+                var domainItemCache = {};
                 for (var i = 0; i < trail.trailUrls.length; ++i) {
                     var trailUrl = trail.trailUrls[i];
+                    var lowerCaseUrl = trailUrl.url.toLowerCase();
+                    if (trailUrlCache[lowerCaseUrl]) {
+                        continue;
+                    }
+                    trailUrlCache[lowerCaseUrl] = true;
                     var domainItems = JSON.parse(trailUrl.domainItemsJson);
+                    for (var j = 0; j < domainItems.length; ++j) {
+                        var domainItemText = domainItems[j].domainItem.toLowerCase();
+                        var newNode = domainItemCache[domainItemText];
+                        if(!newNode){
+                            newNode = {
+                                community: 'n/a',
+                                group: 0,
+                                groupName: 'groupName',
+                                name: domainItemText,
+                                id: 'n/a',
+                                size: 6,
+                                timestamps: [new Date()],
+                                type: 'domain item'
+                            };
+                            newNode.index = graph.nodes.length;
+                            domainItemCache[domainItemText] = newNode;
+                            graph.nodes.push(newNode);
+                        }
+                        var newLink = {
+                            source: i,
+                            target: newNode.index,
+                            value: 1
+                        };
+                        graph.links.push(newLink);
+                    }
                 }
+                graph.drawAllLabels = $scope.drawAllLabels;
                 change_domain_items_graph(graph);
             });
     };
@@ -209,7 +242,6 @@ app.controller('ForensicCtrl', function ($scope, $state, $stateParams, AminoUser
                         cullNodesWithNoOutboundLinks(graph);
                     }
                     try {
-
                         graph.drawAllLabels = $scope.drawAllLabels;
                         change_extracted_entities_graph(graph);
                     } catch (e) {

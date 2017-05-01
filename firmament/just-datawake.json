@@ -1,7 +1,7 @@
 [
   {
     "name"          : "datawake",
-    "Image"         : "jreeme/datawake:rancor-stanner",
+    "Image"         : "jreeme/datawake:dist-04-APR-2017",
     "DockerFilePath": "",
     "Hostname"      : "datawake",
     "ExposedPorts"  : {
